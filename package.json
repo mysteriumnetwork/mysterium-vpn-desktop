@@ -1,0 +1,58 @@
+{
+  "name": "mysterium-vpn2",
+  "version": "2.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "Mysterium Network",
+    "email": "mysterium-dev@mysterium.network",
+    "url": "https://mysterium.network/"
+  },
+  "license": "GPL-3.0",
+  "scripts": {
+    "dev": "webpack --mode=development",
+    "start": "qode --inspect ./dist/index.js",
+    "build": "webpack -p",
+    "packer": "node ../nodegui/fork/packer/dist/cli.js --pack dist --sign 14D1483DEFD2A449D35CC443621E3D0FEDF3972E"
+  },
+  "dependencies": {
+    "@nodegui/nodegui": "^0.13.1",
+    "@nodegui/react-nodegui": "^0.4.0",
+    "mkdirp": "^1.0.3",
+    "mobx": "^5.15.4",
+    "mobx-react": "^6.1.8",
+    "mysterium-vpn-js": "^1.0.12",
+    "node-fetch": "^2.6.0",
+    "open": "^7.0.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-promise-middleware": "^6.1.2",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.7",
+    "@nodegui/packer": "https://github.com/tadaskay/packer",
+    "@types/node": "^12.12.22",
+    "@types/node-fetch": "^2.5.4",
+    "@types/react": "^16.9.17",
+    "@types/react-redux": "^7.1.7",
+    "@types/redux-actions": "^2.6.1",
+    "@types/redux-logger": "^3.0.7",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/webpack-env": "^1.14.1",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "file-loader": "^5.0.2",
+    "fork-ts-checker-webpack-plugin": "^3.1.1",
+    "native-addon-loader": "^2.0.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10"
+  }
+}
