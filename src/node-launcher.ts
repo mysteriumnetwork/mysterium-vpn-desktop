@@ -30,16 +30,9 @@ export const launchDaemon = () => {
             console.log("Could not determine node daemon path")
             process.exit(-5)
         }
-        // fs.writeFileSync(path.join(os.homedir(), "test.txt"), nodePath);
         spawnChild(nodePath, ["daemon"])
-    } catch (e) {
-        console.log("Error running myst daemon", e)
-        // try {
-        //     // fs.writeFileSync(path.join(os.homedir(), "test.txt"), e);
-        //
-        // } catch (e) {
-        //     console.error("Cannot write file ", e);
-        // }
+    } catch (err) {
+        console.log("Error running myst daemon", err)
     }
 }
 

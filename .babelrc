@@ -4,5 +4,8 @@
     "@babel/preset-typescript",
     "@babel/preset-react"
   ],
-  "plugins": []
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
 }

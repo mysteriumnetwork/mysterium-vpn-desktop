@@ -1,11 +1,9 @@
-import {hot, Text, useEventHandler, View, Window} from "@nodegui/react-nodegui";
+import {hot, useEventHandler, View, Window} from "@nodegui/react-nodegui";
 import React from "react";
 import {QIcon, WidgetEventTypes} from "@nodegui/nodegui";
 import mystLogo from "../assets/logo.svg";
-import {ConnectionStatus} from "./connection-status";
+import {ConnectionStatus} from "./connection/connection-status";
 import {DaemonStatus} from "./daemon/daemon-status";
-import {Provider} from "react-redux"
-import {store} from "./state";
 
 const minSize = {width: 900, height: 520};
 const winIcon = new QIcon(mystLogo);
@@ -17,21 +15,19 @@ const App = () => {
         }
     }, [])
     return (
-        <Provider store={store}>
-            <Window
-                on={mainWindowEvents}
-                windowIcon={winIcon}
-                windowTitle="Mysterium VPN 2"
-                minSize={minSize}
-                maxSize={minSize}
-                styleSheet={styleSheet}
-            >
-                <View style={containerStyle}>
-                    <DaemonStatus/>
-                    <ConnectionStatus status="Disconnected"/>
-                </View>
-            </Window>
-        </Provider>
+        <Window
+            on={mainWindowEvents}
+            windowIcon={winIcon}
+            windowTitle="Mysterium VPN 2"
+            minSize={minSize}
+            maxSize={minSize}
+            styleSheet={styleSheet}
+        >
+            <View style={containerStyle}>
+                <DaemonStatus/>
+                <ConnectionStatus/>
+            </View>
+        </Window>
     );
 }
 
