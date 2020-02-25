@@ -6,7 +6,16 @@ import {registerExitHooks} from "./utils/spawn-child";
 
 process.title = "Mysterium VPN 2";
 
-Renderer.render(<App/>);
+class Root extends React.Component {
+    render(): React.ReactNode {
+        return (
+            <App />
+        )
+    }
+}
+
+Renderer.render(<Root/>);
+
 // This is for hot reloading (this will be stripped off in production by webpack)
 if (module.hot) {
     module.hot.accept(["./app"], function () {
