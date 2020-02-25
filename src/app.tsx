@@ -1,9 +1,11 @@
 import {hot, View, Window} from "@nodegui/react-nodegui";
 import React from "react";
 import {QIcon, WidgetEventTypes} from "@nodegui/nodegui";
-import mystLogo from "../assets/logo.svg";
+
 import {ConnectionStatus} from "./connection/connection-status";
 import {DaemonStatus} from "./daemon/daemon-status";
+import mystLogo from "../assets/logo.svg";
+import {Logo} from "./logo";
 
 const minSize = {width: 900, height: 600};
 const winIcon = new QIcon(mystLogo);

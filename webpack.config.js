@@ -15,8 +15,8 @@ module.exports = (env, argv) => {
       filename: "index.js"
     },
     node: {
-      __dirname: true,
-      __filename: true
+      __dirname: false,
+      __filename: false
     },
     module: {
       rules: [
