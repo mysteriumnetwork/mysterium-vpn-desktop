@@ -9,6 +9,7 @@ import {useStores} from "./store";
 import {autorun} from "mobx";
 import {DaemonStatusType} from "./daemon/store";
 import {ConnectionStatusType} from "./connection/store";
+import {Proposals} from "./proposals/proposals";
 
 const minSize = {width: 900, height: 600};
 const winIcon = new QIcon(mystLogo);
@@ -45,37 +46,49 @@ const App = () => {
             maxSize={minSize}
             styleSheet={styleSheet}
         >
-            <View style={containerStyle}>
-                <Logo/>
-                <ConnectionStatus/>
-                <Button text="Connect" on={{
-                    ['clicked']: () => {
-                        // let qStatusBar = new QStatusBar();
-                        // winRef.current.setStatusBar(qStatusBar)
-                        // qStatusBar.showMessage(new Date().toString(), 0)
-                        // console.log("clicked")
-                    }
-                }}/>
+            <View id="main">
+                <View id="left">
+                    <Proposals/>
+                </View>
+                <View id="right">
+                    <Logo/>
+                    <ConnectionStatus/>
+                    <View id="connect">
+                        <Button id="connectBtn" text="Connect" on={{
+                            ['clicked']: () => {
+                            }
+                        }}/>
+                    </View>
+                </View>
             </View>
         </Window>
     )
 }
 
-const containerStyle = `
-    flex: 1;
-`;
+//     background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #412361, stop: 1 #9b1c4d);
 
 const styleSheet = `
-#welcome-text {
-    font-size: 24px;
-    padding-top: 20px;
-    qproperty-alignment: 'AlignHCenter';
-    font-family: 'sans-serif';
+#main {
+    width: ${minSize.width}px;
+    height: ${minSize.height}px;
+    background: "white";
+    flex-direction: "row";
 }
-#step-1, #step-2 {
-    font-size: 18px;
-    padding-top: 10px;
-    padding-horizontal: 20px;
+#left {
+    width: 450px;
+    background-color: #fafafa;
+}
+#right {
+    flex: 1;
+    align-items: "center";
+    padding-top: 120px;
+    background-color: #f0f0f0;
+}
+#connect {
+    margin-top: 30px;
+}
+#connectBtn {
+    padding: 18px;
 }
 `;
 

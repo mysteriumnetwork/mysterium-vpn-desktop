@@ -1,8 +1,9 @@
-import {action, observable, reaction, toJS} from "mobx";
+import {action, computed, observable, reaction} from "mobx";
 import {RootStore} from "../store";
 import {DaemonStatusType} from "../daemon/store";
 import tequilapi from "../tequila";
 import {Proposal} from "mysterium-vpn-js";
+import * as _ from "lodash";
 
 export class ProposalStore {
     @observable
@@ -26,11 +27,15 @@ export class ProposalStore {
         this.loading = true
         try {
             this.proposals = await tequilapi.findProposals({fetchConnectCounts: true})
-            console.log(toJS(this.proposals))
         } catch (err) {
             console.log("Could not get proposals", err)
         }
         this.loading = false
+    }
+
+    @computed
+    get byCountry() {
+        return _.groupBy(this.proposals, p => p.serviceDefinition?.locationOriginate?.country)
     }
 
 }
