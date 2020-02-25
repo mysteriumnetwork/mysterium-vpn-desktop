@@ -12,12 +12,11 @@ export const Logo = () => (
 
 const styleSheet = `
 #container {
-    height: 200px;
-    background: "blue";
+    height: 150px;
 }
 #img {
-    height: 200px;
-    width: 200px;
+    height: 150px;
+    width: 150px;
 }
 `
 
