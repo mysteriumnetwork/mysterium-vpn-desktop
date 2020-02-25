@@ -7,7 +7,7 @@ export const DaemonStatus = observer(() => {
     useEffect(() => {
         const timer = setInterval(async () => {
             await daemon.healthcheck()
-        }, 1000);
+        }, 200);
         return () => clearInterval(timer);
     }, [])
     return (<></>)
