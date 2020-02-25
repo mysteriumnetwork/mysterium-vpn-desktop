@@ -839,9 +839,9 @@
     postcss-nodegui-autoprefixer "0.0.7"
     prebuild-install "^5.3.3"
 
-"@nodegui/packer@https://github.com/tadaskay/packer":
+"@nodegui/packer@https://github.com/nodegui/packer":
   version "1.1.2"
-  resolved "https://github.com/tadaskay/packer#d3d5fbbb52a7ae0919f22dca22039644387f35cd"
+  resolved "https://github.com/nodegui/packer#a5ec18762e1b4a0cec817a436c68d073b97518b8"
   dependencies:
     commander "^4.0.1"
     fs-extra "^8.1.0"
