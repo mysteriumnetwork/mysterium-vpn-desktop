@@ -30,11 +30,11 @@ const App = () => {
         }
         winRef.current = ref
     }, [])
-    const {daemon, connection} = useStores();
+    const {daemon, connection, identity} = useStores();
     useEffect(() => autorun(() => {
         const daemonIcon = (daemon.status == DaemonStatusType.Up) ? '🟢' : '⚪️'
         const connectionIcon = (connection.status == ConnectionStatusType.Connected) ? '🟢' : '⚪️'
-        statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon}` as string, 0)
+        statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || '⚪'}`, 0)
     }))
     return (
         <Window
