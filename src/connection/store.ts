@@ -1,6 +1,6 @@
 import {observable} from "mobx";
 
-export enum ConnectionStatus {
+export enum ConnectionStatusType {
     Connecting = "CONNECTING",
     Connected = "CONNECTED",
     Disconnecting = "DISCONNECTING",
@@ -11,5 +11,5 @@ export class ConnectionStore {
     @observable
     loading = false
     @observable
-    status = ConnectionStatus.Disconnected
+    status = ConnectionStatusType.Disconnected
 }

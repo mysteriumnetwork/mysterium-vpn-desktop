@@ -1,11 +1,15 @@
-import {hot, View, Window} from "@nodegui/react-nodegui";
-import React from "react";
-import {QIcon, WidgetEventTypes} from "@nodegui/nodegui";
+import {Button, hot, View, Window} from "@nodegui/react-nodegui";
+import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
+import {QIcon, QMainWindow, QStatusBar, WidgetEventTypes} from "@nodegui/nodegui";
 
 import {ConnectionStatus} from "./connection/connection-status";
 import {DaemonStatus} from "./daemon/daemon-status";
 import mystLogo from "../assets/logo.svg";
 import {Logo} from "./logo";
+import {useStores} from "./store";
+import {autorun} from "mobx";
+import {DaemonStatusType} from "./daemon/store";
+import {ConnectionStatusType} from "./connection/store";
 
 const minSize = {width: 900, height: 600};
 const winIcon = new QIcon(mystLogo);
@@ -16,25 +20,47 @@ const mainWindowEventHandler = {
     }
 }
 
-class App extends React.Component {
-    render(): React.ReactNode {
-        return (
-            <Window
-                on={mainWindowEventHandler}
-                windowIcon={winIcon}
-                windowTitle="Mysterium VPN 2"
-                minSize={minSize}
-                maxSize={minSize}
-                styleSheet={styleSheet}
-            >
-                <View style={containerStyle}>
-                    <Logo/>
-                    <DaemonStatus/>
-                    <ConnectionStatus/>
-                </View>
-            </Window>
-        )
-    }
+const statusBar = new QStatusBar()
+
+const App = () => {
+    var winRef: MutableRefObject<QMainWindow | null> = useRef<QMainWindow>(null);
+    const setRef = useCallback((ref: QMainWindow) => {
+        if (ref !== null) {
+            ref.setStatusBar(statusBar)
+        }
+        winRef.current = ref
+    }, [])
+    const {daemon, connection} = useStores();
+    useEffect(() => autorun(() => {
+        const daemonIcon = (daemon.status == DaemonStatusType.Up) ? '🟢' : '⚪️'
+        const connectionIcon = (connection.status == ConnectionStatusType.Connected) ? '🟢' : '⚪️'
+        statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon}` as string, 0)
+    }))
+    return (
+        <Window
+            ref={setRef}
+            on={mainWindowEventHandler}
+            windowIcon={winIcon}
+            windowTitle="Mysterium VPN 2"
+            minSize={minSize}
+            maxSize={minSize}
+            styleSheet={styleSheet}
+        >
+            <View style={containerStyle}>
+                <Logo/>
+                <DaemonStatus/>
+                <ConnectionStatus/>
+                <Button text="Connect" on={{
+                    ['clicked']: () => {
+                        // let qStatusBar = new QStatusBar();
+                        // winRef.current.setStatusBar(qStatusBar)
+                        // qStatusBar.showMessage(new Date().toString(), 0)
+                        // console.log("clicked")
+                    }
+                }}/>
+            </View>
+        </Window>
+    )
 }
 
 const containerStyle = `
