@@ -12,6 +12,12 @@ export class DaemonStore {
     @observable
     status = DaemonStatusType.Down
 
+    constructor() {
+        setInterval(async () => {
+            await this.healthcheck()
+        }, 200);
+    }
+
     @action
     async healthcheck() {
         this.loading = true

@@ -3,7 +3,6 @@ import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
 import {QIcon, QMainWindow, QStatusBar, WidgetEventTypes} from "@nodegui/nodegui";
 
 import {ConnectionStatus} from "./connection/connection-status";
-import {DaemonStatus} from "./daemon/daemon-status";
 import mystLogo from "../assets/logo.svg";
 import {Logo} from "./logo";
 import {useStores} from "./store";
@@ -48,7 +47,6 @@ const App = () => {
         >
             <View style={containerStyle}>
                 <Logo/>
-                <DaemonStatus/>
                 <ConnectionStatus/>
                 <Button text="Connect" on={{
                     ['clicked']: () => {
