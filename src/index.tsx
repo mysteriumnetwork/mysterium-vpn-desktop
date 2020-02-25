@@ -9,7 +9,7 @@ process.title = "Mysterium VPN 2";
 Renderer.render(<App/>);
 // This is for hot reloading (this will be stripped off in production by webpack)
 if (module.hot) {
-    module.hot.accept(["./app", "./store"], function () {
+    module.hot.accept(["./app"], function () {
         Renderer.forceUpdate();
     });
 }
