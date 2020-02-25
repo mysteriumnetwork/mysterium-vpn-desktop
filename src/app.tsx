@@ -38,7 +38,7 @@ class App extends React.Component {
 }
 
 const containerStyle = `
-  flex: 1;
+    flex: 1;
 `;
 
 const styleSheet = `

@@ -19,14 +19,14 @@ export const DaemonStatus = observer(() => {
 })
 
 const viewStyle = `
-width: 500;
-height: 45;
-background: 'red';
+    width: 500;
+    height: 45;
+    background: 'red';
 `
 
 const textStyle = `
-qproperty-alignment: AlignCenter;
-background: 'green';
-font-size: 30px;
-flex: 1;
+    qproperty-alignment: AlignCenter;
+    background: 'green';
+    font-size: 30px;
+    flex: 1;
 `

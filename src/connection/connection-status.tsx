@@ -7,13 +7,13 @@ export const ConnectionStatus = observer(() => {
     const {connection: {status}} = useStores()
     return (
         <View id="status" styleSheet={style}>
-            <Text id="statusText">{status}</Text>
+            <Text id="text">{status}</Text>
         </View>
     )
 })
 
 const style = `
-#statusText {
+#text {
     font-size: 16px;
     qproperty-alignment: 'AlignHCenter';
 }
