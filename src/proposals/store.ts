@@ -10,6 +10,8 @@ export class ProposalStore {
     loading = false
     @observable
     proposals: Proposal[] = []
+    @observable
+    active?: Proposal
 
     root: RootStore
 
@@ -36,6 +38,11 @@ export class ProposalStore {
     @computed
     get byCountry() {
         return _.groupBy(this.proposals, p => p.serviceDefinition?.locationOriginate?.country)
+    }
+
+    set activate(proposal: Proposal) {
+        console.info("Selected proposal", JSON.stringify(proposal))
+        this.active = proposal
     }
 
 }

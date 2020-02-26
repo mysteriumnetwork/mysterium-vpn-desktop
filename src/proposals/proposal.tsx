@@ -1,11 +1,14 @@
 import {Proposal as ProposalType} from "mysterium-vpn-js/lib/proposal/proposal";
 import {Button, useEventHandler, View} from "@nodegui/react-nodegui";
 import React from "react";
+import {observer} from "mobx-react-lite";
+import {useStores} from "../store";
 
-export const Proposal = (p: Partial<ProposalType>) => {
+export const Proposal = observer((p: ProposalType) => {
+    const { proposals } = useStores()
     const clickHandler = useEventHandler({
-        ['clicked']: () => {
-            console.log('clicked')
+        ["clicked"]: () => {
+            proposals.activate = p
         }
     }, [])
     const key = `${p.providerId}|${p.serviceType}`
@@ -14,7 +17,7 @@ export const Proposal = (p: Partial<ProposalType>) => {
             <Button id="button" text={key} on={clickHandler}/>
         </View>
     )
-}
+})
 
 const styleSheet = `
 #proposal {
