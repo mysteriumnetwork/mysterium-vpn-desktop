@@ -1,4 +1,4 @@
-import {Button, hot, View, Window} from "@nodegui/react-nodegui";
+import {Button, hot, useEventHandler, View, Window} from "@nodegui/react-nodegui";
 import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
 import {QIcon, QMainWindow, QStatusBar, WidgetEventTypes} from "@nodegui/nodegui";
 
@@ -36,6 +36,10 @@ const App = () => {
         const connectionIcon = (connection.status == ConnectionStatusType.Connected) ? '🟢' : '⚪️'
         statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || '⚪'}`, 0)
     }))
+    const clickHandler = useEventHandler({
+        ['clicked']: () => {
+        }
+    }, [])
     return (
         <Window
             ref={setRef}
@@ -54,10 +58,7 @@ const App = () => {
                     <Logo/>
                     <ConnectionStatus/>
                     <View id="connect">
-                        <Button id="connectBtn" text="Connect" on={{
-                            ['clicked']: () => {
-                            }
-                        }}/>
+                        <Button id="connectBtn" text="Connect" on={clickHandler}/>
                     </View>
                 </View>
             </View>
@@ -75,7 +76,7 @@ const styleSheet = `
     flex-direction: "row";
 }
 #left {
-    width: 450px;
+    width: 406px;
     background-color: #fafafa;
 }
 #right {

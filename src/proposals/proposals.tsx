@@ -11,8 +11,8 @@ export const Proposals = observer(() => {
         <View id="container" styleSheet={styleSheet}>
             {Object.keys(byCountry).map(country => (
                 <View>
-                    <Text id="country">{country}</Text>
-                    {byCountry[country].map(p => Proposal(p))}
+                    <Text id="country" >{country}</Text>
+                    {byCountry[country].map(p => <Proposal {...p}/>)}
                 </View>
             ))}
         </View>
@@ -22,7 +22,7 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
-    padding: 10px;
+    padding: 7px;
 }
 #country {
     margin: 5px;
