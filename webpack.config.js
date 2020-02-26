@@ -78,6 +78,7 @@ module.exports = (env, argv) => {
   config.plugins.push(function () {
     this.plugin("done", () => {
       fs.chmodSync("dist/node/myst", "755")
+      fs.chmodSync("dist/node/config/update-resolv-conf", "755")
     })
   })
   return config;
