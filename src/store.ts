@@ -15,6 +15,10 @@ export class RootStore {
         this.connection = new ConnectionStore();
         this.identity = new IdentityStore(this);
         this.proposals = new ProposalStore(this)
+
+        // Setup cross-store reactions after all injections.
+        this.identity.setupReactions()
+        this.proposals.setupReactions()
     }
 }
 

@@ -13,6 +13,9 @@ export class IdentityStore {
 
     constructor(root: RootStore) {
         this.root = root
+    }
+
+    setupReactions() {
         reaction(() => this.root.daemon.status, async (status) => {
             if (status == DaemonStatusType.Up) {
                 await this.currentIdentity()
