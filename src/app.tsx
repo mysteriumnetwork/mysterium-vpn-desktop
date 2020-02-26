@@ -3,12 +3,12 @@ import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
 import {QIcon, QMainWindow, QStatusBar, WidgetEventTypes} from "@nodegui/nodegui";
 
 import {ConnectionStatus} from "./connection/connection-status";
+import {ConnectionStatus as ConnectionStatusType} from "mysterium-vpn-js"
 import mystLogo from "../assets/logo.svg";
 import {Logo} from "./logo";
 import {useStores} from "./store";
 import {autorun} from "mobx";
 import {DaemonStatusType} from "./daemon/store";
-import {ConnectionStatusType} from "./connection/store";
 import {Proposals} from "./proposals/proposals";
 
 const minSize = {width: 900, height: 600};
@@ -33,7 +33,7 @@ const App = () => {
     const {daemon, connection, identity} = useStores();
     useEffect(() => autorun(() => {
         const daemonIcon = (daemon.status == DaemonStatusType.Up) ? '🟢' : '⚪️'
-        const connectionIcon = (connection.status == ConnectionStatusType.Connected) ? '🟢' : '⚪️'
+        const connectionIcon = (connection.status == ConnectionStatusType.CONNECTED) ? '🟢' : '⚪️'
         statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || '⚪'}`, 0)
     }))
     const clickHandler = useEventHandler({

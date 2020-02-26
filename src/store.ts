@@ -12,11 +12,12 @@ export class RootStore {
 
     constructor() {
         this.daemon = new DaemonStore();
-        this.connection = new ConnectionStore();
+        this.connection = new ConnectionStore(this);
         this.identity = new IdentityStore(this);
         this.proposals = new ProposalStore(this)
 
         // Setup cross-store reactions after all injections.
+        this.connection.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
     }
