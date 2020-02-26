@@ -1,7 +1,12 @@
 import {action, observable, reaction} from "mobx";
 import {RootStore} from "../store";
 import tequilapi from "../tequila";
-import {ConnectionStatus as ConnectionStatusType, HttpTequilapiClient, TequilapiError} from "mysterium-vpn-js";
+import {
+    ConnectionStatus,
+    ConnectionStatus as ConnectionStatusType,
+    HttpTequilapiClient,
+    TequilapiError
+} from "mysterium-vpn-js";
 import {DaemonStatusType} from "../daemon/store";
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
@@ -9,6 +14,8 @@ const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 export class ConnectionStore {
     @observable
     loading = false
+    @observable
+    connectInProgress = false
     @observable
     status = ConnectionStatusType.NOT_CONNECTED
 
@@ -31,8 +38,10 @@ export class ConnectionStore {
 
     @action
     async connect() {
+        this.connectInProgress = true
         try {
-            this.status = ConnectionStatusType.CONNECTING
+            this.status = ConnectionStatus.CONNECTING
+            // this.status = ConnectionStatusType.CONNECTING
             // TODO SDK: add accountantId
             // TODO SDK: remove object remapping! (just passthrough all fields to the API);
             // const req = {
@@ -62,16 +71,32 @@ export class ConnectionStore {
             }
             // this.status = ConnectionStatus.NOT_CONNECTED
         }
+        this.connectInProgress = false
     }
 
     @action
     async statusCheck() {
         try {
+            if (this.connectInProgress) {
+                return
+            }
             const conn = await tequilapi.connectionStatus()
+            if (this.connectInProgress) {
+                return
+            }
             this.status = conn.status
         } catch (err) {
             console.error("Connection status check failed", err)
             this.status = ConnectionStatusType.NOT_CONNECTED
+        }
+    }
+
+    @action
+    async disconnect() {
+        try {
+            await tequilapi.connectionCancel()
+        } catch (err) {
+            console.error("Failed to disconnect", err)
         }
     }
 

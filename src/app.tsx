@@ -10,6 +10,7 @@ import {useStores} from "./store";
 import {autorun} from "mobx";
 import {DaemonStatusType} from "./daemon/store";
 import {Proposals} from "./proposals/proposals";
+import {Disconnect} from "./connection/disconnect-button";
 
 const minSize = {width: 900, height: 600};
 const winIcon = new QIcon(mystLogo);
@@ -36,10 +37,7 @@ const App = () => {
         const connectionIcon = (connection.status == ConnectionStatusType.CONNECTED) ? '🟢' : '⚪️'
         statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || '⚪'}`, 0)
     }))
-    const clickHandler = useEventHandler({
-        ['clicked']: () => {
-        }
-    }, [])
+
     return (
         <Window
             ref={setRef}
@@ -57,9 +55,7 @@ const App = () => {
                 <View id="right">
                     <Logo/>
                     <ConnectionStatus/>
-                    <View id="connect">
-                        <Button id="connectBtn" text="Connect" on={clickHandler}/>
-                    </View>
+                    <Disconnect/>
                 </View>
             </View>
         </Window>
