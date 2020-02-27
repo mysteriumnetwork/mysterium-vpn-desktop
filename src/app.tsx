@@ -1,4 +1,4 @@
-import {Button, hot, useEventHandler, View, Window} from "@nodegui/react-nodegui";
+import {hot, View, Window, ScrollArea} from "@nodegui/react-nodegui";
 import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
 import {QIcon, QMainWindow, QStatusBar, WidgetEventTypes} from "@nodegui/nodegui";
 
@@ -50,7 +50,9 @@ const App = () => {
         >
             <View id="main">
                 <View id="left">
-                    <Proposals/>
+                    <ScrollArea id="scroll">
+                        <Proposals/>
+                    </ScrollArea>
                 </View>
                 <View id="right">
                     <Logo/>
@@ -72,14 +74,18 @@ const styleSheet = `
     flex-direction: "row";
 }
 #left {
-    width: 406px;
+    width: 410px;
     background-color: #fafafa;
 }
 #right {
     flex: 1;
+    flex-direction: column;
     align-items: "center";
     padding-top: 120px;
     background-color: #f0f0f0;
+}
+#scroll {
+    width: 410px;
 }
 #connect {
     margin-top: 30px;

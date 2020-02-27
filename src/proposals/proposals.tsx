@@ -10,7 +10,7 @@ export const Proposals = observer(() => {
     return (
         <View id="container" styleSheet={styleSheet}>
             {Object.keys(byCountry).map(country => (
-                <View>
+                <View id="bycountry">
                     <Text id="country" >{country}</Text>
                     {byCountry[country].map(p => <Proposal {...p}/>)}
                 </View>
@@ -22,7 +22,12 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
+    flex-direction: column;
     padding: 7px;
+    padding-bottom: 27px;
+}
+#bycountry {
+    flex-direction: column;
 }
 #country {
     margin: 5px;
