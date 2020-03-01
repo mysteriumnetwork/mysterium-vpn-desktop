@@ -1,6 +1,6 @@
 import React from "react"
 import {Image, View} from "@nodegui/react-nodegui"
-import {fixAssetPath} from "./utils/fix-asset-url";
+import {fixAssetPath} from "./utils/paths";
 
 import mystLogo from "../assets/logo.png"
 

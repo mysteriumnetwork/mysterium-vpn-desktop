@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
 
   if (argv.mode === "production") {
     config.plugins.push(new CopyPlugin([
-      { from: 'node', to: 'node' },
+      { from: 'static', to: 'static' },
     ]),)
   }
 
@@ -77,8 +77,8 @@ module.exports = (env, argv) => {
 
   config.plugins.push(function () {
     this.plugin("done", () => {
-      fs.chmodSync("dist/node/myst", "755")
-      fs.chmodSync("dist/node/config/update-resolv-conf", "755")
+      fs.chmodSync("dist/static/myst", "755")
+      fs.chmodSync("dist/static/config/update-resolv-conf", "755")
     })
   })
   return config;
