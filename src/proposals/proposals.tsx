@@ -9,7 +9,7 @@ export const Proposals = observer(() => {
     const byCountry = proposals.byCountry;
     return (
         <View id="container" styleSheet={styleSheet}>
-            {Object.keys(byCountry).map(country => (
+            {Object.keys(byCountry).sort().map(country => (
                 <View id="bycountry">
                     <Text id="country" >{country}</Text>
                     {byCountry[country].map(p => <Proposal {...p}/>)}
