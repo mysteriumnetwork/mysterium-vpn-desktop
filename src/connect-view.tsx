@@ -31,8 +31,10 @@ const styleSheet = `
     flex-direction: "row";
 }
 #scroll {
-    border: 1px;
+    border: 0;
+    border-right: 1px solid #ccc;
     background-color: #ecf0f1;
+    width: 410;
 }
 #left {
     width: 410px;
@@ -44,14 +46,5 @@ const styleSheet = `
     align-items: "center";
     padding-top: 120px;
     background-color: #ecf0f1;
-}
-#scroll {
-    width: 410px;
-}
-#connect {
-    margin-top: 30px;
-}
-#connectBtn {
-    padding: 18px;
 }
 `;

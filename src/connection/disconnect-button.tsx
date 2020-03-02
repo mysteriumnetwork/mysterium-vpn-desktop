@@ -14,8 +14,16 @@ export const Disconnect = observer(() => {
     return (
         <View id="connect">
             {connection.status != ConnectionStatusType.NOT_CONNECTED && (
-                <Button id="connectBtn" text="Disconnect" on={clickHandler}/>
+                <Button
+                    id="connectBtn"
+                    text="Disconnect"
+                    on={clickHandler}
+                    style={`
+                        padding: 15;
+                    `}
+                />
             )}
         </View>
     )
 })
+
