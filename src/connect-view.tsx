@@ -15,7 +15,6 @@ export const ConnectView = () => {
                 </ScrollArea>
             </View>
             <View id="right">
-                <Logo/>
                 <ConnectionStatus/>
                 <Disconnect/>
             </View>

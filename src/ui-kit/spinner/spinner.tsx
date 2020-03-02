@@ -22,6 +22,8 @@ const logoPos = {
 const mov = new QMovie()
 mov.setFileName(fixAssetPath(spinnerFile))
 
+let ql: QLabel;
+
 type SpinnerProps = {
     active: boolean
     top: number
@@ -33,10 +35,11 @@ export const Spinner = ({active, top, left}: SpinnerProps) => {
     const setViewRef = useCallback((ref: RNView) => {
         viewRef.current = ref
         if (viewRef.current) {
-            const ql = new QLabel(viewRef.current);
+            ql = new QLabel(viewRef.current);
             ql.setFixedSize(spinnerSize.width, spinnerSize.height)
             ql.lower()
             ql.setMovie(mov)
+            ql.hide()
         }
     }, [])
     useEffect(() => {
@@ -45,8 +48,10 @@ export const Spinner = ({active, top, left}: SpinnerProps) => {
         }
         if (active) {
             mov.start()
+            ql.show()
         } else {
             mov.stop()
+            ql.hide()
         }
     }, [active, viewRef])
     return (
