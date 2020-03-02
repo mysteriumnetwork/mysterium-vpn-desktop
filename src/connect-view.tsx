@@ -10,7 +10,7 @@ export const ConnectView = () => {
     return (
         <View id="main" styleSheet={styleSheet}>
             <View id="left">
-                <ScrollArea id="scroll" style="border: 1px;">
+                <ScrollArea id="scroll">
                     <Proposals/>
                 </ScrollArea>
             </View>
@@ -29,19 +29,22 @@ const styleSheet = `
 #main {
     width: ${winSize.width}px;
     height: ${winSize.height}px;
-    background: "white";
     flex-direction: "row";
+}
+#scroll {
+    border: 1px;
+    background-color: #ecf0f1;
 }
 #left {
     width: 410px;
-    background-color: #fafafa;
+    background-color: #ecf0f1;
 }
 #right {
     flex: 1;
     flex-direction: column;
     align-items: "center";
     padding-top: 120px;
-    background-color: #f0f0f0;
+    background-color: #ecf0f1;
 }
 #scroll {
     width: 410px;

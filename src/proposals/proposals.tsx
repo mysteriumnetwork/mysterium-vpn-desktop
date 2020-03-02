@@ -22,6 +22,7 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
+    background: #95a5a6;
     flex-direction: column;
     padding: 7px;
     padding-bottom: 27px;

@@ -1,6 +1,6 @@
 import {Renderer} from "@nodegui/react-nodegui";
 import React from "react";
-import App from "./main-window";
+import MainWindow from "./main-window";
 import {onProcessExit} from "./utils/on-process-exit";
 import {supervisor} from "./supervisor/supervisor";
 
@@ -9,7 +9,7 @@ process.title = "Mysterium VPN 2";
 class Root extends React.Component {
     render(): React.ReactNode {
         return (
-            <App />
+            <MainWindow />
         )
     }
 }
