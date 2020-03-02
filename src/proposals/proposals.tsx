@@ -4,19 +4,26 @@ import {View, Text} from "@nodegui/react-nodegui";
 import {observer} from "mobx-react-lite";
 import {Proposal} from "./proposal";
 
+const {flag, name} = require('country-emoji');
+
 export const Proposals = observer(() => {
     const {proposals} = useStores()
     const byCountry = proposals.byCountry;
     return (
         <View id="container" styleSheet={styleSheet}>
             {Object.keys(byCountry).sort().map(country => (
-                <View id="bycountry" key={country}>
-                    <Text id="country">{country}</Text>
-                    {byCountry[country].map(p => {
-                        return (
-                            <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
-                        )
-                    })}
+                <View id="country-container" key={country}>
+                    <View id="country">
+                        <Text id="country-flag">{flag(country)}</Text>
+                        <Text id="country-name">{name(country)}</Text>
+                    </View>
+                    <View id="country-proposals">
+                        {byCountry[country].map(p => {
+                            return (
+                                <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
+                            )
+                        })}
+                    </View>
                 </View>
             ))}
         </View>
@@ -26,15 +33,30 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
-    background: #bdc3c7;
+    background: #ecf0f1;
     flex-direction: column;
-    padding: 7px;
-    padding-bottom: 27px;
+    padding: 0;
+    padding-top: 0;
+    padding-bottom: 27;
 }
-#bycountry {
+#country-container {
     flex-direction: column;
 }
 #country {
-    margin: 5px;
+    background: #34495e;
+    padding: 5;
+}
+#country-flag {
+    font-size: 26px;
+    height: 26;
+    margin-right: 1;
+}
+#country-name {
+    font-size: 12px;
+    color: #ecf0f1;
+}
+#country-proposals {
+    flex-direction: column;
+    padding: 7;
 }
 `
