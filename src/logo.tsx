@@ -2,7 +2,7 @@ import React from "react"
 import {Image, View} from "@nodegui/react-nodegui"
 import {fixAssetPath} from "./utils/paths";
 
-import mystLogo from "../assets/logo.png"
+import mystLogo from "../assets/logosm.png"
 
 export const Logo = () => (
     <View id="container" styleSheet={styleSheet}>
