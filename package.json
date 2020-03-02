@@ -21,6 +21,7 @@
     "lodash": "^4.17.15",
     "mkdirp": "^1.0.3",
     "mobx": "^5.15.4",
+    "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^1.5.2",
     "mysterium-vpn-js": "^1.0.12",
     "node-fetch": "^2.6.0",
