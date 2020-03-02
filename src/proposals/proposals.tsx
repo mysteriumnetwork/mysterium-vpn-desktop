@@ -10,9 +10,13 @@ export const Proposals = observer(() => {
     return (
         <View id="container" styleSheet={styleSheet}>
             {Object.keys(byCountry).sort().map(country => (
-                <View id="bycountry">
-                    <Text id="country" >{country}</Text>
-                    {byCountry[country].map(p => <Proposal {...p}/>)}
+                <View id="bycountry" key={country}>
+                    <Text id="country">{country}</Text>
+                    {byCountry[country].map(p => {
+                        return (
+                            <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
+                        )
+                    })}
                 </View>
             ))}
         </View>
@@ -22,7 +26,7 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
-    background: #95a5a6;
+    background: #bdc3c7;
     flex-direction: column;
     padding: 7px;
     padding-bottom: 27px;
