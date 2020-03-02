@@ -17,7 +17,7 @@ const winIcon = new QIcon(mystLogo);
 
 const mainWindowEventHandler = {
     [WidgetEventTypes.Close]: () => {
-        process.exit()
+        process.emit("beforeExit", 0)
     }
 }
 

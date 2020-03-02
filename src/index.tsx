@@ -1,8 +1,8 @@
 import {Renderer} from "@nodegui/react-nodegui";
 import React from "react";
 import App from "./app";
-import {launchDaemon} from "./node-launcher";
-import {registerExitHooks} from "./utils/spawn-child";
+import {onProcessExit} from "./utils/on-process-exit";
+import {supervisor} from "./supervisor/supervisor";
 
 process.title = "Mysterium VPN 2";
 
@@ -23,5 +23,4 @@ if (module.hot) {
     });
 }
 
-registerExitHooks()
-launchDaemon()
+onProcessExit(async () => await supervisor.killMyst())

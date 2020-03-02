@@ -1,5 +1,6 @@
 import tequilapi from "../tequila";
-import {action, observable} from "mobx";
+import {action, observable, reaction, when} from "mobx";
+import {supervisor} from "../supervisor/supervisor";
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -8,26 +9,64 @@ export enum DaemonStatusType {
 
 export class DaemonStore {
     @observable
-    loading = false
+    statusLoading = false
     @observable
     status = DaemonStatusType.Down
+
+    @observable
+    starting = false
 
     constructor() {
         setInterval(async () => {
             await this.healthcheck()
-        }, 200);
+        }, 2000);
+        when(() => this.status == DaemonStatusType.Down, async () => {
+            await this.start()
+        })
+        reaction(() => this.status, async (status) => {
+            if (status == DaemonStatusType.Down) {
+                await this.start()
+            }
+        })
     }
 
     @action
     async healthcheck() {
-        this.loading = true
+        if (this.starting) {
+            console.log("Daemon is starting, suspending healthcheck")
+            return
+        }
+        this.statusLoading = true
         try {
-            const hc = await tequilapi.healthCheck(100)
-            this.status = hc.uptime ? DaemonStatusType.Up : DaemonStatusType.Down
+            await tequilapi.healthCheck(100)
+            this.status = DaemonStatusType.Up
         } catch (err) {
-            console.error("Healthcheck failed", err)
+            console.error("Healthcheck failed:", err.message)
             this.status = DaemonStatusType.Down
         }
-        this.loading = false
+        this.statusLoading = false
     }
+
+    @action
+    async start() {
+        if (this.starting) {
+            console.info("Already starting")
+            return
+        }
+        this.starting = true
+        try {
+            await supervisor.connect()
+        } catch (err) {
+            console.error("Failed to connect to the supervisor, installing", err)
+            try {
+                await supervisor.install()
+            } catch (err) {
+                console.error("Failed to install supervisor", err)
+            }
+        }
+
+        await supervisor.startMyst()
+        this.starting = false
+    }
+
 }

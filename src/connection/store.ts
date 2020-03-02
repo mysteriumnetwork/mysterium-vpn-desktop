@@ -27,7 +27,7 @@ export class ConnectionStore {
             if (this.root.daemon.status == DaemonStatusType.Up) {
                 await this.statusCheck()
             }
-        }, 500);
+        }, 1000);
     }
 
     setupReactions() {

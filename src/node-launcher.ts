@@ -1,12 +1,11 @@
-import * as path from "path";
-import {isDevelopment, isProduction} from "./utils/mode";
-import {spawnChild} from "./utils/spawn-child";
+import * as path from "path"
+import {isDevelopment, isProduction} from "./utils/mode"
 
 /**
  * Resolves node executable path for all supported platforms in development and production modes.
  * @return {string} Node executable path which can be used to spawn the node daemon.
  */
-const nodeExecPath = (): string | undefined => {
+const mystPath = (): string | undefined => {
     if (isProduction()) {
         switch (process.platform) {
             case "darwin":
@@ -22,17 +21,3 @@ const nodeExecPath = (): string | undefined => {
         return "./node/myst"
     }
 }
-
-export const launchDaemon = () => {
-    try {
-        const nodePath = nodeExecPath()
-        if (!nodePath) {
-            console.log("Could not determine node daemon path")
-            process.exit(-5)
-        }
-        spawnChild(nodePath, ["daemon"])
-    } catch (err) {
-        console.log("Error running myst daemon", err)
-    }
-}
-
