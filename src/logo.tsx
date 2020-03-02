@@ -19,4 +19,3 @@ const styleSheet = `
     width: 150px;
 }
 `
-
