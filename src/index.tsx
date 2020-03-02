@@ -1,6 +1,6 @@
 import {Renderer} from "@nodegui/react-nodegui";
 import React from "react";
-import App from "./app";
+import App from "./main-window";
 import {onProcessExit} from "./utils/on-process-exit";
 import {supervisor} from "./supervisor/supervisor";
 

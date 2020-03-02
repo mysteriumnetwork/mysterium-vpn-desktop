@@ -6,7 +6,14 @@ import mystLogo from "../assets/logosm.png"
 
 export const Logo = () => (
     <View id="container" styleSheet={styleSheet}>
-        <Image id="img" src={fixAssetPath(mystLogo)} />
+        <Image id="img"
+               src={fixAssetPath(mystLogo)}
+               geometry={{
+                   width: 150,
+                   height: 150,
+                   x: 600,
+                   y: 120,
+               }}/>
     </View>
 )
 
