@@ -22,21 +22,22 @@ export const Proposal = observer((p: ProposalType) => {
 const styleSheet = `
 #proposal {
     width: 390px;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
+    border-left: 5px solid transparent;
+}
+#proposal:hover {
+    background: #8f9c9d;
+    color: #f0f0f0;
+    border-left: 5px solid #ecf0f1;
 }
 #button {
     font-size: 12px;
     font-family: "Monaco, monospace";
     text-align: left;
-    color: #222;
-    height: 30px;
-    padding: 7px;
-    border-radius: 5px;
-}
-#button:hover {
     color: #f0f0f0;
-    background-color: #b2005e;
-    padding: 7px;
+    padding: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
 }
 `

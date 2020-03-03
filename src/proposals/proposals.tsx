@@ -33,7 +33,9 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
-    background: #ecf0f1;
+    font-size: 12px;
+    background: #7f8c8d;
+
     flex-direction: column;
     padding: 0;
     padding-top: 0;
@@ -41,9 +43,9 @@ const styleSheet = `
 }
 #country-container {
     flex-direction: column;
+    border-bottom: 1px solid #666;
 }
 #country {
-    background: #34495e;
     padding: 5;
 }
 #country-flag {
@@ -52,11 +54,11 @@ const styleSheet = `
     margin-right: 1;
 }
 #country-name {
-    font-size: 12px;
-    color: #ecf0f1;
+    font-family: ".AppleSystemUIFont";
+    color: #eee;
+    font-size: 13px;
 }
 #country-proposals {
     flex-direction: column;
-    padding: 7;
 }
 `
