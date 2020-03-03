@@ -46,12 +46,13 @@ const styleSheet = `
     border-bottom: 1px solid #666;
 }
 #country {
+    background: #6f7c7d;
     padding: 5;
 }
 #country-flag {
     font-size: 26px;
     height: 26;
-    margin-right: 1;
+    padding-right: 1px;
 }
 #country-name {
     font-family: ".AppleSystemUIFont";

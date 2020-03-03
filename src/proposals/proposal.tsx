@@ -61,7 +61,7 @@ export const Proposal = observer((p: ProposalType) => {
 
 const styleSheet = `
 #proposal {
-    width: 390px;
+    width: 309px;
     margin-bottom: 3px;
     border-left: 5px solid transparent;
 }

@@ -34,10 +34,10 @@ const styleSheet = `
     border: 0;
     border-right: 1px solid #ccc;
     background-color: #ecf0f1;
-    width: 410;
+    width: 310px;
 }
 #left {
-    width: 410px;
+    width: 310px;
     background-color: #ecf0f1;
 }
 #right {
