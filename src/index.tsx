@@ -1,5 +1,5 @@
-import {Renderer} from "@nodegui/react-nodegui";
 import React from "react";
+import {Renderer} from "@nodegui/react-nodegui";
 import MainWindow from "./main-window";
 import {onProcessExit} from "./utils/on-process-exit";
 import {supervisor} from "./supervisor/supervisor";
@@ -18,7 +18,7 @@ Renderer.render(<Root/>);
 
 // This is for hot reloading (this will be stripped off in production by webpack)
 if (module.hot) {
-    module.hot.accept(["./app"], function () {
+    module.hot.accept(["./main-window"], function () {
         Renderer.forceUpdate();
     });
 }
