@@ -31,7 +31,7 @@ export class ProposalStore {
     async fetchProposals() {
         this.loading = true
         try {
-            this.proposals = await tequilapi.findProposals({fetchConnectCounts: true})
+            this.proposals = await tequilapi.findProposals()
         } catch (err) {
             console.log("Could not get proposals", err)
         }
