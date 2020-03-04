@@ -3,9 +3,9 @@ import {RootStore} from "../store";
 import {DaemonStatusType} from "../daemon/store";
 import tequilapi from "../tequila";
 import * as _ from "lodash";
-import {newUIProposal, UIProposal} from "./ui-proposal-type";
+import {newUIProposal, UIProposal, compareProposal} from "./ui-proposal-type";
 
-const compareProposal = (a: UIProposal, b: UIProposal): number => a.key.localeCompare(b.key)
+const supportedServiceTypes = ["openvpn", "wireguard"]
 
 export class ProposalStore {
     @observable
@@ -33,7 +33,9 @@ export class ProposalStore {
     async fetchProposals() {
         this.loading = true
         try {
-            this.proposals = await tequilapi.findProposals().then(proposals => proposals.map(newUIProposal))
+            this.proposals = await tequilapi.findProposals()
+                .then(proposals => proposals.filter(p => supportedServiceTypes.includes(p.serviceType)))
+                .then(proposals => proposals.map(newUIProposal))
         } catch (err) {
             console.log("Could not get proposals", err)
         }

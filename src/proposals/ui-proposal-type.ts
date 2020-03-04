@@ -31,3 +31,5 @@ export const newUIProposal = (proposal: Proposal): UIProposal => {
         serviceType4: serviceType4(proposal.serviceType),
     })
 }
+
+export const compareProposal = (a: UIProposal, b: UIProposal): number => a.key.localeCompare(b.key)
