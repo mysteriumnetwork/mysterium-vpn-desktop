@@ -1,31 +1,31 @@
 import React from "react";
 import {useStores} from "../store";
-import {View, Text} from "@nodegui/react-nodegui";
+import {View} from "@nodegui/react-nodegui";
 import {observer} from "mobx-react-lite";
 import {Proposal} from "./proposal";
-
-const {flag, name} = require('country-emoji');
+import {Country} from "../ui-kit/country/country";
 
 export const Proposals = observer(() => {
     const {proposals} = useStores()
     const byCountry = proposals.byCountry;
     return (
         <View id="container" styleSheet={styleSheet}>
-            {Object.keys(byCountry).sort().map(country => (
-                <View id="country-container" key={country}>
-                    <View id="country">
-                        <Text id="country-flag">{flag(country)}</Text>
-                        <Text id="country-name">{name(country)}</Text>
+            {Object.keys(byCountry).sort().map(countryCode => {
+                return (
+                    <View id="country-container" key={countryCode}>
+                        <View id="country">
+                            <Country code={countryCode} flag/>
+                        </View>
+                        <View id="country-proposals">
+                            {byCountry[countryCode].map(p => {
+                                return (
+                                    <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
+                                )
+                            })}
+                        </View>
                     </View>
-                    <View id="country-proposals">
-                        {byCountry[country].map(p => {
-                            return (
-                                <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
-                            )
-                        })}
-                    </View>
-                </View>
-            ))}
+                )
+            })}
         </View>
     )
 })
@@ -46,18 +46,11 @@ const styleSheet = `
 }
 #country {
     background: #7f8c8d;
-    padding: 5;
+    padding: 10;
     height: 40px;
     border-bottom: 1px solid #666;
     border-top: 1px solid #656565;
-}
-#country-flag {
-    font-size: 26px;
-    padding-right: 1px;
-}
-#country-name {
-    color: #eee;
-    font-size: 13px;
+    align-items: "center";
 }
 #country-proposals {
     flex-direction: column;
