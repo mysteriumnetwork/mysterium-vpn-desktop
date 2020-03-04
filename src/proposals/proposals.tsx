@@ -34,7 +34,7 @@ export const Proposals = observer(() => {
 const styleSheet = `
 #container {
     font-size: 12px;
-    background: #7f8c8d;
+    background: #6f7c7d;
 
     flex-direction: column;
     padding: 0;
@@ -43,19 +43,19 @@ const styleSheet = `
 }
 #country-container {
     flex-direction: column;
-    border-bottom: 1px solid #666;
 }
 #country {
-    background: #6f7c7d;
+    background: #7f8c8d;
     padding: 5;
+    height: 40px;
+    border-bottom: 1px solid #666;
+    border-top: 1px solid #656565;
 }
 #country-flag {
     font-size: 26px;
-    height: 26;
     padding-right: 1px;
 }
 #country-name {
-    font-family: ".AppleSystemUIFont";
     color: #eee;
     font-size: 13px;
 }
