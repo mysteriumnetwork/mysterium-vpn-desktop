@@ -39,7 +39,7 @@ export const Proposal = observer((p: UIProposal) => {
     ].filter(Boolean).join(" ")
 
     return (
-        <View key={p.key} id="proposal" styleSheet={styleSheet}>
+        <View id="proposal" styleSheet={styleSheet}>
             <Button id="button" text={displayText} on={clickHandler}/>
         </View>
     )

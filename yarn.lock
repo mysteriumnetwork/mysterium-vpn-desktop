@@ -3715,10 +3715,10 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mysterium-vpn-js@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-1.0.13.tgz#da91de03ba4a035c83707682223b82cb89d92b3c"
-  integrity sha512-JVDrdms14bb0dCWSMIfJW6WPgai6eX3vTu43Yx0p/J7gsGs+3/HGndZD3lVxqfXSGVwkDyHPhCV86GO2VR5PNw==
+mysterium-vpn-js@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-1.0.16.tgz#ed058ae48f20f0deb65f92210dd01cb6cba36890"
+  integrity sha512-tBu5/L2mlw9B09/ZpIzVfuFcJt6Z6VRtJjXgGPaRr+jpWNEGtgCG62mKkdK29IxRXCY09El7iuQ+/A1EU4wOWA==
   dependencies:
     axios "^0.19.0"
     filesize "^5.0.0"

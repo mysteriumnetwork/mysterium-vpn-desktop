@@ -20,16 +20,18 @@ export const Flag: React.FC<FlagProps> = ({base64, size}) => {
 
 export type CountryProps = {
     code: string
+    viewStyle?: string,
+    textStyle?: string,
     flag: boolean
 }
 
-export const Country: React.FC<CountryProps> = ({code, flag}) => {
+export const Country: React.FC<CountryProps> = ({code, textStyle, viewStyle, flag}) => {
     const c = country(code)
     const flag64 = Buffer.from(c.flag, "base64")
     return (
         <View style={`
             align-items: "center";
-        `}>
+        ` + (viewStyle || '')}>
             {flag && (
                 <Flag size={24} base64={flag64}/>
             )}
@@ -37,7 +39,7 @@ export const Country: React.FC<CountryProps> = ({code, flag}) => {
                 color: #eee;
                 font-size: 12px;
                 margin-left: 1px;
-            `}>{c.name}</Text>
+            ` + (textStyle || '')}>{c.name}</Text>
         </View>
 
     )

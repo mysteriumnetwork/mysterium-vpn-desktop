@@ -1,10 +1,11 @@
 import {ScrollArea, View} from "@nodegui/react-nodegui";
 import {Proposals} from "./proposals/proposals";
-import {Logo} from "./logo";
+import {ConnectionLocation} from "./location/connection-location";
 import {ConnectionStatus} from "./connection/connection-status";
 import {Disconnect} from "./connection/disconnect-button";
 import React from "react";
 import {winSize} from "./config";
+import {ConnectionStatusText} from "./connection/connection-status-text";
 
 export const ConnectView = () => {
     return (
@@ -15,7 +16,9 @@ export const ConnectView = () => {
                 </ScrollArea>
             </View>
             <View id="right">
+                <ConnectionLocation />
                 <ConnectionStatus/>
+                <ConnectionStatusText/>
                 <Disconnect/>
             </View>
         </View>
@@ -42,7 +45,7 @@ const styleSheet = `
 }
 #right {
     flex: 1;
-    flex-direction: column;
+    flex-direction: "column";
     align-items: "center";
     padding-top: 120px;
     background-color: #ecf0f1;

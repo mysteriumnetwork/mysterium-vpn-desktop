@@ -3,7 +3,7 @@ import {RootStore} from "../store";
 import tequilapi from "../tequila";
 import {
     ConnectionStatus,
-    ConnectionStatus as ConnectionStatusType,
+    ConnectionStatus as ConnectionStatusType, ConsumerLocation,
     HttpTequilapiClient,
     TequilapiError
 } from "mysterium-vpn-js";
@@ -18,6 +18,8 @@ export class ConnectionStore {
     connectInProgress = false
     @observable
     status = ConnectionStatusType.NOT_CONNECTED
+    @observable
+    location?: ConsumerLocation
 
     root: RootStore
 
@@ -26,6 +28,7 @@ export class ConnectionStore {
         setInterval(async () => {
             if (this.root.daemon.status == DaemonStatusType.Up) {
                 await this.statusCheck()
+                await this.resolveLocation()
             }
         }, 1000);
     }
@@ -97,6 +100,20 @@ export class ConnectionStore {
             await tequilapi.connectionCancel()
         } catch (err) {
             console.error("Failed to disconnect", err)
+        }
+    }
+
+    @action
+    async resolveLocation() {
+        try {
+            this.location = await tequilapi.connectionLocation()
+        } catch (err) {
+            this.location = {
+                country: "Unknown",
+                ip: "Updating...",
+                asn: 0, city: "", continent: "", isp: "", node_type: "",
+            }
+            console.error("Failed to lookup location", err)
         }
     }
 
