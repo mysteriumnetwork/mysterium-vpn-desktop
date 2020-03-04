@@ -32,6 +32,7 @@ const MainWindow = () => {
     useEffect(() => autorun(() => {
         const daemonIcon = (daemon.status == DaemonStatusType.Up) ? '🟢' : '⚪️'
         const connectionIcon = (connection.status == ConnectionStatusType.CONNECTED) ? '🟢' : '⚪️'
+        statusBar.clearMessage()
         statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || '⚪'}`, 0)
     }))
 
