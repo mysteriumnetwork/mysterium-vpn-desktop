@@ -25,7 +25,8 @@ export class RootStore {
     }
 }
 
-export const storesContext = React.createContext(new RootStore())
+export const rootStore = new RootStore();
+export const storesContext = React.createContext(rootStore)
 
 // enableLogging()
 

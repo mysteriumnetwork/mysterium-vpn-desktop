@@ -3,6 +3,7 @@ import {Renderer} from "@nodegui/react-nodegui";
 import MainWindow from "./main-window";
 import {onProcessExit} from "./utils/on-process-exit";
 import {supervisor} from "./supervisor/supervisor";
+import {createSystemTray} from "./tray/tray";
 
 process.title = "Mysterium VPN 2";
 
@@ -15,6 +16,8 @@ class Root extends React.Component {
 }
 
 Renderer.render(<Root/>);
+
+createSystemTray()
 
 // This is for hot reloading (this will be stripped off in production by webpack)
 if (module.hot) {
