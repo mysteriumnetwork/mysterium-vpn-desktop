@@ -49,6 +49,9 @@ export class ProposalStore {
     }
 
     set activate(proposal: UIProposal) {
+        if (!this.root.connection.canConnect) {
+            return
+        }
         console.info("Selected proposal", JSON.stringify(proposal))
         this.active = proposal
     }

@@ -1,4 +1,4 @@
-import {action, observable, reaction} from "mobx";
+import {action, computed, observable, reaction} from "mobx";
 import {RootStore} from "../store";
 import tequilapi from "../tequila";
 import {
@@ -37,6 +37,11 @@ export class ConnectionStore {
         reaction(() => this.root.proposals.active, async (proposal) => {
             await this.connect()
         })
+    }
+
+    @computed
+    get canConnect(): boolean {
+        return this.status == ConnectionStatus.NOT_CONNECTED
     }
 
     @action

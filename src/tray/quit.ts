@@ -13,5 +13,3 @@ export const quitAction = (): QAction => {
     })
     return quitAction
 }
-
-
