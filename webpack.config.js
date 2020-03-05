@@ -79,6 +79,7 @@ module.exports = (env, argv) => {
     this.plugin("done", () => {
       fs.chmodSync("dist/static/myst", "755")
       fs.chmodSync("dist/static/myst_supervisor", "755")
+      fs.chmodSync("dist/static/openvpn", "755")
       fs.chmodSync("dist/static/config/update-resolv-conf", "755")
     })
   })
