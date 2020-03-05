@@ -58,15 +58,20 @@ export class DaemonStore {
             await supervisor.connect()
         } catch (err) {
             console.error("Failed to connect to the supervisor, installing", err)
-            try {
-                await supervisor.install()
-            } catch (err) {
-                console.error("Failed to install supervisor", err)
-            }
+            await this.supervisorInstall()
         }
 
         await supervisor.startMyst()
         this.starting = false
+    }
+
+    @action
+    async supervisorInstall() {
+        try {
+            return await supervisor.install()
+        } catch (err) {
+            console.error("Failed to install supervisor", err)
+        }
     }
 
 }
