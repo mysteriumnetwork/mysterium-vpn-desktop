@@ -21,11 +21,10 @@ export const ConnectionLocation = observer(() => {
                 textStyle={`
                     color: "black";
                 `}
-                viewStyle={`
+                containerStyle={`
                     justify-content: "center";
                 `}
                 code={connection.location?.country || "unknown"}
-                flag
             />
         </View>
     )

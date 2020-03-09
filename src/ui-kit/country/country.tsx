@@ -1,48 +1,22 @@
 import React from "react";
-import {Image, Text, View} from "@nodegui/react-nodegui";
-import {AspectRatioMode} from "@nodegui/nodegui";
-import {country} from "../../location/countries";
-
-export type FlagProps = {
-    base64: Buffer
-    size: number
-}
-
-export const Flag: React.FC<FlagProps> = ({base64, size}) => {
-    return (
-        <Image
-            size={{ width: size, height: size }}
-            style={`width: ${size}; height: ${size};`}
-            aspectRatioMode={AspectRatioMode.KeepAspectRatio}
-            buffer={base64}/>
-    )
-}
+import {resolveCountry} from "../../location/countries";
+import {ResolvedCountry} from "./resolved-country";
 
 export type CountryProps = {
     code: string
-    viewStyle?: string,
-    textStyle?: string,
-    flag: boolean
+    containerStyle?: string
+    textStyle?: string
 }
 
-export const Country: React.FC<CountryProps> = ({code, textStyle, viewStyle, flag}) => {
-    const c = country(code)
-    const flag64 = Buffer.from(c.flag, "base64")
+export const Country: React.FC<CountryProps> = (props) => {
+    const c = resolveCountry(props.code)
+    const flagBase64 = Buffer.from(c.flag, "base64")
     return (
-        <View style={`
-            align-items: "center";
-        ` + (viewStyle || '')}>
-            {flag && (
-                <Flag size={24} base64={flag64}/>
-            )}
-            <Text style={`
-                color: #eee;
-                font-size: 12px;
-                margin-left: 1px;
-            ` + (textStyle || '')}>{c.name}</Text>
-        </View>
-
+        <ResolvedCountry
+            name={c.name}
+            flagBase64={flagBase64}
+            textStyle={props.textStyle}
+            containerStyle={props.containerStyle}
+        />
     )
 }
-
-

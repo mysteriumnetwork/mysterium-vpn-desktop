@@ -961,7 +961,7 @@ export type Country = {
     flag: string // base64
 }
 
-export const country = (countryCode: string): Country => {
+export const resolveCountry = (countryCode?: string): Country => {
     if (!countryCode) {
         return unknown
     }

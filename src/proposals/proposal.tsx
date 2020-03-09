@@ -47,20 +47,15 @@ export const Proposal = observer((p: UIProposal) => {
 
 const styleSheet = `
 #proposal {
-    width: 294;
-    margin: 0;
-    padding: 0;
 }
 #proposal:hover {
-    background: #4f5c5d;
 }
 #button {
-    width: 289;
+    width: "100%";
     height: 40px;
     font-size: 12px;
     font-family: "Monaco, monospace";
     text-align: left;
-    color: #f0f0f0;
     margin: 0;
     padding: 0;
     padding-left: 10;

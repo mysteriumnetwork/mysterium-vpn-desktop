@@ -3,6 +3,7 @@ import {useStores} from "../store";
 import {View} from "@nodegui/react-nodegui";
 import {observer} from "mobx-react-lite";
 import {Proposal} from "./proposal";
+import {Collapse} from "../ui-kit/collapse/collapse";
 import {Country} from "../ui-kit/country/country";
 
 export const Proposals = observer(() => {
@@ -12,19 +13,26 @@ export const Proposals = observer(() => {
         <View id="container" styleSheet={styleSheet}>
             {Object.keys(byCountry).sort().map(countryCode => {
                 return (
-                    <View id="country-container" key={countryCode}>
-                        <View id="country">
-                            <Country code={countryCode} flag/>
-                        </View>
-                        <View id="country-proposals">
-                            {byCountry[countryCode].map(p => {
-                                return (
-                                    <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
-                                )
-                            })}
-                        </View>
-                    </View>
-                )
+                    <Collapse
+                        initiallyCollapsed
+                        header={
+                            <View style={`padding-top: 5; padding-bottom: 5; padding-left: 15;`}>
+                                <Country
+                                    textStyle={`font-size: 14px; color: #444;`}
+                                    code={countryCode}
+                                />
+                            </View>
+                        }
+                        content={
+                            <View id="country-proposals">
+                                {byCountry[countryCode].map(p => {
+                                    return (
+                                        <Proposal key={`${p.providerId}${p.serviceType}`} {...p}/>
+                                    )
+                                })}
+                            </View>
+                        }
+                    />)
             })}
         </View>
     )
@@ -33,19 +41,18 @@ export const Proposals = observer(() => {
 
 const styleSheet = `
 #container {
-    font-size: 12px;
-    background: #6f7c7d;
+    font-size: 13px;
+    background: #fafafa;
 
     flex-direction: column;
     padding: 0;
     padding-top: 0;
-    padding-bottom: 27;
+    width: "100%";
 }
 #country-container {
     flex-direction: column;
 }
 #country {
-    background: #7f8c8d;
     padding: 10;
     height: 40px;
     border-bottom: 1px solid #666;

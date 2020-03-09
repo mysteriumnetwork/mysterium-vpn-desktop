@@ -12,7 +12,7 @@ export const ConnectView = () => {
         <View id="main" styleSheet={styleSheet}>
             <View id="left">
                 <ScrollArea id="scroll">
-                    <Proposals/>
+                    <View style={`width: 294;`}><Proposals/></View>
                 </ScrollArea>
             </View>
             <View id="right">
