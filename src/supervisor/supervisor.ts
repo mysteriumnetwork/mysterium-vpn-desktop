@@ -1,52 +1,57 @@
-import * as net from "net";
-import {Socket} from "net";
+import * as net from "net"
+import { Socket } from "net"
 import * as os from "os"
-import {staticAssetPath} from "../utils/paths";
-
-const sudo = require("sudo-prompt")
+import { staticAssetPath } from "../utils/paths"
+import * as sudo from "sudo-prompt"
 
 const mystSock = "/var/run/myst.sock"
 
 export class Supervisor {
     conn?: Socket
 
-    async connect() {
+    async connect(): Promise<void> {
         console.log("Connecting to the supervisor...")
-        return await new Promise(((resolve, reject) => {
-            this.conn = net.createConnection(mystSock)
+        return await new Promise((resolve, reject) => {
+            this.conn = net
+                .createConnection(mystSock)
                 .on("connect", () => {
                     console.info("Connected to: ", mystSock)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {
-                    console.info('Server:', data.toString())
+                    console.info("Server:", data.toString())
                 })
-                .on("error", function (data) {
+                .on("error", function(data) {
                     return reject(data)
                 })
-        }))
+        })
     }
 
-    async install() {
+    async install(): Promise<void> {
         const supervisorPath = staticAssetPath("myst_supervisor")
         const mystHome = os.homedir()
         const mystPath = staticAssetPath("myst")
         const openvpnPath = staticAssetPath("openvpn")
         return await new Promise((resolve, reject) => {
             try {
-                sudo.exec(`${supervisorPath} -install -mystHome ${mystHome} -mystPath ${mystPath} -openvpnPath ${openvpnPath}`, {
-                    name: "Mysterium VPN2",
-                    icns: staticAssetPath("logo.icns"),
-                }, (err: any, stdout: string, stderr: string) => {
-                    console.log("[sudo-exec]", stdout, stderr)
-                    if (err) {
-                        return reject(err)
-                    }
-                })
+                sudo.exec(
+                    `${supervisorPath} -install -mystHome ${mystHome} -mystPath ${mystPath} -openvpnPath ${openvpnPath}`,
+                    {
+                        name: "Mysterium VPN2",
+                        icns: staticAssetPath("logo.icns"),
+                    },
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (err: any, stdout: string, stderr: string) => {
+                        console.log("[sudo-exec]", stdout, stderr)
+                        if (err) {
+                            return reject(err)
+                        }
+                    },
+                )
             } catch (err) {
                 reject(err)
             }
-            const waitUntilConnected = () => {
+            const waitUntilConnected = (): void => {
                 this.connect()
                     .then(() => resolve())
                     .catch(() => setTimeout(waitUntilConnected, 500))
@@ -55,20 +60,20 @@ export class Supervisor {
         })
     }
 
-    async disconnect() {
+    disconnect(): void {
         if (this.conn) {
             this.conn.destroy()
         }
     }
 
-    async startMyst() {
+    startMyst(): void {
         if (!this.conn) {
             throw new Error("Supervisor is not connected")
         }
         this.conn.write("RUN\n")
     }
 
-    async killMyst() {
+    killMyst(): void {
         if (!this.conn) {
             throw new Error("Supervisor is not connected")
         }

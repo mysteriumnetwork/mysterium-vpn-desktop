@@ -1,13 +1,14 @@
-import {action, computed, observable, reaction} from "mobx";
-import {RootStore} from "../store";
-import tequilapi from "../tequila";
+import { action, computed, observable, reaction } from "mobx"
+import { RootStore } from "../store"
+import tequilapi from "../tequila"
 import {
     ConnectionStatus,
-    ConnectionStatus as ConnectionStatusType, ConsumerLocation,
+    ConnectionStatus as ConnectionStatusType,
+    ConsumerLocation,
     HttpTequilapiClient,
-    TequilapiError
-} from "mysterium-vpn-js";
-import {DaemonStatusType} from "../daemon/store";
+    TequilapiError,
+} from "mysterium-vpn-js"
+import { DaemonStatusType } from "../daemon/store"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
@@ -30,13 +31,16 @@ export class ConnectionStore {
                 await this.statusCheck()
                 await this.resolveLocation()
             }
-        }, 1000);
+        }, 1000)
     }
 
-    setupReactions() {
-        reaction(() => this.root.proposals.active, async (proposal) => {
-            await this.connect()
-        })
+    setupReactions(): void {
+        reaction(
+            () => this.root.proposals.active,
+            async () => {
+                await this.connect()
+            },
+        )
     }
 
     @computed
@@ -45,7 +49,7 @@ export class ConnectionStore {
     }
 
     @action
-    async connect() {
+    async connect(): Promise<void> {
         this.connectInProgress = true
         try {
             this.status = ConnectionStatus.CONNECTING
@@ -62,12 +66,16 @@ export class ConnectionStore {
             // };
             // const res = await tequilapi.connectionCreate(req)
 
-            await (tequilapi as HttpTequilapiClient).http.put("connection", {
-                consumerId: this.root.identity.id!,
-                providerId: this.root.proposals.active?.providerId!,
-                accountantId,
-                serviceType: this.root.proposals.active?.serviceType!
-            }, 5000)
+            await (tequilapi as HttpTequilapiClient).http.put(
+                "connection",
+                {
+                    consumerId: this.root.identity.id,
+                    providerId: this.root.proposals.active?.providerId,
+                    accountantId,
+                    serviceType: this.root.proposals.active?.serviceType,
+                },
+                5000,
+            )
             // const res = parseConnectionStatusResponse(httpRes);
             // this.status = res.status
         } catch (err) {
@@ -83,7 +91,7 @@ export class ConnectionStore {
     }
 
     @action
-    async statusCheck() {
+    async statusCheck(): Promise<void> {
         try {
             if (this.connectInProgress) {
                 return
@@ -100,7 +108,7 @@ export class ConnectionStore {
     }
 
     @action
-    async disconnect() {
+    async disconnect(): Promise<void> {
         try {
             await tequilapi.connectionCancel()
         } catch (err) {
@@ -109,17 +117,21 @@ export class ConnectionStore {
     }
 
     @action
-    async resolveLocation() {
+    async resolveLocation(): Promise<void> {
         try {
             this.location = await tequilapi.connectionLocation()
         } catch (err) {
             this.location = {
                 country: "Unknown",
                 ip: "Updating...",
-                asn: 0, city: "", continent: "", isp: "", node_type: "",
+                asn: 0,
+                city: "",
+                continent: "",
+                isp: "",
+                // eslint-disable-next-line @typescript-eslint/camelcase
+                node_type: "",
             }
             console.error("Failed to lookup location", err)
         }
     }
-
 }

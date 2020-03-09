@@ -1,7 +1,7 @@
-import tequilapi from "../tequila";
-import {action, observable, reaction} from "mobx";
-import {RootStore} from "../store";
-import {DaemonStatusType} from "../daemon/store";
+import tequilapi from "../tequila"
+import { action, observable, reaction } from "mobx"
+import { RootStore } from "../store"
+import { DaemonStatusType } from "../daemon/store"
 
 export class IdentityStore {
     @observable
@@ -15,18 +15,21 @@ export class IdentityStore {
         this.root = root
     }
 
-    setupReactions() {
-        reaction(() => this.root.daemon.status, async (status) => {
-            if (status == DaemonStatusType.Up) {
-                await this.currentIdentity()
-            } else {
-                this.id = undefined
-            }
-        })
+    setupReactions(): void {
+        reaction(
+            () => this.root.daemon.status,
+            async status => {
+                if (status == DaemonStatusType.Up) {
+                    await this.currentIdentity()
+                } else {
+                    this.id = undefined
+                }
+            },
+        )
     }
 
     @action
-    async currentIdentity() {
+    async currentIdentity(): Promise<void> {
         this.loading = true
         try {
             const identity = await tequilapi.identityCurrent("")
@@ -36,5 +39,4 @@ export class IdentityStore {
         }
         this.loading = false
     }
-
 }

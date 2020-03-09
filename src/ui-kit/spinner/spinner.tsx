@@ -1,10 +1,10 @@
-import React, {MutableRefObject, useCallback, useEffect, useRef} from "react";
-import {Image, View} from "@nodegui/react-nodegui";
-import {QLabel, QMovie} from "@nodegui/nodegui";
-import {fixAssetPath} from "../../utils/paths";
+import React, { MutableRefObject, useCallback, useEffect, useRef } from "react"
+import { Image, View } from "@nodegui/react-nodegui"
+import { QLabel, QMovie } from "@nodegui/nodegui"
+import { fixAssetPath } from "../../utils/paths"
 import spinnerFile from "./spinner2.gif"
 import logoFile from "./mnet1.png"
-import {RNView} from "@nodegui/react-nodegui/dist/components/View/RNView";
+import { RNView } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
 const spinnerSize = {
     width: 200,
@@ -22,7 +22,7 @@ const logoPos = {
 const mov = new QMovie()
 mov.setFileName(fixAssetPath(spinnerFile))
 
-let ql: QLabel;
+let ql: QLabel
 
 type SpinnerProps = {
     active: boolean
@@ -30,12 +30,12 @@ type SpinnerProps = {
     left: number
 }
 
-export const Spinner = ({active, top, left}: SpinnerProps) => {
-    var viewRef: MutableRefObject<RNView | null> = useRef<RNView>(null);
+export const Spinner: React.FC<SpinnerProps> = ({ active, top, left }) => {
+    const viewRef: MutableRefObject<RNView | null> = useRef<RNView>(null)
     const setViewRef = useCallback((ref: RNView) => {
         viewRef.current = ref
         if (viewRef.current) {
-            ql = new QLabel(viewRef.current);
+            ql = new QLabel(viewRef.current)
             ql.setFixedSize(spinnerSize.width, spinnerSize.height)
             ql.lower()
             ql.setMovie(mov)
@@ -67,7 +67,8 @@ export const Spinner = ({active, top, left}: SpinnerProps) => {
                 top: ${top};
                 width: ${spinnerSize.width};
                 height: ${spinnerSize.height};
-            `}>
+            `}
+        >
             <Image
                 size={logoSize}
                 maxSize={logoSize}

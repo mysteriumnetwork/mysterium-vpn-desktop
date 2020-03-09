@@ -1,10 +1,10 @@
-import tequilapi from "../tequila";
-import {action, observable, reaction, when} from "mobx";
-import {supervisor} from "../supervisor/supervisor";
+import tequilapi from "../tequila"
+import { action, observable, reaction, when } from "mobx"
+import { supervisor } from "../supervisor/supervisor"
 
 export enum DaemonStatusType {
     Up = "UP",
-    Down = "DOWN"
+    Down = "DOWN",
 }
 
 export class DaemonStore {
@@ -19,19 +19,25 @@ export class DaemonStore {
     constructor() {
         setInterval(async () => {
             await this.healthcheck()
-        }, 2000);
-        when(() => this.status == DaemonStatusType.Down, async () => {
-            await this.start()
-        })
-        reaction(() => this.status, async (status) => {
-            if (status == DaemonStatusType.Down) {
+        }, 2000)
+        when(
+            () => this.status == DaemonStatusType.Down,
+            async () => {
                 await this.start()
-            }
-        })
+            },
+        )
+        reaction(
+            () => this.status,
+            async status => {
+                if (status == DaemonStatusType.Down) {
+                    await this.start()
+                }
+            },
+        )
     }
 
     @action
-    async healthcheck() {
+    async healthcheck(): Promise<void> {
         if (this.starting) {
             console.log("Daemon is starting, suspending healthcheck")
             return
@@ -48,7 +54,7 @@ export class DaemonStore {
     }
 
     @action
-    async start() {
+    async start(): Promise<void> {
         if (this.starting) {
             console.info("Already starting")
             return
@@ -66,12 +72,11 @@ export class DaemonStore {
     }
 
     @action
-    async supervisorInstall() {
+    async supervisorInstall(): Promise<void> {
         try {
             return await supervisor.install()
         } catch (err) {
             console.error("Failed to install supervisor", err)
         }
     }
-
 }

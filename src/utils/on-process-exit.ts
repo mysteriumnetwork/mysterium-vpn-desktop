@@ -1,5 +1,5 @@
-export const onProcessExit = (hook : Function) => {
-    const shutdown = () => {
+export const onProcessExit = (hook: Function): void => {
+    const shutdown = (): void => {
         console.log("Shutting down...")
         hook()
         process.exit(0)

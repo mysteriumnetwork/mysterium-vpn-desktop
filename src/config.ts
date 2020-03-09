@@ -1,1 +1,1 @@
-export const winSize = {width: 800, height: 600};
+export const winSize = { width: 800, height: 600 }

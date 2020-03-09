@@ -1,9 +1,9 @@
-import {action, computed, observable, reaction} from "mobx";
-import {RootStore} from "../store";
-import {DaemonStatusType} from "../daemon/store";
-import tequilapi from "../tequila";
-import * as _ from "lodash";
-import {newUIProposal, UIProposal, compareProposal} from "./ui-proposal-type";
+import { action, computed, observable, reaction } from "mobx"
+import { RootStore } from "../store"
+import { DaemonStatusType } from "../daemon/store"
+import tequilapi from "../tequila"
+import * as _ from "lodash"
+import { newUIProposal, UIProposal, compareProposal } from "./ui-proposal-type"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
@@ -21,19 +21,23 @@ export class ProposalStore {
         this.root = root
     }
 
-    setupReactions() {
-        reaction(() => this.root.daemon.status, async (status) => {
-            if (status == DaemonStatusType.Up) {
-                await this.fetchProposals()
-            }
-        })
+    setupReactions(): void {
+        reaction(
+            () => this.root.daemon.status,
+            async status => {
+                if (status == DaemonStatusType.Up) {
+                    await this.fetchProposals()
+                }
+            },
+        )
     }
 
     @action
-    async fetchProposals() {
+    async fetchProposals(): Promise<void> {
         this.loading = true
         try {
-            this.proposals = await tequilapi.findProposals()
+            this.proposals = await tequilapi
+                .findProposals()
                 .then(proposals => proposals.filter(p => supportedServiceTypes.includes(p.serviceType)))
                 .then(proposals => proposals.map(newUIProposal))
         } catch (err) {
@@ -44,7 +48,7 @@ export class ProposalStore {
 
     @computed
     get byCountry(): { [code: string]: UIProposal[] } {
-        let result = _.groupBy(this.proposals, p => p.country);
+        const result = _.groupBy(this.proposals, p => p.country)
         return _.mapValues(result, ps => ps.sort(compareProposal))
     }
 
@@ -55,5 +59,4 @@ export class ProposalStore {
         console.info("Selected proposal", JSON.stringify(proposal))
         this.active = proposal
     }
-
 }

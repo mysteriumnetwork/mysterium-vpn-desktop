@@ -1,11 +1,13 @@
-import React from "react";
-import {Text} from "@nodegui/react-nodegui"
-import {useStores} from "../store";
-import {observer} from "mobx-react-lite";
-import {ConnectionStatus as ConnectionStatusType} from "mysterium-vpn-js/lib/connection/status";
+import React from "react"
+import { Text } from "@nodegui/react-nodegui"
+import { useStores } from "../../store"
+import { observer } from "mobx-react-lite"
+import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
 
 export const ConnectionStatusText = observer(() => {
-    const {connection: {status}} = useStores()
+    const {
+        connection: { status },
+    } = useStores()
     let statusText = ""
     switch (status) {
         case ConnectionStatusType.CONNECTED:
@@ -23,7 +25,9 @@ export const ConnectionStatusText = observer(() => {
             width: 400;
             height: 25;
             qproperty-alignment: 'AlignHCenter';
-        `}>{statusText}</Text>
+        `}
+        >
+            {statusText}
+        </Text>
     )
 })
-

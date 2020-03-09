@@ -1,5 +1,5 @@
-import React, {ReactNode} from "react";
-import {Button, View} from "@nodegui/react-nodegui";
+import React, { ReactNode } from "react"
+import { Button, View } from "@nodegui/react-nodegui"
 
 export type ClickableViewProps = {
     width: number
@@ -8,7 +8,7 @@ export type ClickableViewProps = {
     onClick: Function
 }
 
-export const ClickableView: React.FC<ClickableViewProps> = ({width, height, onClick, children}) => {
+export const ClickableView: React.FC<ClickableViewProps> = ({ width, height, onClick, children }) => {
     return (
         <View
             id="container"
@@ -25,11 +25,13 @@ export const ClickableView: React.FC<ClickableViewProps> = ({width, height, onCl
                     height: ${height};
                     min-height: ${height};
                 `}
-            >{children}</View>
+            >
+                {children}
+            </View>
             <Button
                 id="ghost-button"
                 on={{
-                    "clicked": () => onClick()
+                    clicked: (): void => onClick(),
                 }}
                 style={`
                     top: -${height};

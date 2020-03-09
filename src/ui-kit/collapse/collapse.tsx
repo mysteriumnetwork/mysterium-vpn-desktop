@@ -1,41 +1,11 @@
-import React, {useState} from "react";
-import {Button, View} from "@nodegui/react-nodegui";
-import {ClickableView} from "../clickable-view/clickable-view";
+import React, { useState } from "react"
+import { Button, View } from "@nodegui/react-nodegui"
+import { ClickableView } from "../clickable-view/clickable-view"
 
 export type ListGroupProps = {
     initiallyCollapsed: boolean
     header: React.ReactNode
     content: React.ReactNode
-}
-
-export const Collapse: React.FC<ListGroupProps> = ({initiallyCollapsed, header, content}) => {
-    const [collapsed, setCollapsed] = useState(initiallyCollapsed)
-    const collapseText = collapsed ? "▼" : "▲"
-    return (
-        <View id="container" styleSheet={styleSheet}>
-            <View
-                id="header"
-            >
-                    <ClickableView width={320} height={40} onClick={() => setCollapsed(!collapsed)}>
-                        <View id="header-left">{header}</View>
-                        <View id="header-right">
-                            <Button
-                                id="collapse"
-                                text={collapseText}
-                                on={{
-                                    "clicked": () => {
-                                        setCollapsed(() => !collapsed)
-                                    }
-                                }}
-                            />
-                        </View>
-                    </ClickableView>
-            </View>
-            {!collapsed && (
-                <View>{content}</View>
-            )}
-        </View>
-    )
 }
 
 const styleSheet = `
@@ -61,3 +31,29 @@ const styleSheet = `
     color: "white";
 }
 `
+
+export const Collapse: React.FC<ListGroupProps> = ({ initiallyCollapsed, header, content }) => {
+    const [collapsed, setCollapsed] = useState(initiallyCollapsed)
+    const collapseText = collapsed ? "▼" : "▲"
+    return (
+        <View id="container" styleSheet={styleSheet}>
+            <View id="header">
+                <ClickableView width={320} height={40} onClick={(): void => setCollapsed(!collapsed)}>
+                    <View id="header-left">{header}</View>
+                    <View id="header-right">
+                        <Button
+                            id="collapse"
+                            text={collapseText}
+                            on={{
+                                clicked: (): void => {
+                                    setCollapsed(() => !collapsed)
+                                },
+                            }}
+                        />
+                    </View>
+                </ClickableView>
+            </View>
+            {!collapsed && <View>{content}</View>}
+        </View>
+    )
+}

@@ -1,32 +1,13 @@
-import {ScrollArea, View} from "@nodegui/react-nodegui";
-import {Proposals} from "./proposals/proposals";
-import {ConnectionLocation} from "./location/connection-location";
-import {ConnectionStatus} from "./connection/connection-status";
-import {Disconnect} from "./connection/disconnect-button";
-import React from "react";
-import {winSize} from "./config";
-import {ConnectionStatusText} from "./connection/connection-status-text";
-
-export const ConnectView = () => {
-    return (
-        <View id="main" styleSheet={styleSheet}>
-            <View id="left">
-                <ScrollArea id="scroll">
-                    <View style={`width: 294;`}><Proposals/></View>
-                </ScrollArea>
-            </View>
-            <View id="right">
-                <ConnectionLocation />
-                <ConnectionStatus/>
-                <ConnectionStatusText/>
-                <Disconnect/>
-            </View>
-        </View>
-    )
-}
+import { ScrollArea, View } from "@nodegui/react-nodegui"
+import { Proposals } from "./proposals/comp/proposals"
+import { ConnectionLocation } from "./location/comp/connection-location"
+import { ConnectionStatus } from "./connection/comp/connection-status"
+import { Disconnect } from "./connection/comp/disconnect-button"
+import React from "react"
+import { winSize } from "./config"
+import { ConnectionStatusText } from "./connection/comp/connection-status-text"
 
 //     background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #412361, stop: 1 #9b1c4d);
-
 const styleSheet = `
 #main {
     width: ${winSize.width}px;
@@ -50,4 +31,24 @@ const styleSheet = `
     padding-top: 120px;
     background-color: #ecf0f1;
 }
-`;
+`
+
+export const ConnectView: React.FC = () => {
+    return (
+        <View id="main" styleSheet={styleSheet}>
+            <View id="left">
+                <ScrollArea id="scroll">
+                    <View style={`width: 294;`}>
+                        <Proposals />
+                    </View>
+                </ScrollArea>
+            </View>
+            <View id="right">
+                <ConnectionLocation />
+                <ConnectionStatus />
+                <ConnectionStatusText />
+                <Disconnect />
+            </View>
+        </View>
+    )
+}

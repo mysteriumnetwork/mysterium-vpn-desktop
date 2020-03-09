@@ -1,4 +1,4 @@
-import * as path from "path";
+import * as path from "path"
 
 /**
  * Calculates asset path assuming it's in the same directory as dist/index.js.

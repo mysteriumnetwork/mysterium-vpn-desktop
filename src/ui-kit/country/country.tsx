@@ -1,6 +1,6 @@
-import React from "react";
-import {resolveCountry} from "../../location/countries";
-import {ResolvedCountry} from "./resolved-country";
+import React from "react"
+import { resolveCountry } from "../../location/countries"
+import { ResolvedCountry } from "./resolved-country"
 
 export type CountryProps = {
     code: string
@@ -8,7 +8,7 @@ export type CountryProps = {
     textStyle?: string
 }
 
-export const Country: React.FC<CountryProps> = (props) => {
+export const Country: React.FC<CountryProps> = props => {
     const c = resolveCountry(props.code)
     const flagBase64 = Buffer.from(c.flag, "base64")
     return (

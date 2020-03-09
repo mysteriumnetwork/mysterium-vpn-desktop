@@ -1,10 +1,10 @@
-import {Proposal} from "mysterium-vpn-js";
+import { Proposal } from "mysterium-vpn-js"
 
 export interface UIProposal extends Proposal {
     key: string
-    country?: string,
+    country?: string
     id10: string
-    serviceType4: string,
+    serviceType4: string
 }
 
 const id10 = (id: string): string => id.substr(0, 10)
@@ -23,13 +23,13 @@ const serviceType4 = (serviceType: string): string => {
 
 export const newUIProposal = (proposal: Proposal): UIProposal => {
     const key = `${proposal.providerId}${proposal.serviceType}`
-    return ({
+    return {
         ...proposal,
         key,
         country: proposal.serviceDefinition?.locationOriginate?.country,
         id10: id10(proposal.providerId),
         serviceType4: serviceType4(proposal.serviceType),
-    })
+    }
 }
 
 export const compareProposal = (a: UIProposal, b: UIProposal): number => a.key.localeCompare(b.key)
