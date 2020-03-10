@@ -19,7 +19,7 @@ const styleSheet = `
 }
 `
 
-export const ProposalGroups = observer(() => {
+export const ProposalsByCountry = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.byCountryCounts
     return (

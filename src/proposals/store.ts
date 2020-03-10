@@ -7,6 +7,8 @@ import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
+const proposalRefreshRate = 10000
+
 export type ProposalFilter = {
     country?: string
     noAccessPolicy?: boolean
@@ -17,6 +19,7 @@ export class ProposalStore {
     loading = false
     @observable
     proposals: UIProposal[] = []
+
     @observable
     active?: UIProposal
 
@@ -24,6 +27,10 @@ export class ProposalStore {
     filter: ProposalFilter = {
         noAccessPolicy: true,
     }
+    @observable
+    apFiltered: UIProposal[] = []
+    @observable
+    countryFiltered: UIProposal[] = []
 
     root: RootStore
 
@@ -37,6 +44,7 @@ export class ProposalStore {
             async status => {
                 if (status == DaemonStatusType.Up) {
                     await this.fetchProposals()
+                    this.applyCountryFilter() // Refresh (load) main view initially
                 }
             },
         )
@@ -45,7 +53,7 @@ export class ProposalStore {
                 return
             }
             await this.fetchProposals()
-        }, 3000)
+        }, proposalRefreshRate)
     }
 
     @action
@@ -56,6 +64,7 @@ export class ProposalStore {
                 .findProposals()
                 .then(proposals => proposals.filter(p => supportedServiceTypes.includes(p.serviceType)))
                 .then(proposals => proposals.map(newUIProposal))
+            this.applyAccessPolicyFilter() // Only reflect update in the sidebar, not refreshing main view (not to bother the user)
         } catch (err) {
             console.log("Could not get proposals", err)
         }
@@ -63,30 +72,9 @@ export class ProposalStore {
     }
 
     @computed
-    get byCountry(): { [code: string]: UIProposal[] } {
-        const result = _.groupBy(this.proposals, p => p.country)
-        return _.mapValues(result, ps => ps.sort(compareProposal))
-    }
-
-    @computed
     get byCountryCounts(): { [code: string]: number } {
-        const result = _.groupBy(this.proposals, p => p.country)
+        const result = _.groupBy(this.apFiltered, p => p.country)
         return _.mapValues(result, ps => ps.length)
-    }
-
-    @computed
-    get byFilter(): UIProposal[] {
-        return this.proposals
-            .filter(p => {
-                if (this.filter.country != null && p.country != this.filter.country) {
-                    return false
-                }
-                if (this.filter.noAccessPolicy && p.accessPolicies) {
-                    return false
-                }
-                return true
-            })
-            .sort(compareProposal)
     }
 
     set activate(proposal: UIProposal) {
@@ -97,7 +85,27 @@ export class ProposalStore {
         this.active = proposal
     }
 
+    set toggleAccessPolicyFilter(noAccessPolicies: boolean) {
+        this.filter.noAccessPolicy = noAccessPolicies
+        this.applyAccessPolicyFilter()
+    }
+
+    @action
+    applyAccessPolicyFilter(): void {
+        this.apFiltered = this.proposals
+            .filter(p => !this.filter.noAccessPolicy || !p.accessPolicies)
+            .sort(compareProposal)
+    }
+
     set toggleFilterCountry(countryCode: string) {
         this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
+        this.applyCountryFilter()
+    }
+
+    @action
+    applyCountryFilter(): void {
+        this.countryFiltered = this.apFiltered
+            .filter(p => this.filter.country == null || p.country == this.filter.country)
+            .sort(compareProposal)
     }
 }

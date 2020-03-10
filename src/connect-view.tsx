@@ -2,7 +2,7 @@ import { ScrollArea, View } from "@nodegui/react-nodegui"
 import { Proposals } from "./proposals/comp/proposals"
 import React from "react"
 import { winSize } from "./config"
-import { ProposalGroups } from "./proposals/comp/proposal-groups"
+import { ProposalsByCountry } from "./proposals/comp/proposals-by-country"
 
 //     background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #412361, stop: 1 #9b1c4d);
 const styleSheet = `
@@ -33,7 +33,7 @@ export const ConnectView: React.FC = () => {
             <View id="left">
                 <ScrollArea id="scroll">
                     <View style={`width: 232;`}>
-                        <ProposalGroups />
+                        <ProposalsByCountry />
                     </View>
                 </ScrollArea>
             </View>
