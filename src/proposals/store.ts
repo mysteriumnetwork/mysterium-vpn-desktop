@@ -3,7 +3,7 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import tequilapi from "../tequila"
 import * as _ from "lodash"
-import { newUIProposal, UIProposal, compareProposal } from "./ui-proposal-type"
+import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
@@ -40,6 +40,12 @@ export class ProposalStore {
                 }
             },
         )
+        setInterval(async () => {
+            if (this.root.daemon.status != DaemonStatusType.Up) {
+                return
+            }
+            await this.fetchProposals()
+        }, 3000)
     }
 
     @action
@@ -70,15 +76,17 @@ export class ProposalStore {
 
     @computed
     get byFilter(): UIProposal[] {
-        return this.proposals.filter(p => {
-            if (this.filter.country != null && p.country != this.filter.country) {
-                return false
-            }
-            if (this.filter.noAccessPolicy && p.accessPolicies) {
-                return false
-            }
-            return true
-        })
+        return this.proposals
+            .filter(p => {
+                if (this.filter.country != null && p.country != this.filter.country) {
+                    return false
+                }
+                if (this.filter.noAccessPolicy && p.accessPolicies) {
+                    return false
+                }
+                return true
+            })
+            .sort(compareProposal)
     }
 
     set activate(proposal: UIProposal) {
