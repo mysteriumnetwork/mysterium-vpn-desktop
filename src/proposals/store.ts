@@ -7,6 +7,11 @@ import { newUIProposal, UIProposal, compareProposal } from "./ui-proposal-type"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
+export type ProposalFilter = {
+    country?: string
+    noAccessPolicy?: boolean
+}
+
 export class ProposalStore {
     @observable
     loading = false
@@ -14,6 +19,11 @@ export class ProposalStore {
     proposals: UIProposal[] = []
     @observable
     active?: UIProposal
+
+    @observable
+    filter: ProposalFilter = {
+        noAccessPolicy: true,
+    }
 
     root: RootStore
 
@@ -52,11 +62,34 @@ export class ProposalStore {
         return _.mapValues(result, ps => ps.sort(compareProposal))
     }
 
+    @computed
+    get byCountryCounts(): { [code: string]: number } {
+        const result = _.groupBy(this.proposals, p => p.country)
+        return _.mapValues(result, ps => ps.length)
+    }
+
+    @computed
+    get byFilter(): UIProposal[] {
+        return this.proposals.filter(p => {
+            if (this.filter.country != null && p.country != this.filter.country) {
+                return false
+            }
+            if (this.filter.noAccessPolicy && p.accessPolicies) {
+                return false
+            }
+            return true
+        })
+    }
+
     set activate(proposal: UIProposal) {
         if (!this.root.connection.canConnect) {
             return
         }
         console.info("Selected proposal", JSON.stringify(proposal))
         this.active = proposal
+    }
+
+    set toggleFilterCountry(countryCode: string) {
+        this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
     }
 }

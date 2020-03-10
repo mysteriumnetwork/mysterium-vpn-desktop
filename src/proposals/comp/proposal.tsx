@@ -22,6 +22,7 @@ const trafficRate = (p: ProposalType): number | undefined => {
 
 const styleSheet = `
 #proposal {
+    width: 400;
 }
 #proposal:hover {
 }

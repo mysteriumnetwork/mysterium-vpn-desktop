@@ -3,9 +3,10 @@ import { resolveCountry } from "../../location/countries"
 import { ResolvedCountry } from "./resolved-country"
 
 export type CountryProps = {
-    code: string
+    code?: string
     containerStyle?: string
     textStyle?: string
+    text?: boolean
 }
 
 export const Country: React.FC<CountryProps> = props => {
@@ -17,6 +18,7 @@ export const Country: React.FC<CountryProps> = props => {
             flagBase64={flagBase64}
             textStyle={props.textStyle}
             containerStyle={props.containerStyle}
+            text={props.text}
         />
     )
 }

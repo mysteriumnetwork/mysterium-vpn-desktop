@@ -16,6 +16,7 @@ export const ClickableView: React.FC<ClickableViewProps> = ({ width, height, onC
                 width: ${width};
                 height: ${height};
                 min-height: ${height};
+                background: "transparent";
             `}
         >
             <View
