@@ -97,7 +97,8 @@ export class ProposalStore {
             .sort(compareProposal)
     }
 
-    set toggleFilterCountry(countryCode: string) {
+    @action
+    toggleFilterCountry(countryCode?: string): void {
         this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
         this.applyCountryFilter()
     }

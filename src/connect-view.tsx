@@ -3,42 +3,66 @@ import { Proposals } from "./proposals/comp/proposals"
 import React from "react"
 import { winSize } from "./config"
 import { ProposalsByCountry } from "./proposals/comp/proposals-by-country"
-
-//     background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #412361, stop: 1 #9b1c4d);
-const styleSheet = `
-#main {
-    width: ${winSize.width}px;
-    height: ${winSize.height}px;
-    flex-direction: "row";
-}
-#scroll {
-    border: 0;
-    border-right: 1px solid #ccc;
-    background-color: #ecf0f1;
-    width: 270;
-}
-#left {
-    width: 250;
-    background-color: #ecf0f1;
-}
-#right {
-    height: "100%";
-    background-color: "red";
-}
-`
+import { EffectiveLocation } from "./location/comp/effective-location"
 
 export const ConnectView: React.FC = () => {
     return (
-        <View id="main" styleSheet={styleSheet}>
-            <View id="left">
-                <ScrollArea id="scroll">
-                    <View style={`width: 232;`}>
+        <View
+            style={`
+                width: ${winSize.width};
+                height: ${winSize.height};
+                flex-direction: "row";
+            `}
+        >
+            <View
+                style={`
+                    width: 250;
+                    padding-bottom: 25;
+                    flex-direction: "column";
+                `}
+            >
+                <ScrollArea
+                    style={`
+                        flex: 1;
+                        background-color: #ecf0f1;
+                        border: 0;
+                        border-right: 1px solid #ccc;
+                        border-bottom: 1px solid #e9e9e9;
+                    `}
+                >
+                    <View
+                        style={`
+                            padding-bottom: 15;
+                            background: #fafafa;
+                        `}
+                    >
                         <ProposalsByCountry />
                     </View>
                 </ScrollArea>
+                <View
+                    style={`
+                        height: 65;
+                        background: #fafafa;
+                        border-top: 1px solid #dcdcdc;
+                    `}
+                >
+                    <EffectiveLocation />
+                </View>
             </View>
-            <ScrollArea id="scroll-proposals" style={`border: 0; height: "100%"; width: ${winSize.width - 255};`}>
-                <View style={`width: "100%";`}>
+            <ScrollArea
+                style={`
+                    flex: 1;
+                    border: 0;
+                    width: ${winSize.width - 250 - 10};
+                    padding-bottom: 25;
+                `}
+            >
+                <View
+                    style={`
+                        flex: 1;
+                        max-width: ${winSize.width - 250 - 15};
+                    `}
+                >
                     <Proposals />
                 </View>
             </ScrollArea>

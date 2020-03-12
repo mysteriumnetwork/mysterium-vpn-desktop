@@ -36,7 +36,7 @@ export const ProposalsByCountry = observer(() => {
                                 height={30}
                                 active={proposals.filter.country === countryCode}
                                 onToggle={(): void => {
-                                    proposals.toggleFilterCountry = countryCode
+                                    proposals.toggleFilterCountry(countryCode)
                                 }}
                             >
                                 <View

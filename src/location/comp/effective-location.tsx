@@ -1,0 +1,32 @@
+import React from "react"
+import { Text, View } from "@nodegui/react-nodegui"
+import { observer } from "mobx-react-lite"
+import { useStores } from "../../store"
+import { Country } from "../../ui-kit/country/country"
+
+export const EffectiveLocation = observer(() => {
+    const { connection } = useStores()
+    const ipText = `IP: ${connection.location?.ip ?? "Unknown"}`
+    return (
+        <View
+            style={`
+                flex-direction: "row";
+                align-items: "center";
+                justify-content: "center";
+            `}
+        >
+            <View
+                style={`
+                    padding-left: 15;
+                    padding-right: 15;
+                `}
+            >
+                <Country code={connection.location?.country} text={false} />
+            </View>
+            <View style={`flex-direction: "column";`}>
+                <Text style={`font-weight: bold;`}>{connection.status}</Text>
+                <Text style={`qproperty-alignment: AlignCenter;`}>{ipText}</Text>
+            </View>
+        </View>
+    )
+})
