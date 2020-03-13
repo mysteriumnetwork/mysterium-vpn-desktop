@@ -5,7 +5,7 @@ import { mystDisplay, pricePerGiB, pricePerMinute } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../store"
 import { Country } from "../../ui-kit/country/country"
-import { MButton } from "../../ui-kit/mbutton/mbutton"
+import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
 
 const timeRate = (p: ProposalType): number | undefined => {
     if (!p.paymentMethod) {
@@ -22,13 +22,12 @@ const trafficRate = (p: ProposalType): number | undefined => {
 }
 
 export const SelectedProposal: React.FC = observer(() => {
-    const { proposals, connection } = useStores()
+    const { proposals } = useStores()
     const proposal = proposals.active
     if (!proposal) {
         return <></>
     }
     const pricingText = `${timeRate(proposal)}/min ${trafficRate(proposal)}/GiB`
-    const connectAction = (): Promise<void> => connection.connect()
     return (
         <View style={`flex: 1;`}>
             <View style={`padding: 15;`}>
@@ -50,7 +49,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 padding: 15;
                 `}
             >
-                <MButton text="Connect" onClick={connectAction} />
+                <ConnectDisconnectButton />
             </View>
         </View>
     )

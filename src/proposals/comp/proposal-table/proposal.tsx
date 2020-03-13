@@ -20,16 +20,16 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
             <Toggle width={532} height={35} active={activeKey === proposal.key} onToggle={onToggle}>
                 <View
                     style={`
-                width: "100%";
-                padding: 10;
-                `}
+                    width: "100%";
+                    padding: 10;
+                    `}
                 >
                     <View style={proposalsCellStyle}>
                         <Text
                             style={`
-                        font-family: "Monaco, monospace";
-                        font-size: 12px;
-                        `}
+                            font-family: "Monaco, monospace";
+                            font-size: 12px;
+                            `}
                         >
                             {proposal.id10}
                         </Text>
