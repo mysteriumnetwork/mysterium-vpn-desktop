@@ -26,15 +26,6 @@ export class ConnectionStore {
         }, 1000)
     }
 
-    setupReactions(): void {
-        // reaction(
-        //     () => this.root.proposals.active,
-        //     async () => {
-        //         await this.connect()
-        //     },
-        // )
-    }
-
     @computed
     get canConnect(): boolean {
         return this.status == ConnectionStatus.NOT_CONNECTED
@@ -143,5 +134,4 @@ export class ConnectionStore {
     setConnectInProgress = (b: boolean): void => {
         this.connectInProgress = b
     }
-
 }
