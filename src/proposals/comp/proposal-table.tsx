@@ -37,39 +37,60 @@ export type ProposalProps = {
     proposal: UIProposal
 }
 
-export const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
-    const { proposals } = useStores()
-    const onToggle = (): void => proposals.toggleActiveProposal(proposal)
-    return (
-        <Toggle width={532} height={35} active={proposals.active?.key === proposal.key} onToggle={onToggle}>
-            <View
-                style={`
+export type ProposalFCProps = {
+    proposal: UIProposal
+    activeKey?: string
+    onToggle: () => void
+}
+
+// eslint-disable-next-line react/display-name
+const Proposal: React.FC<ProposalFCProps> = React.memo(
+    ({ proposal, activeKey, onToggle }) => {
+        return (
+            <Toggle width={532} height={35} active={activeKey === proposal.key} onToggle={onToggle}>
+                <View
+                    style={`
                 width: "100%";
                 padding: 10;
                 `}
-            >
-                <View style={proposalsCellStyle}>
-                    <Text
-                        style={`
+                >
+                    <View style={proposalsCellStyle}>
+                        <Text
+                            style={`
                         font-family: "Monaco, monospace";
                         font-size: 12px;
                         `}
-                    >
-                        {proposal.id10}
-                    </Text>
+                        >
+                            {proposal.id10}
+                        </Text>
+                    </View>
+                    <View style={`width: 100;`}>
+                        <Text>{timeRate(proposal)}</Text>
+                    </View>
+                    <View style={proposalsCellStyle}>
+                        <Text>{trafficRate(proposal)}</Text>
+                    </View>
+                    <View style={proposalsCellStyle}>
+                        <Text>{proposal.serviceType4}</Text>
+                    </View>
                 </View>
-                <View style={`width: 100;`}>
-                    <Text>{timeRate(proposal)}</Text>
-                </View>
-                <View style={proposalsCellStyle}>
-                    <Text>{trafficRate(proposal)}</Text>
-                </View>
-                <View style={proposalsCellStyle}>
-                    <Text>{proposal.serviceType4}</Text>
-                </View>
-            </View>
-        </Toggle>
-    )
+            </Toggle>
+        )
+    },
+    (prevProps, nextProps) => {
+        return (
+            // If same key and it was not active/will not be active - leave it alone and do not re-render
+            prevProps.proposal.key === nextProps.proposal.key &&
+            ![prevProps.activeKey, nextProps.activeKey].includes(nextProps.proposal.key)
+        )
+    },
+)
+
+export const ConnectedProposal: React.FC<ProposalProps> = observer(({ proposal }) => {
+    const { proposals } = useStores()
+    const onToggle = (): void => proposals.toggleActiveProposal(proposal)
+    const activeKey = proposals.active?.key
+    return <Proposal proposal={proposal} activeKey={activeKey} onToggle={onToggle} />
 })
 
 export const ProposalTable: React.FC = observer(() => {
@@ -93,7 +114,7 @@ export const ProposalTable: React.FC = observer(() => {
                 `}
             >
                 {items.map(p => {
-                    return <Proposal key={p.key} proposal={p} />
+                    return <ConnectedProposal key={p.key} proposal={p} />
                 })}
             </View>
         </View>
