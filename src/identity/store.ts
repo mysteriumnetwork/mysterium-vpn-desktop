@@ -22,7 +22,7 @@ export class IdentityStore {
                 if (status == DaemonStatusType.Up) {
                     await this.currentIdentity()
                 } else {
-                    this.id = undefined
+                    this.setId(undefined)
                 }
             },
         )
@@ -30,13 +30,23 @@ export class IdentityStore {
 
     @action
     async currentIdentity(): Promise<void> {
-        this.loading = true
+        this.setLoading(true)
         try {
             const identity = await tequilapi.identityCurrent("")
-            this.id = identity.id
+            this.setId(identity.id)
         } catch (err) {
             console.log("Could not get current identity")
         }
-        this.loading = false
+        this.setLoading(false)
+    }
+
+    @action
+    setLoading = (b: boolean): void => {
+        this.loading = b
+    }
+
+    @action
+    setId = (id?: string): void => {
+        this.id = id
     }
 }

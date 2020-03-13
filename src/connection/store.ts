@@ -1,24 +1,16 @@
 import { action, computed, observable } from "mobx"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
-import {
-    ConnectionStatus,
-    ConnectionStatus as ConnectionStatusType,
-    ConsumerLocation,
-    HttpTequilapiClient,
-    TequilapiError,
-} from "mysterium-vpn-js"
+import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient, TequilapiError } from "mysterium-vpn-js"
 import { DaemonStatusType } from "../daemon/store"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
 export class ConnectionStore {
     @observable
-    loading = false
-    @observable
     connectInProgress = false
     @observable
-    status = ConnectionStatusType.NOT_CONNECTED
+    status = ConnectionStatus.NOT_CONNECTED
     @observable
     location?: ConsumerLocation
 
@@ -50,9 +42,9 @@ export class ConnectionStore {
 
     @action
     async connect(): Promise<void> {
-        this.connectInProgress = true
+        this.setConnectInProgress(true)
         try {
-            this.status = ConnectionStatus.CONNECTING
+            this.setStatus(ConnectionStatus.CONNECTING)
             // this.status = ConnectionStatusType.CONNECTING
             // TODO SDK: add accountantId
             // TODO SDK: remove object remapping! (just passthrough all fields to the API);
@@ -87,7 +79,7 @@ export class ConnectionStore {
             }
             // this.status = ConnectionStatus.NOT_CONNECTED
         }
-        this.connectInProgress = false
+        this.setConnectInProgress(false)
     }
 
     @action
@@ -100,10 +92,10 @@ export class ConnectionStore {
             if (this.connectInProgress) {
                 return
             }
-            this.status = conn.status
+            this.setStatus(conn.status)
         } catch (err) {
             console.error("Connection status check failed", err)
-            this.status = ConnectionStatusType.NOT_CONNECTED
+            this.setStatus(ConnectionStatus.NOT_CONNECTED)
         }
     }
 
@@ -118,10 +110,11 @@ export class ConnectionStore {
 
     @action
     async resolveLocation(): Promise<void> {
+        let location: ConsumerLocation
         try {
-            this.location = await tequilapi.connectionLocation()
+            location = await tequilapi.connectionLocation()
         } catch (err) {
-            this.location = {
+            location = {
                 country: "Unknown",
                 ip: "Updating...",
                 asn: 0,
@@ -133,5 +126,22 @@ export class ConnectionStore {
             }
             console.error("Failed to lookup location", err)
         }
+        this.setLocation(location)
     }
+
+    @action
+    setStatus = (s: ConnectionStatus): void => {
+        this.status = s
+    }
+
+    @action
+    setLocation = (l: ConsumerLocation): void => {
+        this.location = l
+    }
+
+    @action
+    setConnectInProgress = (b: boolean): void => {
+        this.connectInProgress = b
+    }
+
 }

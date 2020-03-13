@@ -42,15 +42,15 @@ export class DaemonStore {
             console.log("Daemon is starting, suspending healthcheck")
             return
         }
-        this.statusLoading = true
+        this.setStatusLoading(true)
         try {
             await tequilapi.healthCheck(100)
-            this.status = DaemonStatusType.Up
+            this.setStatus(DaemonStatusType.Up)
         } catch (err) {
             console.error("Healthcheck failed:", err.message)
-            this.status = DaemonStatusType.Down
+            this.setStatus(DaemonStatusType.Down)
         }
-        this.statusLoading = false
+        this.setStatusLoading(false)
     }
 
     @action
@@ -59,7 +59,7 @@ export class DaemonStore {
             console.info("Already starting")
             return
         }
-        this.starting = true
+        this.setStarting(true)
         try {
             await supervisor.connect()
         } catch (err) {
@@ -68,7 +68,7 @@ export class DaemonStore {
         }
 
         await supervisor.startMyst()
-        this.starting = false
+        this.setStarting(false)
     }
 
     @action
@@ -78,5 +78,20 @@ export class DaemonStore {
         } catch (err) {
             console.error("Failed to install supervisor", err)
         }
+    }
+
+    @action
+    setStatus = (s: DaemonStatusType): void => {
+        this.status = s
+    }
+
+    @action
+    setStarting = (s: boolean): void => {
+        this.starting = s
+    }
+
+    @action
+    setStatusLoading = (s: boolean): void => {
+        this.statusLoading = s
     }
 }

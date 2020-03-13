@@ -3,8 +3,9 @@ import { ConnectionStore } from "./connection/store"
 import React from "react"
 import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
+import { configure } from "mobx"
 
-//import {enableLogging} from "mobx-logger";
+// import { enableLogging } from "mobx-logger"
 
 export class RootStore {
     daemon: DaemonStore
@@ -29,5 +30,7 @@ export const rootStore = new RootStore()
 export const storesContext = React.createContext(rootStore)
 
 // enableLogging()
+
+configure({ enforceActions: "always" })
 
 export const useStores = (): RootStore => React.useContext(storesContext)

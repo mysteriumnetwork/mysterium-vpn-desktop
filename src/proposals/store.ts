@@ -58,17 +58,18 @@ export class ProposalStore {
 
     @action
     async fetchProposals(): Promise<void> {
-        this.loading = true
+        this.setLoading(true)
         try {
-            this.proposals = await tequilapi
+            const proposals = await tequilapi
                 .findProposals()
                 .then(proposals => proposals.filter(p => supportedServiceTypes.includes(p.serviceType)))
                 .then(proposals => proposals.map(newUIProposal))
+            this.setProposals(proposals)
             this.applyAccessPolicyFilter() // Only reflect update in the sidebar, not refreshing main view (not to bother the user)
         } catch (err) {
             console.log("Could not get proposals", err)
         }
-        this.loading = false
+        this.setLoading(false)
     }
 
     @computed
@@ -113,5 +114,15 @@ export class ProposalStore {
         this.countryFiltered = this.apFiltered
             .filter(p => this.filter.country == null || p.country == this.filter.country)
             .sort(compareProposal)
+    }
+
+    @action
+    setLoading = (b: boolean): void => {
+        this.loading = b
+    }
+
+    @action
+    setProposals = (proposals: UIProposal[]): void => {
+        this.proposals = proposals
     }
 }
