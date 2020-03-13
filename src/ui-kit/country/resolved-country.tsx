@@ -13,11 +13,11 @@ export type ResolvedCountryProps = {
 export const ResolvedCountry: React.FC<ResolvedCountryProps> = ({
     name,
     flagBase64,
-    containerStyle,
-    textStyle,
-    text,
+    containerStyle = "",
+    textStyle = "",
+    text = false,
 }) => (
-    <View style={`align-items: "center"; ${containerStyle || ""}`}>
+    <View style={`align-items: "center"; ${containerStyle}`}>
         <Flag size={24} imageBase64={flagBase64} />
         {text && <Text style={`font-size: 12px; margin-left: 1; ${textStyle || ""}`}>{name}</Text>}
     </View>

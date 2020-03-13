@@ -11,16 +11,15 @@ export type ClickableViewProps = {
 export const ClickableView: React.FC<ClickableViewProps> = ({ width, height, onClick, children }) => {
     return (
         <View
-            id="container"
             style={`
-                width: ${width};
+                width: "100%";
                 height: ${height};
                 min-height: ${height};
                 background: "transparent";
+                flex-direction: "column";
             `}
         >
             <View
-                id="content"
                 style={`
                     width: ${width};
                     height: ${height};
@@ -30,7 +29,6 @@ export const ClickableView: React.FC<ClickableViewProps> = ({ width, height, onC
                 {children}
             </View>
             <Button
-                id="ghost-button"
                 on={{
                     clicked: (): void => onClick(),
                 }}

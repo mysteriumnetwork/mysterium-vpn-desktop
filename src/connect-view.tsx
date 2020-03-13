@@ -1,9 +1,11 @@
 import { ScrollArea, View } from "@nodegui/react-nodegui"
-import { Proposals } from "./proposals/comp/proposals"
+import { ProposalTable } from "./proposals/comp/proposal-table"
 import React from "react"
 import { winSize } from "./config"
 import { ProposalsByCountry } from "./proposals/comp/proposals-by-country"
 import { EffectiveLocation } from "./location/comp/effective-location"
+import { SelectedProposal } from "./proposals/comp/selected-proposal"
+import { ProposalTableHeader } from "./proposals/comp/proposal-table"
 
 export const ConnectView: React.FC = () => {
     return (
@@ -26,8 +28,7 @@ export const ConnectView: React.FC = () => {
                         flex: 1;
                         background-color: #ecf0f1;
                         border: 0;
-                        border-right: 1px solid #ccc;
-                        border-bottom: 1px solid #e9e9e9;
+                        border-right: 1px solid #e9e9e9;
                     `}
                 >
                     <View
@@ -43,29 +44,47 @@ export const ConnectView: React.FC = () => {
                     style={`
                         height: 65;
                         background: #fafafa;
-                        border-top: 1px solid #dcdcdc;
+                        border-top: 1px solid #e9e9e9;
+                        border-right: 1px solid #e9e9e9;
                     `}
                 >
                     <EffectiveLocation />
                 </View>
             </View>
-            <ScrollArea
+            <View
                 style={`
-                    flex: 1;
-                    border: 0;
-                    width: ${winSize.width - 250 - 10};
+                    width: ${winSize.width - 250};
                     padding-bottom: 25;
+                    flex-direction: "column";
+                    background: #fff;
                 `}
             >
-                <View
+                <ProposalTableHeader />
+                <ScrollArea
                     style={`
+                    flex: 1;
+                    border: 0;
+                    background: #fff;
+                `}
+                >
+                    <View
+                        style={`
                         flex: 1;
                         max-width: ${winSize.width - 250 - 15};
                     `}
+                    >
+                        <ProposalTable />
+                    </View>
+                </ScrollArea>
+                <View
+                    style={`
+                        max-height: 65;
+                        border-top: 1px solid #e9e9e9;
+                    `}
                 >
-                    <Proposals />
+                    <SelectedProposal />
                 </View>
-            </ScrollArea>
+            </View>
         </View>
     )
 }

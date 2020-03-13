@@ -9,16 +9,16 @@ export type CountryProps = {
     text?: boolean
 }
 
-export const Country: React.FC<CountryProps> = props => {
-    const c = resolveCountry(props.code)
+export const Country: React.FC<CountryProps> = ({ code, containerStyle, textStyle, text }) => {
+    const c = resolveCountry(code)
     const flagBase64 = Buffer.from(c.flag, "base64")
     return (
         <ResolvedCountry
             name={c.name}
             flagBase64={flagBase64}
-            textStyle={props.textStyle}
-            containerStyle={props.containerStyle}
-            text={props.text}
+            textStyle={textStyle}
+            containerStyle={containerStyle}
+            text={text}
         />
     )
 }

@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from "mobx"
+import { action, computed, observable } from "mobx"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
 import {
@@ -35,12 +35,12 @@ export class ConnectionStore {
     }
 
     setupReactions(): void {
-        reaction(
-            () => this.root.proposals.active,
-            async () => {
-                await this.connect()
-            },
-        )
+        // reaction(
+        //     () => this.root.proposals.active,
+        //     async () => {
+        //         await this.connect()
+        //     },
+        // )
     }
 
     @computed

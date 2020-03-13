@@ -85,6 +85,11 @@ export class ProposalStore {
         this.active = proposal
     }
 
+    @action
+    toggleActiveProposal(proposal?: UIProposal): void {
+        this.active = this.active?.key !== proposal?.key ? proposal : undefined
+    }
+
     set toggleAccessPolicyFilter(noAccessPolicies: boolean) {
         this.filter.noAccessPolicy = noAccessPolicies
         this.applyAccessPolicyFilter()
