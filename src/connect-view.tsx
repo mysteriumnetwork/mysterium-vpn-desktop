@@ -1,11 +1,11 @@
 import { ScrollArea, View } from "@nodegui/react-nodegui"
-import { ProposalTable } from "./proposals/comp/proposal-table"
+import { ProposalTable } from "./proposals/comp/proposal-table/proposal-table"
 import React from "react"
 import { winSize } from "./config"
 import { ProposalsByCountry } from "./proposals/comp/proposals-by-country"
 import { EffectiveLocation } from "./location/comp/effective-location"
 import { SelectedProposal } from "./proposals/comp/selected-proposal"
-import { ProposalTableHeader } from "./proposals/comp/proposal-table"
+import { ProposalTableHeader } from "./proposals/comp/proposal-table/header"
 
 export const ConnectView: React.FC = () => {
     return (
