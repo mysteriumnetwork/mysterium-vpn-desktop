@@ -10,9 +10,6 @@ const styleSheet = (width: number, height: number): string => `
     background: "${brand}";
     border-radius: 3px;
 }
-#active QLabel {
-    color: "white";
-}
 #inactive {
     width: ${width};
     height: ${height};

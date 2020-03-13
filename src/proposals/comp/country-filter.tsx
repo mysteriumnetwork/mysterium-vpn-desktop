@@ -16,18 +16,17 @@ export type CountryFilterPureProps = {
 // eslint-disable-next-line react/display-name
 const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
     ({ country, count, activeCountry, toggleAction }) => {
+        const active = activeCountry === country
         return (
             <View key={country} style={`margin-top: 5;`} cursor={CursorShape.PointingHandCursor}>
-                <Toggle
-                    key={country}
-                    width={230}
-                    height={30}
-                    active={activeCountry === country}
-                    onToggle={toggleAction}
-                >
+                <Toggle key={country} width={230} height={30} active={active} onToggle={toggleAction}>
                     <View style={`padding-left: 10; padding-right: 10; width: 225; justify-content: "space-between";`}>
-                        <Country textStyle={`font-size: 14px;`} code={country} text />
-                        <Text>{count}</Text>
+                        <Country
+                            textStyle={`font-size: 14px; color: ${active ? "white" : "inherit"}`}
+                            code={country}
+                            text
+                        />
+                        <Text style={`color: ${active ? "white" : "inherit"}`}>{count}</Text>
                     </View>
                 </Toggle>
             </View>

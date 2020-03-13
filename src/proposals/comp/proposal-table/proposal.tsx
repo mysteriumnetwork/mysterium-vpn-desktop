@@ -16,8 +16,9 @@ export type ProposalFCProps = {
 // eslint-disable-next-line react/display-name
 const ProposalPure: React.FC<ProposalFCProps> = React.memo(
     ({ proposal, activeKey, onToggle }) => {
+        const active = activeKey === proposal.key
         return (
-            <Toggle width={532} height={35} active={activeKey === proposal.key} onToggle={onToggle}>
+            <Toggle width={532} height={35} active={active} onToggle={onToggle}>
                 <View
                     style={`
                     width: "100%";
@@ -29,19 +30,20 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
                             style={`
                             font-family: "Monaco, monospace";
                             font-size: 12px;
+                            color: ${active ? "white" : "inherit"}
                             `}
                         >
                             {proposal.id10}
                         </Text>
                     </View>
                     <View style={`width: 100;`}>
-                        <Text>{timeRate(proposal)}</Text>
+                        <Text style={`color: ${active ? "white" : "inherit"}`}>{timeRate(proposal)}</Text>
                     </View>
                     <View style={proposalsCellStyle}>
-                        <Text>{trafficRate(proposal)}</Text>
+                        <Text style={`color: ${active ? "white" : "inherit"}`}>{trafficRate(proposal)}</Text>
                     </View>
                     <View style={proposalsCellStyle}>
-                        <Text>{proposal.serviceType4}</Text>
+                        <Text style={`color: ${active ? "white" : "inherit"}`}>{proposal.serviceType4}</Text>
                     </View>
                 </View>
             </Toggle>
