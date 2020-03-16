@@ -23,7 +23,6 @@ export class ConnectionStore {
         setInterval(async () => {
             if (this.root.daemon.status == DaemonStatusType.Up) {
                 await this.statusCheck()
-                await this.resolveLocation()
             }
         }, 1000)
     }
@@ -34,6 +33,14 @@ export class ConnectionStore {
             async status => {
                 if (status == DaemonStatusType.Up) {
                     await this.resolveOriginalLocation()
+                }
+            },
+        )
+        reaction(
+            () => this.root.connection.status,
+            async status => {
+                if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
+                    await this.resolveLocation()
                 }
             },
         )
