@@ -4,6 +4,7 @@ import { DaemonStatusType } from "../daemon/store"
 import tequilapi from "../tequila"
 import * as _ from "lodash"
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
+import { ConnectionStatus } from "mysterium-vpn-js"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
@@ -42,7 +43,7 @@ export class ProposalStore {
         reaction(
             () => this.root.daemon.status,
             async status => {
-                if (status == DaemonStatusType.Up) {
+                if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     await this.fetchProposals()
                     this.applyCountryFilter() // Refresh (load) main view initially
                 }

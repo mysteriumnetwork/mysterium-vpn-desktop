@@ -63,7 +63,7 @@ export class DaemonStore {
         try {
             await supervisor.connect()
         } catch (err) {
-            console.error("Failed to connect to the supervisor, installing", err)
+            console.error("Failed to connect to the supervisor, installing", err.message)
             await this.supervisorInstall()
         }
 

@@ -6,9 +6,11 @@ import { ConnectView } from "./connect-view"
 import { Spinner } from "./ui-kit/spinner/spinner"
 import { View } from "@nodegui/react-nodegui"
 import { winSize } from "./config"
+import { ConnectionStatus } from "mysterium-vpn-js"
+import { ConnectionActiveView } from "./connection-active-view"
 
 export const App = observer(() => {
-    const { daemon } = useStores()
+    const { daemon, connection } = useStores()
     if (daemon.status == DaemonStatusType.Down) {
         return (
             <View style={`background: #ecf0f1;`}>
@@ -16,5 +18,8 @@ export const App = observer(() => {
             </View>
         )
     }
-    return <ConnectView />
+    if (connection.status === ConnectionStatus.NOT_CONNECTED) {
+        return <ConnectView />
+    }
+    return <ConnectionActiveView />
 })

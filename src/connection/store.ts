@@ -1,7 +1,7 @@
-import { action, computed, observable } from "mobx"
+import { action, computed, observable, reaction } from "mobx"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
-import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient, TequilapiError } from "mysterium-vpn-js"
+import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
 import { DaemonStatusType } from "../daemon/store"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
@@ -13,6 +13,8 @@ export class ConnectionStore {
     status = ConnectionStatus.NOT_CONNECTED
     @observable
     location?: ConsumerLocation
+    @observable
+    originalLocation?: ConsumerLocation
 
     root: RootStore
 
@@ -24,6 +26,17 @@ export class ConnectionStore {
                 await this.resolveLocation()
             }
         }, 1000)
+    }
+
+    setupReactions(): void {
+        reaction(
+            () => this.root.daemon.status,
+            async status => {
+                if (status == DaemonStatusType.Up) {
+                    await this.resolveOriginalLocation()
+                }
+            },
+        )
     }
 
     @computed
@@ -62,13 +75,7 @@ export class ConnectionStore {
             // const res = parseConnectionStatusResponse(httpRes);
             // this.status = res.status
         } catch (err) {
-            if (err instanceof TequilapiError) {
-                // TODO SDK: provide type safe access to errors
-                console.error("Could not connect", err.message, JSON.stringify(err))
-            } else {
-                console.error("Could not connect", err)
-            }
-            // this.status = ConnectionStatus.NOT_CONNECTED
+            console.error("Could not connect", err.message)
         }
         this.setConnectInProgress(false)
     }
@@ -85,7 +92,7 @@ export class ConnectionStore {
             }
             this.setStatus(conn.status)
         } catch (err) {
-            console.error("Connection status check failed", err)
+            console.error("Connection status check failed", err.message)
             this.setStatus(ConnectionStatus.NOT_CONNECTED)
         }
     }
@@ -95,7 +102,17 @@ export class ConnectionStore {
         try {
             await tequilapi.connectionCancel()
         } catch (err) {
-            console.error("Failed to disconnect", err)
+            console.error("Failed to disconnect", err.message)
+        }
+    }
+
+    @action
+    async resolveOriginalLocation(): Promise<void> {
+        try {
+            const location = await tequilapi.location()
+            this.setOriginalLocation(location)
+        } catch (err) {
+            console.error("Failed to lookup original location", err.message)
         }
     }
 
@@ -115,7 +132,7 @@ export class ConnectionStore {
                 // eslint-disable-next-line @typescript-eslint/camelcase
                 node_type: "",
             }
-            console.error("Failed to lookup location", err)
+            console.error("Failed to lookup location", err.message)
         }
         this.setLocation(location)
     }
@@ -128,6 +145,11 @@ export class ConnectionStore {
     @action
     setLocation = (l: ConsumerLocation): void => {
         this.location = l
+    }
+
+    @action
+    setOriginalLocation = (l: ConsumerLocation): void => {
+        this.originalLocation = l
     }
 
     @action

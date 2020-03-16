@@ -20,6 +20,7 @@ export class RootStore {
         this.proposals = new ProposalStore(this)
 
         // Setup cross-store reactions after all injections.
+        this.connection.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
     }
