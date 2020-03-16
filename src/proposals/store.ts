@@ -53,6 +53,9 @@ export class ProposalStore {
             if (this.root.daemon.status != DaemonStatusType.Up) {
                 return
             }
+            if (this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
+                return
+            }
             await this.fetchProposals()
         }, proposalRefreshRate)
     }
