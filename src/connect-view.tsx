@@ -3,9 +3,9 @@ import { ProposalTable } from "./proposals/comp/proposal-table/proposal-table"
 import React from "react"
 import { winSize } from "./config"
 import { CountryFilter } from "./proposals/comp/country-filter"
-import { EffectiveLocation } from "./location/comp/effective-location"
 import { SelectedProposal } from "./proposals/comp/selected-proposal"
 import { ProposalTableHeader } from "./proposals/comp/proposal-table/header"
+import { OriginalLocation } from "./location/comp/original-location"
 
 export const ConnectView: React.FC = () => {
     return (
@@ -48,7 +48,7 @@ export const ConnectView: React.FC = () => {
                         border-right: 1px solid #e9e9e9;
                     `}
                 >
-                    <EffectiveLocation />
+                    <OriginalLocation />
                 </View>
             </View>
             <View
