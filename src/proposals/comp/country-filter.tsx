@@ -19,14 +19,15 @@ const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
         const active = activeCountry === country
         return (
             <View key={country} style={`margin-top: 5;`} cursor={CursorShape.PointingHandCursor}>
-                <Toggle key={country} width={230} height={30} active={active} onToggle={toggleAction}>
+                <Toggle key={country} width={220} height={28} active={active} onToggle={toggleAction}>
                     <View style={`padding-left: 10; padding-right: 10; width: 225; justify-content: "space-between";`}>
                         <Country
-                            textStyle={`font-size: 14px; color: ${active ? "white" : "inherit"}`}
+                            flagStyle={`top: 2;`}
+                            textStyle={`color: ${active ? "white" : "inherit"}`}
                             code={country}
                             text
                         />
-                        <Text style={`color: ${active ? "white" : "inherit"}`}>{count}</Text>
+                        <Text style={`color: ${active ? "white" : "inherit"};`}>{count}</Text>
                     </View>
                 </Toggle>
             </View>
@@ -51,8 +52,7 @@ export const CountryFilter = observer(() => {
             background: #fafafa;
             
             flex-direction: column;
-            padding-left: 2;
-            padding-right: 2;
+            padding: 2;
             width: "100%";
             border: 0;
             `}

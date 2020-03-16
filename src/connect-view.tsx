@@ -18,7 +18,7 @@ export const ConnectView: React.FC = () => {
         >
             <View
                 style={`
-                    width: 250;
+                    width: 240;
                     padding-bottom: 25;
                     flex-direction: "column";
                 `}

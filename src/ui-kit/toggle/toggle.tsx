@@ -13,6 +13,7 @@ const styleSheet = (width: number, height: number): string => `
 #inactive {
     width: ${width};
     height: ${height};
+    border-radius: 3px;
 }
 #inactive:hover {
     background: #e6e6e6;
