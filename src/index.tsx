@@ -4,6 +4,12 @@ import MainWindow from "./main-window"
 import { onProcessExit } from "./utils/on-process-exit"
 import { supervisor } from "./supervisor/supervisor"
 import { createSystemTray } from "./tray/tray"
+import { QFontDatabase } from "@nodegui/nodegui"
+
+import robotoLight from "../assets/fonts/Roboto-Light.ttf"
+import robotoMedium from "../assets/fonts/Roboto-Medium.ttf"
+
+import { fixAssetPath } from "./utils/paths"
 
 process.title = "Mysterium VPN 2"
 
@@ -12,6 +18,10 @@ class Root extends React.Component {
         return <MainWindow />
     }
 }
+
+;[robotoLight, robotoMedium].forEach(font => {
+    QFontDatabase.addApplicationFont(fixAssetPath(font))
+})
 
 Renderer.render(<Root />)
 

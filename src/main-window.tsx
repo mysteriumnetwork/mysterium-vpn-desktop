@@ -49,6 +49,13 @@ const MainWindow: React.FC = () => {
             windowTitle="Mysterium VPN 2"
             minSize={winSize}
             maxSize={winSize}
+            styleSheet={`
+            QLabel {
+            font-family: "Roboto";
+            font-weight: 100;
+            font-size: 14px;
+            }
+            `}
         >
             <App />
         </Window>
