@@ -1,3 +1,4 @@
+import retry from "async-retry"
 import tequilapi from "../tequila"
 import { action, observable, reaction } from "mobx"
 import { RootStore } from "../store"
@@ -31,12 +32,17 @@ export class IdentityStore {
     @action
     async currentIdentity(): Promise<void> {
         this.setLoading(true)
-        try {
-            const identity = await tequilapi.identityCurrent("")
-            this.setId(identity.id)
-        } catch (err) {
-            console.log("Could not get current identity")
-        }
+        await retry(
+            async () => {
+                const identity = await tequilapi.identityCurrent("")
+                this.setId(identity.id)
+            },
+            {
+                onRetry: (err: Error) => {
+                    console.error("Could not get current identity", err.message)
+                },
+            },
+        )
         this.setLoading(false)
     }
 
