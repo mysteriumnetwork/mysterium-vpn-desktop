@@ -866,10 +866,10 @@
     node-fetch "^2.6.0"
     progress "^2.0.3"
 
-"@nodegui/nodegui@^0.16.0":
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/@nodegui/nodegui/-/nodegui-0.16.0.tgz#78ec99352a4d4e2d73af1ede3b2dc55bcab0942c"
-  integrity sha512-s6cFlqxTpk+lNVu+lSQjN7mkt59qfj34Lu7JIg/bmi9USoFoEwQO1+wwKfHV9w1D0Z9SppXL+/Y5RJJFLNzrew==
+"@nodegui/nodegui@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@nodegui/nodegui/-/nodegui-0.16.1.tgz#d82cceed3368b78ac017ebcc78086e39372634ec"
+  integrity sha512-ofK3gUKRZpreCmf73mgTS8I1rxkhobPQRlhLyQekL+cr6i9UNNBpvenk0ouXaEoQAQKckT/A9YNzU5O4eAqQAw==
   dependencies:
     "@nodegui/artifact-installer" "^1.1.0"
     "@nodegui/qode" "^2.0.4"
@@ -877,6 +877,7 @@
     cross-env "^7.0.0"
     cuid "^2.1.6"
     manage-path "^2.0.0"
+    memoize-one "^5.1.1"
     node-addon-api "^2.0.0"
     postcss-nodegui-autoprefixer "0.0.7"
     prebuild-install "^5.3.3"
@@ -3999,6 +4000,11 @@ mem@^4.0.0:
     map-age-cleaner "^0.1.1"
     mimic-fn "^2.0.0"
     p-is-promise "^2.0.0"
+
+memoize-one@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-5.1.1.tgz#047b6e3199b508eaec03504de71229b8eb1d75c0"
+  integrity sha512-HKeeBpWvqiVJD57ZUAsJNm71eHTykffzcLZVYWiVfQeI1rJtuEaS7hQiEpWfVVk18donPwJEcFKIkCmPJNOhHA==
 
 memory-fs@^0.4.0, memory-fs@^0.4.1:
   version "0.4.1"
