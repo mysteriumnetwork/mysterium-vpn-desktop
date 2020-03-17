@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite"
 import { Country } from "../../ui-kit/country/country"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 import { CursorShape } from "@nodegui/nodegui"
+import { textSmall } from "../../ui-kit/typography"
 
 export type CountryFilterPureProps = {
     country: string
@@ -48,16 +49,22 @@ export const CountryFilter = observer(() => {
     return (
         <View
             style={`
-            font-size: 13px;
-            background: #fafafa;
-            
-            flex-direction: column;
-            padding: 2;
             width: "100%";
+            padding: 2;
+            background: #fafafa;
             border: 0;
+            flex-direction: column;
             `}
         >
-            <Text style={`color: #777; margin: 5;`}>By country</Text>
+            <Text
+                style={`
+                ${textSmall}
+                color: #777;
+                margin: 5;
+            `}
+            >
+                By country
+            </Text>
             {Object.keys(countryCounts)
                 .sort()
                 .map(countryCode => {

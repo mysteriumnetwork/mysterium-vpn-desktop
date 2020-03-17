@@ -1,6 +1,7 @@
 import React from "react"
 import { Button, useEventHandler } from "@nodegui/react-nodegui"
 import { brand } from "../colors"
+import { textRegular } from "../typography"
 
 export type MButtonProps = {
     text: string
@@ -14,8 +15,8 @@ export const MButton: React.FC<MButtonProps> = ({ text, enabled = true, onClick 
         <Button
             enabled={enabled}
             style={`
+                ${textRegular} 
                 padding: 10;
-                font-size: 14px; 
                 font-weight: bold; 
                 background: ${enabled ? brand : "#ddd"}; 
                 color: #fff; 

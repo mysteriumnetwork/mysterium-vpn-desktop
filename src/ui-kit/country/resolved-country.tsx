@@ -21,6 +21,6 @@ export const ResolvedCountry: React.FC<ResolvedCountryProps> = ({
 }) => (
     <View style={`${containerStyle}`}>
         <Flag size={24} imageBase64={flagBase64} style={flagStyle} />
-        {text && <Text style={`font-size: 14px; margin-left: 1; ${textStyle || ""}`}>{name}</Text>}
+        {text && <Text style={`margin-left: 1; ${textStyle || ""}`}>{name}</Text>}
     </View>
 )

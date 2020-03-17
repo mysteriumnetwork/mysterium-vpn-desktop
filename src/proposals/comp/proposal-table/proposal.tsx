@@ -6,6 +6,7 @@ import { timeRate, trafficRate } from "../../../payment/rate"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../store"
 import { proposalsCellStyle } from "./style"
+import { textSmall } from "../../../ui-kit/typography"
 
 export type ProposalFCProps = {
     proposal: UIProposal
@@ -29,8 +30,8 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
                         <View style={proposalsCellStyle}>
                             <Text
                                 style={`
+                                ${textSmall}
                                 font-family: "Monaco, monospace";
-                                font-size: 12px;
                                 color: ${active ? "white" : "inherit"}
                                 `}
                             >

@@ -9,6 +9,7 @@ import { autorun } from "mobx"
 import { DaemonStatusType } from "./daemon/store"
 import { winSize } from "./config"
 import { App } from "./app"
+import { textRegular } from "./ui-kit/typography"
 
 const winIcon = new QIcon(mystLogo)
 
@@ -53,7 +54,7 @@ const MainWindow: React.FC = () => {
             QLabel {
             font-family: "Roboto";
             font-weight: 100;
-            font-size: 14px;
+            ${textRegular}
             }
             `}
         >
