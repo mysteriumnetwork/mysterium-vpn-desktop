@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from "mobx"
+import { action, observable, reaction, runInAction } from "mobx"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
 import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
@@ -9,6 +9,8 @@ const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 export class ConnectionStore {
     @observable
     connectInProgress = false
+    @observable
+    gracePeriod = false
     @observable
     status = ConnectionStatus.NOT_CONNECTED
     @observable
@@ -46,14 +48,10 @@ export class ConnectionStore {
         )
     }
 
-    @computed
-    get canConnect(): boolean {
-        return this.status == ConnectionStatus.NOT_CONNECTED
-    }
-
     @action
     async connect(): Promise<void> {
         this.setConnectInProgress(true)
+        this.setGracePeriod()
         try {
             this.setStatus(ConnectionStatus.CONNECTING)
             // this.status = ConnectionStatusType.CONNECTING
@@ -145,6 +143,21 @@ export class ConnectionStore {
     }
 
     @action
+    setConnectInProgress = (b: boolean): void => {
+        this.connectInProgress = b
+    }
+
+    @action
+    setGracePeriod = (): void => {
+        this.gracePeriod = true
+        setTimeout(() => {
+            runInAction(() => {
+                this.gracePeriod = false
+            })
+        }, 5000)
+    }
+
+    @action
     setStatus = (s: ConnectionStatus): void => {
         this.status = s
     }
@@ -157,10 +170,5 @@ export class ConnectionStore {
     @action
     setOriginalLocation = (l: ConsumerLocation): void => {
         this.originalLocation = l
-    }
-
-    @action
-    setConnectInProgress = (b: boolean): void => {
-        this.connectInProgress = b
     }
 }

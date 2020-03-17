@@ -37,7 +37,7 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
             <MButton
                 text={text}
                 onClick={onClick}
-                enabled={true}
+                enabled={!connection.gracePeriod}
                 width={width}
                 height={height}
                 cancelStyle={cancelStyle}
