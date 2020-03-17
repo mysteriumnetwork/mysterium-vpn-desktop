@@ -1,0 +1,18 @@
+sequenceDiagram
+Note right of Desktop app: Application starts
+Desktop app->>Node: Healthcheck
+Node-->>Desktop app: Failed
+Desktop app->>Supervisor: Run node
+Supervisor-->>Desktop app: Failed
+Desktop app->>Desktop app: Ask for permissions
+Desktop app->>Supervisor: Install supervisor and node
+Supervisor-->>Desktop app: Success
+Desktop app->>Supervisor: Run node
+Supervisor-->>Desktop app: Success
+Desktop app->>Node: Healthcheck
+Node-->>Desktop app: Success
+Note right of Desktop app: Application logic
+Note right of Desktop app: Application closes
+Desktop app->>Supervisor: Kill node
+Supervisor-->>Desktop app: Success
+Note right of Desktop app: Application exits

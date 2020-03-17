@@ -1,0 +1,23 @@
+sequenceDiagram
+Note right of Desktop app: Application starts
+Desktop app->>Node: healthcheck()
+Node-->>Desktop app: ok
+Desktop app->>Node: identityCurrent()
+Node->>Node: Identity registration if necessary
+Node-->>Desktop app: ok { id: 0x.... }
+
+Desktop app->>Node: findProposals()
+Node-->>Desktop app: ok { proposals: [...] }
+
+Note right of Desktop app: User selects proposal
+
+Desktop app->>Node: connectionCreate()
+Node-->>Desktop app: ok
+
+Desktop app->>Node: connectionStatus()
+Node-->>Desktop app: ok
+
+Note right of Desktop app: VPN session is active
+
+Desktop app->>Node: connectionCancel()
+Node-->>Desktop app: ok
