@@ -9,5 +9,10 @@ export const onProcessExit = (hook: Function): void => {
     process.on("SIGTERM", shutdown)
     process.on("SIGUSR1", shutdown)
     process.on("SIGUSR2", shutdown)
-    process.on("uncaughtException", shutdown)
+    process.on("uncaughtException", err => {
+        console.error(new Date().toUTCString() + " uncaughtException:", err.message)
+        console.error(err.stack)
+        hook()
+        process.exit(1)
+    })
 }
