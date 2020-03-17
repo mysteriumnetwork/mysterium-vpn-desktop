@@ -29,7 +29,7 @@ export const SelectedProposal: React.FC = observer(() => {
     }
     const pricingText = `${timeRate(proposal)}/min ${trafficRate(proposal)}/GiB`
     return (
-        <View style={`flex: 1; align-items: "center";`}>
+        <View style={`flex: 1; align-items: "center"; padding: 12;`}>
             <View style={`padding-right: 10;`}>
                 <Country code={proposal.country} text={false} />
             </View>

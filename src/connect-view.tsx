@@ -80,7 +80,6 @@ export const ConnectView: React.FC = () => {
                     style={`
                         max-height: 65;
                         border-top: 1px solid #e9e9e9;
-                        padding: 12;
                     `}
                 >
                     <SelectedProposal />
