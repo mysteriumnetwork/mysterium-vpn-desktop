@@ -13,21 +13,23 @@ export type ConnectDisconnectButtonProps = {
 export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = observer(({ width, height }) => {
     const { connection } = useStores()
     const text = ((): string => {
-        if (connection.status === ConnectionStatus.NOT_CONNECTED) {
-            return "Connect"
+        switch (connection.status) {
+            case ConnectionStatus.NOT_CONNECTED:
+                return "Connect"
+            case ConnectionStatus.CONNECTING:
+                return "Cancel"
+            case ConnectionStatus.CONNECTED:
+                return "Disconnect"
+            case ConnectionStatus.DISCONNECTING:
+                return "Disconnecting"
         }
-        if (connection.status === ConnectionStatus.CONNECTED) {
-            return "Disconnect"
-        }
-        return "Cancel"
+        return ""
     })()
     const onClick = async (): Promise<void> => {
         if (connection.status === ConnectionStatus.NOT_CONNECTED) {
             return await connection.connect()
         }
-        if (connection.status === ConnectionStatus.CONNECTED) {
-            return await connection.disconnect()
-        }
+        return await connection.disconnect()
     }
     const cancelStyle = connection.status !== ConnectionStatus.NOT_CONNECTED
     return (
