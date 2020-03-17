@@ -6,6 +6,9 @@ import { useStores } from "./store"
 import { Country } from "./ui-kit/country/country"
 import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js/lib/connection/status"
 import { ConnectDisconnectButton } from "./connection/comp/connect-disconnect-button"
+import { textHuge, textLarger, textSmall } from "./ui-kit/typography"
+import logoWhiteConnected from "../assets/logo-white-connected.png"
+import { fixAssetPath } from "./utils/paths"
 
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
@@ -24,43 +27,64 @@ export const ConnectionActiveView: React.FC = observer(() => {
     }
     return (
         <View
+            // background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #7c2463, stop:1 #552462);
             style={`
                 width: ${winSize.width};
                 height: ${winSize.height};
                 flex-direction: "column";
-                background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #7c2463, stop:1 #552462);
+                background: url("assets/bg-2.png");
+                background-position: center;
             `}
         >
-            <Text
-                style={`
-                padding: 30;
-                color: #fff;
-                font-size: 24px;
-                font-weight: normal;
-                qproperty-alignment: 'AlignHCenter';
-                `}
-            >
-                {statusText}
-            </Text>
             <View
                 style={`
-                justify-content: "space-around";
+                padding: 32;
+                padding-bottom: 0;
+                justify-content: "center";
+                `}
+            >
+                <Text
+                    style={`
+                    ${textHuge}
+                    color: #fff;
+                    font-weight: 100;
+                    qproperty-alignment: 'AlignHCenter';
+                    `}
+                >
+                    {statusText}
+                </Text>
+            </View>
+            <View
+                style={`
+                padding: 60;
+                padding-bottom: 0;
                 `}
             >
                 <View
                     style={`
-                    padding: 20;
-                    border-radius: 32;
-                    background: #fff;
+                    width: "100%";
+                    height: 108;
+                    background: url("${fixAssetPath(logoWhiteConnected)}");
+                    background-position: top center;
+                    background-repeat: none;
+                    `}
+                />
+            </View>
+            <View
+                style={`
+                top: -65;
+                `}
+            >
+                <View
+                    style={`
+                    left: 104;
                     `}
                 >
                     <Country code={originalLocation?.country} text={false} />
                 </View>
                 <View
                     style={`
-                    padding: 20;
-                    border-radius: 32;
-                    background: #fff;
+                    left: 488;
                     `}
                 >
                     <Country code={location?.country} text={false} />
@@ -68,10 +92,33 @@ export const ConnectionActiveView: React.FC = observer(() => {
             </View>
             <View
                 style={`
+                padding-top: 45;
                 justify-content: "center";
                 `}
             >
-                <ConnectDisconnectButton />
+                <ConnectDisconnectButton width={200} height={40} />
+            </View>
+            <View
+                style={`
+                flex-direction: "column";
+                `}
+            >
+                <Text
+                    style={`
+                    ${textSmall}
+                    color: #fff;
+                    `}
+                >
+                    External IP
+                </Text>
+                <Text
+                    style={`
+                    ${textLarger}
+                    color: #fff;
+                    `}
+                >
+                    {location?.ip ?? "Updating..."}
+                </Text>
             </View>
         </View>
     )
