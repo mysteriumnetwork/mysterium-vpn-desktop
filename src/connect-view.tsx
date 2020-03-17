@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2020 BlockDev AG
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 import { ScrollArea, View } from "@nodegui/react-nodegui"
 import { ProposalTable } from "./proposals/comp/proposal-table/proposal-table"
 import React from "react"
