@@ -7,20 +7,42 @@ export type MButtonProps = {
     text: string
     enabled?: boolean
     onClick: () => void
+    width?: number
+    height?: number
+    cancelStyle?: boolean
 }
 
-export const MButton: React.FC<MButtonProps> = ({ text, enabled = true, onClick }) => {
+export const MButton: React.FC<MButtonProps> = ({
+    text,
+    enabled = true,
+    onClick,
+    width,
+    height,
+    cancelStyle = false,
+}) => {
     const clickHandler = useEventHandler({ ["clicked"]: () => onClick() }, [])
+    const stateStyle = ((): string => {
+        if (!enabled) {
+            return "background: #ddd; color: #fff;"
+        }
+        if (cancelStyle) {
+            return "background: #fefefe; color: #d93c3c;"
+        }
+        return `background: ${brand}; color: #fefefe;`
+    })()
     return (
         <Button
             enabled={enabled}
             style={`
                 ${textRegular} 
                 padding: 10;
+                justify-content: "center";
+                align-items: "center";
                 font-weight: bold; 
-                background: ${enabled ? brand : "#ddd"}; 
-                color: #fff; 
+                ${stateStyle}
                 border-radius: 3;
+                ${width ? `width: ${width};` : ""}
+                ${height ? `height: ${height};` : ""}
             `}
             text={text}
             on={clickHandler}

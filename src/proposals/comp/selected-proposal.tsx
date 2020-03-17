@@ -29,8 +29,8 @@ export const SelectedProposal: React.FC = observer(() => {
     }
     const pricingText = `${timeRate(proposal)}/min ${trafficRate(proposal)}/GiB`
     return (
-        <View style={`flex: 1;`}>
-            <View style={`padding: 15;`}>
+        <View style={`flex: 1; align-items: "center";`}>
+            <View style={`padding-right: 10;`}>
                 <Country code={proposal.country} text={false} />
             </View>
             <View
@@ -46,10 +46,9 @@ export const SelectedProposal: React.FC = observer(() => {
                 style={`
                 flex: 1; 
                 justify-content: "flex-end";
-                padding: 15;
                 `}
             >
-                <ConnectDisconnectButton />
+                <ConnectDisconnectButton width={100} height={40} />
             </View>
         </View>
     )
