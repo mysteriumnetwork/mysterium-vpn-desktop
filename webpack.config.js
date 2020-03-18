@@ -71,9 +71,10 @@ module.exports = (env, argv) => {
     ]),)
   }
 
-  if (argv.p) {
-    config.plugins.push(new CleanWebpackPlugin());
-  }
+  config.plugins.push(new CleanWebpackPlugin({
+    cleanOnceBeforeBuildPatterns: ["**/*", "!static"],
+    cleanAfterEveryBuildPatterns: ["**/*", "!static"]
+  }));
 
   config.plugins.push(function () {
     this.plugin("done", () => {
