@@ -61,6 +61,7 @@ const MainWindow: React.FC = () => {
             font-family: "Roboto";
             font-weight: 100;
             ${textRegular}
+            color: #000;
             }
             `}
         >
