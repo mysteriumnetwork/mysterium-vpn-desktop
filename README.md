@@ -25,6 +25,19 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
     yarn start
     ```
 
+## Using a custom Mysterium Node version
+
+Instead of using prebuilt Node binary (located in `static/`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
+
+```
+git clone https://github.com/mysteriumnetwork/node
+cd node
+bin/build
+mage daemon
+```
+
+App will try to connect to the existing instance instead of launching one of its own.
+
 ## Packaging for distribution
 
 In package.json, change the signing key that is passed to [nodegui-packer](https://github.com/nodegui/packer). Then:
