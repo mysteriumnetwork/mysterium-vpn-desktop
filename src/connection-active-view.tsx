@@ -12,13 +12,15 @@ import { useStores } from "./store"
 import { Country } from "./ui-kit/country/country"
 import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js/lib/connection/status"
 import { ConnectDisconnectButton } from "./connection/comp/connect-disconnect-button"
-import { textHuge, textLarger, textSmall } from "./ui-kit/typography"
+import { fontMono, textHuge } from "./ui-kit/typography"
 import logoWhiteConnected from "../assets/logo-white-connected.png"
 import { fixAssetPath } from "./utils/paths"
+import { Metric } from "./connection/comp/metric"
 
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
         connection: { location, originalLocation, status },
+        proposals,
     } = useStores()
     let statusText = ""
     switch (status) {
@@ -99,32 +101,47 @@ export const ConnectionActiveView: React.FC = observer(() => {
             <View
                 style={`
                 padding-top: 45;
+                padding-bottom: 24;
                 justify-content: "center";
                 `}
             >
                 <ConnectDisconnectButton width={200} height={40} />
             </View>
+            <View style={`margin-left: 12; margin-right: 12; height: 1; background: #724e81;`} />
             <View
                 style={`
-                flex-direction: "column";
+                width: "100%";
+                height: 92;
+                padding: 24;
+                flex-direction: "row";
+                justify-content: "space-between";
                 `}
             >
-                <Text
-                    style={`
-                    ${textSmall}
-                    color: #fff;
-                    `}
-                >
-                    External IP
-                </Text>
-                <Text
-                    style={`
-                    ${textLarger}
-                    color: #fff;
-                    `}
-                >
-                    {location?.ip ?? "Updating..."}
-                </Text>
+                <Metric name="External IP" value={location?.ip} style={{ value: "width: 120;" }} />
+                <Metric
+                    name="Server ID"
+                    value={proposals.active?.id10}
+                    style={{
+                        value: fontMono,
+                    }}
+                />
+                <Metric name="Price" value="" />
+                <Metric name="Quality" value="" />
+            </View>
+            <View
+                style={`
+                width: "100%";
+                height: 80;
+                padding: 8;
+                background: #2a154d;
+                flex-direction: "row";
+                justify-content: "space-around";
+                `}
+            >
+                <Metric name="Duration" value="--:--:--:--" style={{ value: textHuge }} />
+                <Metric name="Downloaded" value="- MiB" style={{ value: textHuge }} />
+                <Metric name="Uploaded" value="- MiB" style={{ value: textHuge }} />
+                <Metric name="Cost" value="- MYST" style={{ value: textHuge }} />
             </View>
         </View>
     )
