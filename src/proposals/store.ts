@@ -77,7 +77,7 @@ export class ProposalStore {
             this.setProposals(proposals)
             this.applyAccessPolicyFilter() // Only reflect update in the sidebar, not refreshing main view (not to bother the user)
         } catch (err) {
-            console.log("Could not get proposals", err)
+            console.log("Could not get proposals", err.message)
         }
         this.setLoading(false)
     }
