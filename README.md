@@ -1,4 +1,4 @@
-# mysterium-vpn2
+# mysterium-vpn-desktop
 
 **Work in progress: use with care**
 
