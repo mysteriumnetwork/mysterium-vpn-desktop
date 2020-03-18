@@ -65,15 +65,13 @@ module.exports = (env, argv) => {
     config.entry.unshift("webpack/hot/poll?100");
   }
 
-  if (argv.mode === "production") {
-    config.plugins.push(new CopyPlugin([
-      { from: 'static', to: 'static' },
-    ]),)
-  }
+  config.plugins.push(new CopyPlugin([
+    { from: 'static', to: 'static' },
+  ]),)
 
   config.plugins.push(new CleanWebpackPlugin({
-    cleanOnceBeforeBuildPatterns: ["**/*", "!static"],
-    cleanAfterEveryBuildPatterns: ["**/*", "!static"]
+    cleanOnceBeforeBuildPatterns: ["**/*", "!static/**"],
+    cleanAfterEveryBuildPatterns: ["**/*", "!static/**"]
   }));
 
   config.plugins.push(function () {
