@@ -47,6 +47,7 @@ export class ConnectionStore {
         reaction(
             () => this.root.connection.status,
             async status => {
+                this.resetLocation()
                 if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
                     await this.resolveLocation()
                 }
@@ -125,6 +126,20 @@ export class ConnectionStore {
         } catch (err) {
             console.error("Failed to lookup original location", err.message)
         }
+    }
+
+    @action
+    resetLocation(): void {
+        this.setLocation({
+            country: "Unknown",
+            ip: "Updating...",
+            asn: 0,
+            city: "",
+            continent: "",
+            isp: "",
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            node_type: "",
+        })
     }
 
     @action
