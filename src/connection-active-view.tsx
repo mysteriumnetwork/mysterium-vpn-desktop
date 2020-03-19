@@ -8,7 +8,7 @@ import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
-import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
+import { ConnectionStatus } from "mysterium-vpn-js"
 import { winSize } from "./config"
 import { useStores } from "./store"
 import { Country } from "./ui-kit/country/country"
@@ -27,11 +27,17 @@ export const ConnectionActiveView: React.FC = observer(() => {
     const up = statistics ? byteSize(statistics.bytesSent, { units: "iec" }) : ""
     let statusText = ""
     switch (status) {
-        case ConnectionStatusType.CONNECTED:
-            statusText = "🔐 Your connection is secure"
+        case ConnectionStatus.CONNECTING:
+            statusText = "Connecting..."
             break
-        case ConnectionStatusType.NOT_CONNECTED:
-            statusText = "⚠️ Your connection is unprotected"
+        case ConnectionStatus.CONNECTED:
+            statusText = "Your connection is secure"
+            break
+        case ConnectionStatus.DISCONNECTING:
+            statusText = "Disconnecting..."
+            break
+        case ConnectionStatus.NOT_CONNECTED:
+            statusText = "Your connection is unprotected"
             break
         default:
             statusText = "Working on it..."
