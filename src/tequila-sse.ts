@@ -38,7 +38,7 @@ export const sseConnect = (): EventSource => {
     es.onmessage = (evt): void => {
         const { type, payload }: SSEResponse = camelKeys(typeof evt.data === "string" ? JSON.parse(evt.data) : evt.data)
         if (isDevelopment()) {
-            console.log("[sse message event]", type, payload)
+            console.log("[sse message event]", type, JSON.stringify(payload, null, 2))
         }
         eventBus.emit(type, payload)
     }
