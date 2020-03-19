@@ -55,13 +55,14 @@ export const ConnectionActiveView: React.FC = observer(() => {
         >
             <View
                 style={`
+                width: "100%";
                 padding: 32;
                 padding-bottom: 0;
-                justify-content: "center";
                 `}
             >
                 <Text
                     style={`
+                    width: "100%";
                     ${textHuge}
                     color: #fff;
                     font-weight: 100;
