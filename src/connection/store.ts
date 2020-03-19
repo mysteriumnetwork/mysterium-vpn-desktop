@@ -5,12 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
+import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
-import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
+import { AppState, AppStateChangeEvent, eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
+
+export type ConnectionStatistics = {
+    bytesReceived: number
+    bytesSent: number
+}
 
 export class ConnectionStore {
     @observable
@@ -20,6 +26,8 @@ export class ConnectionStore {
     @observable
     status = ConnectionStatus.NOT_CONNECTED
     @observable
+    statistics?: ConnectionStatistics
+    @observable
     location?: ConsumerLocation
     @observable
     originalLocation?: ConsumerLocation
@@ -28,14 +36,14 @@ export class ConnectionStore {
 
     constructor(root: RootStore) {
         this.root = root
-        setInterval(async () => {
-            if (this.root.daemon.status == DaemonStatusType.Up) {
-                await this.statusCheck()
-            }
-        }, 1000)
     }
 
     setupReactions(): void {
+        eventBus.on(AppStateChangeEvent, (state: AppState) => {
+            this.setStatus(state.consumer.connection.state)
+            this.setStatistics(state.consumer.connection.statistics)
+            // console.log("reactionto sse :", state)
+        })
         reaction(
             () => this.root.daemon.status,
             async status => {
@@ -60,7 +68,7 @@ export class ConnectionStore {
         this.setConnectInProgress(true)
         this.setGracePeriod()
         try {
-            this.setStatus(ConnectionStatus.CONNECTING)
+            // this.setStatus(ConnectionStatus.CONNECTING)
             // this.status = ConnectionStatusType.CONNECTING
             // TODO SDK: add accountantId
             // TODO SDK: remove object remapping! (just passthrough all fields to the API);
@@ -191,5 +199,10 @@ export class ConnectionStore {
     @action
     setOriginalLocation = (l: ConsumerLocation): void => {
         this.originalLocation = l
+    }
+
+    @action
+    setStatistics = (s?: ConnectionStatistics): void => {
+        this.statistics = s
     }
 }

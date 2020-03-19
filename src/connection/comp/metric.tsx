@@ -23,6 +23,7 @@ export const Metric: React.FC<MetricProps> = ({ name, value = "", style }) => {
             style={`
             flex-direction: "column";
             justify-content: "space-between";
+            min-width: 120;
             `}
         >
             <Text

@@ -6,11 +6,12 @@
  */
 import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
-import { winSize } from "./config"
 import { observer } from "mobx-react-lite"
+import byteSize from "byte-size"
+import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
+import { winSize } from "./config"
 import { useStores } from "./store"
 import { Country } from "./ui-kit/country/country"
-import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js/lib/connection/status"
 import { ConnectDisconnectButton } from "./connection/comp/connect-disconnect-button"
 import { fontMono, textHuge } from "./ui-kit/typography"
 import logoWhiteConnected from "../assets/logo-white-connected.png"
@@ -19,9 +20,11 @@ import { Metric } from "./connection/comp/metric"
 
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
-        connection: { location, originalLocation, status },
+        connection: { location, originalLocation, status, statistics },
         proposals,
     } = useStores()
+    const down = statistics ? byteSize(statistics.bytesReceived, { units: "iec" }) : ""
+    const up = statistics ? byteSize(statistics.bytesSent, { units: "iec" }) : ""
     let statusText = ""
     switch (status) {
         case ConnectionStatusType.CONNECTED:
@@ -139,8 +142,8 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 `}
             >
                 <Metric name="Duration" value="--:--:--:--" style={{ value: textHuge }} />
-                <Metric name="Downloaded" value="- MiB" style={{ value: textHuge }} />
-                <Metric name="Uploaded" value="- MiB" style={{ value: textHuge }} />
+                <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
+                <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
                 <Metric name="Cost" value="- MYST" style={{ value: textHuge }} />
             </View>
         </View>

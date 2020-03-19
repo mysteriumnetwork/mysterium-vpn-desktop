@@ -7,6 +7,8 @@
 import tequilapi from "../tequila"
 import { action, observable, reaction, when } from "mobx"
 import { supervisor } from "../supervisor/supervisor"
+import EventSource from "eventsource"
+import { sseConnect } from "../tequila-sse"
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -21,6 +23,8 @@ export class DaemonStore {
 
     @observable
     starting = false
+
+    eventSource?: EventSource
 
     constructor() {
         setInterval(async () => {
@@ -37,6 +41,14 @@ export class DaemonStore {
             async status => {
                 if (status == DaemonStatusType.Down) {
                     await this.start()
+                }
+            },
+        )
+        reaction(
+            () => this.status,
+            async status => {
+                if (status == DaemonStatusType.Up) {
+                    this.eventSource = sseConnect()
                 }
             },
         )
