@@ -109,7 +109,25 @@ export const ConnectionActiveView: React.FC = observer(() => {
             </View>
             <View
                 style={`
-                padding-top: 45;
+                top: -30;
+                left: 470;
+                width: 110;
+                height: 20;
+                `}
+            >
+                <Text
+                    style={`
+                    width: "100%";
+                    color: #fff;
+                    qproperty-alignment: AlignHCenter;
+                    `}
+                >
+                    {location?.ip}
+                </Text>
+            </View>
+            <View
+                style={`
+                padding-top: 25;
                 padding-bottom: 24;
                 justify-content: "center";
                 `}
