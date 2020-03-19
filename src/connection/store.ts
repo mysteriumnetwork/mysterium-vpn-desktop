@@ -10,6 +10,7 @@ import { RootStore } from "../store"
 import tequilapi from "../tequila"
 import { AppState, AppStateChangeEvent, eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
+import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
@@ -28,6 +29,8 @@ export class ConnectionStore {
     @observable
     statistics?: ConnectionStatistics
     @observable
+    proposal?: UIProposal
+    @observable
     location?: ConsumerLocation
     @observable
     originalLocation?: ConsumerLocation
@@ -42,6 +45,9 @@ export class ConnectionStore {
         eventBus.on(AppStateChangeEvent, (state: AppState) => {
             this.setStatus(state.consumer.connection.state)
             this.setStatistics(state.consumer.connection.statistics)
+            if (state.consumer.connection.proposal) {
+                this.setProposal(newUIProposal(state.consumer.connection.proposal))
+            }
             // console.log("reactionto sse :", state)
         })
         reaction(
@@ -189,6 +195,11 @@ export class ConnectionStore {
     @action
     setStatus = (s: ConnectionStatus): void => {
         this.status = s
+    }
+
+    @action
+    setProposal = (p: UIProposal): void => {
+        this.proposal = p
     }
 
     @action

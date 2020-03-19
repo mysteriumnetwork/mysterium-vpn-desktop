@@ -20,12 +20,11 @@ import { Metric } from "./connection/comp/metric"
 
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
-        connection: { location, originalLocation, status, statistics },
-        proposals,
+        connection: { location, originalLocation, status, statistics, proposal },
     } = useStores()
     const down = statistics ? byteSize(statistics.bytesReceived, { units: "iec" }) : ""
     const up = statistics ? byteSize(statistics.bytesSent, { units: "iec" }) : ""
-    let statusText = ""
+    let statusText: string
     switch (status) {
         case ConnectionStatus.CONNECTING:
             statusText = "Connecting..."
@@ -130,7 +129,7 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 <Metric name="External IP" value={location?.ip} style={{ value: "width: 120;" }} />
                 <Metric
                     name="Server ID"
-                    value={proposals.active?.id10}
+                    value={proposal?.id10}
                     style={{
                         value: fontMono,
                     }}

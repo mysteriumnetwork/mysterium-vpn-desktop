@@ -6,15 +6,17 @@
  */
 import EventSource from "eventsource"
 import { EventEmitter } from "events"
-import { ConnectionStatistics, ConnectionStatus } from "mysterium-vpn-js"
+import { ConnectionStatistics, ConnectionStatus, Proposal } from "mysterium-vpn-js"
 import { isDevelopment } from "./utils/mode"
 import { tequilaBase } from "./tequila"
+import { camelKeys } from "./utils/json"
 
 export type AppState = {
     consumer: {
         connection: {
             state: ConnectionStatus
             statistics?: ConnectionStatistics
+            proposal?: Proposal
         }
     }
 }
@@ -34,9 +36,9 @@ export const sseConnect = (): EventSource => {
         console.error("[sse error]", evt)
     }
     es.onmessage = (evt): void => {
-        const { type, payload }: SSEResponse = typeof evt.data === "string" ? JSON.parse(evt.data) : evt.data
+        const { type, payload }: SSEResponse = camelKeys(typeof evt.data === "string" ? JSON.parse(evt.data) : evt.data)
         if (isDevelopment()) {
-            console.log("[sse message event]", evt.data)
+            console.log("[sse message event]", type, payload)
         }
         eventBus.emit(type, payload)
     }
