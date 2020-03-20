@@ -89,7 +89,6 @@ export class ProposalStore {
     }
 
     set activate(proposal: UIProposal) {
-        console.info("Selected proposal", JSON.stringify(proposal))
         this.active = proposal
     }
 
@@ -113,6 +112,7 @@ export class ProposalStore {
     @action
     toggleFilterCountry(countryCode?: string): void {
         this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
+        this.toggleActiveProposal(undefined)
         this.applyCountryFilter()
     }
 
