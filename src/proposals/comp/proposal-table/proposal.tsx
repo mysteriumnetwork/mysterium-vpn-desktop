@@ -36,8 +36,6 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
                         <View style={proposalsCellStyle}>
                             <Text
                                 style={`
-                                ${textSmall}
-                                font-family: "Monaco, monospace";
                                 color: ${active ? "white" : "inherit"}
                                 `}
                             >
