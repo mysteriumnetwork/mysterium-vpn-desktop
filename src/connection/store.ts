@@ -38,9 +38,11 @@ export class ConnectionStore {
 
     setupReactions(): void {
         eventBus.on(AppStateChangeEvent, (state: AppState) => {
-            this.setStatus(state.consumer.connection.state)
-            this.setStatistics(state.consumer.connection.statistics)
-            if (state.consumer.connection.proposal) {
+            if (state.consumer?.connection) {
+                this.setStatus(state.consumer.connection.state)
+                this.setStatistics(state.consumer.connection.statistics)
+            }
+            if (state.consumer?.connection?.proposal) {
                 this.setProposal(newUIProposal(state.consumer.connection.proposal))
             }
             // console.log("reactionto sse :", state)

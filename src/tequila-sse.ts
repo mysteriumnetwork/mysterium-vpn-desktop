@@ -12,8 +12,8 @@ import { tequilaBase } from "./tequila"
 import { camelKeys } from "./utils/json"
 
 export type AppState = {
-    consumer: {
-        connection: {
+    consumer?: {
+        connection?: {
             state: ConnectionStatus
             statistics?: ConnectionStatistics
             proposal?: Proposal
