@@ -6,27 +6,12 @@
  */
 import React from "react"
 import { Text, View } from "@nodegui/react-nodegui"
-import { proposalsCellStyle } from "./style"
 
 export const ProposalTableHeader: React.FC = () => (
-    <View
-        style={`
-        width: "100%"; 
-        padding: 10;
-        border-bottom: 1px solid #dcdcdc;
-        `}
-    >
-        <View style={proposalsCellStyle}>
-            <Text>ID</Text>
-        </View>
-        <View style={proposalsCellStyle}>
-            <Text>Price/min</Text>
-        </View>
-        <View style={proposalsCellStyle}>
-            <Text>Price/GiB</Text>
-        </View>
-        <View style={proposalsCellStyle}>
-            <Text>Service type</Text>
-        </View>
+    <View id="ProposalTable-Proposal-header-row">
+        <Text id="ProposalTable-Proposal-cell">ID</Text>
+        <Text id="ProposalTable-Proposal-cell">Price/min</Text>
+        <Text id="ProposalTable-Proposal-cell">Price/GiB</Text>
+        <Text id="ProposalTable-Proposal-cell">Service type</Text>
     </View>
 )

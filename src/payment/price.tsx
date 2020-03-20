@@ -10,30 +10,31 @@ import { PaymentMethod } from "mysterium-vpn-js"
 import { perGiB, perMinute } from "./rate"
 
 export type RateProps = {
+    id?: string
     paymentMethod?: PaymentMethod
     units?: boolean
 }
 
-export const CombinedRate: React.FC<RateProps> = ({ paymentMethod, units = true }) => {
+export const CombinedRate: React.FC<RateProps> = ({ id, paymentMethod, units = true }) => {
     if (!paymentMethod) {
         return <></>
     }
     const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""} + ${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text>{rate}</Text>
+    return <Text id={id}>{rate}</Text>
 }
 
-export const PerMinuteRate: React.FC<RateProps> = ({ paymentMethod, units }) => {
+export const PerMinuteRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
     if (!paymentMethod) {
         return <></>
     }
     const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""}`
-    return <Text>{rate}</Text>
+    return <Text id={id}>{rate}</Text>
 }
 
-export const PerGiBRate: React.FC<RateProps> = ({ paymentMethod, units }) => {
+export const PerGiBRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
     if (!paymentMethod) {
         return <></>
     }
     const rate = `${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text>{rate}</Text>
+    return <Text id={id}>{rate}</Text>
 }

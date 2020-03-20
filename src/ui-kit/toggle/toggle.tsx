@@ -5,49 +5,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { View } from "@nodegui/react-nodegui"
-import { ClickableView } from "../clickable-view/clickable-view"
-import { brand } from "../colors"
-
-const styleSheet = (width: number, height: number): string => `
-#active {
-    width: ${width};
-    height: ${height};
-    background: "${brand}";
-    border-radius: 3px;
-}
-#inactive {
-    width: ${width};
-    height: ${height};
-    border-radius: 3px;
-}
-#inactive:hover {
-    background: #e6e6e6;
-}
-`
+import { useEventHandler, View } from "@nodegui/react-nodegui"
+import { WidgetEventTypes } from "@nodegui/nodegui"
 
 export type ToggleProps = {
-    width: number
-    height: number
     children: React.ReactNode
     onToggle?: () => void
-    active: boolean
+    id: string
 }
 
 export const Toggle: React.FC<ToggleProps> = ({
-    width,
-    height,
     children,
     onToggle = (): void => {
         // noop
     },
-    active,
+    id = "",
 }) => {
+    const clickHandler = useEventHandler({ [WidgetEventTypes.MouseButtonPress]: () => onToggle() }, [])
     return (
-        <View id={active ? "active" : "inactive"} styleSheet={styleSheet(width, height)}>
-            <ClickableView width={width} height={height} onClick={onToggle}>
-                {children}
-            </ClickableView>
+        <View id={id} on={clickHandler}>
+            {children}
         </View>
     )
 }

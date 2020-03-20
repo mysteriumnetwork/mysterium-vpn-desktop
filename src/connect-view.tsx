@@ -10,7 +10,6 @@ import React from "react"
 import { winSize } from "./config"
 import { CountryFilter } from "./proposals/comp/country-filter"
 import { SelectedProposal } from "./proposals/comp/selected-proposal"
-import { ProposalTableHeader } from "./proposals/comp/proposal-table/header"
 import { OriginalLocation } from "./location/comp/original-location"
 
 export const ConnectView: React.FC = () => {
@@ -65,23 +64,7 @@ export const ConnectView: React.FC = () => {
                     background: #fff;
                 `}
             >
-                <ProposalTableHeader />
-                <ScrollArea
-                    style={`
-                    flex: 1;
-                    border: 0;
-                    background: #fff;
-                `}
-                >
-                    <View
-                        style={`
-                        flex: 1;
-                        max-width: ${winSize.width - 250 - 15};
-                    `}
-                    >
-                        <ProposalTable />
-                    </View>
-                </ScrollArea>
+                <ProposalTable />
                 <View
                     style={`
                         max-height: 65;

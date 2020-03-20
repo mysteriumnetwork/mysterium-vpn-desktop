@@ -6,12 +6,10 @@
  */
 import { UIProposal } from "../../ui-proposal-type"
 import React from "react"
-import { Toggle } from "../../../ui-kit/toggle/toggle"
 import { Text, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
 import { useStores } from "../../../store"
-import { proposalsCellStyle } from "./style"
-import { textSmall } from "../../../ui-kit/typography"
+import { Toggle } from "../../../ui-kit/toggle/toggle"
 import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
 
 export type ProposalFCProps = {
@@ -22,55 +20,20 @@ export type ProposalFCProps = {
 
 // eslint-disable-next-line react/display-name
 const ProposalPure: React.FC<ProposalFCProps> = React.memo(
-    ({ proposal, activeKey, onToggle }) => {
-        const active = activeKey === proposal.key
+    ({ proposal: { key, paymentMethod, serviceType4, id10 }, activeKey, onToggle }) => {
+        const active = activeKey === key
+        const cellId = !active ? "ProposalTable-Proposal-cell" : "ProposalTable-Proposal-cell-active"
         return (
-            <View style={`padding: 2;`}>
-                <Toggle width={532} height={36} active={active} onToggle={onToggle}>
-                    <View
-                        style={`
-                        width: "100%";
-                        padding: 10;
-                        `}
-                    >
-                        <View style={proposalsCellStyle}>
-                            <Text
-                                style={`
-                                color: ${active ? "white" : "inherit"}
-                                `}
-                            >
-                                {proposal.id10}
-                            </Text>
-                        </View>
-                        <View
-                            id="cell"
-                            styleSheet={`
-                            #cell, #cell-active {
-                                width: 100;
-                            }
-                            #cell QLabel {
-                                color: ${active ? "white" : "inherit"};
-                            }
-                            `}
-                        >
-                            <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />
-                        </View>
-                        <View
-                            id="cell"
-                            styleSheet={`
-                            #cell {
-                                width: 100;
-                            }
-                            #cell QLabel {
-                                color: ${active ? "white" : "inherit"};
-                            }
-                            `}
-                        >
-                            <PerGiBRate paymentMethod={proposal.paymentMethod} units={false} />
-                        </View>
-                        <View style={proposalsCellStyle}>
-                            <Text style={`color: ${active ? "white" : "inherit"}`}>{proposal.serviceType4}</Text>
-                        </View>
+            <View id="ProposalTable-Proposal-row-outer">
+                <Toggle
+                    id={active ? "ProposalTable-Proposal-Toggle-active" : "ProposalTable-Proposal-Toggle-inactive"}
+                    onToggle={onToggle}
+                >
+                    <View id="ProposalTable-Proposal-row" size={{ width: 385, height: 37 }}>
+                        <Text id={cellId}>{id10}</Text>
+                        <PerMinuteRate id={cellId} paymentMethod={paymentMethod} units={false} />
+                        <PerGiBRate id={cellId} paymentMethod={paymentMethod} units={false} />
+                        <Text id={cellId}>{serviceType4}</Text>
                     </View>
                 </Toggle>
             </View>

@@ -12,6 +12,7 @@ import { Country } from "../../ui-kit/country/country"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 import { CursorShape } from "@nodegui/nodegui"
 import { textSmall } from "../../ui-kit/typography"
+import { brand } from "../../ui-kit/colors"
 
 export type CountryFilterPureProps = {
     country: string
@@ -20,14 +21,44 @@ export type CountryFilterPureProps = {
     toggleAction: () => void
 }
 
+const styleSheet = `
+#CountryFilter {
+    margin-top: 5;
+}
+#CountryFilter-Row-active {
+    width: 220;
+    height: 28;
+    background: "${brand}";
+    border-radius: 3px;
+}
+#CountryFilter-Row-inactive {
+    width: 220;
+    height: 28;
+    border-radius: 3px;
+}
+#CountryFilter-Row-inactive:hover {
+    background: #e6e6e6;
+}
+#CountryFilter-Row-Content {
+    padding-left: 10;
+    padding-right: 10;
+    width: 225;
+    justify-content: "space-between";
+}
+`
+
 // eslint-disable-next-line react/display-name
 const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
     ({ country, count, activeCountry, toggleAction }) => {
         const active = activeCountry === country
         return (
-            <View key={country} style={`margin-top: 5;`} cursor={CursorShape.PointingHandCursor}>
-                <Toggle key={country} width={220} height={28} active={active} onToggle={toggleAction}>
-                    <View style={`padding-left: 10; padding-right: 10; width: 225; justify-content: "space-between";`}>
+            <View key={country} cursor={CursorShape.PointingHandCursor} id="CountryFilter" styleSheet={styleSheet}>
+                <Toggle
+                    id={active ? "CountryFilter-Row-active" : "CountryFilter-Row-inactive"}
+                    key={country}
+                    onToggle={toggleAction}
+                >
+                    <View id="CountryFilter-Row-Content">
                         <Country
                             flagStyle={`top: 2;`}
                             textStyle={`color: ${active ? "white" : "inherit"}`}
