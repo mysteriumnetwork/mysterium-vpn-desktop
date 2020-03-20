@@ -13,10 +13,11 @@ import { winSize } from "./config"
 import { useStores } from "./store"
 import { Country } from "./ui-kit/country/country"
 import { ConnectDisconnectButton } from "./connection/comp/connect-disconnect-button"
-import { fontMono, textHuge } from "./ui-kit/typography"
+import { textHuge } from "./ui-kit/typography"
 import logoWhiteConnected from "../assets/logo-white-connected.png"
 import { fixAssetPath } from "./utils/paths"
 import { Metric } from "./connection/comp/metric"
+import { CombinedRate } from "./payment/price"
 
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
@@ -126,6 +127,33 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 </Text>
             </View>
             <View
+                id="ConnectionActiveView-proposalPropsContainer"
+                styleSheet={`
+                #ConnectionActiveView-proposalPropsContainer {
+                    flex-direction: "column";
+                }
+                #ConnectionActiveView-proposalProps {
+                    padding-left: 80;
+                    padding-bottom: 14;
+                }
+                #ConnectionActiveView-proposalProps QLabel {
+                    color: #c0b3c9;
+                }
+                #ConnectionActiveView-proposalPropsLabel {
+                    width: 120;
+                }
+                `}
+            >
+                <View id="ConnectionActiveView-proposalProps">
+                    <Text id="ConnectionActiveView-proposalPropsLabel">Provider ID</Text>
+                    <Text>{proposal?.providerId ?? ""}</Text>
+                </View>
+                <View id="ConnectionActiveView-proposalProps">
+                    <Text id="ConnectionActiveView-proposalPropsLabel">Price</Text>
+                    <CombinedRate paymentMethod={proposal?.paymentMethod} />
+                </View>
+            </View>
+            <View
                 style={`
                 padding-top: 25;
                 padding-bottom: 24;
@@ -134,41 +162,21 @@ export const ConnectionActiveView: React.FC = observer(() => {
             >
                 <ConnectDisconnectButton width={200} height={40} />
             </View>
-            <View style={`margin-left: 12; margin-right: 12; height: 1; background: #724e81;`} />
             <View
                 style={`
                 width: "100%";
-                height: 92;
-                padding: 24;
-                flex-direction: "row";
-                justify-content: "space-between";
-                `}
-            >
-                <Metric name="External IP" value={location?.ip} style={{ value: "width: 120;" }} />
-                <Metric
-                    name="Server ID"
-                    value={proposal?.id10}
-                    style={{
-                        value: fontMono,
-                    }}
-                />
-                <Metric name="Price" value="" />
-                <Metric name="Quality" value="" />
-            </View>
-            <View
-                style={`
-                width: "100%";
-                height: 80;
+                top: 66;
+                height: 65;
                 padding: 8;
                 background: #2a154d;
                 flex-direction: "row";
                 justify-content: "space-around";
                 `}
             >
-                <Metric name="Duration" value="--:--:--:--" style={{ value: textHuge }} />
+                <Metric name="Duration" value="" style={{ value: textHuge }} />
                 <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
                 <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
-                <Metric name="Cost" value="- MYST" style={{ value: textHuge }} />
+                <Metric name="Cost" value="" style={{ value: textHuge }} />
             </View>
         </View>
     )
