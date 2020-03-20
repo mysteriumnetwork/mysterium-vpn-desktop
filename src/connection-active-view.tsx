@@ -8,6 +8,7 @@ import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
+import * as _ from "lodash"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { winSize } from "./config"
 import { useStores } from "./store"
@@ -19,12 +20,26 @@ import { fixAssetPath } from "./utils/paths"
 import { Metric } from "./connection/comp/metric"
 import { CombinedRate } from "./payment/price"
 
+const toClock = (duration: number): string => {
+    const secs = Math.floor(duration % 60)
+    const mins = Math.floor((duration % (60 * 60)) / 60)
+    const hours = Math.floor(duration / (60 * 60))
+    return [hours, mins, secs].map(n => _.padStart(String(n), 2, "0")).join(":")
+}
+
 export const ConnectionActiveView: React.FC = observer(() => {
     const {
-        connection: { location, originalLocation, status, statistics, proposal },
+        connection: {
+            location,
+            originalLocation,
+            status,
+            statistics: { duration, bytesReceived, bytesSent } = {},
+            proposal,
+        },
     } = useStores()
-    const down = statistics ? byteSize(statistics.bytesReceived, { units: "iec" }) : ""
-    const up = statistics ? byteSize(statistics.bytesSent, { units: "iec" }) : ""
+    const clock = duration ? toClock(duration) : ""
+    const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : ""
+    const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : ""
     let statusText: string
     switch (status) {
         case ConnectionStatus.CONNECTING:
@@ -173,10 +188,10 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 justify-content: "space-around";
                 `}
             >
-                <Metric name="Duration" value="" style={{ value: textHuge }} />
+                <Metric name="Duration" value={clock} style={{ value: textHuge }} />
                 <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
                 <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
-                <Metric name="Cost" value="" style={{ value: textHuge }} />
+                <Metric name="Paid" value="" style={{ value: textHuge }} />
             </View>
         </View>
     )

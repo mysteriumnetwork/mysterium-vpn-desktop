@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
-import { ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
+import { ConnectionStatistics, ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
 import { RootStore } from "../store"
 import tequilapi from "../tequila"
 import { AppState, AppStateChangeEvent, eventBus } from "../tequila-sse"
@@ -13,11 +13,6 @@ import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
-
-export type ConnectionStatistics = {
-    bytesReceived: number
-    bytesSent: number
-}
 
 export class ConnectionStore {
     @observable
