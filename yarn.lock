@@ -866,10 +866,10 @@
     node-fetch "^2.6.0"
     progress "^2.0.3"
 
-"@nodegui/nodegui@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@nodegui/nodegui/-/nodegui-0.16.1.tgz#d82cceed3368b78ac017ebcc78086e39372634ec"
-  integrity sha512-ofK3gUKRZpreCmf73mgTS8I1rxkhobPQRlhLyQekL+cr6i9UNNBpvenk0ouXaEoQAQKckT/A9YNzU5O4eAqQAw==
+"@nodegui/nodegui@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@nodegui/nodegui/-/nodegui-0.17.0.tgz#f947f91ce415793d60620b86451ba571a18bb380"
+  integrity sha512-za7sLQTgd+LoouRf2B0F0WimqlIWTPKqjo+sg6cIZQRYBnu9Yp9HSj0zfl8R8LV2S7QtuqRYy1qn6vjhq1eGcw==
   dependencies:
     "@nodegui/artifact-installer" "^1.1.0"
     "@nodegui/qode" "^2.0.4"
@@ -902,10 +902,10 @@
     progress "^2.0.3"
     tar "^6.0.1"
 
-"@nodegui/react-nodegui@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@nodegui/react-nodegui/-/react-nodegui-0.5.0.tgz#9ff418a4225fd7416855e49ef7cc672b19a8060b"
-  integrity sha512-FLf+XpNKUIJ96A2hhXx9PvH2Zm8GWGgC0XZHgOxwnrSi26iS5KGXzhkywnfthLtYv6NAGLZ6PcbG/ZfcGSgY7w==
+"@nodegui/react-nodegui@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@nodegui/react-nodegui/-/react-nodegui-0.6.0.tgz#fcc131ce76eb21d0cdcd3bdb787044c849304a7e"
+  integrity sha512-CiL889Ef8TsNosJ+VnZk77Adoh3bBv74etw4UD/oRT1NAUXim6rWbF01UpgxQPWncSq3L3rb4p5DvZciEwwDBQ==
   dependencies:
     "@types/react-reconciler" "^0.18.0"
     phin "^3.4.1"

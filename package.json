@@ -16,9 +16,9 @@
     "packer": "npx nodegui-packer --pack dist --sign 14D1483DEFD2A449D35CC443621E3D0FEDF3972E"
   },
   "dependencies": {
-    "@nodegui/nodegui": "^0.16.1",
+    "@nodegui/nodegui": "^0.17.0",
     "@nodegui/qode": "^2.0.4",
-    "@nodegui/react-nodegui": "^0.5.0",
+    "@nodegui/react-nodegui": "^0.6.0",
     "async-retry": "^1.3.1",
     "byte-size": "^6.2.0",
     "eventsource": "^1.0.7",
