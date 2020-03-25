@@ -31,18 +31,19 @@ const styleSheet = `
     background: "${brand}";
     border-radius: 3px;
 }
-#CountryFilter-Row-inactive {
+#CountryFilter-Row {
     width: 220;
     height: 28;
     border-radius: 3px;
 }
-#CountryFilter-Row-inactive:hover {
+#CountryFilter-Row:hover {
     background: #e6e6e6;
 }
 #CountryFilter-Row-Content {
     padding-left: 10;
     padding-right: 10;
     width: 225;
+    flex-direction: "row";
     justify-content: "space-between";
 }
 `
@@ -54,18 +55,18 @@ const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
         return (
             <View key={country} cursor={CursorShape.PointingHandCursor} id="CountryFilter" styleSheet={styleSheet}>
                 <Toggle
-                    id={active ? "CountryFilter-Row-active" : "CountryFilter-Row-inactive"}
+                    id={active ? "CountryFilter-Row-active" : "CountryFilter-Row"}
                     key={country}
                     onToggle={toggleAction}
                 >
                     <View id="CountryFilter-Row-Content">
                         <Country
-                            flagStyle={`top: 2;`}
-                            textStyle={`color: ${active ? "white" : "inherit"}`}
+                            containerStyle={`flex-direction: "row"; align-items: "center"; justify-content: "center";`}
+                            textStyle={`height: 28; color: ${active ? "white" : "inherit"};`}
                             code={country}
                             text
                         />
-                        <Text style={`color: ${active ? "white" : "inherit"};`}>{count}</Text>
+                        <Text style={`height: 28; color: ${active ? "white" : "inherit"};`}>{count}</Text>
                     </View>
                 </Toggle>
             </View>
