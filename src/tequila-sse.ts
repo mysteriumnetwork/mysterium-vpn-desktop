@@ -11,6 +11,21 @@ import { isDevelopment } from "./utils/mode"
 import { tequilaBase } from "./tequila"
 import { camelKeys } from "./utils/json"
 
+export enum IdentityRegistrationStatus {
+    Unregistered = "Unregistered",
+    InProgress = "InProgress",
+    RegisteredConsumer = "RegisteredConsumer",
+    RegisteredProvider = "RegisteredProvider",
+    Promoting = "Promoting",
+    RegistrationError = "RegistrationError",
+}
+
+export type Identity = {
+    id: string
+    registrationStatus?: IdentityRegistrationStatus
+    balance?: number
+}
+
 export type AppState = {
     consumer?: {
         connection?: {
@@ -19,6 +34,7 @@ export type AppState = {
             proposal?: Proposal
         }
     }
+    identities?: Identity[]
 }
 
 export const eventBus = new EventEmitter()

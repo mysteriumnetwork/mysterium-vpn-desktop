@@ -20,7 +20,7 @@ export const CombinedRate: React.FC<RateProps> = ({ id, paymentMethod, units = t
         return <></>
     }
     const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""} + ${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text id={id}>{rate}</Text>
+    return <Text id={id ?? "rate"}>{rate}</Text>
 }
 
 export const PerMinuteRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
@@ -28,7 +28,7 @@ export const PerMinuteRate: React.FC<RateProps> = ({ id, paymentMethod, units })
         return <></>
     }
     const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""}`
-    return <Text id={id}>{rate}</Text>
+    return <Text id={id ?? "rate"}>{rate}</Text>
 }
 
 export const PerGiBRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
@@ -36,5 +36,5 @@ export const PerGiBRate: React.FC<RateProps> = ({ id, paymentMethod, units }) =>
         return <></>
     }
     const rate = `${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text id={id}>{rate}</Text>
+    return <Text id={id ?? "rate"}>{rate}</Text>
 }

@@ -45,7 +45,6 @@ export class ConnectionStore {
             if (state.consumer?.connection?.proposal) {
                 this.setProposal(newUIProposal(state.consumer.connection.proposal))
             }
-            // console.log("reactionto sse :", state)
         })
         reaction(
             () => this.root.daemon.status,
@@ -88,7 +87,7 @@ export class ConnectionStore {
             await (tequilapi as HttpTequilapiClient).http.put(
                 "connection",
                 {
-                    consumerId: this.root.identity.id,
+                    consumerId: this.root.identity.identity?.id,
                     providerId: this.root.proposals.active?.providerId,
                     accountantId,
                     serviceType: this.root.proposals.active?.serviceType,

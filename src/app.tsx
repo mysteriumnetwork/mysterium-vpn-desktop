@@ -14,15 +14,20 @@ import { View } from "@nodegui/react-nodegui"
 import { winSize } from "./config"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { ConnectionActiveView } from "./connection-active-view"
+import { IdentityRegistration } from "./identity-registration"
+import { IdentityRegistrationStatus } from "./tequila-sse"
 
 export const App = observer(() => {
-    const { daemon, connection } = useStores()
+    const { daemon, connection, identity } = useStores()
     if (daemon.status == DaemonStatusType.Down) {
         return (
             <View style={`background: #ecf0f1;`}>
                 <Spinner active top={(winSize.height - 200) / 2} left={(winSize.width - 200) / 2} />
             </View>
         )
+    }
+    if (!identity.identity || identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer) {
+        return <IdentityRegistration />
     }
     if (connection.status === ConnectionStatus.NOT_CONNECTED) {
         return <ConnectView />

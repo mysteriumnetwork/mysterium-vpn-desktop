@@ -40,11 +40,9 @@ const MainWindow: React.FC = () => {
         autorun(() => {
             const daemonIcon = daemon.status == DaemonStatusType.Up ? "🟢" : "⚪️"
             const connectionIcon = connection.status == ConnectionStatusType.CONNECTED ? "🟢" : "⚪️"
+            const id = identity.identity?.id ?? "⚪️"
             statusBar.clearMessage()
-            statusBar.showMessage(
-                `Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${identity.id || "⚪"}`,
-                0,
-            )
+            statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${id}`, 0)
         }),
     )
 
