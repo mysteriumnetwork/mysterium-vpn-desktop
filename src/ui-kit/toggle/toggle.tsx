@@ -7,11 +7,11 @@
 import React from "react"
 import { useEventHandler, View } from "@nodegui/react-nodegui"
 import { WidgetEventTypes } from "@nodegui/nodegui"
+import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
-export type ToggleProps = {
+export interface ToggleProps extends ViewProps<WidgetEventListeners> {
     children: React.ReactNode
     onToggle?: () => void
-    id: string
 }
 
 export const Toggle: React.FC<ToggleProps> = ({
@@ -19,11 +19,11 @@ export const Toggle: React.FC<ToggleProps> = ({
     onToggle = (): void => {
         // noop
     },
-    id = "",
+    ...rest
 }) => {
     const clickHandler = useEventHandler({ [WidgetEventTypes.MouseButtonPress]: () => onToggle() }, [])
     return (
-        <View id={id} on={clickHandler}>
+        <View {...rest} on={clickHandler}>
             {children}
         </View>
     )

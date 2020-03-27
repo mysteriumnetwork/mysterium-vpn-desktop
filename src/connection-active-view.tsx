@@ -19,6 +19,7 @@ import logoWhiteConnected from "../assets/logo-white-connected.png"
 import { fixAssetPath } from "./utils/paths"
 import { Metric } from "./connection/comp/metric"
 import { CombinedRate } from "./payment/price"
+import { NavBar } from "./navbar"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
@@ -59,91 +60,98 @@ export const ConnectionActiveView: React.FC = observer(() => {
     }
     return (
         <View
-            // background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #7c2463, stop:1 #552462);
             style={`
+            width: ${winSize.width};
+            height: ${winSize.height};
+            flex-direction: "column";
+            `}
+        >
+            <NavBar />
+            <View
+                style={`
                 width: ${winSize.width};
-                height: ${winSize.height};
+                height: ${winSize.height - 40};
                 flex-direction: "column";
                 background: url("assets/bg-2.png");
                 background-position: center;
             `}
-        >
-            <View
-                style={`
+            >
+                <View
+                    style={`
                 width: "100%";
                 padding: 32;
                 padding-bottom: 0;
                 `}
-            >
-                <Text
-                    style={`
+                >
+                    <Text
+                        style={`
                     width: "100%";
                     ${textHuge}
                     color: #fff;
                     font-weight: 100;
                     qproperty-alignment: 'AlignHCenter';
                     `}
-                >
-                    {statusText}
-                </Text>
-            </View>
-            <View
-                style={`
+                    >
+                        {statusText}
+                    </Text>
+                </View>
+                <View
+                    style={`
                 padding: 60;
                 padding-bottom: 0;
                 `}
-            >
-                <View
-                    style={`
+                >
+                    <View
+                        style={`
                     width: "100%";
                     height: 108;
                     background: url("${fixAssetPath(logoWhiteConnected)}");
                     background-position: top center;
                     background-repeat: none;
                     `}
-                />
-            </View>
-            <View
-                style={`
+                    />
+                </View>
+                <View
+                    style={`
                 top: -65;
                 `}
-            >
-                <View
-                    style={`
+                >
+                    <View
+                        style={`
                     left: 104;
                     `}
-                >
-                    <Country code={originalLocation?.country} text={false} />
+                    >
+                        <Country code={originalLocation?.country} text={false} />
+                    </View>
+                    <View
+                        style={`
+                    left: 488;
+                    `}
+                    >
+                        <Country code={location?.country} text={false} />
+                    </View>
                 </View>
                 <View
                     style={`
-                    left: 488;
-                    `}
-                >
-                    <Country code={location?.country} text={false} />
-                </View>
-            </View>
-            <View
-                style={`
                 top: -30;
                 left: 470;
                 width: 110;
                 height: 20;
                 `}
-            >
-                <Text
-                    style={`
+                >
+                    <Text
+                        style={`
                     width: "100%";
                     color: #fff;
                     qproperty-alignment: AlignHCenter;
                     `}
-                >
-                    {location?.ip}
-                </Text>
-            </View>
-            <View
-                id="ConnectionActiveView-proposalPropsContainer"
-                styleSheet={`
+                    >
+                        {location?.ip}
+                    </Text>
+                </View>
+                <View
+                    id="ConnectionActiveView-proposalPropsContainer"
+                    styleSheet={`
                 #ConnectionActiveView-proposalPropsContainer {
                     flex-direction: "column";
                 }
@@ -158,27 +166,27 @@ export const ConnectionActiveView: React.FC = observer(() => {
                     width: 120;
                 }
                 `}
-            >
-                <View id="ConnectionActiveView-proposalProps">
-                    <Text id="ConnectionActiveView-proposalPropsLabel">Provider ID</Text>
-                    <Text>{proposal?.providerId ?? ""}</Text>
+                >
+                    <View id="ConnectionActiveView-proposalProps">
+                        <Text id="ConnectionActiveView-proposalPropsLabel">Provider ID</Text>
+                        <Text>{proposal?.providerId ?? ""}</Text>
+                    </View>
+                    <View id="ConnectionActiveView-proposalProps">
+                        <Text id="ConnectionActiveView-proposalPropsLabel">Price</Text>
+                        <CombinedRate paymentMethod={proposal?.paymentMethod} />
+                    </View>
                 </View>
-                <View id="ConnectionActiveView-proposalProps">
-                    <Text id="ConnectionActiveView-proposalPropsLabel">Price</Text>
-                    <CombinedRate paymentMethod={proposal?.paymentMethod} />
-                </View>
-            </View>
-            <View
-                style={`
+                <View
+                    style={`
                 padding-top: 25;
                 padding-bottom: 24;
                 justify-content: "center";
                 `}
-            >
-                <ConnectDisconnectButton width={200} height={40} />
-            </View>
-            <View
-                style={`
+                >
+                    <ConnectDisconnectButton width={200} height={40} />
+                </View>
+                <View
+                    style={`
                 width: "100%";
                 top: 66;
                 height: 65;
@@ -187,11 +195,12 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 flex-direction: "row";
                 justify-content: "space-around";
                 `}
-            >
-                <Metric name="Duration" value={clock} style={{ value: textHuge }} />
-                <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
-                <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
-                <Metric name="Paid" value="" style={{ value: textHuge }} />
+                >
+                    <Metric name="Duration" value={clock} style={{ value: textHuge }} />
+                    <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
+                    <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
+                    <Metric name="Paid" value="" style={{ value: textHuge }} />
+                </View>
             </View>
         </View>
     )

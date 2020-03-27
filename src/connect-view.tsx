@@ -11,6 +11,7 @@ import { winSize } from "./config"
 import { CountryFilter } from "./proposals/comp/country-filter"
 import { SelectedProposal } from "./proposals/comp/selected-proposal"
 import { OriginalLocation } from "./location/comp/original-location"
+import { NavBar } from "./navbar"
 
 export const ConnectView: React.FC = () => {
     return (
@@ -18,60 +19,69 @@ export const ConnectView: React.FC = () => {
             style={`
                 width: ${winSize.width};
                 height: ${winSize.height};
-                flex-direction: "row";
+                flex-direction: "column";
             `}
         >
+            <NavBar />
             <View
                 style={`
+                width: ${winSize.width};
+                height: ${winSize.height - 40};
+                flex-direction: "row";
+            `}
+            >
+                <View
+                    style={`
                     width: 240;
                     padding-bottom: 25;
                     flex-direction: "column";
                 `}
-            >
-                <ScrollArea
-                    style={`
+                >
+                    <ScrollArea
+                        style={`
                         flex: 1;
                         background-color: #ecf0f1;
                         border: 0;
                         border-right: 1px solid #e9e9e9;
                     `}
-                >
-                    <View
-                        style={`
+                    >
+                        <View
+                            style={`
                             padding-bottom: 15;
                             background: #fafafa;
                         `}
-                    >
-                        <CountryFilter />
-                    </View>
-                </ScrollArea>
-                <View
-                    style={`
+                        >
+                            <CountryFilter />
+                        </View>
+                    </ScrollArea>
+                    <View
+                        style={`
                         height: 65;
                         background: #fafafa;
                         border-top: 1px solid #e9e9e9;
                         border-right: 1px solid #e9e9e9;
                     `}
-                >
-                    <OriginalLocation />
+                    >
+                        <OriginalLocation />
+                    </View>
                 </View>
-            </View>
-            <View
-                style={`
+                <View
+                    style={`
                     width: ${winSize.width - 240};
                     padding-bottom: 25;
                     flex-direction: "column";
                     background: #fff;
                 `}
-            >
-                <ProposalTable />
-                <View
-                    style={`
+                >
+                    <ProposalTable />
+                    <View
+                        style={`
                         max-height: 65;
                         border-top: 1px solid #e9e9e9;
                     `}
-                >
-                    <SelectedProposal />
+                    >
+                        <SelectedProposal />
+                    </View>
                 </View>
             </View>
         </View>

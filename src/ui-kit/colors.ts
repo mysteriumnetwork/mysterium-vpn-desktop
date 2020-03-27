@@ -5,3 +5,4 @@
  * LICENSE file in the root directory of this source tree.
  */
 export const brand = "#853773"
+export const brandDarker = "#632462"
