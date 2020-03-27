@@ -6,53 +6,18 @@
  */
 import EventSource from "eventsource"
 import { EventEmitter } from "events"
-import { ConnectionStatistics, ConnectionStatus, Proposal } from "mysterium-vpn-js"
+import { parseSSEResponse, TEQUILAPI_SSE_URL } from "mysterium-vpn-js"
 import { isDevelopment } from "./utils/mode"
-import { tequilaBase } from "./tequila"
-import { camelKeys } from "./utils/json"
-
-export enum IdentityRegistrationStatus {
-    Unregistered = "Unregistered",
-    InProgress = "InProgress",
-    RegisteredConsumer = "RegisteredConsumer",
-    RegisteredProvider = "RegisteredProvider",
-    Promoting = "Promoting",
-    RegistrationError = "RegistrationError",
-}
-
-export type Identity = {
-    id: string
-    registrationStatus?: IdentityRegistrationStatus
-    balance?: number
-}
-
-export type AppState = {
-    consumer?: {
-        connection?: {
-            state: ConnectionStatus
-            statistics?: ConnectionStatistics
-            proposal?: Proposal
-        }
-    }
-    identities?: Identity[]
-}
 
 export const eventBus = new EventEmitter()
 
-export const AppStateChangeEvent = "state-change"
-
-export type SSEResponse = {
-    type: string
-    payload: AppState
-}
-
 export const sseConnect = (): EventSource => {
-    const es = new EventSource(`${tequilaBase}/events/state`)
+    const es = new EventSource(TEQUILAPI_SSE_URL)
     es.onerror = (evt): void => {
         console.error("[sse error]", evt)
     }
     es.onmessage = (evt): void => {
-        const { type, payload }: SSEResponse = camelKeys(typeof evt.data === "string" ? JSON.parse(evt.data) : evt.data)
+        const { type, payload } = parseSSEResponse(evt.data)
         if (isDevelopment()) {
             console.log("[sse message event]", type, JSON.stringify(payload, null, 2))
         }

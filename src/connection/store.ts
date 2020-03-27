@@ -5,10 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
-import { ConnectionStatistics, ConnectionStatus, ConsumerLocation, HttpTequilapiClient } from "mysterium-vpn-js"
+import tequilapi, {
+    ConnectionStatistics,
+    ConnectionStatus,
+    ConsumerLocation,
+    AppState,
+    SSEEventType,
+} from "mysterium-vpn-js"
 import { RootStore } from "../store"
-import tequilapi from "../tequila"
-import { AppState, AppStateChangeEvent, eventBus } from "../tequila-sse"
+import { eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 
@@ -37,7 +42,7 @@ export class ConnectionStore {
     }
 
     setupReactions(): void {
-        eventBus.on(AppStateChangeEvent, (state: AppState) => {
+        eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             if (state.consumer?.connection) {
                 this.setStatus(state.consumer.connection.state)
                 this.setStatistics(state.consumer.connection.statistics)
@@ -67,35 +72,21 @@ export class ConnectionStore {
 
     @action
     async connect(): Promise<void> {
+        if (!this.root.identity.identity || !this.root.proposals.active) {
+            return
+        }
         this.setConnectInProgress(true)
         this.setGracePeriod()
         try {
-            // this.setStatus(ConnectionStatus.CONNECTING)
-            // this.status = ConnectionStatusType.CONNECTING
-            // TODO SDK: add accountantId
-            // TODO SDK: remove object remapping! (just passthrough all fields to the API);
-            // const req = {
-            //     consumerId: this.root.identity.id!,
-            //     providerId: this.root.proposals.active?.providerId!,
-            //
-            //     //           devs should be able to pass unknown props, e.g. when SDK is outdated.
-            //     accountantId: accountantId,
-            //     serviceType: this.root.proposals.active?.serviceType!
-            // };
-            // const res = await tequilapi.connectionCreate(req)
-
-            await (tequilapi as HttpTequilapiClient).http.put(
-                "connection",
+            await tequilapi.connectionCreate(
                 {
-                    consumerId: this.root.identity.identity?.id,
-                    providerId: this.root.proposals.active?.providerId,
+                    consumerId: this.root.identity.identity.id,
+                    providerId: this.root.proposals.active.providerId,
                     accountantId,
-                    serviceType: this.root.proposals.active?.serviceType,
+                    serviceType: this.root.proposals.active.serviceType,
                 },
                 5000,
             )
-            // const res = parseConnectionStatusResponse(httpRes);
-            // this.status = res.status
         } catch (err) {
             console.error("Could not connect", err.message)
         }
@@ -147,8 +138,7 @@ export class ConnectionStore {
             city: "",
             continent: "",
             isp: "",
-            // eslint-disable-next-line @typescript-eslint/camelcase
-            node_type: "",
+            nodeType: "",
         })
     }
 
@@ -165,8 +155,7 @@ export class ConnectionStore {
                 city: "",
                 continent: "",
                 isp: "",
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                node_type: "",
+                nodeType: "",
             }
             console.error("Failed to lookup location", err.message)
         }

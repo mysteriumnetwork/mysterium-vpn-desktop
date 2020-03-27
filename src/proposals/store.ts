@@ -5,12 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
+import tequilapi, { ConnectionStatus } from "mysterium-vpn-js"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
-import tequilapi from "../tequila"
 import * as _ from "lodash"
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
-import { ConnectionStatus } from "mysterium-vpn-js"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 

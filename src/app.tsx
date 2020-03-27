@@ -12,10 +12,9 @@ import { ConnectView } from "./connect-view"
 import { Spinner } from "./ui-kit/spinner/spinner"
 import { View } from "@nodegui/react-nodegui"
 import { winSize } from "./config"
-import { ConnectionStatus } from "mysterium-vpn-js"
+import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 import { ConnectionActiveView } from "./connection-active-view"
 import { IdentityRegistration } from "./identity-registration"
-import { IdentityRegistrationStatus } from "./tequila-sse"
 
 export const App = observer(() => {
     const { daemon, connection, identity } = useStores()

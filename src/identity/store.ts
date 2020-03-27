@@ -4,11 +4,16 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import tequilapi from "../tequila"
+import tequilapi, {
+    Identity,
+    IdentityRegistrationStatus,
+    TransactorFeesResponse,
+    AppState,
+    SSEEventType,
+} from "mysterium-vpn-js"
 import { action, observable, reaction } from "mobx"
 import { RootStore } from "../store"
-import { AppState, AppStateChangeEvent, eventBus, Identity, IdentityRegistrationStatus } from "../tequila-sse"
-import { TransactorFeesResponse } from "mysterium-vpn-js"
+import { eventBus } from "../tequila-sse"
 
 export class IdentityStore {
     @observable
@@ -25,7 +30,7 @@ export class IdentityStore {
     }
 
     setupReactions(): void {
-        eventBus.on(AppStateChangeEvent, (state: AppState) => {
+        eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             this.setIdentities(state.identities ?? [])
         })
         reaction(

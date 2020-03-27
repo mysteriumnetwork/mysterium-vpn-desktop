@@ -4,10 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import tequilapi from "../tequila"
+import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
-import { supervisor } from "../supervisor/supervisor"
 import EventSource from "eventsource"
+import { supervisor } from "../supervisor/supervisor"
 import { sseConnect } from "../tequila-sse"
 
 export enum DaemonStatusType {
