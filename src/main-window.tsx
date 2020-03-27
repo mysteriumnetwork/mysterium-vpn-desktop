@@ -8,7 +8,6 @@ import React from "react"
 import { hot, Window } from "@nodegui/react-nodegui"
 import { QIcon, WidgetEventTypes } from "@nodegui/nodegui"
 import mystLogo from "../assets/logo.svg"
-import { useStores } from "./store"
 import { winSize } from "./config"
 import { App } from "./app"
 import { textRegular } from "./ui-kit/typography"
@@ -31,7 +30,7 @@ const MainWindow: React.FC = () => {
     //     }
     //     winRef.current = ref
     // }, [])
-    const { daemon, connection, identity } = useStores()
+    // const { daemon, connection, identity } = useStores()
     // useEffect(() =>
     //     autorun(() => {
     //         const daemonIcon = daemon.status == DaemonStatusType.Up ? "🟢" : "⚪️"
