@@ -26,14 +26,14 @@ export const ConnectView: React.FC = () => {
             <View
                 style={`
                 width: ${winSize.width};
-                height: ${winSize.height - 40};
+                height: ${winSize.height};
                 flex-direction: "row";
             `}
             >
                 <View
                     style={`
                     width: 240;
-                    padding-bottom: 25;
+                    padding-bottom: 0;
                     flex-direction: "column";
                 `}
                 >
@@ -68,7 +68,6 @@ export const ConnectView: React.FC = () => {
                 <View
                     style={`
                     width: ${winSize.width - 240};
-                    padding-bottom: 25;
                     flex-direction: "column";
                     background: #fff;
                 `}

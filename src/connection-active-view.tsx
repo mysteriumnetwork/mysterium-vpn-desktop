@@ -188,7 +188,7 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 <View
                     style={`
                 width: "100%";
-                top: 66;
+                top: 53;
                 height: 65;
                 padding: 8;
                 background: #2a154d;

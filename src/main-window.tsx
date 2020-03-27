@@ -4,15 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import React from "react"
 import { hot, Window } from "@nodegui/react-nodegui"
-import React, { MutableRefObject, useCallback, useEffect, useRef } from "react"
-import { QIcon, QMainWindow, QStatusBar, WidgetEventTypes } from "@nodegui/nodegui"
-
-import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
+import { QIcon, WidgetEventTypes } from "@nodegui/nodegui"
 import mystLogo from "../assets/logo.svg"
 import { useStores } from "./store"
-import { autorun } from "mobx"
-import { DaemonStatusType } from "./daemon/store"
 import { winSize } from "./config"
 import { App } from "./app"
 import { textRegular } from "./ui-kit/typography"
@@ -25,30 +21,30 @@ const mainWindowEventHandler = {
     },
 }
 
-const statusBar = new QStatusBar()
+// const statusBar = new QStatusBar()
 
 const MainWindow: React.FC = () => {
-    const winRef: MutableRefObject<QMainWindow | null> = useRef<QMainWindow>(null)
-    const setRef = useCallback((ref: QMainWindow) => {
-        if (ref !== null) {
-            ref.setStatusBar(statusBar)
-        }
-        winRef.current = ref
-    }, [])
+    //const winRef: MutableRefObject<QMainWindow | null> = useRef<QMainWindow>(null)
+    // const setRef = useCallback((ref: QMainWindow) => {
+    //     if (ref !== null) {
+    //         ref.setStatusBar(statusBar)
+    //     }
+    //     winRef.current = ref
+    // }, [])
     const { daemon, connection, identity } = useStores()
-    useEffect(() =>
-        autorun(() => {
-            const daemonIcon = daemon.status == DaemonStatusType.Up ? "🟢" : "⚪️"
-            const connectionIcon = connection.status == ConnectionStatusType.CONNECTED ? "🟢" : "⚪️"
-            const id = identity.identity?.id ?? "⚪️"
-            statusBar.clearMessage()
-            statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${id}`, 0)
-        }),
-    )
+    // useEffect(() =>
+    //     autorun(() => {
+    //         const daemonIcon = daemon.status == DaemonStatusType.Up ? "🟢" : "⚪️"
+    //         const connectionIcon = connection.status == ConnectionStatusType.CONNECTED ? "🟢" : "⚪️"
+    //         const id = identity.identity?.id ?? "⚪️"
+    //         statusBar.clearMessage()
+    //         statusBar.showMessage(`Connection: ${connectionIcon} | Daemon: ${daemonIcon} | ID: ${id}`, 0)
+    //     }),
+    // )
 
     return (
         <Window
-            ref={setRef}
+            // ref={setRef}
             on={mainWindowEventHandler}
             windowIcon={winIcon}
             windowTitle="Mysterium VPN 2"
