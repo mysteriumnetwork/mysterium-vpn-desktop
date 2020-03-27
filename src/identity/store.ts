@@ -4,16 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import tequilapi, {
-    Identity,
-    IdentityRegistrationStatus,
-    TransactorFeesResponse,
-    AppState,
-    SSEEventType,
-} from "mysterium-vpn-js"
+import tequilapi, { AppState, Identity, SSEEventType, TransactorFeesResponse } from "mysterium-vpn-js"
 import { action, observable, reaction } from "mobx"
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
+import { eligibleForRegistration, registered } from "./identity"
 
 export class IdentityStore {
     @observable
@@ -38,7 +33,7 @@ export class IdentityStore {
             async identities => {
                 this.refreshIdentity(identities)
                 if (!this.identity) {
-                    const id = await this.selectIdentity()
+                    const id = identities.find(id => registered(id) || eligibleForRegistration(id))
                     if (id) {
                         this.setIdentity(id)
                     } else {
@@ -54,14 +49,7 @@ export class IdentityStore {
                     return
                 }
                 await this.unlock()
-                const canRegister =
-                    identity.registrationStatus &&
-                    [
-                        IdentityRegistrationStatus.Unregistered,
-                        IdentityRegistrationStatus.InProgress,
-                        IdentityRegistrationStatus.RegistrationError,
-                    ].includes(identity.registrationStatus)
-                if (canRegister) {
+                if (eligibleForRegistration(identity)) {
                     await this.register(identity)
                 }
             },
@@ -80,14 +68,6 @@ export class IdentityStore {
         }
         this.identity.balance = matchingId.balance
         this.identity.registrationStatus = matchingId.registrationStatus
-    }
-
-    @action
-    selectIdentity = async (): Promise<Identity | undefined> => {
-        if (!this.identities) {
-            return undefined
-        }
-        return this.identities.find(id => id.registrationStatus != IdentityRegistrationStatus.RegisteredProvider)
     }
 
     @action
