@@ -195,7 +195,7 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 </View>
                 <View
                     style={`
-                    padding-top: 25;
+                    padding-top: 35;
                     padding-bottom: 24;
                     flex-direction: "row";
                     justify-content: "center";
@@ -206,7 +206,7 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 <View
                     style={`
                     width: "100%";
-                    top: 53;
+                    top: 22;
                     height: 65;
                     padding: 8;
                     background: #2a154d;
