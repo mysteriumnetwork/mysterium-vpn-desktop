@@ -26,7 +26,7 @@ export const ConnectView: React.FC = () => {
             <View
                 style={`
                 width: ${winSize.width};
-                height: ${winSize.height};
+                height: ${winSize.height - 40};
                 flex-direction: "row";
             `}
             >

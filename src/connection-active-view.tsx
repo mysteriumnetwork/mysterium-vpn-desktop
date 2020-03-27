@@ -18,8 +18,8 @@ import { textHuge } from "./ui-kit/typography"
 import logoWhiteConnected from "../assets/logo-white-connected.png"
 import { fixAssetPath } from "./utils/paths"
 import { Metric } from "./connection/comp/metric"
-import { CombinedRate } from "./payment/price"
 import { NavBar } from "./navbar"
+import { perGiB, perMinute } from "./payment/rate"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
@@ -38,6 +38,10 @@ export const ConnectionActiveView: React.FC = observer(() => {
             proposal,
         },
     } = useStores()
+    let rate = ""
+    if (proposal?.paymentMethod) {
+        rate = perMinute(proposal.paymentMethod) + "/min" + " ＋ " + perGiB(proposal.paymentMethod) + "/GiB"
+    }
     const clock = duration ? toClock(duration) : ""
     const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : ""
     const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : ""
@@ -85,12 +89,12 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 >
                     <Text
                         style={`
-                    width: "100%";
-                    ${textHuge}
-                    color: #fff;
-                    font-weight: 100;
-                    qproperty-alignment: 'AlignHCenter';
-                    `}
+                        width: "100%";
+                        ${textHuge}
+                        color: #fff;
+                        font-weight: 100;
+                        qproperty-alignment: 'AlignHCenter';
+                        `}
                     >
                         {statusText}
                     </Text>
@@ -113,20 +117,21 @@ export const ConnectionActiveView: React.FC = observer(() => {
                 </View>
                 <View
                     style={`
-                top: -65;
-                `}
+                    top: -65;
+                    flex-direction: "row";
+                    `}
                 >
                     <View
                         style={`
-                    left: 104;
-                    `}
+                        left: 104;
+                        `}
                     >
                         <Country code={originalLocation?.country} text={false} />
                     </View>
                     <View
                         style={`
-                    left: 488;
-                    `}
+                        left: 488;
+                        `}
                     >
                         <Country code={location?.country} text={false} />
                     </View>
@@ -150,51 +155,64 @@ export const ConnectionActiveView: React.FC = observer(() => {
                     </Text>
                 </View>
                 <View
-                    id="ConnectionActiveView-proposalPropsContainer"
-                    styleSheet={`
-                #ConnectionActiveView-proposalPropsContainer {
-                    flex-direction: "column";
-                }
-                #ConnectionActiveView-proposalProps {
+                    style={`
                     padding-left: 80;
-                    padding-bottom: 14;
-                }
-                #ConnectionActiveView-proposalProps QLabel {
-                    color: #c0b3c9;
-                }
-                #ConnectionActiveView-proposalPropsLabel {
-                    width: 120;
-                }
-                `}
+                    flex-direction: "column";
+                    `}
                 >
-                    <View id="ConnectionActiveView-proposalProps">
-                        <Text id="ConnectionActiveView-proposalPropsLabel">Provider ID</Text>
-                        <Text>{proposal?.providerId ?? ""}</Text>
+                    <View
+                        style={`
+                        padding-bottom: 14;
+                        flex-direction: "row";
+                        `}
+                    >
+                        <Text
+                            style={`
+                            color: #c0b3c9;
+                            width: 120;
+                            `}
+                        >
+                            Provider ID
+                        </Text>
+                        <Text style={`color: #c0b3c9;`}>{proposal?.providerId ?? ""}</Text>
                     </View>
-                    <View id="ConnectionActiveView-proposalProps">
-                        <Text id="ConnectionActiveView-proposalPropsLabel">Price</Text>
-                        <CombinedRate paymentMethod={proposal?.paymentMethod} />
+                    <View
+                        style={`
+                        padding-bottom: 14;
+                        flex-direction: "row";
+                        `}
+                    >
+                        <Text
+                            style={`
+                            color: #c0b3c9;
+                            width: 120;
+                            `}
+                        >
+                            Price
+                        </Text>
+                        <Text style={`color: #c0b3c9;`}>{rate}</Text>
                     </View>
                 </View>
                 <View
                     style={`
-                padding-top: 25;
-                padding-bottom: 24;
-                justify-content: "center";
-                `}
+                    padding-top: 25;
+                    padding-bottom: 24;
+                    flex-direction: "row";
+                    justify-content: "center";
+                    `}
                 >
                     <ConnectDisconnectButton width={200} height={40} />
                 </View>
                 <View
                     style={`
-                width: "100%";
-                top: 53;
-                height: 65;
-                padding: 8;
-                background: #2a154d;
-                flex-direction: "row";
-                justify-content: "space-around";
-                `}
+                    width: "100%";
+                    top: 53;
+                    height: 65;
+                    padding: 8;
+                    background: #2a154d;
+                    flex-direction: "row";
+                    justify-content: "space-around";
+                    `}
                 >
                     <Metric name="Duration" value={clock} style={{ value: textHuge }} />
                     <Metric name="Downloaded" value={down} style={{ value: textHuge }} />

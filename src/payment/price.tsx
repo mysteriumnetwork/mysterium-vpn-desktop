@@ -15,14 +15,6 @@ export type RateProps = {
     units?: boolean
 }
 
-export const CombinedRate: React.FC<RateProps> = ({ id, paymentMethod, units = true }) => {
-    if (!paymentMethod) {
-        return <></>
-    }
-    const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""} + ${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text id={id ?? "rate"}>{rate}</Text>
-}
-
 export const PerMinuteRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
     if (!paymentMethod) {
         return <></>
