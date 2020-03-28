@@ -49,6 +49,8 @@ export class ConnectionStore {
             }
             if (state.consumer?.connection?.proposal) {
                 this.setProposal(newUIProposal(state.consumer.connection.proposal))
+            } else {
+                this.setProposal(undefined)
             }
         })
         reaction(
@@ -183,7 +185,7 @@ export class ConnectionStore {
     }
 
     @action
-    setProposal = (p: UIProposal): void => {
+    setProposal = (p?: UIProposal): void => {
         this.proposal = p
     }
 
