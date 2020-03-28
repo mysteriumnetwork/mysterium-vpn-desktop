@@ -6,18 +6,14 @@
  */
 import React from "react"
 import { Text, View } from "@nodegui/react-nodegui"
-import { textLarger, textSmall } from "../../ui-kit/typography"
+import { textHuge, textSmall } from "../../../ui-kit/typography"
 
 export type MetricProps = {
     name: string
     value?: string
-    style?: {
-        name?: string
-        value?: string
-    }
 }
 
-export const Metric: React.FC<MetricProps> = ({ name, value = "", style }) => {
+export const Metric: React.FC<MetricProps> = ({ name, value = "" }) => {
     return (
         <View
             style={`
@@ -30,16 +26,14 @@ export const Metric: React.FC<MetricProps> = ({ name, value = "", style }) => {
                 style={`
                 ${textSmall}
                 color: #c0b3c9;
-                ${style?.name ?? ""}
                 `}
             >
                 {name}
             </Text>
             <Text
                 style={`
-                ${textLarger}
+                ${textHuge}
                 color: #fff;
-                ${style?.value ?? ""}
                 `}
             >
                 {value}

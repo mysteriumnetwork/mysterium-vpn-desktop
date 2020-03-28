@@ -7,8 +7,6 @@
 import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
-import byteSize from "byte-size"
-import * as _ from "lodash"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { winSize } from "../../../config"
 import { useStores } from "../../../store"
@@ -17,34 +15,18 @@ import { ConnectDisconnectButton } from "../../../connection/comp/connect-discon
 import { textHuge } from "../../../ui-kit/typography"
 import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import { fixAssetPath } from "../../../utils/paths"
-import { Metric } from "../../../connection/comp/metric"
 import { NavBar } from "../../../navbar"
 import { perGiB, perMinute } from "../../../payment/rate"
-
-const toClock = (duration: number): string => {
-    const secs = Math.floor(duration % 60)
-    const mins = Math.floor((duration % (60 * 60)) / 60)
-    const hours = Math.floor(duration / (60 * 60))
-    return [hours, mins, secs].map((n) => _.padStart(String(n), 2, "0")).join(":")
-}
+import { ConnectionStatistics } from "./connection-statistics"
 
 export const ConnectedView: React.FC = observer(() => {
     const {
-        connection: {
-            location,
-            originalLocation,
-            status,
-            statistics: { duration, bytesReceived, bytesSent } = {},
-            proposal,
-        },
+        connection: { location, originalLocation, status, proposal },
     } = useStores()
     let rate = ""
     if (proposal?.paymentMethod) {
         rate = perMinute(proposal.paymentMethod) + "/min" + " ＋ " + perGiB(proposal.paymentMethod) + "/GiB"
     }
-    const clock = duration ? toClock(duration) : ""
-    const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : ""
-    const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : ""
     let statusText: string
     switch (status) {
         case ConnectionStatus.CONNECTING:
@@ -203,7 +185,7 @@ export const ConnectedView: React.FC = observer(() => {
                 >
                     <ConnectDisconnectButton width={200} height={40} />
                 </View>
-                <View
+                <ConnectionStatistics
                     style={`
                     width: "100%";
                     top: 22;
@@ -213,12 +195,7 @@ export const ConnectedView: React.FC = observer(() => {
                     flex-direction: "row";
                     justify-content: "space-around";
                     `}
-                >
-                    <Metric name="Duration" value={clock} style={{ value: textHuge }} />
-                    <Metric name="Downloaded" value={down} style={{ value: textHuge }} />
-                    <Metric name="Uploaded" value={up} style={{ value: textHuge }} />
-                    <Metric name="Paid" value="" style={{ value: textHuge }} />
-                </View>
+                />
             </View>
         </View>
     )
