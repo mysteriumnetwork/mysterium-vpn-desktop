@@ -25,7 +25,7 @@ const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
     const mins = Math.floor((duration % (60 * 60)) / 60)
     const hours = Math.floor(duration / (60 * 60))
-    return [hours, mins, secs].map(n => _.padStart(String(n), 2, "0")).join(":")
+    return [hours, mins, secs].map((n) => _.padStart(String(n), 2, "0")).join(":")
 }
 
 export const ConnectionActiveView: React.FC = observer(() => {

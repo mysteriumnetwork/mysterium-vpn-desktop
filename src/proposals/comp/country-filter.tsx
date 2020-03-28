@@ -105,7 +105,7 @@ export const CountryFilter = observer(() => {
             </Text>
             {Object.keys(countryCounts)
                 .sort()
-                .map(countryCode => {
+                .map((countryCode) => {
                     const toggleAction = (): void => {
                         proposals.toggleFilterCountry(countryCode)
                     }

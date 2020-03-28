@@ -38,7 +38,7 @@ export class DaemonStore {
         )
         reaction(
             () => this.status,
-            async status => {
+            async (status) => {
                 if (status == DaemonStatusType.Down) {
                     await this.start()
                 }
@@ -46,7 +46,7 @@ export class DaemonStore {
         )
         reaction(
             () => this.status,
-            async status => {
+            async (status) => {
                 if (status == DaemonStatusType.Up) {
                     this.eventSource = sseConnect()
                 }

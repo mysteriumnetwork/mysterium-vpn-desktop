@@ -25,7 +25,7 @@ class Root extends React.Component {
     }
 }
 
-;[robotoLight, robotoMedium].forEach(font => {
+;[robotoLight, robotoMedium].forEach((font) => {
     QFontDatabase.addApplicationFont(fixAssetPath(font))
 })
 
@@ -35,7 +35,7 @@ createSystemTray()
 
 // This is for hot reloading (this will be stripped off in production by webpack)
 if (module.hot) {
-    module.hot.accept(["./main-window"], function() {
+    module.hot.accept(["./main-window"], function () {
         Renderer.forceUpdate()
     })
 }

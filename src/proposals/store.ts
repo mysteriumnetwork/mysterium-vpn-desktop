@@ -47,7 +47,7 @@ export class ProposalStore {
     setupReactions(): void {
         reaction(
             () => this.root.daemon.status,
-            async status => {
+            async (status) => {
                 if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     await this.fetchProposals()
                     this.applyCountryFilter() // Refresh (load) main view initially
@@ -71,8 +71,8 @@ export class ProposalStore {
         try {
             const proposals = await tequilapi
                 .findProposals()
-                .then(proposals => proposals.filter(p => supportedServiceTypes.includes(p.serviceType)))
-                .then(proposals => proposals.map(newUIProposal))
+                .then((proposals) => proposals.filter((p) => supportedServiceTypes.includes(p.serviceType)))
+                .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
             this.applyAccessPolicyFilter() // Only reflect update in the sidebar, not refreshing main view (not to bother the user)
         } catch (err) {
@@ -83,8 +83,8 @@ export class ProposalStore {
 
     @computed
     get byCountryCounts(): { [code: string]: number } {
-        const result = _.groupBy(this.apFiltered, p => p.country)
-        return _.mapValues(result, ps => ps.length)
+        const result = _.groupBy(this.apFiltered, (p) => p.country)
+        return _.mapValues(result, (ps) => ps.length)
     }
 
     set activate(proposal: UIProposal) {
@@ -104,7 +104,7 @@ export class ProposalStore {
     @action
     applyAccessPolicyFilter(): void {
         this.apFiltered = this.proposals
-            .filter(p => !this.filter.noAccessPolicy || !p.accessPolicies)
+            .filter((p) => !this.filter.noAccessPolicy || !p.accessPolicies)
             .sort(compareProposal)
     }
 
@@ -118,7 +118,7 @@ export class ProposalStore {
     @action
     applyCountryFilter(): void {
         this.countryFiltered = this.apFiltered
-            .filter(p => this.filter.country == null || p.country == this.filter.country)
+            .filter((p) => this.filter.country == null || p.country == this.filter.country)
             .sort(compareProposal)
     }
 

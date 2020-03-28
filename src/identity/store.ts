@@ -30,10 +30,10 @@ export class IdentityStore {
         })
         reaction(
             () => this.identities,
-            async identities => {
+            async (identities) => {
                 this.refreshIdentity(identities)
                 if (!this.identity) {
-                    const id = identities.find(id => registered(id) || eligibleForRegistration(id))
+                    const id = identities.find((id) => registered(id) || eligibleForRegistration(id))
                     if (id) {
                         this.setIdentity(id)
                     } else {
@@ -44,7 +44,7 @@ export class IdentityStore {
         )
         reaction(
             () => this.identity,
-            async identity => {
+            async (identity) => {
                 if (!identity) {
                     return
                 }
@@ -61,7 +61,7 @@ export class IdentityStore {
         if (!this.identity) {
             return
         }
-        const matchingId = identities.find(id => id.id == this.identity?.id)
+        const matchingId = identities.find((id) => id.id == this.identity?.id)
         if (!matchingId) {
             this.setIdentity(undefined)
             return

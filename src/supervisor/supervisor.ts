@@ -27,7 +27,7 @@ export class Supervisor {
                 .on("data", (data: Buffer) => {
                     console.info("Server:", data.toString())
                 })
-                .on("error", function(data) {
+                .on("error", function (data) {
                     return reject(data)
                 })
         })

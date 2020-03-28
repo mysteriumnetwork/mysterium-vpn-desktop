@@ -18,7 +18,7 @@ const ConnectedProposalTable: React.FC = observer(() => {
     const items = proposals.countryFiltered
     return (
         <>
-            {items.map(p => {
+            {items.map((p) => {
                 return <Proposal key={p.key} proposal={p} />
             })}
         </>

@@ -53,7 +53,7 @@ export class ConnectionStore {
         })
         reaction(
             () => this.root.daemon.status,
-            async status => {
+            async (status) => {
                 if (status == DaemonStatusType.Up) {
                     await this.resolveOriginalLocation()
                 }
@@ -61,7 +61,7 @@ export class ConnectionStore {
         )
         reaction(
             () => this.root.connection.status,
-            async status => {
+            async (status) => {
                 this.resetLocation()
                 if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
                     await this.resolveLocation()
