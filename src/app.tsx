@@ -8,13 +8,13 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import { useStores } from "./store"
 import { DaemonStatusType } from "./daemon/store"
-import { ConnectView } from "./connect-view"
+import { SelectProposalView } from "./views/consumer/select-proposal/select-proposal-view"
 import { Spinner } from "./ui-kit/spinner/spinner"
 import { View } from "@nodegui/react-nodegui"
 import { winSize } from "./config"
 import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
-import { ConnectionActiveView } from "./connection-active-view"
-import { IdentityRegistration } from "./identity-registration"
+import { ConnectedView } from "./views/consumer/connected/connected-view"
+import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
 
 export const App = observer(() => {
     const { daemon, connection, identity } = useStores()
@@ -26,10 +26,10 @@ export const App = observer(() => {
         )
     }
     if (!identity.identity || identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer) {
-        return <IdentityRegistration />
+        return <SelectIdentityView />
     }
     if (connection.status === ConnectionStatus.NOT_CONNECTED) {
-        return <ConnectView />
+        return <SelectProposalView />
     }
-    return <ConnectionActiveView />
+    return <ConnectedView />
 })

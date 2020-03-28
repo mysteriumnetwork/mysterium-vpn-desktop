@@ -6,11 +6,11 @@
  */
 import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
-import { winSize } from "./config"
+import { winSize } from "../../../config"
 import { observer } from "mobx-react-lite"
-import { useStores } from "./store"
-import { brand } from "./ui-kit/colors"
-import { textHuge } from "./ui-kit/typography"
+import { useStores } from "../../../store"
+import { brand } from "../../../ui-kit/colors"
+import { textHuge } from "../../../ui-kit/typography"
 
 const styleSheet = `
 #IdentitySelect {
@@ -38,7 +38,7 @@ const styleSheet = `
 }
 `
 
-export const IdentityRegistration: React.FC = observer(() => {
+export const SelectIdentityView: React.FC = observer(() => {
     const { identity } = useStores()
     return (
         <View id="IdentitySelect" styleSheet={styleSheet}>

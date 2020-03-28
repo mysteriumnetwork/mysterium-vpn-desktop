@@ -10,16 +10,16 @@ import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
 import * as _ from "lodash"
 import { ConnectionStatus } from "mysterium-vpn-js"
-import { winSize } from "./config"
-import { useStores } from "./store"
-import { Country } from "./ui-kit/country/country"
-import { ConnectDisconnectButton } from "./connection/comp/connect-disconnect-button"
-import { textHuge } from "./ui-kit/typography"
-import logoWhiteConnected from "../assets/logo-white-connected.png"
-import { fixAssetPath } from "./utils/paths"
-import { Metric } from "./connection/comp/metric"
-import { NavBar } from "./navbar"
-import { perGiB, perMinute } from "./payment/rate"
+import { winSize } from "../../../config"
+import { useStores } from "../../../store"
+import { Country } from "../../../ui-kit/country/country"
+import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
+import { textHuge } from "../../../ui-kit/typography"
+import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
+import { fixAssetPath } from "../../../utils/paths"
+import { Metric } from "../../../connection/comp/metric"
+import { NavBar } from "../../../navbar"
+import { perGiB, perMinute } from "../../../payment/rate"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
@@ -28,7 +28,7 @@ const toClock = (duration: number): string => {
     return [hours, mins, secs].map((n) => _.padStart(String(n), 2, "0")).join(":")
 }
 
-export const ConnectionActiveView: React.FC = observer(() => {
+export const ConnectedView: React.FC = observer(() => {
     const {
         connection: {
             location,
