@@ -1005,10 +1005,10 @@
     progress "^2.0.3"
     tar "^6.0.1"
 
-"@nodegui/react-nodegui@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@nodegui/react-nodegui/-/react-nodegui-0.6.0.tgz#fcc131ce76eb21d0cdcd3bdb787044c849304a7e"
-  integrity sha512-CiL889Ef8TsNosJ+VnZk77Adoh3bBv74etw4UD/oRT1NAUXim6rWbF01UpgxQPWncSq3L3rb4p5DvZciEwwDBQ==
+"@nodegui/react-nodegui@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@nodegui/react-nodegui/-/react-nodegui-0.6.1.tgz#7d2db265b71dcae29a5ecbbcb71aad20733a10ec"
+  integrity sha512-kYUJyRmdjmDy4DtYS043rdHDeLDiyP/HDv10HGmRV8tNmC87s4x0NJyvf41qvreUyfIceydwsHu0+pEctGVHuA==
   dependencies:
     "@types/react-reconciler" "^0.18.0"
     phin "^3.4.1"
