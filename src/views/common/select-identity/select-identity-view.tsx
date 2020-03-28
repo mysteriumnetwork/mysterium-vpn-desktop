@@ -6,8 +6,9 @@
  */
 import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
-import { winSize } from "../../../config"
 import { observer } from "mobx-react-lite"
+
+import { winSize } from "../../../config"
 import { useStores } from "../../../store"
 import { brand } from "../../../ui-kit/colors"
 import { textHuge } from "../../../ui-kit/typography"

@@ -5,12 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { useStores } from "../../store"
 import { Text, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
+import { CursorShape } from "@nodegui/nodegui"
+
+import { useStores } from "../../store"
 import { Country } from "../../ui-kit/country/country"
 import { Toggle } from "../../ui-kit/toggle/toggle"
-import { CursorShape } from "@nodegui/nodegui"
 import { textSmall } from "../../ui-kit/typography"
 import { brand } from "../../ui-kit/colors"
 

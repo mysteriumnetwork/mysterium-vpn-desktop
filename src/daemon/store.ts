@@ -7,6 +7,7 @@
 import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
 import EventSource from "eventsource"
+
 import { supervisor } from "../supervisor/supervisor"
 import { sseConnect } from "../tequila-sse"
 

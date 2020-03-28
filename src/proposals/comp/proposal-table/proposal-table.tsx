@@ -5,13 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { useStores } from "../../../store"
 import { ScrollArea, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
-import { Proposal } from "./proposal"
-import { ProposalTableHeader } from "./header"
+
+import { useStores } from "../../../store"
 import { winSize } from "../../../config"
 import { brand } from "../../../ui-kit/colors"
+
+import { Proposal } from "./proposal"
+import { ProposalTableHeader } from "./header"
 
 const ConnectedProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()

@@ -4,9 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import EventSource from "eventsource"
 import { EventEmitter } from "events"
+
+import EventSource from "eventsource"
 import { parseSSEResponse, TEQUILAPI_SSE_URL } from "mysterium-vpn-js"
+
 import { isDevelopment } from "./utils/mode"
 
 export const eventBus = new EventEmitter()

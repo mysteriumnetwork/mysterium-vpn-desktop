@@ -5,8 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { ScrollArea, View } from "@nodegui/react-nodegui"
-import { ProposalTable } from "../../../proposals/comp/proposal-table/proposal-table"
 import React from "react"
+
+import { ProposalTable } from "../../../proposals/comp/proposal-table/proposal-table"
 import { winSize } from "../../../config"
 import { CountryFilter } from "../../../proposals/comp/country-filter"
 import { SelectedProposal } from "../../../proposals/comp/selected-proposal"

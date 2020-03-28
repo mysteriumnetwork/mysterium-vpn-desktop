@@ -8,6 +8,7 @@ import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus } from "mysterium-vpn-js"
+
 import { winSize } from "../../../config"
 import { useStores } from "../../../store"
 import { Country } from "../../../ui-kit/country/country"
@@ -16,6 +17,7 @@ import { textHuge } from "../../../ui-kit/typography"
 import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import { fixAssetPath } from "../../../utils/paths"
 import { NavBar } from "../../../navbar"
+
 import { ConnectionStatistics } from "./connection-statistics"
 import { ConnectionProposal } from "./connection-proposal"
 

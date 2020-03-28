@@ -6,6 +6,7 @@
  */
 import React from "react"
 import { View } from "@nodegui/react-nodegui"
+
 import { winSize } from "./config"
 import { WalletButton } from "./payment/comp/wallet-button"
 

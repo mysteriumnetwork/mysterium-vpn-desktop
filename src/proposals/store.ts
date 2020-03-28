@@ -6,9 +6,11 @@
  */
 import { action, computed, observable, reaction } from "mobx"
 import tequilapi, { ConnectionStatus } from "mysterium-vpn-js"
+import * as _ from "lodash"
+
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
-import * as _ from "lodash"
+
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 
 const supportedServiceTypes = ["openvpn", "wireguard"]

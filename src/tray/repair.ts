@@ -5,8 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { QAction } from "@nodegui/nodegui"
-import { rootStore } from "../store"
 import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js/lib/connection/status"
+
+import { rootStore } from "../store"
 
 export const repairAction = (): QAction => {
     const quitAction = new QAction()

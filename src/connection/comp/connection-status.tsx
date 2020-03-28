@@ -6,10 +6,11 @@
  */
 import React from "react"
 import { View } from "@nodegui/react-nodegui"
-import { useStores } from "../../store"
 import { observer } from "mobx-react-lite"
-import { Spinner } from "../../ui-kit/spinner/spinner"
 import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
+
+import { useStores } from "../../store"
+import { Spinner } from "../../ui-kit/spinner/spinner"
 
 export const ConnectionStatus = observer(() => {
     const {

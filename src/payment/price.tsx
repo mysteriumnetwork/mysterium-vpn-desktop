@@ -7,6 +7,7 @@
 import React from "react"
 import { Text } from "@nodegui/react-nodegui"
 import { PaymentMethod } from "mysterium-vpn-js"
+
 import { perGiB, perMinute } from "./rate"
 
 export type RateProps = {

@@ -7,6 +7,7 @@
 import React from "react"
 import { Text, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
+
 import { useStores } from "../../store"
 import { Country } from "../../ui-kit/country/country"
 

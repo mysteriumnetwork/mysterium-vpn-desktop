@@ -6,6 +6,7 @@
  */
 import React from "react"
 import { Text, View } from "@nodegui/react-nodegui"
+
 import { textHuge, textSmall } from "../../../ui-kit/typography"
 
 export type MetricProps = {

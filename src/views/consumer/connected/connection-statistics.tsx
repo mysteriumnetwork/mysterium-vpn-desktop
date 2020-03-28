@@ -8,10 +8,12 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import { View } from "@nodegui/react-nodegui"
 import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
-import { Metric } from "./metric"
-import { useStores } from "../../../store"
 import byteSize from "byte-size"
 import * as _ from "lodash"
+
+import { useStores } from "../../../store"
+
+import { Metric } from "./metric"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)

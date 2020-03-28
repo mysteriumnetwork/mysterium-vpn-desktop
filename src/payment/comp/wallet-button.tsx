@@ -6,9 +6,10 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
+import { Text } from "@nodegui/react-nodegui"
+
 import { useStores } from "../../store"
 import { Toggle } from "../../ui-kit/toggle/toggle"
-import { Text } from "@nodegui/react-nodegui"
 import { brandDarker } from "../../ui-kit/colors"
 
 export const mystDisplay = (m?: number): string => {

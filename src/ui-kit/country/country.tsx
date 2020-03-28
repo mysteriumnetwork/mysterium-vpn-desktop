@@ -5,7 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
+
 import { resolveCountry } from "../../location/countries"
+
 import { ResolvedCountry } from "./resolved-country"
 
 export type CountryProps = {

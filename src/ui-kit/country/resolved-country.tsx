@@ -6,6 +6,7 @@
  */
 import React from "react"
 import { Text, View } from "@nodegui/react-nodegui"
+
 import { Flag } from "./flag"
 
 export type ResolvedCountryProps = {

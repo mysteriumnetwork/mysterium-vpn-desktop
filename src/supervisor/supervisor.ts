@@ -7,8 +7,10 @@
 import * as net from "net"
 import { Socket } from "net"
 import * as os from "os"
-import { staticAssetPath } from "../utils/paths"
+
 import * as sudo from "sudo-prompt"
+
+import { staticAssetPath } from "../utils/paths"
 
 const mystSock = "/var/run/myst.sock"
 

@@ -7,7 +7,9 @@
 import React from "react"
 import { hot, Window } from "@nodegui/react-nodegui"
 import { QIcon, WidgetEventTypes } from "@nodegui/nodegui"
+
 import mystLogo from "../assets/logo.svg"
+
 import { winSize } from "./config"
 import { App } from "./app"
 import { textRegular } from "./ui-kit/typography"

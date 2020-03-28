@@ -4,8 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { QIcon, QMenu, QSystemTrayIcon } from "@nodegui/nodegui"
 import path from "path"
+
+import { QIcon, QMenu, QSystemTrayIcon } from "@nodegui/nodegui"
+
 import { quitAction } from "./quit"
 import { repairAction } from "./repair"
 

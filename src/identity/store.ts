@@ -6,8 +6,10 @@
  */
 import tequilapi, { AppState, Identity, SSEEventType, TransactorFeesResponse } from "mysterium-vpn-js"
 import { action, observable, reaction } from "mobx"
+
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
+
 import { eligibleForRegistration, registered } from "./identity"
 
 export class IdentityStore {

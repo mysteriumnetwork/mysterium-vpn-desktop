@@ -6,13 +6,14 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
+import { View } from "@nodegui/react-nodegui"
+import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
+
 import { useStores } from "./store"
 import { DaemonStatusType } from "./daemon/store"
 import { SelectProposalView } from "./views/consumer/select-proposal/select-proposal-view"
 import { Spinner } from "./ui-kit/spinner/spinner"
-import { View } from "@nodegui/react-nodegui"
 import { winSize } from "./config"
-import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 import { ConnectedView } from "./views/consumer/connected/connected-view"
 import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
 

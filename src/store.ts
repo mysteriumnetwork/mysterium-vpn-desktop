@@ -4,12 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import React from "react"
+import { configure } from "mobx"
+
 import { DaemonStore } from "./daemon/store"
 import { ConnectionStore } from "./connection/store"
-import React from "react"
 import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
-import { configure } from "mobx"
 
 // import { enableLogging } from "mobx-logger"
 

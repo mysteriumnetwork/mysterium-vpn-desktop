@@ -7,10 +7,12 @@
 import React, { MutableRefObject, useCallback, useEffect, useRef } from "react"
 import { Image, View } from "@nodegui/react-nodegui"
 import { QLabel, QMovie } from "@nodegui/nodegui"
+import { RNView } from "@nodegui/react-nodegui/dist/components/View/RNView"
+
 import { fixAssetPath } from "../../utils/paths"
+
 import spinnerFile from "./spinner2.gif"
 import logoFile from "./mnet1.png"
-import { RNView } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
 const spinnerSize = {
     width: 200,

@@ -6,9 +6,10 @@
  */
 import React from "react"
 import { Text } from "@nodegui/react-nodegui"
-import { useStores } from "../../store"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus as ConnectionStatusType } from "mysterium-vpn-js"
+
+import { useStores } from "../../store"
 
 export const ConnectionStatusText = observer(() => {
     const {

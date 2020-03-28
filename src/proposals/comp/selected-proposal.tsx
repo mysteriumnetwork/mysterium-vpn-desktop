@@ -9,6 +9,7 @@ import { Text, View } from "@nodegui/react-nodegui"
 import { Proposal as ProposalType } from "mysterium-vpn-js/lib/proposal/proposal"
 import { mystDisplay, pricePerGiB, pricePerMinute } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
+
 import { useStores } from "../../store"
 import { Country } from "../../ui-kit/country/country"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"

@@ -12,6 +12,7 @@ import tequilapi, {
     AppState,
     SSEEventType,
 } from "mysterium-vpn-js"
+
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
