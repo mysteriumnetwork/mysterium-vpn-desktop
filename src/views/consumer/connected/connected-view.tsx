@@ -16,17 +16,13 @@ import { textHuge } from "../../../ui-kit/typography"
 import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import { fixAssetPath } from "../../../utils/paths"
 import { NavBar } from "../../../navbar"
-import { perGiB, perMinute } from "../../../payment/rate"
 import { ConnectionStatistics } from "./connection-statistics"
+import { ConnectionProposal } from "./connection-proposal"
 
 export const ConnectedView: React.FC = observer(() => {
     const {
-        connection: { location, originalLocation, status, proposal },
+        connection: { location, originalLocation, status },
     } = useStores()
-    let rate = ""
-    if (proposal?.paymentMethod) {
-        rate = perMinute(proposal.paymentMethod) + "/min" + " ＋ " + perGiB(proposal.paymentMethod) + "/GiB"
-    }
     let statusText: string
     switch (status) {
         case ConnectionStatus.CONNECTING:
@@ -136,45 +132,12 @@ export const ConnectedView: React.FC = observer(() => {
                         {location?.ip}
                     </Text>
                 </View>
-                <View
+                <ConnectionProposal
                     style={`
                     padding-left: 80;
                     flex-direction: "column";
                     `}
-                >
-                    <View
-                        style={`
-                        padding-bottom: 14;
-                        flex-direction: "row";
-                        `}
-                    >
-                        <Text
-                            style={`
-                            color: #c0b3c9;
-                            width: 120;
-                            `}
-                        >
-                            Provider ID
-                        </Text>
-                        <Text style={`color: #c0b3c9;`}>{proposal?.providerId ?? ""}</Text>
-                    </View>
-                    <View
-                        style={`
-                        padding-bottom: 14;
-                        flex-direction: "row";
-                        `}
-                    >
-                        <Text
-                            style={`
-                            color: #c0b3c9;
-                            width: 120;
-                            `}
-                        >
-                            Price
-                        </Text>
-                        <Text style={`color: #c0b3c9;`}>{rate}</Text>
-                    </View>
-                </View>
+                />
                 <View
                     style={`
                     padding-top: 35;
