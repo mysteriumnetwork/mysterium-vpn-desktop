@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { configure } from "mobx"
+import { action, configure, observable } from "mobx"
 
 import { DaemonStore } from "./daemon/store"
 import { ConnectionStore } from "./connection/store"
@@ -20,6 +20,9 @@ export class RootStore {
     identity: IdentityStore
     proposals: ProposalStore
 
+    @observable
+    wallet = false
+
     constructor() {
         this.daemon = new DaemonStore()
         this.connection = new ConnectionStore(this)
@@ -30,6 +33,16 @@ export class RootStore {
         this.connection.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
+    }
+
+    @action
+    openWallet = (): void => {
+        this.wallet = true
+    }
+
+    @action
+    closeWallet = (): void => {
+        this.wallet = false
     }
 }
 

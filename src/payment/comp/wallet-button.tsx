@@ -20,11 +20,16 @@ export const mystDisplay = (m?: number): string => {
 }
 
 export const WalletButton: React.FC = observer(() => {
-    const { identity } = useStores()
+    const root = useStores()
+    const { identity } = root
     const balance = mystDisplay(identity.identity?.balance)
+    const active = root.wallet
+    const backgroundStyle = active
+        ? "background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #873a72, stop:1 #673a72);"
+        : "background: #fff;"
+    const textStyle = active ? "color: #fff;" : `color: ${brandDarker};`
     return (
         <Toggle
-            id="togglez"
             style={`
              width: 168;
              height: 24;
@@ -35,14 +40,21 @@ export const WalletButton: React.FC = observer(() => {
              padding-right: 8;
              border: 1px solid #c1c1c1;
              border-radius: 4;
-             background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #fefefe, stop:1 #f2f2f2);
+             ${backgroundStyle}
              `}
+            onToggle={(): void => {
+                if (!root.wallet) {
+                    root.openWallet()
+                } else {
+                    setTimeout(() => root.closeWallet(), 50)
+                }
+            }}
         >
-            <Text>Wallet</Text>
+            <Text style={textStyle}>Wallet</Text>
             <Text
                 style={`
                 width: 95;
-                color: ${brandDarker};
+                ${textStyle}
                 qproperty-alignment: 'AlignRight';
                 `}
             >

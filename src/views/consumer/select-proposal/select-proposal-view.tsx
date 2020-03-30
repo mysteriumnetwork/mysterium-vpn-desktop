@@ -6,6 +6,7 @@
  */
 import { ScrollArea, View } from "@nodegui/react-nodegui"
 import React from "react"
+import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
 import { ProposalTable } from "../../../proposals/comp/proposal-table/proposal-table"
 import { winSize } from "../../../config"
@@ -14,14 +15,14 @@ import { SelectedProposal } from "../../../proposals/comp/selected-proposal"
 import { OriginalLocation } from "../../../location/comp/original-location"
 import { NavBar } from "../../../navbar"
 
-export const SelectProposalView: React.FC = () => {
+export const SelectProposalView: React.FC<ViewProps<WidgetEventListeners>> = ({ style = "", ...rest }) => {
     return (
         <View
             style={`
-                width: ${winSize.width};
-                height: ${winSize.height};
+                ${style}
                 flex-direction: "column";
             `}
+            {...rest}
         >
             <NavBar />
             <View

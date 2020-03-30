@@ -8,6 +8,7 @@ import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus } from "mysterium-vpn-js"
+import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
 import { winSize } from "../../../config"
 import { useStores } from "../../../store"
@@ -21,7 +22,7 @@ import { NavBar } from "../../../navbar"
 import { ConnectionStatistics } from "./connection-statistics"
 import { ConnectionProposal } from "./connection-proposal"
 
-export const ConnectedView: React.FC = observer(() => {
+export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
     const {
         connection: { location, originalLocation, status },
     } = useStores()
@@ -45,10 +46,10 @@ export const ConnectedView: React.FC = observer(() => {
     return (
         <View
             style={`
-            width: ${winSize.width};
-            height: ${winSize.height};
             flex-direction: "column";
+            ${style}
             `}
+            {...rest}
         >
             <NavBar />
             <View
