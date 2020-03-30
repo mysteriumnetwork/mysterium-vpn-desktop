@@ -11,9 +11,19 @@ import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/com
 
 import { useStores } from "../../../store"
 import { NavBar } from "../../../navbar"
+import { textHuge } from "../../../ui-kit/typography"
+import { MButton } from "../../../ui-kit/mbutton/mbutton"
+
+export const mystDisplay = (m?: number): string => {
+    if (!m) {
+        return "0"
+    }
+    return (m / 100000000).toFixed(3)
+}
 
 export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
-    const { identity } = useStores()
+    const { identity, payment } = useStores()
+    const balanceDisplay = mystDisplay(identity.identity?.balance)
     return (
         <View
             style={`
@@ -44,6 +54,37 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
                     <Text style={`color: #fff;`}>Your identity</Text>
                     <Text style={`color: #fff;`}>{identity.identity?.registrationStatus}</Text>
                     <Text style={`color: #fff;`}>{identity.identity?.id}</Text>
+                </View>
+                <View
+                    style={`
+                    flex: 1;
+                    padding-top: 24;
+                    padding-bottom: 24;
+                    height: 104;
+                    flex-direction: "column";
+                    justify-content: "space-between";
+                    `}
+                >
+                    <Text style={`color: #fff;`}>Available balance</Text>
+                    <Text style={`${textHuge} color: #fff;`}>{balanceDisplay} MYSTT</Text>
+                </View>
+                <View
+                    style={`
+                    flex: 1;
+                    height: 40;
+                    flex-direction: "row";
+                    justify-content: "center";
+                    align-items: "center";
+                    background: #2a154d;
+                    border-radius: 4;
+                    `}
+                >
+                    <Text style={`color: #fff;`}>
+                        MYSTT is a test token which you get for free while we are in the Testnet environment.
+                    </Text>
+                </View>
+                <View style={`padding-top: 12;`}>
+                    <MButton text="Topup" cancelStyle onClick={(): Promise<void> => payment.topUp()} />
                 </View>
             </View>
         </View>

@@ -11,6 +11,7 @@ import { DaemonStore } from "./daemon/store"
 import { ConnectionStore } from "./connection/store"
 import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
+import { PaymentStore } from "./payment/store"
 
 // import { enableLogging } from "mobx-logger"
 
@@ -19,6 +20,7 @@ export class RootStore {
     connection: ConnectionStore
     identity: IdentityStore
     proposals: ProposalStore
+    payment: PaymentStore
 
     @observable
     wallet = false
@@ -28,6 +30,7 @@ export class RootStore {
         this.connection = new ConnectionStore(this)
         this.identity = new IdentityStore(this)
         this.proposals = new ProposalStore(this)
+        this.payment = new PaymentStore(this)
 
         // Setup cross-store reactions after all injections.
         this.connection.setupReactions()
