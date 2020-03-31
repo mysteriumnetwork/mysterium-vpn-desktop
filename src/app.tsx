@@ -12,11 +12,11 @@ import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 import { useStores } from "./store"
 import { DaemonStatusType } from "./daemon/store"
 import { SelectProposalView } from "./views/consumer/select-proposal/select-proposal-view"
-import { Spinner } from "./ui-kit/spinner/spinner"
 import { winSize } from "./config"
 import { ConnectedView } from "./views/consumer/connected/connected-view"
 import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
 import { WalletView } from "./views/consumer/wallet/wallet-view"
+import { LoadingView } from "./views/common/loading/loading-view"
 
 // To avoid hiccups on screen re-render, render all screens and use positioning to switch between them.
 // Visibility is calculated as (window width) * (index in element order) * (-1).
@@ -58,9 +58,7 @@ export const App = observer(() => {
 
     return (
         <View>
-            <View style={`background: #ecf0f1; ${fitWindowStyle} ${visibilityStyle(0, screen == Nav.Loader)}`}>
-                <Spinner active top={(winSize.height - 200) / 2} left={(winSize.width - 200) / 2} />
-            </View>
+            <LoadingView style={`${fitWindowStyle} ${visibilityStyle(0, screen == Nav.Loader)}`} />
             <SelectIdentityView style={`${fitWindowStyle} ${visibilityStyle(1, screen == Nav.SelectIdentity)}`} />
             <SelectProposalView style={`${fitWindowStyle} ${visibilityStyle(2, screen == Nav.SelectProposal)}`} />
             <ConnectedView style={`${fitWindowStyle} ${visibilityStyle(3, screen == Nav.ConnectionActive)}`} />
