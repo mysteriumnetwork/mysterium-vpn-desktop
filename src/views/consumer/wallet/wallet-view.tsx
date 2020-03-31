@@ -13,6 +13,8 @@ import { useStores } from "../../../store"
 import { NavBar } from "../../../navbar"
 import { textHuge } from "../../../ui-kit/typography"
 import { MButton } from "../../../ui-kit/mbutton/mbutton"
+import { fixAssetPath } from "../../../utils/paths"
+import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 
 export const mystDisplay = (m?: number): string => {
     if (!m) {
@@ -27,7 +29,7 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
     return (
         <View
             style={`
-            background: url("assets/bg-2.png");
+            background: url("${fixAssetPath(mosaicBg)}");
             background-position: center;
             flex-direction: "column";
             ${style}

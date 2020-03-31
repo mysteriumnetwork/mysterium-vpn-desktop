@@ -18,6 +18,7 @@ import { textHuge } from "../../../ui-kit/typography"
 import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import { fixAssetPath } from "../../../utils/paths"
 import { NavBar } from "../../../navbar"
+import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 
 import { ConnectionStatistics } from "./connection-statistics"
 import { ConnectionProposal } from "./connection-proposal"
@@ -57,7 +58,7 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                 width: ${winSize.width};
                 height: ${winSize.height - 40};
                 flex-direction: "column";
-                background: url("assets/bg-2.png");
+                background: url("${fixAssetPath(mosaicBg)}");
                 background-position: center;
             `}
             >
