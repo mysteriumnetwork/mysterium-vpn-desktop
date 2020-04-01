@@ -17,6 +17,7 @@ import { ConnectedView } from "./views/consumer/connected/connected-view"
 import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
 import { WalletView } from "./views/consumer/wallet/wallet-view"
 import { LoadingView } from "./views/common/loading/loading-view"
+import { AcceptTermsView } from "./views/common/accept-terms/accept-terms-view"
 
 // To avoid hiccups on screen re-render, render all screens and use style to switch between them.
 // Hidden elements have zero width.
@@ -26,6 +27,7 @@ const fitWindowIfVisible = (visible: boolean): string => {
 
 enum Nav {
     Loader,
+    AcceptTerms,
     SelectIdentity,
     SelectProposal,
     ConnectionActive,
@@ -34,12 +36,14 @@ enum Nav {
 
 export const App = observer(() => {
     const root = useStores()
-    const { daemon, connection, identity } = root
+    const { daemon, connection, identity, config } = root
 
     // Poor man's navigation, but performs better than re-rendering the whole screen.
     let screen: Nav
     if (daemon.status == DaemonStatusType.Down) {
         screen = Nav.Loader
+    } else if (!config.currentTermsAgreed()) {
+        screen = Nav.AcceptTerms
     } else if (
         !identity.identity ||
         identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer
@@ -56,6 +60,7 @@ export const App = observer(() => {
     return (
         <View>
             <LoadingView style={fitWindowIfVisible(screen == Nav.Loader)} />
+            <AcceptTermsView style={fitWindowIfVisible(screen == Nav.AcceptTerms)} />
             <SelectIdentityView style={fitWindowIfVisible(screen == Nav.SelectIdentity)} />
             <SelectProposalView style={fitWindowIfVisible(screen == Nav.SelectProposal)} />
             <ConnectedView style={fitWindowIfVisible(screen == Nav.ConnectionActive)} />

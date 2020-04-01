@@ -18,12 +18,14 @@ import { textHuge } from "../../../ui-kit/typography"
 import { brand } from "../../../ui-kit/colors"
 import { MButton } from "../../../ui-kit/mbutton/mbutton"
 import { winSize } from "../../../config"
+import { useStores } from "../../../store"
 
 import termsBg from "./terms-bg.png"
 
 const md = new showdown.Converter()
 
 export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style, ...rest }) => {
+    const { config } = useStores()
     const [agree, setAgree] = useState(false)
     const termsHtml = md.makeHtml(TermsEndUser)
     const version = `<i>Version: ${termsPackageJson.version}<br>Last updated: ${termsPackageJson.updatedAt ?? ""}</i>`
@@ -120,8 +122,8 @@ export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observ
                     <MButton
                         enabled={agree}
                         text="Continue"
-                        onClick={() => {
-                            console.log("Continue")
+                        onClick={(): void => {
+                            config.agreeToTerms()
                         }}
                     />
                 </View>
