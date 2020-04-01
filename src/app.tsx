@@ -18,14 +18,11 @@ import { SelectIdentityView } from "./views/common/select-identity/select-identi
 import { WalletView } from "./views/consumer/wallet/wallet-view"
 import { LoadingView } from "./views/common/loading/loading-view"
 
-// To avoid hiccups on screen re-render, render all screens and use positioning to switch between them.
-// Visibility is calculated as (window width) * (index in element order) * (-1).
-// Hidden elements are rendered to the right of the visible area and shifted left
-const visibilityStyle = (idx: number, visible: boolean): string => {
-    return visible ? `left: ${winSize.width * idx * -1};` : `left: 1000;`
+// To avoid hiccups on screen re-render, render all screens and use style to switch between them.
+// Hidden elements have zero width.
+const fitWindowIfVisible = (visible: boolean): string => {
+    return `width: ${visible ? winSize.width : 0}; height: ${winSize.height};`
 }
-
-const fitWindowStyle = `width: ${winSize.width}; height: ${winSize.height};`
 
 enum Nav {
     Loader,
@@ -58,11 +55,11 @@ export const App = observer(() => {
 
     return (
         <View>
-            <LoadingView style={`${fitWindowStyle} ${visibilityStyle(0, screen == Nav.Loader)}`} />
-            <SelectIdentityView style={`${fitWindowStyle} ${visibilityStyle(1, screen == Nav.SelectIdentity)}`} />
-            <SelectProposalView style={`${fitWindowStyle} ${visibilityStyle(2, screen == Nav.SelectProposal)}`} />
-            <ConnectedView style={`${fitWindowStyle} ${visibilityStyle(3, screen == Nav.ConnectionActive)}`} />
-            <WalletView style={`${fitWindowStyle} ${visibilityStyle(4, screen == Nav.Wallet)}`} />
+            <LoadingView style={fitWindowIfVisible(screen == Nav.Loader)} />
+            <SelectIdentityView style={fitWindowIfVisible(screen == Nav.SelectIdentity)} />
+            <SelectProposalView style={fitWindowIfVisible(screen == Nav.SelectProposal)} />
+            <ConnectedView style={fitWindowIfVisible(screen == Nav.ConnectionActive)} />
+            <WalletView style={fitWindowIfVisible(screen == Nav.Wallet)} />
         </View>
     )
 })
