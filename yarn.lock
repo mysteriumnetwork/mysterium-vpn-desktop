@@ -958,10 +958,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@mysteriumnetwork/terms@^0.0.22":
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.22.tgz#10c8a015c51c45eddeafa818f91c226bc290b252"
-  integrity sha512-gGSYpR20qXqqvDPQQgzah2kIczbib4t+DVSSHJ16gjp8Hm8JHGxZsBTqwX1QR1zHsYab2d5kINsqzyQQNSRDfg==
+"@mysteriumnetwork/terms@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.24.tgz#a819e5a1a485f6dd38b34254e6ed3f6bcf990ac7"
+  integrity sha512-rfNDFsS188+rxSQpMaTT49Uw8clgfGd+kpuHbJ7cVZemHMq47YlT32XbiYGjpaPnb7ok6owQWrSo2GGozkVnSg==
 
 "@nodegui/artifact-installer@^1.0.0", "@nodegui/artifact-installer@^1.1.0":
   version "1.1.0"

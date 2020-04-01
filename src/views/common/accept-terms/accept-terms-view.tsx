@@ -27,7 +27,7 @@ export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observ
     const [agree, setAgree] = useState(false)
     const termsHtml = md.makeHtml(TermsEndUser)
     const version = `<i>Version: ${termsPackageJson.version}<br>Last updated: ${termsPackageJson.updatedAt ?? ""}</i>`
-    const termsHeight = 5900 // ACHTUNG! Adjust as needed to fit all of the text.
+    const termsHeight = 5520 // ACHTUNG! Adjust as needed to fit all of the text.
     return (
         <View
             style={`
