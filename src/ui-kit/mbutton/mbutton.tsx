@@ -7,7 +7,6 @@
 import React from "react"
 import { Button, useEventHandler } from "@nodegui/react-nodegui"
 
-import { brand } from "../colors"
 import { textRegular } from "../typography"
 
 export type MButtonProps = {
@@ -35,7 +34,7 @@ export const MButton: React.FC<MButtonProps> = ({
         if (cancelStyle) {
             return "background: #fefefe; color: #d93c3c;"
         }
-        return `background: ${brand}; color: #fefefe;`
+        return `background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #7c2463, stop: 1 #552462); color: #fff;`
     })()
     return (
         <Button
@@ -43,11 +42,13 @@ export const MButton: React.FC<MButtonProps> = ({
             style={`
                 ${textRegular} 
                 padding: 10;
+                padding-left: 16;
+                padding-right: 16;
                 justify-content: "center";
                 align-items: "center";
                 font-weight: bold; 
                 ${stateStyle}
-                border-radius: 3;
+                border-radius: 4;
                 ${width ? `width: ${width};` : ""}
                 ${height ? `height: ${height};` : ""}
             `}

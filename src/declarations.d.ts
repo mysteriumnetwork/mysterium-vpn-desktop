@@ -11,3 +11,7 @@ declare module "byte-size" {
     ) => string
     export default byteSize
 }
+
+declare module "@mysteriumnetwork/terms" {
+    const TermsEndUser: string
+}

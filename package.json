@@ -16,6 +16,7 @@
     "packer": "npx nodegui-packer --pack dist --sign 14D1483DEFD2A449D35CC443621E3D0FEDF3972E"
   },
   "dependencies": {
+    "@mysteriumnetwork/terms": "^0.0.22",
     "@nodegui/nodegui": "^0.18.1",
     "@nodegui/qode": "^2.0.4",
     "@nodegui/react-nodegui": "^0.6.1",
@@ -31,6 +32,7 @@
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
     "react": "^16.13.1",
+    "showdown": "^1.9.1",
     "sudo-prompt": "^9.1.1"
   },
   "devDependencies": {
@@ -47,6 +49,7 @@
     "@types/node": "^12.12.34",
     "@types/node-fetch": "^2.5.4",
     "@types/react": "^16.9.29",
+    "@types/showdown": "^1.9.3",
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
