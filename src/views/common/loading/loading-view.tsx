@@ -10,8 +10,8 @@ import { RNView, ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/
 import { QLabel, QMovie } from "@nodegui/nodegui"
 
 import { fixAssetPath } from "../../../utils/paths"
+import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
 
-import welcomeBg from "./welcome-bg.png"
 // Loading.io Free License
 // With Loading.io Free license ( LD-FREE / FREE / Free License ),
 // items are dedicated to the public domain by waiving all our right worldwide under copyright law.
