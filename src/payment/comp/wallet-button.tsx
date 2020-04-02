@@ -32,22 +32,17 @@ export const WalletButton: React.FC = observer(() => {
         <Toggle
             style={`
              width: 168;
-             height: 24;
+             height: 26;
              flex-direction: "row";
              justify-content: "space-between";
              padding: 2;
              padding-left: 12;
              padding-right: 8;
-             border: 1px solid #c1c1c1;
              border-radius: 4;
              ${backgroundStyle}
              `}
             onToggle={(): void => {
-                if (!root.wallet) {
-                    root.openWallet()
-                } else {
-                    setTimeout(() => root.closeWallet(), 50)
-                }
+                setTimeout(() => root.navigateToWallet(), 50)
             }}
         >
             <Text style={textStyle}>Wallet</Text>
@@ -55,7 +50,7 @@ export const WalletButton: React.FC = observer(() => {
                 style={`
                 width: 95;
                 ${textStyle}
-                qproperty-alignment: 'AlignRight';
+                qproperty-alignment: 'AlignRight | AlignVCenter';
                 `}
             >
                 {balance} Ⓜ

@@ -25,7 +25,10 @@ export class RootStore {
     payment: PaymentStore
 
     @observable
+    consumer = true
+    @observable
     wallet = false
+
     @observable
     welcome = true
 
@@ -55,13 +58,15 @@ export class RootStore {
     }
 
     @action
-    openWallet = (): void => {
-        this.wallet = true
+    navigateToConsumer = (): void => {
+        this.consumer = true
+        this.wallet = false
     }
 
     @action
-    closeWallet = (): void => {
-        this.wallet = false
+    navigateToWallet = (): void => {
+        this.consumer = false
+        this.wallet = true
     }
 }
 
