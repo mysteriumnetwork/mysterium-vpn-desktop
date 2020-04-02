@@ -16,10 +16,10 @@ import { CheckState } from "@nodegui/nodegui"
 import { fixAssetPath } from "../../../utils/paths"
 import { textHuge } from "../../../ui-kit/typography"
 import { brand } from "../../../ui-kit/colors"
-import { MButton } from "../../../ui-kit/mbutton/mbutton"
 import { winSize } from "../../../config"
 import { useStores } from "../../../store"
 import { Space } from "../../../ui-kit/space/space"
+import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
 
 import termsBg from "./terms-bg.png"
 
@@ -119,7 +119,7 @@ export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observ
                     padding-right: 24;
                     `}
                 >
-                    <MButton
+                    <BrandButton
                         enabled={agree}
                         text="Continue"
                         onClick={(): void => {

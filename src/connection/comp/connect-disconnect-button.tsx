@@ -10,7 +10,9 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 
 import { useStores } from "../../store"
-import { MButton } from "../../ui-kit/mbutton/mbutton"
+import { BrandButton } from "../../ui-kit/mbutton/brand-button"
+import { CancelButton } from "../../ui-kit/mbutton/cancel-button"
+import { CommonButtonProps } from "../../ui-kit/mbutton/props"
 
 export type ConnectDisconnectButtonProps = {
     width?: number
@@ -38,17 +40,12 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
         }
         return await connection.disconnect()
     }
-    const cancelStyle = connection.status !== ConnectionStatus.NOT_CONNECTED
-    return (
-        <View>
-            <MButton
-                text={text}
-                onClick={onClick}
-                enabled={!connection.gracePeriod}
-                width={width}
-                height={height}
-                cancelStyle={cancelStyle}
-            />
-        </View>
-    )
+    const isCancel = connection.status !== ConnectionStatus.NOT_CONNECTED
+    const buttonProps: CommonButtonProps = {
+        text,
+        enabled: !connection.gracePeriod,
+        onClick,
+        style: `width: ${width}; height: ${height};`,
+    }
+    return <View>{isCancel ? <CancelButton {...buttonProps} /> : <BrandButton {...buttonProps} />}</View>
 })

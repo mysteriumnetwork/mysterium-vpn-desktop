@@ -9,51 +9,43 @@ import { Button, useEventHandler } from "@nodegui/react-nodegui"
 
 import { textRegular } from "../typography"
 
-export type MButtonProps = {
-    text: string
-    enabled?: boolean
-    onClick: () => void
-    width?: number
-    height?: number
-    cancelStyle?: boolean
-}
+import { CommonButtonProps } from "./props"
 
-export const MButton: React.FC<MButtonProps> = ({
-    text,
-    enabled = true,
+export const LightButton: React.FC<CommonButtonProps> = ({
     onClick,
-    width,
-    height,
-    cancelStyle = false,
+    enabled = true,
+    text = "",
+    style = "",
+    ...rest
 }) => {
     const clickHandler = useEventHandler({ ["clicked"]: () => onClick() }, [])
     const stateStyle = ((): string => {
         if (!enabled) {
             return "background: #ddd; color: #fff;"
         }
-        if (cancelStyle) {
-            return "background: #fefefe; color: #d93c3c;"
-        }
-        return `background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop: 0 #f1209b,stop: 0.03 #7c2463, stop: 0.97 #552462, stop: 1 #35154d); color: #fff;`
+        return "background: #fefefe; color: #333;"
     })()
     return (
         <Button
-            enabled={enabled}
             style={`
-                ${textRegular} 
+                border-radius: 4;
+                ${stateStyle}
+
                 padding: 10;
                 padding-left: 16;
                 padding-right: 16;
                 justify-content: "center";
                 align-items: "center";
-                font-weight: bold; 
-                ${stateStyle}
-                border-radius: 4;
-                ${width ? `width: ${width};` : ""}
-                ${height ? `height: ${height};` : ""}
+
+                font-weight: bold;
+                ${textRegular}
+
+                ${style}
             `}
-            text={text}
             on={clickHandler}
+            enabled={enabled}
+            text={text}
+            {...rest}
         />
     )
 }

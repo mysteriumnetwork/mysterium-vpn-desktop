@@ -11,9 +11,9 @@ import { observer } from "mobx-react-lite"
 
 import { fixAssetPath } from "../../../utils/paths"
 import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
-import { MButton } from "../../../ui-kit/mbutton/mbutton"
 import { useStores } from "../../../store"
 import { textHuge, textLarger } from "../../../ui-kit/typography"
+import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
 
 export const WelcomeView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style, ...rest }) => {
     const root = useStores()
@@ -77,7 +77,7 @@ export const WelcomeView: React.FC<ViewProps<WidgetEventListeners>> = observer((
                 justify-content: "center";
                 `}
             >
-                <MButton
+                <BrandButton
                     text="Get Started"
                     onClick={(): void => {
                         root.dismissWelcome()
