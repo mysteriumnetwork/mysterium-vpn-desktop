@@ -21,7 +21,7 @@ export const CancelButton: React.FC<CommonButtonProps> = ({
     const clickHandler = useEventHandler({ ["clicked"]: () => onClick() }, [])
     const stateStyle = ((): string => {
         if (!enabled) {
-            return "background: #ddd; color: #fff;"
+            return "background: #ccc; color: #fff;"
         }
         return "background: #fefefe; color: #d93c3c;"
     })()

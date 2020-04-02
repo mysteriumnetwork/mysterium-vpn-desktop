@@ -21,7 +21,7 @@ export const BrandButton: React.FC<CommonButtonProps> = ({
     const clickHandler = useEventHandler({ ["clicked"]: () => onClick() }, [])
     const stateStyle = ((): string => {
         if (!enabled) {
-            return "background: #ddd;"
+            return "background: #ccc;"
         }
         return `background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop: 0 #f1209b,stop: 0.03 #7c2463, stop: 0.97 #552462, stop: 1 #35154d);`
     })()
