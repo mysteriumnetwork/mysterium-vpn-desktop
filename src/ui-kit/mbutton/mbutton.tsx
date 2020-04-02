@@ -34,7 +34,7 @@ export const MButton: React.FC<MButtonProps> = ({
         if (cancelStyle) {
             return "background: #fefefe; color: #d93c3c;"
         }
-        return `background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #7c2463, stop: 1 #552462); color: #fff;`
+        return `background: qlineargradient(x1:0,y1:0,x2:0,y2:1,stop: 0 #f1209b,stop: 0.03 #7c2463, stop: 0.97 #552462, stop: 1 #35154d); color: #fff;`
     })()
     return (
         <Button
