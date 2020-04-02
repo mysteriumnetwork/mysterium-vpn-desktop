@@ -48,7 +48,7 @@ const MainWindow: React.FC = () => {
             // ref={setRef}
             on={mainWindowEventHandler}
             windowIcon={winIcon}
-            windowTitle="Mysterium VPN 2"
+            windowTitle="MysteriumVPN"
             minSize={winSize}
             maxSize={winSize}
             styleSheet={`

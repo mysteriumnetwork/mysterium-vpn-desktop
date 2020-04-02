@@ -17,7 +17,7 @@ const mystPath = (): string | undefined => {
     if (isProduction()) {
         switch (process.platform) {
             case "darwin":
-                const qodeDir = path.dirname(process.execPath) // MysteriumVPN2.app/Contents/MacOS
+                const qodeDir = path.dirname(process.execPath) // MysteriumVPN.app/Contents/MacOS
                 const appBundleRoot = path.resolve(qodeDir, "../../")
                 const nodePath = "Contents/Resources/dist/node/myst"
                 return path.resolve(appBundleRoot, nodePath)

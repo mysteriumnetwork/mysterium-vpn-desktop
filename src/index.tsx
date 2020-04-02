@@ -17,7 +17,7 @@ import { supervisor } from "./supervisor/supervisor"
 import { createSystemTray } from "./tray/tray"
 import { fixAssetPath } from "./utils/paths"
 
-process.title = "Mysterium VPN 2"
+process.title = "MysteriumVPN"
 
 class Root extends React.Component {
     render(): React.ReactNode {

@@ -45,7 +45,7 @@ export class Supervisor {
                 sudo.exec(
                     `${supervisorPath} -install -mystHome ${mystHome} -mystPath ${mystPath} -openvpnPath ${openvpnPath}`,
                     {
-                        name: "Mysterium VPN2",
+                        name: "MysteriumVPN",
                         icns: staticAssetPath("logo.icns"),
                     },
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
