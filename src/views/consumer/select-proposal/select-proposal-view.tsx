@@ -35,7 +35,6 @@ export const SelectProposalView: React.FC<ViewProps<WidgetEventListeners>> = ({ 
                 <View
                     style={`
                     width: 240;
-                    padding-bottom: 0;
                     flex-direction: "column";
                 `}
                 >

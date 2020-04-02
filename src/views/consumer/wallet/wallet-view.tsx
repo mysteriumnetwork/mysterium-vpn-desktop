@@ -15,6 +15,7 @@ import { textHuge } from "../../../ui-kit/typography"
 import { MButton } from "../../../ui-kit/mbutton/mbutton"
 import { fixAssetPath } from "../../../utils/paths"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
+import { Space } from "../../../ui-kit/space/space"
 
 export const mystDisplay = (m?: number): string => {
     if (!m) {
@@ -57,12 +58,11 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
                     <Text style={`color: #fff;`}>{identity.identity?.registrationStatus}</Text>
                     <Text style={`color: #fff;`}>{identity.identity?.id}</Text>
                 </View>
+                <Space y={24} />
                 <View
                     style={`
                     flex: 1;
-                    padding-top: 24;
-                    padding-bottom: 24;
-                    height: 104;
+                    height: 56;
                     flex-direction: "column";
                     justify-content: "space-between";
                     `}
@@ -70,6 +70,7 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
                     <Text style={`color: #fff;`}>Available balance</Text>
                     <Text style={`${textHuge} color: #fff;`}>{balanceDisplay} MYSTT</Text>
                 </View>
+                <Space y={24} />
                 <View
                     style={`
                     flex: 1;
@@ -85,7 +86,8 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
                         MYSTT is a test token which you get for free while we are in the Testnet environment.
                     </Text>
                 </View>
-                <View style={`padding-top: 12;`}>
+                <Space y={12} />
+                <View>
                     <MButton text="Topup" cancelStyle onClick={(): Promise<void> => payment.topUp()} />
                 </View>
             </View>

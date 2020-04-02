@@ -19,6 +19,7 @@ import { brand } from "../../../ui-kit/colors"
 import { MButton } from "../../../ui-kit/mbutton/mbutton"
 import { winSize } from "../../../config"
 import { useStores } from "../../../store"
+import { Space } from "../../../ui-kit/space/space"
 
 import termsBg from "./terms-bg.png"
 
@@ -101,17 +102,16 @@ export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observ
                 width: "100%";
                 height: 72;
                 flex-direction: "row";
+                justify-content: "space-between";
                 `}
             >
+                <Space x={150} />
                 <CheckBox
                     on={{
                         ["stateChanged"]: (state: CheckState): void => {
                             setAgree(state == CheckState.Checked)
                         },
                     }}
-                    style={`
-                    padding-left: 220;
-                    `}
                     text="I agree to all Terms of Service"
                 />
                 <View

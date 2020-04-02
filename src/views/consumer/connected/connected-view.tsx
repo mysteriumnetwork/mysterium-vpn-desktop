@@ -19,6 +19,7 @@ import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import { fixAssetPath } from "../../../utils/paths"
 import { NavBar } from "../../../navbar"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
+import { Space } from "../../../ui-kit/space/space"
 
 import { ConnectionStatistics } from "./connection-statistics"
 import { ConnectionProposal } from "./connection-proposal"
@@ -62,12 +63,12 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                 background-position: center;
             `}
             >
+                <Space y={32} />
                 <View
                     style={`
-                width: "100%";
-                padding: 32;
-                padding-bottom: 0;
-                `}
+                    width: "100%";
+                    padding-bottom: 0;
+                    `}
                 >
                     <Text
                         style={`
@@ -81,20 +82,21 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                         {statusText}
                     </Text>
                 </View>
+                <Space y={60} />
                 <View
                     style={`
-                padding: 60;
-                padding-bottom: 0;
-                `}
+                    padding-left: 60;
+                    padding-right: 60;
+                    `}
                 >
                     <View
                         style={`
-                    width: "100%";
-                    height: 108;
-                    background: url("${fixAssetPath(logoWhiteConnected)}");
-                    background-position: top center;
-                    background-repeat: none;
-                    `}
+                        width: "100%";
+                        height: 108;
+                        background: url("${fixAssetPath(logoWhiteConnected)}");
+                        background-position: top center;
+                        background-repeat: none;
+                        `}
                     />
                 </View>
                 <View
@@ -120,18 +122,18 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                 </View>
                 <View
                     style={`
-                top: -30;
-                left: 470;
-                width: 110;
-                height: 20;
-                `}
+                    top: -30;
+                    left: 470;
+                    width: 110;
+                    height: 20;
+                    `}
                 >
                     <Text
                         style={`
-                    width: "100%";
-                    color: #fff;
-                    qproperty-alignment: AlignHCenter;
-                    `}
+                        width: "100%";
+                        color: #fff;
+                        qproperty-alignment: AlignHCenter;
+                        `}
                     >
                         {location?.ip}
                     </Text>
@@ -142,17 +144,16 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                     flex-direction: "column";
                     `}
                 />
+                <Space y={35} />
                 <View
                     style={`
-                    padding-top: 35;
-                    padding-bottom: 24;
                     flex-direction: "row";
                     justify-content: "center";
                     `}
                 >
                     <ConnectDisconnectButton width={200} height={40} />
                 </View>
-                <View style={`height: 16;`} />
+                <Space y={40} />
                 <ConnectionStatistics
                     style={`
                     width: "100%";

@@ -42,8 +42,6 @@ const styleSheet = `
     flex: 1;
     max-width: ${winSize.width - 240 - 15};
     flex-direction: column;
-    padding: 0;
-    padding-top: 0;
     background: "white";
 }
 #ProposalTable-Proposal-row-outer {
