@@ -26,6 +26,8 @@ export class RootStore {
 
     @observable
     wallet = false
+    @observable
+    welcome = true
 
     constructor() {
         this.daemon = new DaemonStore()
@@ -40,6 +42,16 @@ export class RootStore {
         this.connection.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
+    }
+
+    @action
+    showWelcome = (): void => {
+        this.welcome = true
+    }
+
+    @action
+    dismissWelcome = (): void => {
+        this.welcome = false
     }
 
     @action

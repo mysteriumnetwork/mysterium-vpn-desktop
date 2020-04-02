@@ -18,6 +18,7 @@ import { SelectIdentityView } from "./views/common/select-identity/select-identi
 import { WalletView } from "./views/consumer/wallet/wallet-view"
 import { LoadingView } from "./views/common/loading/loading-view"
 import { AcceptTermsView } from "./views/common/accept-terms/accept-terms-view"
+import { WelcomeView } from "./views/common/welcome/welcome-view"
 
 // To avoid hiccups on screen re-render, render all screens and use style to switch between them.
 // Hidden elements have zero width.
@@ -27,6 +28,7 @@ const fitWindowIfVisible = (visible: boolean): string => {
 
 enum Nav {
     Loader,
+    Welcome,
     AcceptTerms,
     SelectIdentity,
     SelectProposal,
@@ -42,6 +44,8 @@ export const App = observer(() => {
     let screen: Nav
     if (daemon.status == DaemonStatusType.Down) {
         screen = Nav.Loader
+    } else if (!config.currentTermsAgreed() && root.welcome) {
+        screen = Nav.Welcome
     } else if (!config.currentTermsAgreed()) {
         screen = Nav.AcceptTerms
     } else if (
@@ -60,6 +64,7 @@ export const App = observer(() => {
     return (
         <View>
             <LoadingView style={fitWindowIfVisible(screen == Nav.Loader)} />
+            <WelcomeView style={fitWindowIfVisible(screen == Nav.Welcome)} />
             <AcceptTermsView style={fitWindowIfVisible(screen == Nav.AcceptTerms)} />
             <SelectIdentityView style={fitWindowIfVisible(screen == Nav.SelectIdentity)} />
             <SelectProposalView style={fitWindowIfVisible(screen == Nav.SelectProposal)} />
