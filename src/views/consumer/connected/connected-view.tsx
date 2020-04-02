@@ -152,11 +152,11 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                 >
                     <ConnectDisconnectButton width={200} height={40} />
                 </View>
+                <View style={`height: 16;`} />
                 <ConnectionStatistics
                     style={`
                     width: "100%";
-                    top: 22;
-                    height: 65;
+                    height: 64;
                     padding: 8;
                     background: #2a154d;
                     flex-direction: "row";
