@@ -63,7 +63,7 @@ export class DaemonStore {
         }
         this.setStatusLoading(true)
         try {
-            await tequilapi.healthCheck(100)
+            await tequilapi.healthCheck(500)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
             console.error("Healthcheck failed:", err.message)
