@@ -151,7 +151,11 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                     justify-content: "center";
                     `}
                 >
-                    <ConnectDisconnectButton width={200} height={40} />
+                    {status === ConnectionStatus.NOT_CONNECTED ? (
+                        <></>
+                    ) : (
+                        <ConnectDisconnectButton width={200} height={40} />
+                    )}
                 </View>
                 <Space y={40} />
                 <ConnectionStatistics
