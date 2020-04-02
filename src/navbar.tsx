@@ -35,7 +35,7 @@ export const ConsumerModeButton: React.FC = observer(() => {
              ${backgroundStyle}
              `}
             onToggle={(): void => {
-                setTimeout(() => root.navigateToConsumer(), 10)
+                root.navigateToConsumer()
             }}
         >
             <Text style={textStyle}>Connect to VPN</Text>

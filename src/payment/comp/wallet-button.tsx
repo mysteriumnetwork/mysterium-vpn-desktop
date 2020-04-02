@@ -42,7 +42,7 @@ export const WalletButton: React.FC = observer(() => {
              ${backgroundStyle}
              `}
             onToggle={(): void => {
-                setTimeout(() => root.navigateToWallet(), 50)
+                root.navigateToWallet()
             }}
         >
             <Text style={textStyle}>Wallet</Text>
