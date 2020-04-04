@@ -63,11 +63,15 @@ module.exports = (env, argv) => {
     config.devtool = "source-map";
     config.watch = true;
     config.entry.unshift("webpack/hot/poll?100");
+    
+    config.plugins.push(new CopyPlugin([
+      { from: 'static', to: 'static', ignore: ['config/config.toml'] },
+    ]),)
+  } else {
+    config.plugins.push(new CopyPlugin([
+      { from: 'static', to: 'static' },
+    ]),)
   }
-
-  config.plugins.push(new CopyPlugin([
-    { from: 'static', to: 'static' },
-  ]),)
 
   config.plugins.push(new CleanWebpackPlugin({
     cleanOnceBeforeBuildPatterns: ["**/*", "!static/**"],
