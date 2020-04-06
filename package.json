@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@mysteriumnetwork/terms": "^0.0.24",
-    "@nodegui/nodegui": "^0.18.1",
+    "@nodegui/nodegui": "^0.18.2",
     "@nodegui/qode": "^2.0.4",
     "@nodegui/react-nodegui": "^0.6.1",
     "async-retry": "^1.3.1",
