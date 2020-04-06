@@ -13,7 +13,7 @@
     "dev": "webpack --mode=development",
     "start": "qode --inspect ./dist/index.js",
     "build": "webpack -p",
-    "packer": "npx nodegui-packer --pack dist --sign 14D1483DEFD2A449D35CC443621E3D0FEDF3972E"
+    "packer": "npx nodegui-packer --pack dist"
   },
   "dependencies": {
     "@mysteriumnetwork/terms": "^0.0.24",
