@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { View } from "@nodegui/react-nodegui"
-import React, { MutableRefObject, useCallback, useEffect, useRef } from "react"
+import React, { MutableRefObject, useCallback, useRef } from "react"
 import { RNView, ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 import { QLabel, QMovie } from "@nodegui/nodegui"
 
