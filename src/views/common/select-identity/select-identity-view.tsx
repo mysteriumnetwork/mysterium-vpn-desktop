@@ -12,6 +12,9 @@ import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/com
 import { useStores } from "../../../store"
 import { brand } from "../../../ui-kit/colors"
 import { textHuge } from "../../../ui-kit/typography"
+import { Space } from "../../../ui-kit/space/space"
+import { Spinner } from "../../../ui-kit/spinner/spinner"
+import { winSize } from "../../../config"
 
 export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style, ...rest }) => {
     const { identity } = useStores()
@@ -31,7 +34,7 @@ export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = obs
                     color: "${brand}";
                     `}
                 >
-                    Registering identity...
+                    Registering identity on blockchain
                 </Text>
             </View>
             <View
@@ -42,9 +45,22 @@ export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = obs
                 `}
             >
                 {identity.identity && (
-                    <Text>{`${identity.identity.id} | ${identity.identity.registrationStatus}`}</Text>
+                    <>
+                        <Text style={`height: 20;`}>{`Identity: ${identity.identity.id}`}</Text>
+                        <Text style={`height: 20;`}>{`Status: ${identity.identity.registrationStatus}`}</Text>
+                        <Space y={24} />
+                        <Text
+                            style={`height: 20;`}
+                        >{`It's a one-time operation that usually takes a few minutes.`}</Text>
+                    </>
                 )}
             </View>
+            <Spinner
+                style={`
+                    top: 50;
+                    left: ${winSize.width / 2 - 50 / 2}
+                `}
+            />
         </View>
     )
 })
