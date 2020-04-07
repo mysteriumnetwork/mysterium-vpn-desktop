@@ -7,6 +7,7 @@
 import React from "react"
 import { Renderer } from "@nodegui/react-nodegui"
 import { QFontDatabase } from "@nodegui/nodegui"
+import "mobx-react-lite/batchingOptOut"
 
 import robotoLight from "../assets/fonts/Roboto-Light.ttf"
 import robotoMedium from "../assets/fonts/Roboto-Medium.ttf"
