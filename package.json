@@ -24,7 +24,7 @@
     "byte-size": "^6.2.0",
     "eventsource": "^1.0.7",
     "lodash": "^4.17.15",
-    "mkdirp": "^1.0.3",
+    "mkdirp": "^1.0.4",
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.0.4",
