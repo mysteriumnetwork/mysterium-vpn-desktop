@@ -4436,10 +4436,10 @@ mobx-logger@^0.7.1:
   resolved "https://registry.yarnpkg.com/mobx-logger/-/mobx-logger-0.7.1.tgz#6be44c726e14433463f5fa566f24f1768e2a9355"
   integrity sha512-kAcNjzDGjILjvNiVrQZfVY6Bxs5YKt35rtwNuU/uneLq+E9zF5grnGmr95EMqqYSVpE6RjJLID3y3j0yQ/cvRA==
 
-mobx-react-lite@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-2.0.3.tgz#5e5f9c4b472c415796cbc7a21d9dfbb0c0db1895"
-  integrity sha512-9YwjomobyZOc5WQPBqZFGyFpDr89KpWgfRuPD2jMP7V7X3poTSyWZTskqSpuo7TB4QISXezUT3t7NNN7MVoF7Q==
+mobx-react-lite@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-2.0.4.tgz#bc38c9dfb56918d2d39588324d1ce1e3a649fb66"
+  integrity sha512-/iuPXh90VONdem69cxt4ipm/opQQEAm3v27eQkot9HO1eOeu+2VqGW7qTmbgShM6tqLv8FWvjc8fRwsvkoK5Qw==
 
 mobx@^5.15.4:
   version "5.15.4"
