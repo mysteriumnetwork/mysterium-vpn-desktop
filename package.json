@@ -49,7 +49,7 @@
     "@types/lodash": "^4.14.149",
     "@types/node": "^12.12.34",
     "@types/node-fetch": "^2.5.4",
-    "@types/react": "^16.9.29",
+    "@types/react": "^16.9.32",
     "@types/showdown": "^1.9.3",
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
@@ -72,6 +72,6 @@
     "webpack-cli": "^3.3.10"
   },
   "resolutions": {
-    "@types/react": "^16.9.29"
+    "@types/react": "^16.9.32"
   }
 }
