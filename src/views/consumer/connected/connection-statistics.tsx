@@ -12,6 +12,7 @@ import byteSize from "byte-size"
 import * as _ from "lodash"
 
 import { useStores } from "../../../store"
+import { mystDisplay } from "../wallet/wallet-view"
 
 import { Metric } from "./metric"
 
@@ -24,17 +25,18 @@ const toClock = (duration: number): string => {
 
 export const ConnectionStatistics: React.FC<ViewProps<WidgetEventListeners>> = observer((props) => {
     const {
-        connection: { statistics: { duration, bytesReceived, bytesSent } = {} },
+        connection: { statistics: { duration, bytesReceived, bytesSent, tokensSpent } = {} },
     } = useStores()
     const clock = duration ? toClock(duration) : ""
     const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : ""
     const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : ""
+    const paid = tokensSpent ? mystDisplay(tokensSpent) + " MYSTT" : ""
     return (
         <View {...props}>
             <Metric name="Duration" value={clock} />
             <Metric name="Downloaded" value={down} />
             <Metric name="Uploaded" value={up} />
-            <Metric name="Paid" value="" />
+            <Metric name="Paid" value={paid} />
         </View>
     )
 })
