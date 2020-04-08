@@ -4,22 +4,20 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Button, Text, View } from "@nodegui/react-nodegui"
+import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
-import { observer } from "mobx-react-lite"
 import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
-import { useStores } from "../../../store"
 import { brand } from "../../../ui-kit/colors"
-import { fontMono, textHuge, textSmall } from "../../../ui-kit/typography"
+import { textHuge, textSmall } from "../../../ui-kit/typography"
 import { Space } from "../../../ui-kit/space/space"
 import { Spinner } from "../../../ui-kit/spinner/spinner"
 import { fixAssetPath } from "../../../utils/paths"
 
 import identityBg from "./identity-bg.png"
+import { TopupInstructions } from "./topup-instructions"
 
-export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style, ...rest }) => {
-    const { identity } = useStores()
+export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = ({ style, ...rest }) => {
     return (
         <View
             style={`
@@ -47,45 +45,8 @@ export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = obs
                     Activate account
                 </Text>
             </View>
+            <TopupInstructions style={`height: 372;`} />
             <Space y={48} />
-            <View
-                style={`
-                height: 372;
-                flex-direction: "column";
-                padding-left: 32;
-                padding-right: 32;
-                `}
-            >
-                {identity.identity && (
-                    <>
-                        <Text style={`height: 20;`}>To activate your account and top up 100 MYST, transfer ... to</Text>
-                        <View
-                            style={`
-                            height: 42;
-                            flex-direction: "row";
-                            `}
-                        >
-                            <Text
-                                style={`
-                                height: 42;
-                                font-size: 13px;
-                                font-weight: bold;
-                                ${fontMono}
-                                `}
-                            >
-                                {identity.identity.channelAddress}
-                            </Text>
-                            <Space x={12} />
-                            <Button text="Copy" />
-                        </View>
-
-                        <Text style={`color: "red"; height: 20;`}>{`THIS IS DONE AUTOMATICALLY IN TESTNET.`}</Text>
-                        <Text style={`color: "red"; height: 20;`}>{`SIT BACK AND RELAX.`}</Text>
-                        <Text style={`height: 20;`}>{`Status: ${identity.identity.registrationStatus}`}</Text>
-                        <Space y={24} />
-                    </>
-                )}
-            </View>
             <View
                 style={`
                 height: 72;
@@ -110,4 +71,4 @@ export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = obs
             </View>
         </View>
     )
-})
+}

@@ -31,6 +31,7 @@
     "mysterium-vpn-js": "^2.1.0",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
+    "qrcode-generator": "^1.4.4",
     "react": "^16.13.1",
     "showdown": "^1.9.1",
     "sudo-prompt": "^9.1.1"
