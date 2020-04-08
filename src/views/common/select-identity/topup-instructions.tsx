@@ -5,9 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
-import { Button, Text, View } from "@nodegui/react-nodegui"
+import { Button, Text, useEventHandler, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
+import { QApplication, QClipboardMode } from "@nodegui/nodegui"
 
 import { Space } from "../../../ui-kit/space/space"
 import { fontMono } from "../../../ui-kit/typography"
@@ -16,6 +17,18 @@ import { useStores } from "../../../store"
 
 export const TopupInstructions: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
     const { identity } = useStores()
+    const copyChannelAddressHandler = useEventHandler(
+        {
+            ["clicked"]: () => {
+                if (!identity.identity?.channelAddress) {
+                    return
+                }
+                const clipboard = QApplication.clipboard()
+                clipboard.setText(identity.identity?.channelAddress, QClipboardMode.Clipboard)
+            },
+        },
+        [],
+    )
     return (
         <View
             style={`
@@ -53,7 +66,7 @@ export const TopupInstructions: React.FC<ViewProps<WidgetEventListeners>> = obse
                                 {identity.identity.channelAddress}
                             </Text>
                             <Space x={12} />
-                            <Button text="Copy" />
+                            <Button text="Copy" on={copyChannelAddressHandler} />
                         </View>
 
                         <Text style={`color: "red"; height: 20;`}>{`THIS IS DONE AUTOMATICALLY IN TESTNET.`}</Text>
