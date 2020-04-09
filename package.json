@@ -28,7 +28,7 @@
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.0.4",
-    "mysterium-vpn-js": "^2.2.0",
+    "mysterium-vpn-js": "^2.2.1",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
     "qrcode-generator": "^1.4.4",

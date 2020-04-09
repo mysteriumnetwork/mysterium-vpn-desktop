@@ -1946,10 +1946,10 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camelcase-keys@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/camelcase-keys/-/camelcase-keys-6.2.1.tgz#cd3e2d2d7db767aa3f247e4c2df93b4661008945"
-  integrity sha512-BPCNVH56RVIxQQIXskp5tLQXUNGQ6sXr7iCv1FHDt81xBOQ/1r6H8SPxf19InVP6DexWar4s87q9thfuk8X9HA==
+camelcase-keys@^6.2.2:
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/camelcase-keys/-/camelcase-keys-6.2.2.tgz#5e755d6ba51aa223ec7d3d52f25778210f9dc3c0"
+  integrity sha512-YrwaA0vEKazPBkn0ipTiMpSajYDSe+KjQfrjhcBMxJt/znbvlHd8Pw/Vamaz5EB4Wfhs3SUR3Z9mwRu/P3s3Yg==
   dependencies:
     camelcase "^5.3.1"
     map-obj "^4.0.0"
@@ -4492,13 +4492,13 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysterium-vpn-js@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-2.2.0.tgz#275ee0e18e21639955d0e83e69e31862d9bc2876"
-  integrity sha512-C9pC3AvQ50qewc7q+WB9KsfcDdKUL2D8sV1ZbJTyaXz+NTiN8BYkRNciwkdgUVAvInNsawGFLmYamn+cBl/w4w==
+mysterium-vpn-js@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-2.2.1.tgz#b8c566135a87a44928947ce6c8067007e1feaec1"
+  integrity sha512-JudG4nqYy7JW3NmeU/t78tqK5XhbaQj9qg038gTiUguaErAjXLh+ByEvH7tZbuV+atlcFzSeQnBEYAHAgiTo+A==
   dependencies:
     axios "^0.19.2"
-    camelcase-keys "^6.2.1"
+    camelcase-keys "^6.2.2"
     filesize "^5.0.0"
     snakecase-keys "^3.1.2"
 

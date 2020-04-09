@@ -12,8 +12,8 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 
 export interface Config {
-    mysteriumVpnDesktop?: {
-        termsAgreed?: {
+    desktop?: {
+        "terms-agreed"?: {
             at?: string
             version?: string
         }
@@ -54,8 +54,8 @@ export class ConfigStore {
     agreeToTerms = async (): Promise<void> => {
         const data: Config = {
             ...this.config,
-            mysteriumVpnDesktop: {
-                termsAgreed: {
+            desktop: {
+                "terms-agreed": {
                     version: termsPackageJson.version,
                     at: new Date().toISOString(),
                 },
@@ -66,8 +66,8 @@ export class ConfigStore {
     }
 
     currentTermsAgreed = (): boolean => {
-        const version = this.config.mysteriumVpnDesktop?.termsAgreed?.version
-        const at = this.config.mysteriumVpnDesktop?.termsAgreed?.at
+        const version = this.config.desktop?.["terms-agreed"]?.version
+        const at = this.config.desktop?.["terms-agreed"]?.at
         return !!version && !!at && version == termsPackageJson.version
     }
 }
