@@ -19,6 +19,7 @@ const proposalRefreshRate = 10000
 
 export type ProposalFilter = {
     text?: string
+    ipType?: string
     country?: string
     noAccessPolicy?: boolean
 }
@@ -78,11 +79,9 @@ export class ProposalStore {
         this.setLoading(false)
     }
 
-    @computed
-    get byCountryCounts(): { [code: string]: number } {
-        const result = _.groupBy(this.textFiltered, (p) => p.country)
-        return _.mapValues(result, (ps) => ps.length)
-    }
+    // #####################
+    // Access policy filter (invisible yet)
+    // #####################
 
     @computed
     get accessPolicyFiltered(): UIProposal[] {
@@ -91,6 +90,17 @@ export class ProposalStore {
             return input
         }
         return input.filter((p) => !p.accessPolicies).sort(compareProposal)
+    }
+
+    // #####################
+    // Text filter
+    // #####################
+
+    @action
+    setTextFilter(text?: string): void {
+        this.filter.text = text
+        this.setIpTypeFilter(undefined)
+        this.setCountryFilter(undefined)
     }
 
     @computed
@@ -103,30 +113,81 @@ export class ProposalStore {
         return input.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
     }
 
+    // #####################
+    // IP type filter
+    // #####################
+
+    @computed
+    get ipTypeCounts(): { [type: string]: number } {
+        const input = this.textFiltered
+        const result = _.groupBy(input, (p) => p.serviceDefinition.locationOriginate?.nodeType)
+        return _.mapValues(result, (ps) => ps.length)
+    }
+
+    @action
+    setIpTypeFilter(ipType?: string): void {
+        this.filter.ipType = ipType
+        this.setCountryFilter(undefined)
+    }
+
+    @action
+    toggleIpTypeFilter(ipType?: string): void {
+        this.setIpTypeFilter(this.filter.ipType !== ipType ? ipType : undefined)
+    }
+
+    @computed
+    get ipTypeFiltered(): UIProposal[] {
+        const input = this.textFiltered
+        if (!this.filter.ipType) {
+            return input
+        }
+        const ipType = (p: UIProposal): string | undefined => p.serviceDefinition.locationOriginate?.nodeType
+        return input.filter((p) => ipType(p) === this.filter.ipType).sort(compareProposal)
+    }
+
+    // #####################
+    // Country filter
+    // #####################
+
+    @computed
+    get countryCounts(): { [code: string]: number } {
+        const input = this.ipTypeFiltered
+        const result = _.groupBy(input, (p) => p.country)
+        return _.mapValues(result, (ps) => ps.length)
+    }
+
+    @action
+    setCountryFilter(countryCode?: string): void {
+        this.filter.country = countryCode
+    }
+
+    @action
+    toggleCountryFilter(countryCode?: string): void {
+        this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
+        this.toggleActiveProposal(undefined)
+    }
+
     @computed
     get countryFiltered(): UIProposal[] {
-        const input = this.textFiltered
+        const input = this.ipTypeFiltered
         if (!this.filter.country) {
             return input
         }
         return input.filter((p) => p.country == this.filter.country).sort(compareProposal)
     }
 
+    // #####################
+    // Resulting list of proposals
+    // #####################
+
     @computed
     get filteredProposals(): UIProposal[] {
         return this.countryFiltered
     }
 
-    @action
-    setTextFilter(text?: string): void {
-        this.filter.text = text
-    }
-
-    @action
-    toggleFilterCountry(countryCode?: string): void {
-        this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
-        this.toggleActiveProposal(undefined)
-    }
+    // #####################
+    // End of filters
+    // #####################
 
     set activate(proposal: UIProposal) {
         this.active = proposal

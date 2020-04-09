@@ -91,8 +91,10 @@ const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
 )
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
-    const countryCounts = proposals.byCountryCounts
-
+    const countryCounts = proposals.countryCounts
+    if (!Object.keys(countryCounts).length) {
+        return <></>
+    }
     return (
         <View
             style={`
@@ -116,7 +118,7 @@ export const CountryFilter = observer(() => {
                 .sort()
                 .map((countryCode) => {
                     const toggleAction = (): void => {
-                        proposals.toggleFilterCountry(countryCode)
+                        proposals.toggleCountryFilter(countryCode)
                     }
                     return (
                         <CountryFilterPure

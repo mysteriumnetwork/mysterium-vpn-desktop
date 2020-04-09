@@ -18,12 +18,12 @@ import { OriginalLocation } from "../../../location/comp/original-location"
 import { NavBar } from "../../../navbar"
 import { Search } from "../../../ui-kit/search/search"
 import { useStores } from "../../../store"
+import { IpTypeFilter } from "../../../proposals/comp/ip-type-filter"
 
 export const SelectProposalView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
     const { proposals } = useStores()
     const searchDebounced = _.debounce((text): void => {
         proposals.setTextFilter(text)
-        proposals.toggleFilterCountry(undefined)
     }, 500)
     return (
         <View
@@ -67,8 +67,10 @@ export const SelectProposalView: React.FC<ViewProps<WidgetEventListeners>> = obs
                             style={`
                             padding-bottom: 15;
                             background: #fafafa;
+                            flex-direction: "column";
                         `}
                         >
+                            <IpTypeFilter />
                             <CountryFilter />
                         </View>
                     </ScrollArea>
