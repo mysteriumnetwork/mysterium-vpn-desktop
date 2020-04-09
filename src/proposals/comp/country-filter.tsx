@@ -67,7 +67,15 @@ const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
                             code={country}
                             text
                         />
-                        <Text style={`height: 28; color: ${active ? "white" : "inherit"};`}>{count}</Text>
+                        <Text
+                            style={`
+                            height: 28;
+                            qproperty-alignment: "AlignRight | AlignVCenter";
+                            color: ${active ? "white" : "inherit"};
+                            `}
+                        >
+                            {count}
+                        </Text>
                     </View>
                 </Toggle>
             </View>

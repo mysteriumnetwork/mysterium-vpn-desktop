@@ -36,13 +36,6 @@ export class ProposalStore {
     filter: ProposalFilter = {
         noAccessPolicy: true,
     }
-    @observable
-    apFiltered: UIProposal[] = []
-    @observable
-    textFiltered: UIProposal[] = []
-
-    @observable
-    countryFiltered: UIProposal[] = []
 
     root: RootStore
 
@@ -56,16 +49,7 @@ export class ProposalStore {
             async (status) => {
                 if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     await this.fetchProposals()
-                    this.applyTextFilter()
-                    this.applyCountryFilter() // Refresh (load) main view initially
                 }
-            },
-        )
-        reaction(
-            () => this.filter.text,
-            () => {
-                this.toggleFilterCountry(undefined)
-                this.applyTextFilter()
             },
         )
         setInterval(async () => {
@@ -88,7 +72,6 @@ export class ProposalStore {
                 .then((proposals) => proposals.filter((p) => supportedServiceTypes.includes(p.serviceType)))
                 .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
-            this.applyAccessPolicyFilter() // Only reflect update in the sidebar, not refreshing main view (not to bother the user)
         } catch (err) {
             console.log("Could not get proposals", err.message)
         }
@@ -97,8 +80,52 @@ export class ProposalStore {
 
     @computed
     get byCountryCounts(): { [code: string]: number } {
-        const result = _.groupBy(this.apFiltered, (p) => p.country)
+        const result = _.groupBy(this.textFiltered, (p) => p.country)
         return _.mapValues(result, (ps) => ps.length)
+    }
+
+    @computed
+    get accessPolicyFiltered(): UIProposal[] {
+        const input = this.proposals
+        if (!this.filter.noAccessPolicy) {
+            return input
+        }
+        return input.filter((p) => !p.accessPolicies).sort(compareProposal)
+    }
+
+    @computed
+    get textFiltered(): UIProposal[] {
+        const input = this.accessPolicyFiltered
+        const filterText = this.filter.text
+        if (!filterText) {
+            return input
+        }
+        return input.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
+    }
+
+    @computed
+    get countryFiltered(): UIProposal[] {
+        const input = this.textFiltered
+        if (!this.filter.country) {
+            return input
+        }
+        return input.filter((p) => p.country == this.filter.country).sort(compareProposal)
+    }
+
+    @computed
+    get filteredProposals(): UIProposal[] {
+        return this.countryFiltered
+    }
+
+    @action
+    setTextFilter(text?: string): void {
+        this.filter.text = text
+    }
+
+    @action
+    toggleFilterCountry(countryCode?: string): void {
+        this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
+        this.toggleActiveProposal(undefined)
     }
 
     set activate(proposal: UIProposal) {
@@ -108,55 +135,6 @@ export class ProposalStore {
     @action
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
-    }
-
-    @computed
-    get filteredProposals(): UIProposal[] {
-        if (this.filter.text) {
-            return this.textFiltered
-        }
-        return this.countryFiltered
-    }
-
-    @action
-    setTextFilter(text?: string): void {
-        this.filter.text = text
-    }
-
-    set toggleAccessPolicyFilter(noAccessPolicies: boolean) {
-        this.filter.noAccessPolicy = noAccessPolicies
-        this.applyAccessPolicyFilter()
-    }
-
-    @action
-    applyAccessPolicyFilter(): void {
-        this.apFiltered = this.proposals
-            .filter((p) => !this.filter.noAccessPolicy || !p.accessPolicies)
-            .sort(compareProposal)
-    }
-
-    @action
-    applyTextFilter(): void {
-        if (this.filter.text) {
-            const filterText = this.filter.text
-            this.textFiltered = this.apFiltered.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
-        } else {
-            this.textFiltered = []
-        }
-    }
-
-    @action
-    toggleFilterCountry(countryCode?: string): void {
-        this.filter.country = this.filter.country !== countryCode ? countryCode : undefined
-        this.toggleActiveProposal(undefined)
-        this.applyCountryFilter()
-    }
-
-    @action
-    applyCountryFilter(): void {
-        this.countryFiltered = this.apFiltered
-            .filter((p) => this.filter.country == null || p.country == this.filter.country)
-            .sort(compareProposal)
     }
 
     @action

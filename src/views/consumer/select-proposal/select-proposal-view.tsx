@@ -23,6 +23,7 @@ export const SelectProposalView: React.FC<ViewProps<WidgetEventListeners>> = obs
     const { proposals } = useStores()
     const searchDebounced = _.debounce((text): void => {
         proposals.setTextFilter(text)
+        proposals.toggleFilterCountry(undefined)
     }, 500)
     return (
         <View
