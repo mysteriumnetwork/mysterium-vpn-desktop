@@ -18,6 +18,7 @@ const supportedServiceTypes = ["openvpn", "wireguard"]
 const proposalRefreshRate = 10000
 
 export type ProposalFilter = {
+    text?: string
     country?: string
     noAccessPolicy?: boolean
 }
@@ -38,6 +39,9 @@ export class ProposalStore {
     @observable
     apFiltered: UIProposal[] = []
     @observable
+    textFiltered: UIProposal[] = []
+
+    @observable
     countryFiltered: UIProposal[] = []
 
     root: RootStore
@@ -52,8 +56,16 @@ export class ProposalStore {
             async (status) => {
                 if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     await this.fetchProposals()
+                    this.applyTextFilter()
                     this.applyCountryFilter() // Refresh (load) main view initially
                 }
+            },
+        )
+        reaction(
+            () => this.filter.text,
+            () => {
+                this.toggleFilterCountry(undefined)
+                this.applyTextFilter()
             },
         )
         setInterval(async () => {
@@ -98,6 +110,19 @@ export class ProposalStore {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
     }
 
+    @computed
+    get filteredProposals(): UIProposal[] {
+        if (this.filter.text) {
+            return this.textFiltered
+        }
+        return this.countryFiltered
+    }
+
+    @action
+    setTextFilter(text?: string): void {
+        this.filter.text = text
+    }
+
     set toggleAccessPolicyFilter(noAccessPolicies: boolean) {
         this.filter.noAccessPolicy = noAccessPolicies
         this.applyAccessPolicyFilter()
@@ -108,6 +133,16 @@ export class ProposalStore {
         this.apFiltered = this.proposals
             .filter((p) => !this.filter.noAccessPolicy || !p.accessPolicies)
             .sort(compareProposal)
+    }
+
+    @action
+    applyTextFilter(): void {
+        if (this.filter.text) {
+            const filterText = this.filter.text
+            this.textFiltered = this.apFiltered.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
+        } else {
+            this.textFiltered = []
+        }
     }
 
     @action

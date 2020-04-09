@@ -17,7 +17,7 @@ import { ProposalTableHeader } from "./header"
 
 const ConnectedProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
-    const items = proposals.countryFiltered
+    const items = proposals.filteredProposals
     return (
         <>
             {items.map((p) => {
