@@ -1,33 +1,39 @@
 #!/usr/bin/env bash
 
-set -e
-
+log_file="./bundle.log"
 app_dir=deploy/darwin/build/MysteriumVPN.app
 identity=14D1483DEFD2A449D35CC443621E3D0FEDF3972E
+entitlements="deploy/darwin/MysteriumVPN.app/Contents/Resources/entitlements.plist"
 
-rm -rf "${app_dir}"
+function check_success() {
+    if [[ $? == 0 ]]; then
+        printf " ✅\n"
+    else
+        printf " ❌\n"
+        echo "Log file: ${log_file}"
+        exit 1
+    fi
+}
 
-npx nodegui-packer --pack dist
-rm "${app_dir}/Contents/Frameworks/.gitkeep"
-rm "${app_dir}/Contents/PlugIns/.gitkeep"
-rm "${app_dir}/Contents/SharedFrameWorks/.gitkeep"
+printf "# Cleaning"
+rm -rf "${app_dir}" "${log_file}"
+check_success
 
-echo "### Signing"
+printf "# Packing"
+npx nodegui-packer --pack dist &>> "${log_file}"
+check_success
 
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/platforms/libqcocoa.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/printsupport/libcocoaprintersupport.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/styles/libqmacstyle.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/imageformats/libqgif.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/imageformats/libqico.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/PlugIns/imageformats/libqjpeg.dylib"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/Frameworks/QtCore.framework"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/Frameworks/QtGui.framework"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/Frameworks/QtWidgets.framework"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/Frameworks/QtDBus.framework"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/Frameworks/QtPrintSupport.framework"
-codesign --verbose --force --sign "${identity}" "${app_dir}/Contents/MacOs/qode"
-codesign --verbose --force --sign "${identity}" "${app_dir}"
+printf "# Signing"
+codesign --verbose=4 --deep --strict --timestamp --sign "${identity}" --entitlements "${entitlements}" --options "runtime" ${app_dir} &>> "${log_file}"
+check_success
 
-echo "### Verifying"
+printf "# Verifying (codesign)"
+codesign --verbose=4 --deep --verify "${app_dir}" &>> "${log_file}"
+check_success
 
-codesign --verbose --verify deploy/darwin/build/MysteriumVPN.app
+printf "# Verifying (gatekeeper)"
+spctl -a -vvvv "${app_dir}" &>> "${log_file}"
+check_success
+
+echo "Complete: ${app_dir}"
+echo "Bundle log: ${log_file}"

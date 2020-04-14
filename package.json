@@ -12,8 +12,9 @@
     "lint": "eslint --ext .ts,.tsx src",
     "dev": "webpack --mode=development",
     "start": "qode --inspect ./dist/index.js",
+    "clean": "rm -rf dist ./deploy/darwin/build",
     "build": "webpack -p",
-    "packer": "npx nodegui-packer --pack dist"
+    "bundle": "bash ./deploy/pack-macos.sh"
   },
   "dependencies": {
     "@mysteriumnetwork/terms": "^0.0.24",

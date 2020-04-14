@@ -44,7 +44,7 @@ In package.json, change the signing key that is passed to [nodegui-packer](https
 
 ```
 yarn build
-yarn packer
+yarn bundle
 ```
 
 ## Development guide
