@@ -43,7 +43,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@nodegui/packer": "^1.4.0",
+    "@nodegui/packer": "^1.4.1",
     "@types/async-retry": "^1.4.1",
     "@types/eventsource": "^1.1.2",
     "@types/lodash": "^4.14.149",
