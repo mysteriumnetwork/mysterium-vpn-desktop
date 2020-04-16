@@ -36,6 +36,7 @@ export class RootStore {
         this.payment = new PaymentStore(this)
 
         // Setup cross-store reactions after all injections.
+        this.navigation.setupReactions()
         this.daemon.setupReactions()
         this.config.setupReactions()
         this.identity.setupReactions()

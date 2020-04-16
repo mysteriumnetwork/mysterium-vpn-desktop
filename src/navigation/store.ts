@@ -6,11 +6,13 @@
  */
 import { action, observable } from "mobx"
 import { History } from "history"
-import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
+import { ConnectionStatus, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
+import { eventBus } from "../tequila-sse"
 
 import { history } from "./history"
+
 import LocationState = History.LocationState
 
 export class NavigationStore {
@@ -19,8 +21,6 @@ export class NavigationStore {
     @observable
     consumer = true
     @observable
-    wallet = false
-    @observable
     welcome = true
 
     root: RootStore
@@ -28,6 +28,10 @@ export class NavigationStore {
     constructor(root: RootStore) {
         this.root = root
         this.history = history
+    }
+
+    setupReactions(): void {
+        eventBus.on(SSEEventType.AppStateChange, this.determineRoute)
     }
 
     @action
@@ -45,6 +49,9 @@ export class NavigationStore {
     determineRoute = (): void => {
         console.log("current location", this.history.location.pathname)
         const { config, identity, connection } = this.root
+        if (this.history.location.pathname == "/wallet") {
+            return
+        }
         if (!config.currentTermsAgreed() && this.welcome) {
             this.navigateTo("/welcome")
         } else if (!config.currentTermsAgreed()) {
@@ -54,8 +61,6 @@ export class NavigationStore {
             identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer
         ) {
             this.navigateTo("/identity")
-        } else if (this.wallet) {
-            this.navigateTo("/wallet")
         } else if (connection.status != ConnectionStatus.NOT_CONNECTED) {
             this.navigateTo("/connection")
         } else {

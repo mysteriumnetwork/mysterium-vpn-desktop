@@ -4,15 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { View } from "@nodegui/react-nodegui"
 import { ConnectionStatus } from "mysterium-vpn-js"
-import React from "react"
+import React, { ButtonHTMLAttributes } from "react"
 import { observer } from "mobx-react-lite"
 
 import { useStores } from "../../store"
 import { BrandButton } from "../../ui-kit/mbutton/brand-button"
 import { CancelButton } from "../../ui-kit/mbutton/cancel-button"
-import { CommonButtonProps } from "../../ui-kit/mbutton/props"
 
 export type ConnectDisconnectButtonProps = {
     width?: number
@@ -41,11 +39,13 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
         return await connection.disconnect()
     }
     const isCancel = connection.status !== ConnectionStatus.NOT_CONNECTED
-    const buttonProps: CommonButtonProps = {
-        text,
-        enabled: !connection.gracePeriod,
+    const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = {
+        disabled: connection.gracePeriod,
         onClick,
-        style: `width: ${width}; height: ${height};`,
     }
-    return <View>{isCancel ? <CancelButton {...buttonProps} /> : <BrandButton {...buttonProps} />}</View>
+    return isCancel ? (
+        <CancelButton {...buttonProps}>{text}</CancelButton>
+    ) : (
+        <BrandButton {...buttonProps}>{text}</BrandButton>
+    )
 })

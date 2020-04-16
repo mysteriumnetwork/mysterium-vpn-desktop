@@ -13,7 +13,7 @@ import { resolveCountry } from "../countries"
 
 const Container = styled.div`
     box-sizing: border-box;
-    height: 80px;
+    height: 64px;
     background: #fafafa;
     box-shadow: inset 0 1px 1px #e6e6e6;
     display: flex;
