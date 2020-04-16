@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { Text, View } from "@nodegui/react-nodegui"
+import styled from "styled-components"
 
 import { textHuge, textSmall } from "../../../ui-kit/typography"
 
@@ -14,31 +14,28 @@ export type MetricProps = {
     value?: string
 }
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 120px;
+`
+
+const Name = styled.span`
+    ${textSmall}
+    color: #c0b3c9;
+`
+
+const Value = styled.span`
+    ${textHuge}
+    color: #fff;
+`
+
 export const Metric: React.FC<MetricProps> = ({ name, value = "" }) => {
     return (
-        <View
-            style={`
-            flex-direction: "column";
-            justify-content: "space-between";
-            min-width: 120;
-            `}
-        >
-            <Text
-                style={`
-                ${textSmall}
-                color: #c0b3c9;
-                `}
-            >
-                {name}
-            </Text>
-            <Text
-                style={`
-                ${textHuge}
-                color: #fff;
-                `}
-            >
-                {value}
-            </Text>
-        </View>
+        <Container>
+            <Name>{name}</Name>
+            <Value>{value}</Value>
+        </Container>
     )
 }

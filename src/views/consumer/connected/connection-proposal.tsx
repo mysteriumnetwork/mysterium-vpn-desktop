@@ -6,27 +6,41 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { Text, View } from "@nodegui/react-nodegui"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
+import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { perGiB, perMinute } from "../../../payment/rate"
 
-export const ConnectionProposal: React.FC<ViewProps<WidgetEventListeners>> = observer((props) => {
+const Container = styled.div`
+    color: #c0b3c9;
+    margin: 16px auto 32px;
+`
+
+const Row = styled.div`
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: row;
+`
+
+const Label = styled.span`
+    width: 120px;
+`
+
+export const ConnectionProposal: React.FC = observer(() => {
     const {
         connection: { proposal: { paymentMethod, providerId } = {} },
     } = useStores()
     const price = paymentMethod ? `${perMinute(paymentMethod)}/min ＋ ${perGiB(paymentMethod)}/GiB` : ""
     return (
-        <View {...props}>
-            <View style={`padding-bottom: 14; flex-direction: "row";`}>
-                <Text style={`width: 120; color: #c0b3c9;`}>Provider ID</Text>
-                <Text style={`flex: 1; color: #c0b3c9;`}>{providerId ?? ""}</Text>
-            </View>
-            <View style={`padding-bottom: 14; flex-direction: "row";`}>
-                <Text style={`width: 120; color: #c0b3c9;`}>Price</Text>
-                <Text style={`flex: 1; color: #c0b3c9;`}>{price}</Text>
-            </View>
-        </View>
+        <Container>
+            <Row>
+                <Label>Provider ID</Label>
+                {providerId ?? ""}
+            </Row>
+            <Row>
+                <Label>Price</Label>
+                {price}
+            </Row>
+        </Container>
     )
 })
