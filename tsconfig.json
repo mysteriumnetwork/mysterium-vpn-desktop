@@ -1,14 +1,14 @@
 {
+  "extends": "./node_modules/electron-webpack/tsconfig-base.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "target": "es2016",
-    "module": "commonjs",
     "jsx": "react",
-    "strict": true,
-    "alwaysStrict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
+    "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "include": ["**/*"]
+  "include": [
+    "./src/renderer",
+    "./src/main",
+    "./assets.d.ts",
+    "./src/declarations.d.ts"
+  ]
 }

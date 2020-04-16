@@ -5,42 +5,33 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { observer } from "mobx-react-lite"
-import { View } from "@nodegui/react-nodegui"
-import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
+import { HashRouter, Route, Switch } from "react-router-dom"
 
-import { useStores } from "./store"
-import { DaemonStatusType } from "./daemon/store"
-import { SelectProposalView } from "./views/consumer/select-proposal/select-proposal-view"
-import { winSize } from "./config"
-import { ConnectedView } from "./views/consumer/connected/connected-view"
-import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
-import { WalletView } from "./views/consumer/wallet/wallet-view"
 import { LoadingView } from "./views/common/loading/loading-view"
 import { AcceptTermsView } from "./views/common/accept-terms/accept-terms-view"
 import { WelcomeView } from "./views/common/welcome/welcome-view"
+import { SelectIdentityView } from "./views/common/select-identity/select-identity-view"
 
-// To avoid hiccups on screen re-render, render all screens and use style to switch between them.
-// Hidden elements have zero width.
-const fitWindowIfVisible = (visible: boolean): string => {
-    return `width: ${visible ? winSize.width : 0}; height: ${winSize.height};`
-}
-
-enum Nav {
-    Loader,
-    Welcome,
-    AcceptTerms,
-    SelectIdentity,
-    SelectProposal,
-    ConnectionActive,
-    Wallet,
-}
-
-export const App = observer(() => {
-    const root = useStores()
-    const { daemon, connection, identity, config } = root
-
-    // Poor man's navigation, but performs better than re-rendering the whole screen.
+export const App: React.FC = () => {
+    return (
+        <HashRouter>
+            <Switch>
+                <Route path="/welcome">
+                    <WelcomeView />
+                </Route>
+                <Route path="/terms">
+                    <AcceptTermsView />
+                </Route>
+                <Route path="/identity">
+                    <SelectIdentityView />
+                </Route>
+                <Route path="/loading">
+                    <LoadingView />
+                </Route>
+            </Switch>
+        </HashRouter>
+    )
+    /*// Poor man's navigation, but performs better than re-rendering the whole screen.
     let screen: Nav
     if (daemon.status == DaemonStatusType.Down) {
         screen = Nav.Loader
@@ -71,5 +62,5 @@ export const App = observer(() => {
             <ConnectedView style={fitWindowIfVisible(screen == Nav.ConnectionActive)} />
             <WalletView style={fitWindowIfVisible(screen == Nav.Wallet)} />
         </View>
-    )
-})
+    )*/
+}

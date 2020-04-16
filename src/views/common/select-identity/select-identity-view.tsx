@@ -4,22 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
-import { brand } from "../../../ui-kit/colors"
-import { textHuge, textSmall } from "../../../ui-kit/typography"
-import { Space } from "../../../ui-kit/space/space"
-import { Spinner } from "../../../ui-kit/spinner/spinner"
-import { fixAssetPath } from "../../../utils/paths"
+// import identityBg from "./identity-bg.png"
 
-import identityBg from "./identity-bg.png"
-import { TopupInstructions } from "./topup-instructions"
-
-export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = ({ style, ...rest }) => {
+export const SelectIdentityView: React.FC = () => {
     return (
-        <View
+        <div>Select identity</div>
+        /* <View
             style={`
             background: url("${fixAssetPath(identityBg)}") #fff;
             background-repeat: none;
@@ -69,6 +61,6 @@ export const SelectIdentityView: React.FC<ViewProps<WidgetEventListeners>> = ({ 
                     <Text style={`${textSmall} color: #808080;`}>Automatically scanning blockchain...</Text>
                 </View>
             </View>
-        </View>
+        </View>*/
     )
 }

@@ -15,3 +15,5 @@ declare module "byte-size" {
 declare module "@mysteriumnetwork/terms" {
     const TermsEndUser: string
 }
+
+declare const __static: string

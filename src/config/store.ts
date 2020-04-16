@@ -39,6 +39,19 @@ export class ConfigStore {
                 }
             },
         )
+        reaction(
+            () => this.config,
+            () => {
+                if (!this.currentTermsAgreed() && this.root.welcome) {
+                    console.log("welcome")
+                    this.root.history.push("/welcome")
+                } else if (!this.currentTermsAgreed()) {
+                    this.root.history.push("/terms")
+                } else {
+                    this.root.history.push("/identity")
+                }
+            },
+        )
     }
 
     @action

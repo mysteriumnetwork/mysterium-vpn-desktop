@@ -6,6 +6,7 @@
  */
 import React from "react"
 import { action, configure, observable } from "mobx"
+import { History, LocationState } from "history"
 
 import { DaemonStore } from "./daemon/store"
 import { ConnectionStore } from "./connection/store"
@@ -13,10 +14,12 @@ import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
 import { PaymentStore } from "./payment/store"
 import { ConfigStore } from "./config/store"
+import { history } from "./history"
 
 // import { enableLogging } from "mobx-logger"
 
 export class RootStore {
+    history: History<LocationState>
     daemon: DaemonStore
     config: ConfigStore
     connection: ConnectionStore
@@ -33,7 +36,8 @@ export class RootStore {
     welcome = true
 
     constructor() {
-        this.daemon = new DaemonStore()
+        this.history = history
+        this.daemon = new DaemonStore(this)
         this.config = new ConfigStore(this)
         this.connection = new ConnectionStore(this)
         this.identity = new IdentityStore(this)
@@ -55,6 +59,7 @@ export class RootStore {
     @action
     dismissWelcome = (): void => {
         this.welcome = false
+        this.history.push("/terms")
     }
 
     @action
