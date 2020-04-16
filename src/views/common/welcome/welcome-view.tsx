@@ -23,13 +23,13 @@ const Container = styled.div`
 `
 
 export const WelcomeView: React.FC = observer(() => {
-    const root = useStores()
+    const { navigation } = useStores()
     return (
         <Container>
             <BrandButton
                 text="Get Started"
                 onClick={(): void => {
-                    root.dismissWelcome()
+                    navigation.dismissWelcome()
                 }}
             />
         </Container>

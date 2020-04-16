@@ -4,18 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
 import { useStores } from "../../../store"
-import { NavBar } from "../../../navbar"
-import { textHuge } from "../../../ui-kit/typography"
-import { fixAssetPath } from "../../../utils/paths"
-import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
-import { Space } from "../../../ui-kit/space/space"
-import { LightButton } from "../../../ui-kit/mbutton/light-button"
 
 export const mystDisplay = (m?: number): string => {
     if (!m) {
@@ -24,11 +16,12 @@ export const mystDisplay = (m?: number): string => {
     return (m / 100000000).toFixed(3)
 }
 
-export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
-    const { identity, payment } = useStores()
+export const WalletView: React.FC = observer(() => {
+    const { identity } = useStores()
     const balanceDisplay = mystDisplay(identity.identity?.balance)
     return (
-        <View
+        <div>{balanceDisplay}</div>
+        /*<View
             style={`
             background: url("${fixAssetPath(mosaicBg)}");
             background-position: center;
@@ -91,6 +84,6 @@ export const WalletView: React.FC<ViewProps<WidgetEventListeners>> = observer(({
                     <LightButton text="Topup" onClick={(): Promise<void> => payment.topUp()} />
                 </View>
             </View>
-        </View>
+        </View>*/
     )
 })

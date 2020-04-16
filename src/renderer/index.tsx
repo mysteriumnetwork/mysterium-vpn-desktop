@@ -12,7 +12,7 @@ import ReactDOM from "react-dom"
 import { createGlobalStyle } from "styled-components"
 
 import "mobx-react-lite/batchingForReactDom"
-import { App } from "../app"
+import { Routes } from "../navigation/routes"
 import { onProcessExit } from "../utils/on-process-exit"
 import { supervisor } from "../supervisor/supervisor"
 
@@ -47,16 +47,16 @@ const GlobalStyle = createGlobalStyle`
 // const container = document.createElement("div")
 // document.body.appendChild(container)
 
-const AppR: React.FC = () => {
+const App: React.FC = () => {
     return (
         <React.Fragment>
             <GlobalStyle />
-            <App />
+            <Routes />
         </React.Fragment>
     )
 }
 
 // Render components
-ReactDOM.render(<AppR />, document.getElementById("app"))
+ReactDOM.render(<App />, document.getElementById("app"))
 
 onProcessExit(async () => await supervisor.killMyst())

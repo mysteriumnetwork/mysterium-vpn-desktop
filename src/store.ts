@@ -5,73 +5,42 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { action, configure, observable } from "mobx"
-import { History, LocationState } from "history"
+import { configure } from "mobx"
 
+import { NavigationStore } from "./navigation/store"
 import { DaemonStore } from "./daemon/store"
-import { ConnectionStore } from "./connection/store"
+import { ConfigStore } from "./config/store"
 import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
+import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
-import { ConfigStore } from "./config/store"
-import { history } from "./history"
 
 // import { enableLogging } from "mobx-logger"
 
 export class RootStore {
-    history: History<LocationState>
+    navigation: NavigationStore
     daemon: DaemonStore
     config: ConfigStore
-    connection: ConnectionStore
     identity: IdentityStore
     proposals: ProposalStore
+    connection: ConnectionStore
     payment: PaymentStore
 
-    @observable
-    consumer = true
-    @observable
-    wallet = false
-
-    @observable
-    welcome = true
-
     constructor() {
-        this.history = history
+        this.navigation = new NavigationStore(this)
         this.daemon = new DaemonStore(this)
         this.config = new ConfigStore(this)
-        this.connection = new ConnectionStore(this)
         this.identity = new IdentityStore(this)
         this.proposals = new ProposalStore(this)
+        this.connection = new ConnectionStore(this)
         this.payment = new PaymentStore(this)
 
         // Setup cross-store reactions after all injections.
+        this.daemon.setupReactions()
         this.config.setupReactions()
-        this.connection.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
-    }
-
-    @action
-    showWelcome = (): void => {
-        this.welcome = true
-    }
-
-    @action
-    dismissWelcome = (): void => {
-        this.welcome = false
-        this.history.push("/terms")
-    }
-
-    @action
-    navigateToConsumer = (): void => {
-        this.consumer = true
-        this.wallet = false
-    }
-
-    @action
-    navigateToWallet = (): void => {
-        this.consumer = false
-        this.wallet = true
+        this.connection.setupReactions()
     }
 }
 

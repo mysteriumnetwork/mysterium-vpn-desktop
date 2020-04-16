@@ -4,27 +4,25 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus } from "mysterium-vpn-js"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 
-import { winSize } from "../../../config"
+// import { winSize } from "../../../config"
 import { useStores } from "../../../store"
-import { Country } from "../../../ui-kit/country/country"
-import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
-import { textHuge } from "../../../ui-kit/typography"
-import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
-import { fixAssetPath } from "../../../utils/paths"
-import { NavBar } from "../../../navbar"
-import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
-import { Space } from "../../../ui-kit/space/space"
+// import { Country } from "../../../ui-kit/country/country"
+// import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
+// import { textHuge } from "../../../ui-kit/typography"
+// import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
+// import { fixAssetPath } from "../../../utils/paths"
+// import { NavBar } from "../../../navbar"
+// import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
+// import { Space } from "../../../ui-kit/space/space"
+//
+// import { ConnectionStatistics } from "./connection-statistics"
+// import { ConnectionProposal } from "./connection-proposal"
 
-import { ConnectionStatistics } from "./connection-statistics"
-import { ConnectionProposal } from "./connection-proposal"
-
-export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
+export const ConnectedView: React.FC = observer(() => {
     const {
         connection: { location, originalLocation, status },
     } = useStores()
@@ -46,7 +44,12 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
             statusText = "Working on it..."
     }
     return (
-        <View
+        <div>
+            <p>{statusText}</p>
+            <p>{location?.country ?? ""}</p>
+            <p>{originalLocation?.country ?? ""}</p>
+        </div>
+        /*<View
             style={`
             flex-direction: "column";
             ${style}
@@ -169,6 +172,6 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
                     `}
                 />
             </View>
-        </View>
+        </View>*/
     )
 })

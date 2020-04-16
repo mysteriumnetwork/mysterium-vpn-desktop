@@ -36,19 +36,7 @@ export class ConfigStore {
             async (status) => {
                 if (status == DaemonStatusType.Up) {
                     await this.fetchConfig()
-                }
-            },
-        )
-        reaction(
-            () => this.config,
-            () => {
-                if (!this.currentTermsAgreed() && this.root.welcome) {
-                    console.log("welcome")
-                    this.root.history.push("/welcome")
-                } else if (!this.currentTermsAgreed()) {
-                    this.root.history.push("/terms")
-                } else {
-                    this.root.history.push("/identity")
+                    this.root.navigation.determineRoute()
                 }
             },
         )

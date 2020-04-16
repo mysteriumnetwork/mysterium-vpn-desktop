@@ -34,10 +34,13 @@ export class DaemonStore {
         setInterval(async () => {
             await this.healthcheck()
         }, 2000)
+    }
+
+    setupReactions(): void {
         when(
             () => this.status == DaemonStatusType.Down,
             async () => {
-                this.root.history.push("/loading")
+                this.root.navigation.showLoading()
                 await this.start()
             },
         )
@@ -47,7 +50,7 @@ export class DaemonStore {
                 if (status == DaemonStatusType.Up) {
                     this.eventSource = sseConnect()
                 } else {
-                    this.root.history.push("/loading")
+                    this.root.navigation.showLoading()
                     await this.start()
                 }
             },
