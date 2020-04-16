@@ -97,11 +97,12 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 </Checkbox>
                 <BrandButton
                     disabled={!agree}
-                    text="Continue"
                     onClick={(): void => {
                         config.agreeToTerms()
                     }}
-                />
+                >
+                    Continue
+                </BrandButton>
             </BottomBar>
         </Container>
     )

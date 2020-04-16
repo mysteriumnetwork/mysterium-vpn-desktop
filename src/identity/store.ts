@@ -70,6 +70,9 @@ export class IdentityStore {
         }
         this.identity.balance = matchingId.balance
         this.identity.registrationStatus = matchingId.registrationStatus
+        if (registered(matchingId)) {
+            this.root.navigation.determineRoute()
+        }
     }
 
     @action

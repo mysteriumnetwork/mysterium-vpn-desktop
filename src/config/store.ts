@@ -64,6 +64,7 @@ export class ConfigStore {
         }
         await tequilapi.updateUserConfig({ data })
         await this.fetchConfig()
+        this.root.navigation.determineRoute()
     }
 
     currentTermsAgreed = (): boolean => {

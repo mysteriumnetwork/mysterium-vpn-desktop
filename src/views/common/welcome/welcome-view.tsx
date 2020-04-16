@@ -16,22 +16,49 @@ const Container = styled.div`
     height: 100%;
     background-image: url(${welcomeBg});
     background-repeat: no-repeat;
-    background-position: top -22px left 0px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+`
+
+const Title = styled.h1`
+    padding-top: 280px;
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: #fff;
+`
+
+const Description = styled.p`
+    width: 300px;
+    margin: 16px auto 28px auto;
+    text-align: center;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.75px;
+    color: #fff;
+`
+
+const GetStartedButton = styled(BrandButton)`
+    min-width: 134px;
+    margin: 0 auto;
 `
 
 export const WelcomeView: React.FC = observer(() => {
     const { navigation } = useStores()
     return (
         <Container>
-            <BrandButton
-                text="Get Started"
+            <Title>Welcome to Mysterium Network</Title>
+            <Description>Connect to everything, everywhere via the Worldߴs first decentralized VPN.</Description>
+            <GetStartedButton
                 onClick={(): void => {
                     navigation.dismissWelcome()
                 }}
-            />
+            >
+                Get Started
+            </GetStartedButton>
         </Container>
     )
     /*    return (
