@@ -14,6 +14,7 @@ import { SelectIdentityView } from "../views/common/select-identity/select-ident
 import { SelectProposalView } from "../views/consumer/select-proposal/select-proposal-view"
 import { ConnectedView } from "../views/consumer/connected/connected-view"
 import { WalletView } from "../views/consumer/wallet/wallet-view"
+import { NavBar } from "../navbar"
 
 export const Routes: React.FC = () => {
     return (
@@ -29,12 +30,15 @@ export const Routes: React.FC = () => {
                     <SelectIdentityView />
                 </Route>
                 <Route path="/proposals">
+                    <NavBar />
                     <SelectProposalView />
                 </Route>
                 <Route path="/connection">
+                    <NavBar />
                     <ConnectedView />
                 </Route>
                 <Route path="/wallet">
+                    <NavBar />
                     <WalletView />
                 </Route>
                 <Route path="/loading">

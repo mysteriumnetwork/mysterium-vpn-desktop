@@ -6,11 +6,14 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { Text } from "@nodegui/react-nodegui"
+import { useLocation } from "react-router-dom"
+import styled from "styled-components"
 
 import { useStores } from "../../store"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 import { brandDarker } from "../../ui-kit/colors"
+
+import { Myst } from "./myst"
 
 export const mystDisplay = (m?: number): string => {
     if (!m) {
@@ -19,42 +22,45 @@ export const mystDisplay = (m?: number): string => {
     return (m / 100000000).toFixed(3)
 }
 
+const Content = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    span:first-child {
+        margin-right: auto;
+    }
+`
+
+interface MoneyProps {
+    active: boolean
+}
+
+const Money = styled.div<MoneyProps>`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: ${(props: MoneyProps): string => (props.active ? "#fff" : brandDarker)};
+    span {
+        padding-right: 4px;
+    }
+`
+
 export const WalletButton: React.FC = observer(() => {
-    const root = useStores()
-    const { identity } = root
+    const { identity, navigation } = useStores()
+    const location = useLocation()
+
     const balance = mystDisplay(identity.identity?.balance)
-    const active = root.wallet
-    const backgroundStyle = active
-        ? "background: qlineargradient( x1:0 y1:0, x2:0 y2:1, stop:0 #873a72, stop:1 #673a72);"
-        : "background: #fff;"
-    const textStyle = active ? "color: #fff;" : `color: ${brandDarker};`
+    const active = location.pathname == "/wallet"
     return (
-        <Toggle
-            style={`
-             width: 168;
-             height: 26;
-             flex-direction: "row";
-             justify-content: "space-between";
-             padding: 2;
-             padding-left: 12;
-             padding-right: 8;
-             border-radius: 4;
-             ${backgroundStyle}
-             `}
-            onToggle={(): void => {
-                root.navigateToWallet()
-            }}
-        >
-            <Text style={textStyle}>Wallet</Text>
-            <Text
-                style={`
-                width: 95;
-                ${textStyle}
-                qproperty-alignment: 'AlignRight | AlignVCenter';
-                `}
-            >
-                {balance} Ⓜ
-            </Text>
+        <Toggle active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
+            <Content>
+                <span>Wallet</span>
+                <Money active={active}>
+                    <span>{balance}</span>
+                    <Myst light={active} />
+                </Money>
+            </Content>
         </Toggle>
     )
 })
