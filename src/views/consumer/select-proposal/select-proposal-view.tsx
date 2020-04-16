@@ -14,6 +14,7 @@ import { OriginalLocation } from "../../../location/comp/original-location"
 import { Search } from "../../../ui-kit/search/search"
 import { useStores } from "../../../store"
 import { IpTypeFilter } from "../../../proposals/comp/ip-type-filter"
+import { ProposalTable } from "../../../proposals/comp/proposal-table/proposal-table"
 
 const Container = styled.div`
     flex: 1;
@@ -30,7 +31,7 @@ const Sidebar = styled.div`
 `
 
 const Main = styled.div`
-    background: cyan;
+    flex: 1;
 `
 
 const ScrollArea = styled.div`
@@ -53,7 +54,9 @@ export const SelectProposalView: React.FC = observer(() => {
                 </ScrollArea>
                 <OriginalLocation />
             </Sidebar>
-            <Main></Main>
+            <Main>
+                <ProposalTable />
+            </Main>
         </Container>
         /*<View
             style={`

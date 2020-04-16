@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { Text } from "@nodegui/react-nodegui"
 import { PaymentMethod } from "mysterium-vpn-js"
 
 import { perGiB, perMinute } from "./rate"
@@ -21,7 +20,7 @@ export const PerMinuteRate: React.FC<RateProps> = ({ id, paymentMethod, units })
         return <></>
     }
     const rate = `${perMinute(paymentMethod)}${units ? "/min" : ""}`
-    return <Text id={id ?? "rate"}>{rate}</Text>
+    return <span id={id ?? "rate"}>{rate}</span>
 }
 
 export const PerGiBRate: React.FC<RateProps> = ({ id, paymentMethod, units }) => {
@@ -29,5 +28,5 @@ export const PerGiBRate: React.FC<RateProps> = ({ id, paymentMethod, units }) =>
         return <></>
     }
     const rate = `${perGiB(paymentMethod)}${units ? "/GiB" : ""}`
-    return <Text id={id ?? "rate"}>{rate}</Text>
+    return <span id={id ?? "rate"}>{rate}</span>
 }
