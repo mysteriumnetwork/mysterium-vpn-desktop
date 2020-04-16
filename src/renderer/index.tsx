@@ -30,8 +30,6 @@ robotoLight.load().then(() => {
     document.fonts.add(robotoMedium)
 })
 
-// console.log(fileContents)
-
 const GlobalStyle = createGlobalStyle`
     html, body, #app {
         margin: 0;
@@ -45,6 +43,10 @@ const GlobalStyle = createGlobalStyle`
     #app {
         display: flex;
         flex-direction: column;
+    }
+    img {
+        user-select: none;
+        user-drag: none;
     }
 `
 
