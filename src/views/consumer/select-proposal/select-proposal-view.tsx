@@ -6,6 +6,32 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
+import styled from "styled-components"
+
+import { CountryFilter } from "../../../proposals/comp/country-filter"
+
+const Container = styled.div`
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+`
+
+const Sidebar = styled.div`
+    height: 100%;
+    width: 240px;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+`
+
+const Main = styled.div`
+    background: cyan;
+`
+
+const ScrollArea = styled.div`
+    flex: 1;
+    overflow-y: scroll;
+`
 
 export const SelectProposalView: React.FC = observer(() => {
     // const { proposals } = useStores()
@@ -13,7 +39,14 @@ export const SelectProposalView: React.FC = observer(() => {
     //     proposals.setTextFilter(text)
     // }, 500)
     return (
-        <div>Proposals</div>
+        <Container>
+            <Sidebar>
+                <ScrollArea>
+                    <CountryFilter />
+                </ScrollArea>
+            </Sidebar>
+            <Main></Main>
+        </Container>
         /*<View
             style={`
                 ${style}

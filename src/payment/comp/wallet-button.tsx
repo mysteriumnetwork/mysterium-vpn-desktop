@@ -53,7 +53,7 @@ export const WalletButton: React.FC = observer(() => {
     const balance = mystDisplay(identity.identity?.balance)
     const active = location.pathname == "/wallet"
     return (
-        <Toggle active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
+        <Toggle small active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
             <Content>
                 <span>Wallet</span>
                 <Money active={active}>

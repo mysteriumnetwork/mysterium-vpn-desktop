@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom"
 
 import { WalletButton } from "./payment/comp/wallet-button"
 import { useStores } from "./store"
+import { Toggle } from "./ui-kit/toggle/toggle"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -21,33 +22,6 @@ const Container = styled.div`
     justify-content: space-between;
 `
 
-export interface ToggleProps {
-    active: boolean
-    onClick: Function
-}
-
-const Toggle = styled.div<ToggleProps>`
-    width: 152px;
-    height: 24px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-
-    color: ${(props: ToggleProps): string => (props.active ? "#fff" : "#404040")};
-    background: ${(props: ToggleProps): string =>
-        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#fff"};
-    &:first-child {
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-    }
-    &:last-child {
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-    }
-`
-
 export const NavBar: React.FC = observer(() => {
     const { navigation } = useStores()
     const location = useLocation()
@@ -55,6 +29,7 @@ export const NavBar: React.FC = observer(() => {
         <Container>
             <div>
                 <Toggle
+                    small
                     active={location.pathname == "/proposals"}
                     onClick={(): void => navigation.navigateTo("/proposals")}
                 >

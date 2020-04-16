@@ -5,131 +5,73 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { Text, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
-import { CursorShape } from "@nodegui/nodegui"
+import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { Country } from "../../ui-kit/country/country"
-import { Toggle } from "../../ui-kit/toggle/toggle"
+import { Toggle, ToggleProps } from "../../ui-kit/toggle/toggle"
 import { textSmall } from "../../ui-kit/typography"
-import { brand } from "../../ui-kit/colors"
+import { resolveCountry } from "../../location/countries"
 
-export type CountryFilterPureProps = {
-    country: string
-    count: number
-    activeCountry?: string
-    toggleAction: () => void
-}
-
-const styleSheet = `
-#CountryFilter {
-    margin-top: 5;
-}
-#CountryFilter-Row-active {
-    width: 220;
-    height: 28;
-    background: "${brand}";
-    border-radius: 3px;
-}
-#CountryFilter-Row {
-    width: 220;
-    height: 28;
-    border-radius: 3px;
-}
-#CountryFilter-Row:hover {
-    background: #e6e6e6;
-}
-#CountryFilter-Row-Content {
-    padding-left: 10;
-    padding-right: 10;
-    width: 225;
-    flex-direction: "row";
-    justify-content: "space-between";
-}
+const Container = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 `
 
-// eslint-disable-next-line react/display-name
-const CountryFilterPure: React.FC<CountryFilterPureProps> = React.memo(
-    ({ country, count, activeCountry, toggleAction }) => {
-        const active = activeCountry === country
-        return (
-            <View key={country} cursor={CursorShape.PointingHandCursor} id="CountryFilter" styleSheet={styleSheet}>
-                <Toggle
-                    id={active ? "CountryFilter-Row-active" : "CountryFilter-Row"}
-                    key={country}
-                    onToggle={toggleAction}
-                >
-                    <View id="CountryFilter-Row-Content">
-                        <Country
-                            containerStyle={`flex-direction: "row"; align-items: "center"; justify-content: "center";`}
-                            textStyle={`height: 28; color: ${active ? "white" : "inherit"};`}
-                            code={country}
-                            text
-                        />
-                        <Text
-                            style={`
-                            height: 28;
-                            qproperty-alignment: "AlignRight | AlignVCenter";
-                            color: ${active ? "white" : "inherit"};
-                            `}
-                        >
-                            {count}
-                        </Text>
-                    </View>
-                </Toggle>
-            </View>
-        )
-    },
-    (prevProps, nextProps) => {
-        return (
-            prevProps.country === nextProps.country &&
-            prevProps.count === nextProps.count &&
-            ![prevProps.activeCountry, nextProps.activeCountry].includes(nextProps.country)
-        )
-    },
-)
+const Title = styled.p`
+    ${textSmall}
+    color: #777;
+    margin: 12px;
+    margin-left: 12px;
+`
+
+const CountryToggle = styled(Toggle)`
+    height: 28px;
+    width: calc(100% - 4px);
+    margin: 2px;
+    border-radius: 4px;
+    justify-content: flex-start;
+    background: ${(props: ToggleProps): string =>
+        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "transparent"};
+    &:hover {
+        background: ${(props: ToggleProps): string =>
+            props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#e6e6e6"};
+    }
+`
+
+const Flag = styled.img`
+    margin-right: 6px;
+`
+
+const Count = styled.span`
+    margin-left: auto;
+`
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.countryCounts
-    if (!Object.keys(countryCounts).length) {
-        return <></>
-    }
     return (
-        <View
-            style={`
-            width: "100%";
-            padding: 2;
-            background: #fafafa;
-            border: 0;
-            flex-direction: column;
-            `}
-        >
-            <Text
-                style={`
-                ${textSmall}
-                color: #777;
-                margin: 5;
-            `}
-            >
-                By country
-            </Text>
+        <Container>
+            <Title>By country</Title>
             {Object.keys(countryCounts)
                 .sort()
                 .map((countryCode) => {
                     const toggleAction = (): void => {
                         proposals.toggleCountryFilter(countryCode)
                     }
+                    const country = resolveCountry(countryCode)
                     return (
-                        <CountryFilterPure
+                        <CountryToggle
                             key={countryCode}
-                            country={countryCode}
-                            count={countryCounts[countryCode]}
-                            activeCountry={proposals.filter.country}
-                            toggleAction={toggleAction}
-                        />
+                            onClick={toggleAction}
+                            active={proposals.filter.country == countryCode}
+                        >
+                            <Flag src={country.flag} alt={country.name} />
+                            <p>{country.name}</p>
+                            <Count>{countryCounts[countryCode]}</Count>
+                        </CountryToggle>
                     )
                 })}
-        </View>
+        </Container>
     )
 })

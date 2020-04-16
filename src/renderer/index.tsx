@@ -42,6 +42,10 @@ const GlobalStyle = createGlobalStyle`
         font-family: Roboto;
         font-weight: 300;
     }
+    #app {
+        display: flex;
+        flex-direction: column;
+    }
 `
 
 // Create main element
