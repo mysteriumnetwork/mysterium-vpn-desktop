@@ -7,9 +7,12 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
+import * as _ from "lodash"
 
 import { CountryFilter } from "../../../proposals/comp/country-filter"
 import { OriginalLocation } from "../../../location/comp/original-location"
+import { Search } from "../../../ui-kit/search/search"
+import { useStores } from "../../../store"
 
 const Container = styled.div`
     flex: 1;
@@ -35,13 +38,14 @@ const ScrollArea = styled.div`
 `
 
 export const SelectProposalView: React.FC = observer(() => {
-    // const { proposals } = useStores()
-    // const searchDebounced = _.debounce((text): void => {
-    //     proposals.setTextFilter(text)
-    // }, 500)
+    const { proposals } = useStores()
+    const searchDebounced = _.debounce((text): void => {
+        proposals.setTextFilter(text)
+    }, 500)
     return (
         <Container>
             <Sidebar>
+                <Search onChange={searchDebounced} />
                 <ScrollArea>
                     <CountryFilter />
                 </ScrollArea>
