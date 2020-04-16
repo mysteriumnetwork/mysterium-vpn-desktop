@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { CountryFilter } from "../../../proposals/comp/country-filter"
+import { OriginalLocation } from "../../../location/comp/original-location"
 
 const Container = styled.div`
     flex: 1;
@@ -44,6 +45,7 @@ export const SelectProposalView: React.FC = observer(() => {
                 <ScrollArea>
                     <CountryFilter />
                 </ScrollArea>
+                <OriginalLocation />
             </Sidebar>
             <Main></Main>
         </Container>
