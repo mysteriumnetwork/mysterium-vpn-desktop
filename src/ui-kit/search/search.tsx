@@ -11,9 +11,6 @@ export interface SearchProps {
     onChange: (text?: string) => void
 }
 
-const Wrapper = styled.div`
-    background: cyan;
-`
 const Input = styled.input`
     height: 24px;
     margin: 8px;
@@ -26,9 +23,5 @@ const Input = styled.input`
 export const Search: React.FC<SearchProps> = ({ onChange, ...rest }) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleChange = (evt: any): void => onChange(evt.target.value)
-    return (
-        <Wrapper>
-            <Input placeholder="Search..." onChange={handleChange} {...rest} />
-        </Wrapper>
-    )
+    return <Input placeholder="Search..." onChange={handleChange} {...rest} />
 }

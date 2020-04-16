@@ -13,6 +13,7 @@ import { CountryFilter } from "../../../proposals/comp/country-filter"
 import { OriginalLocation } from "../../../location/comp/original-location"
 import { Search } from "../../../ui-kit/search/search"
 import { useStores } from "../../../store"
+import { IpTypeFilter } from "../../../proposals/comp/ip-type-filter"
 
 const Container = styled.div`
     flex: 1;
@@ -47,6 +48,7 @@ export const SelectProposalView: React.FC = observer(() => {
             <Sidebar>
                 <Search onChange={searchDebounced} />
                 <ScrollArea>
+                    <IpTypeFilter />
                     <CountryFilter />
                 </ScrollArea>
                 <OriginalLocation />

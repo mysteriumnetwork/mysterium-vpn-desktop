@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite"
 
 import { UIProposal } from "../../ui-proposal-type"
 import { useStores } from "../../../store"
-import { Toggle } from "../../../ui-kit/toggle/toggle"
+import { NavToggle } from "../../../ui-kit/toggle/navToggle"
 import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
 
 export type ProposalFCProps = {
@@ -26,7 +26,7 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
         const cellId = !active ? "ProposalTable-Proposal-cell" : "ProposalTable-Proposal-cell-active"
         return (
             <View id="ProposalTable-Proposal-row-outer">
-                <Toggle
+                <NavToggle
                     id={active ? "ProposalTable-Proposal-Toggle-active" : "ProposalTable-Proposal-Toggle-inactive"}
                     onToggle={onToggle}
                 >
@@ -36,7 +36,7 @@ const ProposalPure: React.FC<ProposalFCProps> = React.memo(
                         <PerGiBRate id={cellId} paymentMethod={paymentMethod} units={false} />
                         <Text id={cellId}>{serviceType4}</Text>
                     </View>
-                </Toggle>
+                </NavToggle>
             </View>
         )
     },

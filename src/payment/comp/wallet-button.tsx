@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { Toggle } from "../../ui-kit/toggle/toggle"
+import { NavToggle } from "../../ui-kit/toggle/nav-toggle"
 import { brandDarker } from "../../ui-kit/colors"
 
 import { Myst } from "./myst"
@@ -53,7 +53,7 @@ export const WalletButton: React.FC = observer(() => {
     const balance = mystDisplay(identity.identity?.balance)
     const active = location.pathname == "/wallet"
     return (
-        <Toggle small active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
+        <NavToggle small active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
             <Content>
                 <span>Wallet</span>
                 <Money active={active}>
@@ -61,6 +61,6 @@ export const WalletButton: React.FC = observer(() => {
                     <Myst light={active} />
                 </Money>
             </Content>
-        </Toggle>
+        </NavToggle>
     )
 })

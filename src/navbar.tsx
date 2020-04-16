@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom"
 
 import { WalletButton } from "./payment/comp/wallet-button"
 import { useStores } from "./store"
-import { Toggle } from "./ui-kit/toggle/toggle"
+import { NavToggle } from "./ui-kit/toggle/nav-toggle"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -28,13 +28,13 @@ export const NavBar: React.FC = observer(() => {
     return (
         <Container>
             <div>
-                <Toggle
+                <NavToggle
                     small
                     active={location.pathname == "/proposals"}
                     onClick={(): void => navigation.navigateTo("/proposals")}
                 >
                     Connect to VPN
-                </Toggle>
+                </NavToggle>
             </div>
             <div>
                 <WalletButton />

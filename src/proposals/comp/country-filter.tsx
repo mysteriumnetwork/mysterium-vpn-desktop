@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { Toggle, ToggleProps } from "../../ui-kit/toggle/toggle"
+import { Toggle } from "../../ui-kit/toggle/toggle"
 import { textSmall } from "../../ui-kit/typography"
 import { resolveCountry } from "../../location/countries"
 
@@ -26,20 +26,6 @@ const Title = styled.p`
     margin-left: 12px;
 `
 
-const CountryToggle = styled(Toggle)`
-    height: 28px;
-    width: calc(100% - 4px);
-    margin: 2px;
-    border-radius: 4px;
-    justify-content: flex-start;
-    background: ${(props: ToggleProps): string =>
-        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "transparent"};
-    &:hover {
-        background: ${(props: ToggleProps): string =>
-            props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#e6e6e6"};
-    }
-`
-
 const Flag = styled.img`
     margin-right: 6px;
 `
@@ -47,6 +33,7 @@ const Flag = styled.img`
 const Count = styled.span`
     margin-left: auto;
 `
+
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.countryCounts
@@ -61,7 +48,7 @@ export const CountryFilter = observer(() => {
                     }
                     const country = resolveCountry(countryCode)
                     return (
-                        <CountryToggle
+                        <Toggle
                             key={countryCode}
                             onClick={toggleAction}
                             active={proposals.filter.country == countryCode}
@@ -69,7 +56,7 @@ export const CountryFilter = observer(() => {
                             <Flag src={country.flag} alt={country.name} />
                             <p>{country.name}</p>
                             <Count>{countryCounts[countryCode]}</Count>
-                        </CountryToggle>
+                        </Toggle>
                     )
                 })}
         </Container>
