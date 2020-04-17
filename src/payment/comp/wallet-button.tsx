@@ -12,6 +12,7 @@ import styled from "styled-components"
 import { useStores } from "../../store"
 import { NavToggle } from "../../ui-kit/toggle/nav-toggle"
 import { brandDarker } from "../../ui-kit/colors"
+import { locations } from "../../navigation/locations"
 
 import { Myst } from "./myst"
 
@@ -51,9 +52,14 @@ export const WalletButton: React.FC = observer(() => {
     const location = useLocation()
 
     const balance = mystDisplay(identity.identity?.balance)
-    const active = location.pathname == "/wallet"
+    const active = location.pathname == locations.wallet
+    const onClick = (): void => {
+        if (!active) {
+            navigation.navigateTo(locations.wallet)
+        }
+    }
     return (
-        <NavToggle small active={active} onClick={(): void => navigation.navigateTo("/wallet")}>
+        <NavToggle small active={active} onClick={onClick}>
             <Content>
                 <span>Wallet</span>
                 <Money active={active}>

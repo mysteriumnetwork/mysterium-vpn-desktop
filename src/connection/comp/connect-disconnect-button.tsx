@@ -17,7 +17,7 @@ export type ConnectDisconnectButtonProps = {
     height?: number
 }
 
-export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = observer(({ width, height }) => {
+export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = observer(() => {
     const { connection } = useStores()
     const text = ((): string => {
         switch (connection.status) {

@@ -5,7 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { HashRouter, Route, Switch } from "react-router-dom"
+import { HashRouter, Redirect, Route, Switch } from "react-router-dom"
+import { ConnectionStatus } from "mysterium-vpn-js"
+import { observer } from "mobx-react-lite"
 
 import { LoadingView } from "../views/common/loading/loading-view"
 import { AcceptTermsView } from "../views/common/accept-terms/accept-terms-view"
@@ -15,36 +17,50 @@ import { SelectProposalView } from "../views/consumer/select-proposal/select-pro
 import { ConnectedView } from "../views/consumer/connected/connected-view"
 import { WalletView } from "../views/consumer/wallet/wallet-view"
 import { NavBar } from "../navbar"
+import { useStores } from "../store"
 
-export const Routes: React.FC = () => {
+import { locations } from "./locations"
+
+export const Routes: React.FC = observer(() => {
+    const { connection } = useStores()
     return (
         <HashRouter>
             <Switch>
-                <Route path="/welcome">
+                <Route path={locations.welcome}>
                     <WelcomeView />
                 </Route>
-                <Route path="/terms">
+                <Route path={locations.terms}>
                     <AcceptTermsView />
                 </Route>
-                <Route path="/identity">
+                <Route path={locations.identity}>
                     <SelectIdentityView />
                 </Route>
-                <Route path="/proposals">
+                <Route path={locations.proposals}>
                     <NavBar />
                     <SelectProposalView />
                 </Route>
-                <Route path="/connection">
+                <Route path={locations.consumer} exact>
+                    <Redirect
+                        to={
+                            connection.status === ConnectionStatus.NOT_CONNECTED
+                                ? locations.proposals
+                                : locations.connection
+                        }
+                        push
+                    />
+                </Route>
+                <Route path={locations.connection}>
                     <NavBar />
                     <ConnectedView />
                 </Route>
-                <Route path="/wallet">
+                <Route path={locations.wallet}>
                     <NavBar />
                     <WalletView />
                 </Route>
-                <Route path="/loading">
+                <Route path={locations.loading}>
                     <LoadingView />
                 </Route>
             </Switch>
         </HashRouter>
     )
-}
+})
