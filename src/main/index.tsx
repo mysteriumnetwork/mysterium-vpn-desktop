@@ -10,6 +10,7 @@ import { format as formatUrl } from "url"
 import { app, BrowserWindow } from "electron"
 
 import { winSize } from "../config"
+import { supervisor } from "../supervisor/supervisor"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -96,4 +97,7 @@ app.on("activate", async () => {
     }
 })
 
-// createSystemTray()
+app.on("will-quit", async () => {
+    await supervisor.connect()
+    await supervisor.killMyst()
+})
