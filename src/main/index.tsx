@@ -38,6 +38,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
         title: "Mysterium VPN",
         width: winSize.width,
         height: winSize.height,
+        useContentSize: true,
         resizable: false,
         maximizable: false,
         webPreferences: { nodeIntegration: true },
