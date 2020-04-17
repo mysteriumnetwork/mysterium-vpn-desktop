@@ -19,7 +19,6 @@ const Container = styled.div`
     height: 100%;
     background: url(${identityBg});
     background-repeat: no-repeat;
-    background-position: top -22px left 0px;
     display: flex;
     flex-direction: column;
 `
