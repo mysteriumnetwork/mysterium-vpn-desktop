@@ -16,4 +16,4 @@ export const fixAssetPath = (assetPath: string): string => path.join(__dirname, 
  * Calculates absolute static asset path.
  * @param assetPath
  */
-export const staticAssetPath = (assetPath: string): string => path.join(__dirname, "static", assetPath)
+export const staticAssetPath = (assetPath: string): string => path.join(__static, assetPath)
