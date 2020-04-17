@@ -14,6 +14,10 @@ import { supervisor } from "../supervisor/supervisor"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+global.supervisor = supervisor
+
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
 

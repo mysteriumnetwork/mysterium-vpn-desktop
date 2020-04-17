@@ -6,10 +6,12 @@
  */
 import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
+import { remote } from "electron"
 
-import { supervisor } from "../supervisor/supervisor"
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
+
+const supervisor = remote.getGlobal("supervisor")
 
 export enum DaemonStatusType {
     Up = "UP",

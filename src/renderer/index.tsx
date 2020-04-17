@@ -13,8 +13,6 @@ import { createGlobalStyle } from "styled-components"
 
 import "mobx-react-lite/batchingForReactDom"
 import { Routes } from "../navigation/routes"
-import { onProcessExit } from "../utils/on-process-exit"
-import { supervisor } from "../supervisor/supervisor"
 
 const robotoLightPath = path.join(__static, "/fonts/Roboto-Light.ttf")
 const robotoLightBuffer = fs.readFileSync(robotoLightPath)
@@ -65,5 +63,3 @@ const App: React.FC = () => {
 
 // Render components
 ReactDOM.render(<App />, document.getElementById("app"))
-
-onProcessExit(async () => await supervisor.killMyst())
