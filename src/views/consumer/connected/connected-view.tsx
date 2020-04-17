@@ -19,12 +19,18 @@ import { ConnectionProposal } from "./connection-proposal"
 import { ConnectionStatistics } from "./connection-statistics"
 
 const Container = styled.div`
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     background: url(${mosaicBg});
     background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     color: #fff;
+`
+
+const Main = styled.div`
+    flex: 1;
+    overflow: hidden;
 `
 
 const Status = styled.h1`
@@ -55,11 +61,12 @@ const Flag = styled.img`
 const ConnectionIP = styled.div`
     text-align: center;
     width: 130px;
-    margin: -15px 50px 10px auto;
+    margin: -15px 50px 0px auto;
 `
 
 const ActionButtons = styled.div`
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
 `
 
 const BottomBar = styled.div`
@@ -99,16 +106,18 @@ export const ConnectedView: React.FC = observer(() => {
 
     return (
         <Container>
-            <Status>{statusText}</Status>
-            <LocationVisual>
-                <Flag src={countryFrom.flag} />
-                <Flag src={countryTo.flag} />
-            </LocationVisual>
-            <ConnectionIP>{location?.ip}</ConnectionIP>
-            <ConnectionProposal />
-            <ActionButtons>
-                <ConnectDisconnectButton />
-            </ActionButtons>
+            <Main>
+                <Status>{statusText}</Status>
+                <LocationVisual>
+                    <Flag src={countryFrom.flag} />
+                    <Flag src={countryTo.flag} />
+                </LocationVisual>
+                <ConnectionIP>{location?.ip}</ConnectionIP>
+                <ConnectionProposal />
+                <ActionButtons>
+                    <ConnectDisconnectButton />
+                </ActionButtons>
+            </Main>
             <BottomBar>
                 <ConnectionStatistics />
             </BottomBar>

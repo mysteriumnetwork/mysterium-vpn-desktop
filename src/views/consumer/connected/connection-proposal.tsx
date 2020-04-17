@@ -13,7 +13,7 @@ import { perGiB, perMinute } from "../../../payment/rate"
 
 const Container = styled.div`
     color: #c0b3c9;
-    margin: 16px auto 32px;
+    margin: 32px auto 48px 100px;
 `
 
 const Row = styled.div`
