@@ -19,7 +19,7 @@ import { LightButton } from "../../../ui-kit/mbutton/light-button"
 
 export const mystDisplay = (m?: number): string => {
     if (!m) {
-        return "0"
+        return Number(0).toFixed(3)
     }
     return (m / 100000000).toFixed(3)
 }

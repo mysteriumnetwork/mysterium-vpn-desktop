@@ -30,7 +30,7 @@ export const ConnectionStatistics: React.FC<ViewProps<WidgetEventListeners>> = o
     const clock = duration ? toClock(duration) : ""
     const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : ""
     const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : ""
-    const paid = tokensSpent ? mystDisplay(tokensSpent) + " MYSTT" : ""
+    const paid = mystDisplay(tokensSpent) + " MYSTT"
     return (
         <View {...props}>
             <Metric name="Duration" value={clock} />
