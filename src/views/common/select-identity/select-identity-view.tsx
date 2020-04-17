@@ -32,7 +32,7 @@ const Title = styled.h1`
 `
 
 const InstructionsDiv = styled.div`
-    padding: 0 32px 0 40px;
+    padding: 0 32px;
     display: flex;
     justify-content: space-between;
 `
