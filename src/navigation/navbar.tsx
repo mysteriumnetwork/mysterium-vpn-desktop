@@ -9,10 +9,11 @@ import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import { useLocation } from "react-router-dom"
 
-import { WalletButton } from "./payment/comp/wallet-button"
-import { useStores } from "./store"
-import { NavToggle } from "./ui-kit/toggle/nav-toggle"
-import { locations } from "./navigation/locations"
+import { WalletButton } from "../payment/comp/wallet-button"
+import { useStores } from "../store"
+import { NavToggle } from "../ui-kit/toggle/nav-toggle"
+
+import { locations } from "./locations"
 
 const Container = styled.div`
     box-sizing: border-box;

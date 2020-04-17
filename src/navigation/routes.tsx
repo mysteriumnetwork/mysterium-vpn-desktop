@@ -16,9 +16,9 @@ import { SelectIdentityView } from "../views/common/select-identity/select-ident
 import { SelectProposalView } from "../views/consumer/select-proposal/select-proposal-view"
 import { ConnectedView } from "../views/consumer/connected/connected-view"
 import { WalletView } from "../views/consumer/wallet/wallet-view"
-import { NavBar } from "../navbar"
 import { useStores } from "../store"
 
+import { NavBar } from "./navbar"
 import { locations } from "./locations"
 
 export const Routes: React.FC = observer(() => {
