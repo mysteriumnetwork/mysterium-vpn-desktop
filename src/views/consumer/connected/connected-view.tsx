@@ -52,12 +52,10 @@ const Flag = styled.img`
     padding: 16px;
 `
 
-const ConnectionIP = styled.span`
-    text-align: right;
-    position: relative;
-    right: 80px;
-    top: -10px;
-    margin: 0;
+const ConnectionIP = styled.div`
+    text-align: center;
+    width: 130px;
+    margin: -15px 50px 10px auto;
 `
 
 const ActionButtons = styled.div`
