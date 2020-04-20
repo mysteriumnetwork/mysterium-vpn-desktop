@@ -7,10 +7,12 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, Tray } from "electron"
 
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
+
+import { createTray } from "./tray"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -20,6 +22,9 @@ global.supervisor = supervisor
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+let tray: Tray | null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installExtensions = async (): Promise<void | any[]> => {
@@ -84,6 +89,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
 // create main BrowserWindow when electron is ready
 app.on("ready", async () => {
     win = await createWindow()
+    tray = createTray(app, win)
 })
 
 // quit application when all windows are closed
@@ -105,3 +111,7 @@ app.on("will-quit", async () => {
     await supervisor.connect()
     await supervisor.killMyst()
 })
+
+export const ipcWebDisconnect = (): void => {
+    win?.webContents.send("disconnect")
+}

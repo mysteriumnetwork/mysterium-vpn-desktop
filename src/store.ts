@@ -6,6 +6,7 @@
  */
 import React from "react"
 import { configure } from "mobx"
+import { ipcRenderer } from "electron"
 
 import { NavigationStore } from "./navigation/store"
 import { DaemonStore } from "./daemon/store"
@@ -48,6 +49,9 @@ export class RootStore {
 export const rootStore = new RootStore()
 export const storesContext = React.createContext(rootStore)
 
+ipcRenderer.on("disconnect", async () => {
+    await rootStore.connection.disconnect()
+})
 // enableLogging()
 
 configure({ enforceActions: "always" })
