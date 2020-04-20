@@ -4,11 +4,5 @@
     "jsx": "react",
     "experimentalDecorators": true,
     "resolveJsonModule": true
-  },
-  "include": [
-    "./src/renderer",
-    "./src/main",
-    "./assets.d.ts",
-    "./src/declarations.d.ts"
-  ]
+  }
 }

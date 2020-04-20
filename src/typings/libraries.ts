@@ -16,4 +16,5 @@ declare module "@mysteriumnetwork/terms" {
     const TermsEndUser: string
 }
 
+// static assets /static
 declare const __static: string
