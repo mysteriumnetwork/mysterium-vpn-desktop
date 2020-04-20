@@ -10,11 +10,11 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
-import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { resolveCountry } from "../../../location/countries"
 import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
 
+import logoWhiteConnected from "./logo-white-connected.png"
 import { ConnectionProposal } from "./connection-proposal"
 import { ConnectionStatistics } from "./connection-statistics"
 
