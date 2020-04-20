@@ -22,8 +22,10 @@ global.supervisor = supervisor
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let tray: Tray | null
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -15,6 +15,7 @@ const iconPath = (): string => {
     return staticAssetPath("tray/macOS/ActiveTemplate.png")
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createTray = (app: App, win: BrowserWindow): Tray => {
     const tray = new Tray(iconPath())
     tray.setContextMenu(
