@@ -23,7 +23,7 @@
     "mkdirp": "^1.0.4",
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
-    "mobx-react-lite": "^2.0.5",
+    "mobx-react-lite": "^2.0.6",
     "mysterium-vpn-js": "^2.2.1",
     "open": "^7.0.0",
     "react": "^16.13.1",
