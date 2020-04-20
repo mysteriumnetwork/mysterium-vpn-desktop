@@ -10,12 +10,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
     "lint": "eslint --ext .ts,.tsx src",
-    "start": "qode --inspect ./dist/index.js",
-    "clean": "rm -rf dist ./deploy/darwin/build",
-    "build": "webpack -p",
-    "bundle": "bash ./deploy/pack-macos.sh"
+    "clean": "rm -rf dist",
+    "build": "electron-webpack",
+    "bundle": "electron-builder"
   },
   "dependencies": {
     "@mysteriumnetwork/terms": "^0.0.24",
@@ -30,13 +28,13 @@
     "mysterium-vpn-js": "^2.2.1",
     "node-fetch": "^2.6.0",
     "open": "^7.0.0",
-    "qrcode-generator": "^1.4.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
     "react-markdown": "^4.3.1",
     "react-qr-svg": "^2.2.2",
     "react-router-dom": "^5.1.2",
+    "source-map-support": "^0.5.16",
     "styled-components": "^4.4.1",
     "sudo-prompt": "^9.1.1"
   },
@@ -50,7 +48,6 @@
     "@types/react": "^16.9.33",
     "@types/react-dom": "^16.9.6",
     "@types/react-router-dom": "^5.1.4",
-    "@types/showdown": "^1.9.3",
     "@types/styled-components": "^5.1.0",
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
@@ -58,6 +55,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "electron": "^8.2.2",
+    "electron-builder": "^22.5.1",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
     "eslint": "^6.8.0",
@@ -78,6 +76,12 @@
   "electronWebpack": {
     "renderer": {
       "webpackConfig": "webpack.renderer.additions.js"
+    }
+  },
+  "build": {
+    "appId": "network.mysterium.mysterium-vpn-desktop",
+    "mac": {
+      "icon": "static/logo.icns"
     }
   }
 }
