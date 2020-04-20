@@ -37,7 +37,6 @@
     "sudo-prompt": "^9.1.1"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.9.4",
     "@types/css-font-loading-module": "^0.0.4",
     "@types/lodash": "^4.14.149",
     "@types/node": "12.12.35",
