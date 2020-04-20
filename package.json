@@ -13,7 +13,7 @@
     "lint": "eslint --ext .ts,.tsx src",
     "clean": "rm -rf dist",
     "build": "electron-webpack",
-    "bundle": "electron-builder"
+    "bundle": "yarn build && electron-builder"
   },
   "dependencies": {
     "@mysteriumnetwork/terms": "^0.0.24",

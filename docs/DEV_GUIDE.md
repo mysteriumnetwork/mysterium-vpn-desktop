@@ -1,12 +1,12 @@
 # Developer's guide to Mysterium VPN desktop app
 
 This desktop app is built with:
-- Node.js
-- Typescript
-- [NodeGui](https://github.com/nodegui/nodegui) - Library for native, cross-platform UIs with JS and CSS. Electron-free.
+- [Typescript](https://www.typescriptlang.org/) - Typed superset of JavaScript that compiles to plain JavaScript
+- [Electron](https://www.electronjs.org/) - Build cross-platform desktop apps with JavaScript, HTML, and CSS
 - [node](https://github.com/mysteriumnetwork/node) - Mysterium Node, hereinafter referred to as Node
 - [node-supervisor](https://github.com/mysteriumnetwork/node-supervisor) - Supervisor: Background service for installing/running Node
 - [mysterium-vpn-js](https://github.com/mysteriumnetwork/mysterium-vpn-js) - JS SDK for communicating with Node
+- [mobx-react-lite](https://github.com/mobxjs/mobx-react-lite) - Simple, scalable state management
 
 ## Supervisor
 
