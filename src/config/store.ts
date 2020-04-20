@@ -36,6 +36,7 @@ export class ConfigStore {
             async (status) => {
                 if (status == DaemonStatusType.Up) {
                     await this.fetchConfig()
+                    this.root.navigation.determineRoute()
                 }
             },
         )
@@ -63,6 +64,7 @@ export class ConfigStore {
         }
         await tequilapi.updateUserConfig({ data })
         await this.fetchConfig()
+        this.root.navigation.determineRoute()
     }
 
     currentTermsAgreed = (): boolean => {

@@ -5,35 +5,47 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { Text, View } from "@nodegui/react-nodegui"
 import { observer } from "mobx-react-lite"
+import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { Country } from "../../ui-kit/country/country"
+import { resolveCountry } from "../countries"
+
+const Container = styled.div`
+    box-sizing: border-box;
+    height: 64px;
+    background: #fafafa;
+    box-shadow: inset 0 1px 1px #e6e6e6;
+    display: flex;
+    align-items: center;
+`
+
+const Flag = styled.img`
+    padding: 16px;
+`
+
+const ConnectionStatus = styled.p`
+    font-weight: bold;
+`
+
+const Location = styled.div`
+    p {
+        margin: 0;
+        line-height: 20px;
+    }
+`
 
 export const OriginalLocation = observer(() => {
     const { connection } = useStores()
-    const ipText = `IP: ${connection.originalLocation?.ip ?? "Unknown"}`
+    const ip = `IP: ${connection.originalLocation?.ip ?? "Unknown"}`
+    const flagSrc = resolveCountry(connection.originalLocation?.country).flag
     return (
-        <View
-            style={`
-                flex-direction: "row";
-                align-items: "center";
-                justify-content: "center";
-            `}
-        >
-            <View
-                style={`
-                    padding-left: 15;
-                    padding-right: 15;
-                `}
-            >
-                <Country code={connection.originalLocation?.country} text={false} />
-            </View>
-            <View style={`flex-direction: "column";`}>
-                <Text style={`font-weight: bold;`}>{connection.status}</Text>
-                <Text style={`qproperty-alignment: AlignCenter;`}>{ipText}</Text>
-            </View>
-        </View>
+        <Container>
+            <Flag src={flagSrc} width={24} />
+            <Location>
+                <ConnectionStatus>{connection.status}</ConnectionStatus>
+                <p>{ip}</p>
+            </Location>
+        </Container>
     )
 })

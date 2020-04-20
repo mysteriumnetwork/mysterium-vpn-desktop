@@ -14,15 +14,10 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
     ```
     yarn && yarn build
     ```
-2. Start:
+2. Start (webpack dev server with hot reload):
 
-    a. Webpack dev server (with hot reload)
     ```
     yarn dev
-    ```
-    b. App (run in separate tab)
-    ```
-    yarn start
     ```
 
 ## Using a custom Mysterium Node version
@@ -40,10 +35,7 @@ App will try to connect to the existing instance instead of launching one of its
 
 ## Packaging for distribution
 
-In package.json, change the signing key that is passed to [nodegui-packer](https://github.com/nodegui/packer). Then:
-
 ```
-yarn build
 yarn bundle
 ```
 

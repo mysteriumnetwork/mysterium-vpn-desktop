@@ -4,27 +4,83 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Text, View } from "@nodegui/react-nodegui"
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus } from "mysterium-vpn-js"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
+import styled from "styled-components"
 
-import { winSize } from "../../../config"
 import { useStores } from "../../../store"
-import { Country } from "../../../ui-kit/country/country"
-import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
-import { textHuge } from "../../../ui-kit/typography"
-import logoWhiteConnected from "../../../../assets/logo-white-connected.png"
-import { fixAssetPath } from "../../../utils/paths"
-import { NavBar } from "../../../navbar"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
-import { Space } from "../../../ui-kit/space/space"
+import { resolveCountry } from "../../../location/countries"
+import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
 
-import { ConnectionStatistics } from "./connection-statistics"
+import logoWhiteConnected from "./logo-white-connected.png"
 import { ConnectionProposal } from "./connection-proposal"
+import { ConnectionStatistics } from "./connection-statistics"
 
-export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style = "", ...rest }) => {
+const Container = styled.div`
+    flex: 1;
+    min-height: 0;
+    background: url(${mosaicBg});
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+`
+
+const Main = styled.div`
+    flex: 1;
+    overflow: hidden;
+`
+
+const Status = styled.h1`
+    margin: 0;
+    margin-top: 32px;
+    text-align: center;
+    font-weight: 300;
+    font-size: 24px;
+`
+
+const LocationVisual = styled.div`
+    box-sizing: border-box;
+    width: 464px;
+    height: 108px;
+    margin: 64px auto 0;
+
+    background: url(${logoWhiteConnected});
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`
+
+const Flag = styled.img`
+    padding: 16px;
+`
+
+const ConnectionIP = styled.div`
+    text-align: center;
+    width: 130px;
+    margin: -15px 50px 0px auto;
+`
+
+const ActionButtons = styled.div`
+    display: flex;
+    justify-content: center;
+`
+
+const BottomBar = styled.div`
+    margin-top: auto;
+    box-sizing: border-box;
+    height: 64px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+`
+
+export const ConnectedView: React.FC = observer(() => {
     const {
         connection: { location, originalLocation, status },
     } = useStores()
@@ -45,130 +101,26 @@ export const ConnectedView: React.FC<ViewProps<WidgetEventListeners>> = observer
         default:
             statusText = "Working on it..."
     }
+    const countryFrom = resolveCountry(originalLocation?.country)
+    const countryTo = resolveCountry(location?.country)
+
     return (
-        <View
-            style={`
-            flex-direction: "column";
-            ${style}
-            `}
-            {...rest}
-        >
-            <NavBar />
-            <View
-                style={`
-                width: ${winSize.width};
-                height: ${winSize.height - 40};
-                flex-direction: "column";
-                background: url("${fixAssetPath(mosaicBg)}");
-                background-position: center;
-            `}
-            >
-                <Space y={32} />
-                <View
-                    style={`
-                    width: "100%";
-                    padding-bottom: 0;
-                    `}
-                >
-                    <Text
-                        style={`
-                        width: "100%";
-                        ${textHuge}
-                        color: #fff;
-                        font-weight: 100;
-                        qproperty-alignment: 'AlignHCenter';
-                        `}
-                    >
-                        {statusText}
-                    </Text>
-                </View>
-                <Space y={60} />
-                <View
-                    style={`
-                    padding-left: 60;
-                    padding-right: 60;
-                    `}
-                >
-                    <View
-                        style={`
-                        width: "100%";
-                        height: 108;
-                        background: url("${fixAssetPath(logoWhiteConnected)}");
-                        background-position: top center;
-                        background-repeat: none;
-                        `}
-                    />
-                </View>
-                <View
-                    style={`
-                    top: -65;
-                    flex-direction: "row";
-                    `}
-                >
-                    <View
-                        style={`
-                        left: 104;
-                        `}
-                    >
-                        <Country code={originalLocation?.country} text={false} />
-                    </View>
-                    <View
-                        style={`
-                        left: 488;
-                        `}
-                    >
-                        <Country code={location?.country} text={false} />
-                    </View>
-                </View>
-                <View
-                    style={`
-                    top: -30;
-                    left: 470;
-                    width: 110;
-                    height: 20;
-                    `}
-                >
-                    <Text
-                        style={`
-                        width: "100%";
-                        color: #fff;
-                        qproperty-alignment: AlignHCenter;
-                        `}
-                    >
-                        {location?.ip}
-                    </Text>
-                </View>
-                <ConnectionProposal
-                    style={`
-                    padding-left: 80;
-                    flex-direction: "column";
-                    `}
-                />
-                <Space y={35} />
-                <View
-                    style={`
-                    flex-direction: "row";
-                    justify-content: "center";
-                    `}
-                >
-                    {status === ConnectionStatus.NOT_CONNECTED ? (
-                        <></>
-                    ) : (
-                        <ConnectDisconnectButton width={200} height={40} />
-                    )}
-                </View>
-                <Space y={40} />
-                <ConnectionStatistics
-                    style={`
-                    width: "100%";
-                    height: 64;
-                    padding: 8;
-                    background: #2a154d;
-                    flex-direction: "row";
-                    justify-content: "space-around";
-                    `}
-                />
-            </View>
-        </View>
+        <Container>
+            <Main>
+                <Status>{statusText}</Status>
+                <LocationVisual>
+                    <Flag src={countryFrom.flag} />
+                    <Flag src={countryTo.flag} />
+                </LocationVisual>
+                <ConnectionIP>{location?.ip}</ConnectionIP>
+                <ConnectionProposal />
+                <ActionButtons>
+                    <ConnectDisconnectButton />
+                </ActionButtons>
+            </Main>
+            <BottomBar>
+                <ConnectionStatistics />
+            </BottomBar>
+        </Container>
     )
 })

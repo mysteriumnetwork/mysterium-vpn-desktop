@@ -115,6 +115,7 @@ export class ConnectionStore {
 
     @action
     async disconnect(): Promise<void> {
+        this.setGracePeriod()
         try {
             await tequilapi.connectionCancel()
         } catch (err) {

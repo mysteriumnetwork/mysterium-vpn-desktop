@@ -6,10 +6,12 @@
  */
 import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
-import EventSource from "eventsource"
+import { remote } from "electron"
 
-import { supervisor } from "../supervisor/supervisor"
 import { sseConnect } from "../tequila-sse"
+import { RootStore } from "../store"
+
+const supervisor = remote.getGlobal("supervisor")
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -27,22 +29,21 @@ export class DaemonStore {
 
     eventSource?: EventSource
 
-    constructor() {
+    root: RootStore
+
+    constructor(root: RootStore) {
+        this.root = root
         setInterval(async () => {
             await this.healthcheck()
         }, 2000)
+    }
+
+    setupReactions(): void {
         when(
             () => this.status == DaemonStatusType.Down,
             async () => {
+                this.root.navigation.showLoading()
                 await this.start()
-            },
-        )
-        reaction(
-            () => this.status,
-            async (status) => {
-                if (status == DaemonStatusType.Down) {
-                    await this.start()
-                }
             },
         )
         reaction(
@@ -50,6 +51,9 @@ export class DaemonStore {
             async (status) => {
                 if (status == DaemonStatusType.Up) {
                     this.eventSource = sseConnect()
+                } else {
+                    this.root.navigation.showLoading()
+                    await this.start()
                 }
             },
         )

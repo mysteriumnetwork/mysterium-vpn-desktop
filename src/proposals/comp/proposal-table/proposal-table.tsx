@@ -5,87 +5,71 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { ScrollArea, View } from "@nodegui/react-nodegui"
+import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 
 import { useStores } from "../../../store"
-import { winSize } from "../../../config"
-import { brand } from "../../../ui-kit/colors"
+import { Toggle } from "../../../ui-kit/toggle/toggle"
+import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
 
-import { Proposal } from "./proposal"
-import { ProposalTableHeader } from "./header"
+const Table = styled.div`
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+`
 
-const ConnectedProposalTable: React.FC = observer(() => {
+const Header = styled.div`
+    flex: 0;
+    min-height: 32px;
+    padding: 0 16px;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.2);
+`
+
+const ScrollArea = styled.div`
+    overflow-y: auto;
+`
+
+const Cell = styled.span`
+    display: inline-block;
+    width: 110px;
+
+    &:nth-child(n + 2) {
+        width: 80px;
+    }
+`
+export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
     return (
-        <>
-            {items.map((p) => {
-                return <Proposal key={p.key} proposal={p} />
-            })}
-        </>
+        <Table>
+            <Header>
+                <Cell>ID</Cell>
+                <Cell>Price/min</Cell>
+                <Cell>Price/GiB</Cell>
+                <Cell>Service type</Cell>
+            </Header>
+            <ScrollArea>
+                {items.map((p) => {
+                    const onToggle = (): void => proposals.toggleActiveProposal(p)
+                    return (
+                        <Toggle key={p.key} active={proposals.active?.key == p.key} onClick={onToggle}>
+                            <Cell>{p.id10}</Cell>
+                            <Cell>
+                                <PerMinuteRate paymentMethod={p.paymentMethod} units={false} />
+                            </Cell>
+                            <Cell>
+                                <PerGiBRate paymentMethod={p.paymentMethod} units={false} />
+                            </Cell>
+                            <Cell>{p.serviceType4}</Cell>
+                        </Toggle>
+                    )
+                })}
+            </ScrollArea>
+        </Table>
     )
 })
-
-const styleSheet = `
-#ProposalTable {
-    flex: 1;
-    width: "100%";
-    flex-direction: column;
-}
-#ProposalTable-ScrollArea {
-    flex: 1;
-    border: 0;
-    background: #fff;
-}
-#ProposalTableBody {
-    flex: 1;
-    max-width: ${winSize.width - 240 - 15};
-    flex-direction: column;
-    background: "white";
-}
-#ProposalTable-Proposal-row-outer {
-    padding: 2;
-}
-#ProposalTable-Proposal-header-row {
-    width: "100%"; 
-    padding: 10;
-    padding-right: 30;
-    border-bottom: 1px solid #dcdcdc;
-}
-#ProposalTable-Proposal-row {
-    width: "100%";
-    padding: 10;
-}
-#ProposalTable-Proposal-cell {
-    width: 100;
-    color: "inherit";
-}
-#ProposalTable-Proposal-cell-active {
-    width: 100;
-    color: "white";
-}
-#ProposalTable-Proposal-Toggle-active {
-    background: "${brand}";
-    border-radius: 3px;
-}
-#ProposalTable-Proposal-Toggle-inactive {
-    border-radius: 3px;
-}
-#ProposalTable-Proposal-Toggle-inactive:hover {
-    background: #e6e6e6;
-}
-`
-
-export const ProposalTable: React.FC = () => {
-    return (
-        <View id="ProposalTable" styleSheet={styleSheet}>
-            <ProposalTableHeader />
-            <ScrollArea id="ProposalTable-ScrollArea">
-                <View id="ProposalTableBody">
-                    <ConnectedProposalTable />
-                </View>
-            </ScrollArea>
-        </View>
-    )
-}

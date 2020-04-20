@@ -43,6 +43,7 @@ export class IdentityStore {
                     }
                 }
             },
+            { name: "Get/create an identity from the list" },
         )
         reaction(
             () => this.identity,
@@ -53,6 +54,15 @@ export class IdentityStore {
                 await this.unlock()
                 if (eligibleForRegistration(identity)) {
                     await this.register(identity)
+                }
+            },
+            { name: "Unlock/register current identity" },
+        )
+        reaction(
+            () => this.identity?.balance,
+            async () => {
+                if (this.identity && !this.identity.balance) {
+                    await this.unlock()
                 }
             },
         )
@@ -70,6 +80,9 @@ export class IdentityStore {
         }
         this.identity.balance = matchingId.balance
         this.identity.registrationStatus = matchingId.registrationStatus
+        if (registered(matchingId)) {
+            this.root.navigation.determineRoute()
+        }
     }
 
     @action

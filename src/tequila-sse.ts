@@ -6,7 +6,6 @@
  */
 import { EventEmitter } from "events"
 
-import EventSource from "eventsource"
 import { parseSSEResponse, TEQUILAPI_SSE_URL } from "mysterium-vpn-js"
 
 import { isDevelopment } from "./utils/mode"

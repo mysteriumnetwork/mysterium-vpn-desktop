@@ -4,130 +4,105 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { CheckBox, ScrollArea, Text, View } from "@nodegui/react-nodegui"
 import React, { useState } from "react"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
 import { observer } from "mobx-react-lite"
-import showdown from "showdown"
+import ReactMarkdown from "react-markdown"
 import { TermsEndUser } from "@mysteriumnetwork/terms"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
-import { CheckState } from "@nodegui/nodegui"
+import styled from "styled-components"
 
-import { fixAssetPath } from "../../../utils/paths"
-import { textHuge } from "../../../ui-kit/typography"
-import { brand } from "../../../ui-kit/colors"
-import { winSize } from "../../../config"
 import { useStores } from "../../../store"
-import { Space } from "../../../ui-kit/space/space"
 import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
 
 import termsBg from "./terms-bg.png"
 
-const md = new showdown.Converter()
+const Container = styled.div`
+    height: 100%;
+    background-image: url(${termsBg});
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+`
 
-export const AcceptTermsView: React.FC<ViewProps<WidgetEventListeners>> = observer(({ style, ...rest }) => {
+const Title = styled.h1`
+    margin-top: 0;
+    padding-top: 32px;
+    text-align: center;
+    font-weight: 300;
+    font-size: 24px;
+    color: #632462;
+`
+
+const Version = styled.p`
+    text-align: center;
+    font-size: 12px;
+    color: #999999;
+`
+
+const Terms = styled.div`
+    width: 300px;
+    height: 288px;
+    margin: 0 auto;
+    padding: 15px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    font-size: 13px;
+    border: 1px solid #e9e9e9;
+    background-color: #fafafa;
+
+    > ul {
+        padding-inline-start: 20px;
+    }
+`
+
+const BottomBar = styled.div`
+    height: 72px;
+    margin-top: auto;
+    margin-right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+
+const Checkbox = styled.label`
+    font-size: 14px;
+    color: #333;
+    margin-left: 208px;
+    user-select: none;
+
+    > input {
+        margin-right: 8px;
+        border-radius: 2px;
+    }
+`
+
+export const AcceptTermsView: React.FC = observer(({}) => {
     const { config } = useStores()
     const [agree, setAgree] = useState(false)
-    const termsHtml = md.makeHtml(TermsEndUser)
-    const version = `<i>Version: ${termsPackageJson.version}<br>Last updated: ${termsPackageJson.updatedAt ?? ""}</i>`
-    const termsHeight = 5520 // ACHTUNG! Adjust as needed to fit all of the text.
     return (
-        <View
-            style={`
-            background: "red";
-            background: url("${fixAssetPath(termsBg)}") #2e265e;
-            background-repeat: none;
-            flex-direction: "column";
-            align-items: "center";
-            ${style}
-            `}
-            {...rest}
-        >
-            <Text
-                style={`
-                    height: 60;
-                    qproperty-alignment: AlignBottom;
-                    ${textHuge}
-                    color: ${brand};
-                    `}
-            >
-                Terms and conditions
-            </Text>
-            <View
-                style={`
-                width: "100%";
-                padding-left: 180;
-                height: ${winSize.height - 60 - 72};
-                padding: 24;
-                `}
-            >
-                <ScrollArea
-                    style={`
-                        flex: 1;
-                        background-color: #ecf0f1;
-                        border: 1px solid #e9e9e9;
-                    `}
-                >
-                    <View
-                        style={`
-                            width: 100;
-                            background: #fafafa;
-                            flex-direction: "column";
-                        `}
-                    >
-                        <Text
-                            style={`
-                            color: #333;
-                            padding-top: 15;
-                            padding-left: 15;
-                            `}
-                        >
-                            {version}
-                        </Text>
-                        <Text
-                            style={`
-                            padding: 15;
-                            height: ${termsHeight};
-                            qproperty-alignment: AlignTop;
-                            `}
-                            wordWrap
-                        >
-                            {termsHtml}
-                        </Text>
-                    </View>
-                </ScrollArea>
-            </View>
-            <View
-                style={`
-                width: "100%";
-                height: 72;
-                flex-direction: "row";
-                justify-content: "space-between";
-                `}
-            >
-                <Space x={150} />
-                <CheckBox
-                    on={{
-                        ["stateChanged"]: (state: CheckState): void => {
-                            setAgree(state == CheckState.Checked)
-                        },
+        <Container>
+            <Title>Terms and Conditions</Title>
+            <Version>
+                Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
+            </Version>
+            <Terms>
+                <ReactMarkdown source={TermsEndUser} />
+            </Terms>
+            <BottomBar>
+                <Checkbox>
+                    <input type="checkbox" checked={agree} onChange={(): void => setAgree(!agree)} />I agree to all
+                    Terms of Service
+                </Checkbox>
+                <BrandButton
+                    disabled={!agree}
+                    onClick={(): void => {
+                        config.agreeToTerms()
                     }}
-                    text="I agree to all Terms of Service"
-                />
-                <View
-                    style={`
-                    padding-right: 24;
-                    `}
                 >
-                    <BrandButton
-                        enabled={agree}
-                        text="Continue"
-                        onClick={(): void => {
-                            config.agreeToTerms()
-                        }}
-                    />
-                </View>
-            </View>
-        </View>
+                    Continue
+                </BrandButton>
+            </BottomBar>
+        </Container>
     )
 })

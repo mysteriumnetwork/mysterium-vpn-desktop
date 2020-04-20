@@ -5,26 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { useEventHandler, View } from "@nodegui/react-nodegui"
-import { WidgetEventTypes } from "@nodegui/nodegui"
-import { ViewProps, WidgetEventListeners } from "@nodegui/react-nodegui/dist/components/View/RNView"
+import styled from "styled-components"
 
-export interface ToggleProps extends ViewProps<WidgetEventListeners> {
-    children: React.ReactNode
-    onToggle?: () => void
-}
+import { NavToggle, ToggleProps } from "./nav-toggle"
 
-export const Toggle: React.FC<ToggleProps> = ({
-    children,
-    onToggle = (): void => {
-        // noop
-    },
-    ...rest
-}) => {
-    const clickHandler = useEventHandler({ [WidgetEventTypes.MouseButtonPress]: () => onToggle() }, [])
-    return (
-        <View {...rest} on={clickHandler}>
-            {children}
-        </View>
-    )
-}
+export const Toggle = styled(NavToggle)`
+    height: 28px;
+    width: calc(100% - 4px);
+    margin: 2px;
+    border-radius: 4px;
+    justify-content: flex-start;
+    background: ${(props: ToggleProps): string =>
+        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "transparent"};
+    &:hover {
+        background: ${(props: ToggleProps): string =>
+            props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#e6e6e6"};
+    }
+` as React.FC<ToggleProps>

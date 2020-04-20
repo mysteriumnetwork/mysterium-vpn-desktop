@@ -4,48 +4,19 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
-import { Button, useEventHandler } from "@nodegui/react-nodegui"
+import styled from "styled-components"
 
-import { textRegular } from "../typography"
-
-import { CommonButtonProps } from "./props"
-
-export const LightButton: React.FC<CommonButtonProps> = ({
-    onClick,
-    enabled = true,
-    text = "",
-    style = "",
-    ...rest
-}) => {
-    const clickHandler = useEventHandler({ ["clicked"]: () => onClick() }, [])
-    const stateStyle = ((): string => {
-        if (!enabled) {
+export const LightButton = styled.button`
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    border-color: transparent;
+    ${(props): string => {
+        if (props.disabled) {
             return "background: #ccc; color: #fff;"
         }
         return "background: #fefefe; color: #333;"
-    })()
-    return (
-        <Button
-            style={`
-                border-radius: 4;
-                ${stateStyle}
-
-                padding: 10;
-                padding-left: 16;
-                padding-right: 16;
-                justify-content: "center";
-                align-items: "center";
-
-                font-weight: bold;
-                ${textRegular}
-
-                ${style}
-            `}
-            on={clickHandler}
-            enabled={enabled}
-            text={text}
-            {...rest}
-        />
-    )
-}
+    }}
+`
