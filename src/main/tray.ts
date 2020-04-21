@@ -7,6 +7,7 @@
 import { App, BrowserWindow, Menu, Tray } from "electron"
 import { ConnectionStatus } from "mysterium-vpn-js"
 
+import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { supervisor } from "../supervisor/supervisor"
 
@@ -47,7 +48,8 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
                 type: "separator",
             },
             {
-                label: "Quit Mysterium VPN",
+                role: "quit",
+                label: `Quit ${packageJson.productName}`,
                 accelerator: "CommandOrControl+Q",
                 click: (): void => {
                     app.quit()

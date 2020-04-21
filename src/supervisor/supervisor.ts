@@ -10,6 +10,7 @@ import * as os from "os"
 
 import * as sudo from "sudo-prompt"
 
+import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 
 const mystSock = "/var/run/myst.sock"
@@ -45,7 +46,7 @@ export class Supervisor {
                 sudo.exec(
                     `${supervisorPath} -install -mystHome ${mystHome} -mystPath ${mystPath} -openvpnPath ${openvpnPath}`,
                     {
-                        name: "MysteriumVPN",
+                        name: packageJson.productName,
                         icns: staticAssetPath("logo.icns"),
                     },
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any

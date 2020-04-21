@@ -7,13 +7,15 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import { app, BrowserWindow, ipcMain, Tray } from "electron"
+import { app, BrowserWindow, ipcMain, Tray, Menu } from "electron"
 
+import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
+import { createMenu } from "./menu"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -48,7 +50,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
     }
 
     const window = new BrowserWindow({
-        title: "Mysterium VPN",
+        title: packageJson.productName,
         width: winSize.width,
         height: winSize.height,
         useContentSize: true,
@@ -56,6 +58,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
         maximizable: false,
         webPreferences: { nodeIntegration: true },
     })
+    Menu.setApplicationMenu(createMenu())
 
     if (isDevelopment) {
         window.webContents.once("dom-ready", () => {
