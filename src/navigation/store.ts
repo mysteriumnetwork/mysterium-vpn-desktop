@@ -31,6 +31,7 @@ export class NavigationStore {
 
     setupReactions(): void {
         reaction(() => this.root.connection.status, this.determineRoute)
+        reaction(() => this.root.identity.identity?.registrationStatus, this.determineRoute)
     }
 
     @action
