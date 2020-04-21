@@ -58,7 +58,9 @@ const createWindow = async (): Promise<BrowserWindow> => {
         maximizable: false,
         webPreferences: { nodeIntegration: true },
     })
-    Menu.setApplicationMenu(createMenu())
+    if (!isDevelopment) {
+        Menu.setApplicationMenu(createMenu())
+    }
 
     if (isDevelopment) {
         window.webContents.once("dom-ready", () => {
