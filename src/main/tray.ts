@@ -31,14 +31,18 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
     const tray = new Tray(trayIconPath(ConnectionStatus.NOT_CONNECTED))
     tray.setContextMenu(
         Menu.buildFromTemplate([
-            /*{
+            {
                 label: "Show window",
                 click: (): void => {
-                    win.show()
+                    win.setAlwaysOnTop(true)
+                    win.setAlwaysOnTop(false)
                 },
-            },*/
+            },
             {
-                label: "Reinstall",
+                type: "separator",
+            },
+            {
+                label: "Repair supervisor",
                 click: async (): Promise<void> => {
                     ipcWebDisconnect()
                     await supervisor.install()
