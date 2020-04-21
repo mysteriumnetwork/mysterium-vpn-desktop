@@ -5,19 +5,29 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { App, BrowserWindow, Menu, Tray } from "electron"
+import { ConnectionStatus } from "mysterium-vpn-js"
 
 import { staticAssetPath } from "../utils/paths"
 import { supervisor } from "../supervisor/supervisor"
 
 import { ipcWebDisconnect } from "./index"
 
-const iconPath = (): string => {
-    return staticAssetPath("tray/macOS/ActiveTemplate.png")
+const trayIconPath = (connectionStatus: ConnectionStatus): string => {
+    const connected = connectionStatus === ConnectionStatus.CONNECTED
+    switch (process.platform) {
+        case "darwin":
+            return staticAssetPath(`tray/macOS/${connected ? "ActiveTemplate" : "PassiveTemplate"}.png`)
+    }
+    return staticAssetPath("tray/macOS/PassiveTemplate.png")
+}
+
+export const refreshTrayIcon = (tray: Tray, status: ConnectionStatus): void => {
+    tray.setImage(trayIconPath(status))
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createTray = (app: App, win: BrowserWindow): Tray => {
-    const tray = new Tray(iconPath())
+    const tray = new Tray(trayIconPath(ConnectionStatus.NOT_CONNECTED))
     tray.setContextMenu(
         Menu.buildFromTemplate([
             /*{

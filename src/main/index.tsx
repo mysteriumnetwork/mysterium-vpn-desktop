@@ -7,12 +7,13 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import { app, BrowserWindow, Tray } from "electron"
+import { app, BrowserWindow, ipcMain, Tray } from "electron"
 
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
 
-import { createTray } from "./tray"
+import { createTray, refreshTrayIcon } from "./tray"
+import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -37,8 +38,8 @@ const installExtensions = async (): Promise<void | any[]> => {
 
     // eslint-disable-next-line prettier/prettier
     return Promise.all(
-        extensions.map(name => installer.default(installer[name], forceDownload))
-    ).catch(console.log); // eslint-disable-line no-console
+        extensions.map(name => installer.default(installer[name], forceDownload)),
+    ).catch(console.log) // eslint-disable-line no-console
 }
 
 const createWindow = async (): Promise<BrowserWindow> => {
@@ -114,6 +115,13 @@ app.on("will-quit", async () => {
     await supervisor.killMyst()
 })
 
+ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
+    if (!tray || !status) {
+        return
+    }
+    refreshTrayIcon(tray, status)
+})
+
 export const ipcWebDisconnect = (): void => {
-    win?.webContents.send("disconnect")
+    win?.webContents.send(WebIpcListenChannels.Disconnect)
 }

@@ -15,6 +15,7 @@ import { IdentityStore } from "./identity/store"
 import { ProposalStore } from "./proposals/store"
 import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
+import { WebIpcListenChannels } from "./main/ipc"
 
 // import { enableLogging } from "mobx-logger"
 
@@ -49,7 +50,7 @@ export class RootStore {
 export const rootStore = new RootStore()
 export const storesContext = React.createContext(rootStore)
 
-ipcRenderer.on("disconnect", async () => {
+ipcRenderer.on(WebIpcListenChannels.Disconnect, async () => {
     await rootStore.connection.disconnect()
 })
 // enableLogging()

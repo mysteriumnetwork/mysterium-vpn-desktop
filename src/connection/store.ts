@@ -12,11 +12,13 @@ import tequilapi, {
     AppState,
     SSEEventType,
 } from "mysterium-vpn-js"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
+import { MainIpcListenChannels } from "../main/ipc"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
@@ -70,6 +72,13 @@ export class ConnectionStore {
                     await this.resolveLocation()
                 }
             },
+        )
+        reaction(
+            () => this.root.connection.status,
+            (status) => {
+                ipcRenderer.send(MainIpcListenChannels.ConnectionStatus, status)
+            },
+            { name: "Notify tray with new connection status" },
         )
     }
 
