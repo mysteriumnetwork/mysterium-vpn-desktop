@@ -16,15 +16,17 @@ import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 
 import { Cell } from "./Cell"
 
-interface ProposalProps {
+interface ProposalPureProps {
     proposal: UIProposal
+    active: boolean
 }
 
-export const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
+const ProposalPure: React.FC<ProposalPureProps> = observer(({ proposal, active }) => {
+    console.log("render ProposalPure")
     const { proposals } = useStores()
     const onToggle = (): void => proposals.toggleActiveProposal(proposal)
     return (
-        <Toggle key={proposal.key} active={proposals.active?.key == proposal.key} onClick={onToggle}>
+        <Toggle key={proposal.key} active={active} onClick={onToggle}>
             <Cell>{proposal.id10}</Cell>
             <Cell>
                 <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />/
@@ -36,4 +38,13 @@ export const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
             <Cell>{proposal.serviceType4}</Cell>
         </Toggle>
     )
+})
+
+interface ProposalProps {
+    proposal: UIProposal
+}
+
+export const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
+    const { proposals } = useStores()
+    return <ProposalPure proposal={proposal} active={proposals.active?.key == proposal.key} />
 })
