@@ -19,14 +19,22 @@ import { Cell } from "./Cell"
 interface ProposalPureProps {
     proposal: UIProposal
     active: boolean
+    onToggle: () => void
 }
 
-const ProposalPure: React.FC<ProposalPureProps> = observer(({ proposal, active }) => {
-    console.log("render ProposalPure")
-    const { proposals } = useStores()
-    const onToggle = (): void => proposals.toggleActiveProposal(proposal)
+const proposalPropsAreEqual = (prevProps: ProposalPureProps, nextProps: ProposalPureProps): boolean => {
     return (
-        <Toggle key={proposal.key} active={active} onClick={onToggle}>
+        prevProps.proposal.key === nextProps.proposal.key &&
+        prevProps.proposal.qualityLevel === nextProps.proposal.qualityLevel &&
+        prevProps.active === nextProps.active
+    )
+}
+
+// eslint-disable-next-line react/display-name
+const ProposalPure: React.FC<ProposalPureProps> = React.memo(({ proposal, active, onToggle }) => {
+    console.log("render ProposalPure")
+    return (
+        <Toggle active={active} onClick={onToggle}>
             <Cell>{proposal.id10}</Cell>
             <Cell>
                 <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />/
@@ -38,7 +46,7 @@ const ProposalPure: React.FC<ProposalPureProps> = observer(({ proposal, active }
             <Cell>{proposal.serviceType4}</Cell>
         </Toggle>
     )
-})
+}, proposalPropsAreEqual)
 
 interface ProposalProps {
     proposal: UIProposal
@@ -46,5 +54,6 @@ interface ProposalProps {
 
 export const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
     const { proposals } = useStores()
-    return <ProposalPure proposal={proposal} active={proposals.active?.key == proposal.key} />
+    const onToggle = (): void => proposals.toggleActiveProposal(proposal)
+    return <ProposalPure proposal={proposal} active={proposals.active?.key == proposal.key} onToggle={onToggle} />
 })
