@@ -7,12 +7,13 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
+import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/toggle/toggle"
 import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
 import { Quality } from "../quality/quality"
-import { QualityLevel } from "mysterium-vpn-js"
+import { UIProposal } from "../../ui-proposal-type"
 
 const Table = styled.div`
     flex: 1;
@@ -49,9 +50,33 @@ const Cell = styled.span`
         text-align: center;
     }
 `
+
+interface ProposalProps {
+    proposal: UIProposal
+}
+
+const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
+    const { proposals } = useStores()
+    const onToggle = (): void => proposals.toggleActiveProposal(proposal)
+    return (
+        <Toggle key={proposal.key} active={proposals.active?.key == proposal.key} onClick={onToggle}>
+            <Cell>{proposal.id10}</Cell>
+            <Cell>
+                <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />/
+                <PerGiBRate paymentMethod={proposal.paymentMethod} units={false} />
+            </Cell>
+            <Cell>
+                <Quality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
+            </Cell>
+            <Cell>{proposal.serviceType4}</Cell>
+        </Toggle>
+    )
+})
+
 export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
+    console.log("render ProposalTable")
     return (
         <Table>
             <Header>
@@ -61,22 +86,9 @@ export const ProposalTable: React.FC = observer(() => {
                 <Cell>Service</Cell>
             </Header>
             <ScrollArea>
-                {items.map((p) => {
-                    const onToggle = (): void => proposals.toggleActiveProposal(p)
-                    return (
-                        <Toggle key={p.key} active={proposals.active?.key == p.key} onClick={onToggle}>
-                            <Cell>{p.id10}</Cell>
-                            <Cell>
-                                <PerMinuteRate paymentMethod={p.paymentMethod} units={false} />/
-                                <PerGiBRate paymentMethod={p.paymentMethod} units={false} />
-                            </Cell>
-                            <Cell>
-                                <Quality level={p.qualityLevel ?? QualityLevel.UNKNOWN} />
-                            </Cell>
-                            <Cell>{p.serviceType4}</Cell>
-                        </Toggle>
-                    )
-                })}
+                {items.map((p) => (
+                    <Proposal key={p.key} proposal={p} />
+                ))}
             </ScrollArea>
         </Table>
     )
