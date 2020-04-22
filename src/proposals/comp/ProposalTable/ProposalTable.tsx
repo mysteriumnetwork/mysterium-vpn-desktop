@@ -23,6 +23,8 @@ const Table = styled.div`
 
 const ScrollArea = styled.div`
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 `
 
 export const ProposalTable: React.FC = observer(() => {

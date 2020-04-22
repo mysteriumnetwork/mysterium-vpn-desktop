@@ -11,6 +11,7 @@ import { NavToggle, ToggleProps } from "./nav-toggle"
 
 export const Toggle = styled(NavToggle)`
     height: 28px;
+    min-height: 28px;
     width: calc(100% - 4px);
     margin: 2px;
     border-radius: 4px;

@@ -9,6 +9,7 @@ import styled from "styled-components"
 export const Header = styled.div`
     flex: 0;
     min-height: 32px;
+    margin-bottom: 2px;
     padding: 0 16px;
     font-size: 12px;
     color: #666;
