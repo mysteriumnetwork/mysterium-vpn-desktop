@@ -12,7 +12,7 @@ import { QualityLevel } from "mysterium-vpn-js"
 import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/toggle/toggle"
 import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
-import { Quality } from "../quality/quality"
+import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { UIProposal } from "../../ui-proposal-type"
 
 const Table = styled.div`
@@ -66,7 +66,7 @@ const Proposal: React.FC<ProposalProps> = observer(({ proposal }) => {
                 <PerGiBRate paymentMethod={proposal.paymentMethod} units={false} />
             </Cell>
             <Cell>
-                <Quality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
+                <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
             </Cell>
             <Cell>{proposal.serviceType4}</Cell>
         </Toggle>

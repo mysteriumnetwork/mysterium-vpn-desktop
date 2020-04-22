@@ -35,6 +35,6 @@ export interface QualityProps {
     level: QualityLevel
 }
 
-export const Quality: React.FC<QualityProps> = ({ level = QualityLevel.UNKNOWN }) => {
+export const ProposalQuality: React.FC<QualityProps> = ({ level = QualityLevel.UNKNOWN }) => {
     return <QualityImage src={levelToImage(level)} />
 }

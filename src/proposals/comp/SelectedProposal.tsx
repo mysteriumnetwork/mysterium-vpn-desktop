@@ -13,7 +13,7 @@ import { useStores } from "../../store"
 import { resolveCountry } from "../../location/countries"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
 
-import { Quality } from "./quality/quality"
+import { ProposalQuality } from "./ProposalQuality/ProposalQuality"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -65,7 +65,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 <ProviderId>{proposal.id10}</ProviderId>
                 <p>{pricingText}</p>
             </ServiceInfo>
-            <Quality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
+            <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
             <ConnectWrapper>
                 <ConnectDisconnectButton />
             </ConnectWrapper>

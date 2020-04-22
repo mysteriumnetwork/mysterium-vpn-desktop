@@ -9,13 +9,13 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import * as _ from "lodash"
 
-import { CountryFilter } from "../../../proposals/comp/country-filter"
+import { CountryFilter } from "../../../proposals/comp/CountryFilter"
 import { OriginalLocation } from "../../../location/comp/original-location"
 import { Search } from "../../../ui-kit/search/search"
 import { useStores } from "../../../store"
-import { IpTypeFilter } from "../../../proposals/comp/ip-type-filter"
-import { ProposalTable } from "../../../proposals/comp/proposal-table/proposal-table"
-import { SelectedProposal } from "../../../proposals/comp/selected-proposal"
+import { IpTypeFilter } from "../../../proposals/comp/IpTypeFilter"
+import { ProposalTable } from "../../../proposals/comp/ProposalTable/ProposalTable"
+import { SelectedProposal } from "../../../proposals/comp/SelectedProposal"
 
 const Container = styled.div`
     flex: 1;
