@@ -11,6 +11,8 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/toggle/toggle"
 import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
+import { Quality } from "../quality/quality"
+import { QualityLevel } from "mysterium-vpn-js"
 
 const Table = styled.div`
     flex: 1;
@@ -37,9 +39,14 @@ const ScrollArea = styled.div`
 const Cell = styled.span`
     display: inline-block;
     width: 110px;
+    height: 16px;
 
     &:nth-child(n + 2) {
         width: 80px;
+    }
+    &:nth-child(n + 3) {
+        width: 80px;
+        text-align: center;
     }
 `
 export const ProposalTable: React.FC = observer(() => {
@@ -49,9 +56,9 @@ export const ProposalTable: React.FC = observer(() => {
         <Table>
             <Header>
                 <Cell>ID</Cell>
-                <Cell>Price/min</Cell>
-                <Cell>Price/GiB</Cell>
-                <Cell>Service type</Cell>
+                <Cell>Price</Cell>
+                <Cell>Quality</Cell>
+                <Cell>Service</Cell>
             </Header>
             <ScrollArea>
                 {items.map((p) => {
@@ -60,10 +67,11 @@ export const ProposalTable: React.FC = observer(() => {
                         <Toggle key={p.key} active={proposals.active?.key == p.key} onClick={onToggle}>
                             <Cell>{p.id10}</Cell>
                             <Cell>
-                                <PerMinuteRate paymentMethod={p.paymentMethod} units={false} />
+                                <PerMinuteRate paymentMethod={p.paymentMethod} units={false} />/
+                                <PerGiBRate paymentMethod={p.paymentMethod} units={false} />
                             </Cell>
                             <Cell>
-                                <PerGiBRate paymentMethod={p.paymentMethod} units={false} />
+                                <Quality level={p.qualityLevel ?? QualityLevel.UNKNOWN} />
                             </Cell>
                             <Cell>{p.serviceType4}</Cell>
                         </Toggle>

@@ -5,13 +5,29 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import tequilapi, { ConnectionStatus, ProposalQuality } from "mysterium-vpn-js"
+import tequilapi, {
+    ConnectionStatus,
+    ProposalMetrics,
+    ProposalQuality,
+    QualityCalculator,
+    QualityLevel,
+} from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
+
+const qc = new QualityCalculator()
+
+const qualityLevel = (metrics?: ProposalMetrics): QualityLevel | undefined => {
+    if (!metrics) {
+        return QualityLevel.UNKNOWN
+    }
+    const qualityValue = qc.calculateValue(metrics)
+    return qc.calculateLevel(qualityValue)
+}
 
 const supportedServiceTypes = ["openvpn", "wireguard"]
 
@@ -104,16 +120,17 @@ export class ProposalStore {
 
     @computed
     get proposalsWithMetrics(): UIProposal[] {
-        return this.proposals.map((proposal) =>
-            _.merge(
-                {},
-                proposal,
-                _.find(
-                    this.metrics,
-                    (m) => m.providerId == proposal.providerId && m.serviceType == proposal.serviceType,
-                ),
-            ),
-        )
+        return this.proposals.map((proposal) => {
+            const proposalMetrics = _.find(
+                this.metrics,
+                (m) => m.providerId == proposal.providerId && m.serviceType == proposal.serviceType,
+            )
+            const level: any = {}
+            if (proposalMetrics) {
+                level.qualityLevel = qualityLevel(proposalMetrics)
+            }
+            return _.merge({}, proposal, level)
+        })
     }
 
     // #####################

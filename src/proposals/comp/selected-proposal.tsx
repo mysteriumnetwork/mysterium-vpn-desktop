@@ -5,13 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { displayMoney, pricePerGiB, pricePerMinute } from "mysterium-vpn-js"
+import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
 import { resolveCountry } from "../../location/countries"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
+
+import { Quality } from "./quality/quality"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -34,6 +36,7 @@ const ProviderId = styled.p`
 const ServiceInfo = styled.div`
     p {
         margin: 0;
+        margin-right: 16px;
         line-height: 20px;
     }
 `
@@ -62,6 +65,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 <ProviderId>{proposal.id10}</ProviderId>
                 <p>{pricingText}</p>
             </ServiceInfo>
+            <Quality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
             <ConnectWrapper>
                 <ConnectDisconnectButton />
             </ConnectWrapper>
