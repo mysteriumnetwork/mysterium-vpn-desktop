@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import tequilapi, { ConnectionStatus } from "mysterium-vpn-js"
+import tequilapi, { ConnectionStatus, ProposalQuality } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
@@ -29,6 +29,8 @@ export class ProposalStore {
     loading = false
     @observable
     proposals: UIProposal[] = []
+    @observable
+    metrics: ProposalQuality[] = []
 
     @observable
     active?: UIProposal
@@ -61,11 +63,15 @@ export class ProposalStore {
                 return
             }
             await this.fetchProposals()
+            await this.fetchMetrics()
         }, proposalRefreshRate)
     }
 
     @action
     async fetchProposals(): Promise<void> {
+        if (this.loading) {
+            return
+        }
         this.setLoading(true)
         try {
             const proposals = await tequilapi
@@ -79,13 +85,44 @@ export class ProposalStore {
         this.setLoading(false)
     }
 
+    @action
+    async fetchMetrics(): Promise<void> {
+        if (this.loading) {
+            return
+        }
+        this.setLoading(true)
+        try {
+            const metrics = await tequilapi.proposalsQuality()
+            if (metrics.length) {
+                this.setMetrics(metrics)
+            }
+        } catch (err) {
+            console.log("Could not get metrics", err.message)
+        }
+        this.setLoading(false)
+    }
+
+    @computed
+    get proposalsWithMetrics(): UIProposal[] {
+        return this.proposals.map((proposal) =>
+            _.merge(
+                {},
+                proposal,
+                _.find(
+                    this.metrics,
+                    (m) => m.providerId == proposal.providerId && m.serviceType == proposal.serviceType,
+                ),
+            ),
+        )
+    }
+
     // #####################
     // Access policy filter (invisible yet)
     // #####################
 
     @computed
     get accessPolicyFiltered(): UIProposal[] {
-        const input = this.proposals
+        const input = this.proposalsWithMetrics
         if (!this.filter.noAccessPolicy) {
             return input
         }
@@ -206,5 +243,10 @@ export class ProposalStore {
     @action
     setProposals = (proposals: UIProposal[]): void => {
         this.proposals = proposals
+    }
+
+    @action
+    setMetrics = (metrics: ProposalQuality[]): void => {
+        this.metrics = metrics
     }
 }
