@@ -8,9 +8,9 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
 import * as _ from "lodash"
+import { Currency, displayMoney } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
-import { mystDisplay } from "../wallet/wallet-view"
 
 import { Metric } from "./metric"
 
@@ -28,7 +28,13 @@ export const ConnectionStatistics: React.FC = observer(() => {
     const clock = duration ? toClock(duration) : ""
     const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }).toString() : ""
     const up = bytesSent ? byteSize(bytesSent, { units: "iec" }).toString() : ""
-    const paid = mystDisplay(tokensSpent) + " MYSTT"
+    const paid = displayMoney(
+        {
+            amount: tokensSpent ?? 0,
+            currency: Currency.MYSTTestToken,
+        },
+        { showCurrency: true },
+    )
     return (
         <React.Fragment>
             <Metric name="Duration" value={clock} />

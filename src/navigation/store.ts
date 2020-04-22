@@ -14,6 +14,10 @@ import { history } from "./history"
 import { locations } from "./locations"
 import LocationState = History.LocationState
 
+const connectionInProgress = (status: ConnectionStatus): boolean => {
+    return [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)
+}
+
 export class NavigationStore {
     history: History<LocationState>
 
@@ -68,7 +72,7 @@ export class NavigationStore {
             identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer
         ) {
             return locations.identity
-        } else if (connection.status != ConnectionStatus.NOT_CONNECTED) {
+        } else if (connectionInProgress(connection.status)) {
             return locations.connection
         } else {
             return locations.proposals

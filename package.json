@@ -25,7 +25,7 @@
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.0.6",
-    "mysterium-vpn-js": "^2.2.1",
+    "mysterium-vpn-js": "^3.0.0",
     "open": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -47,7 +47,7 @@ export class ConnectionStore {
     setupReactions(): void {
         eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             if (state.consumer?.connection) {
-                this.setStatus(state.consumer.connection.state)
+                this.setStatus(state.consumer.connection.status)
                 this.setStatistics(state.consumer.connection.statistics)
             }
             if (state.consumer?.connection?.proposal) {

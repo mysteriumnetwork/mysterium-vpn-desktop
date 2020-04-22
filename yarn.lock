@@ -5416,15 +5416,15 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysterium-vpn-js@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-2.2.1.tgz#b8c566135a87a44928947ce6c8067007e1feaec1"
-  integrity sha512-JudG4nqYy7JW3NmeU/t78tqK5XhbaQj9qg038gTiUguaErAjXLh+ByEvH7tZbuV+atlcFzSeQnBEYAHAgiTo+A==
+mysterium-vpn-js@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-3.0.0.tgz#b2dcfb468728e5d73bac7df79684668986814a38"
+  integrity sha512-yRLaB/nwDMq+QfzPaqSTa9l1L0zoowK4dSThDTo9bteE7AQ7wAdhGkml/kB6msI3OstGt9k7SneEzAfYbao/Bw==
   dependencies:
     axios "^0.19.2"
     camelcase-keys "^6.2.2"
     filesize "^5.0.0"
-    snakecase-keys "^3.1.2"
+    snakecase-keys "^3.2.0"
 
 nan@^2.12.1:
   version "2.14.0"
@@ -7060,10 +7060,10 @@ slice-ansi@^2.1.0:
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
 
-snakecase-keys@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/snakecase-keys/-/snakecase-keys-3.1.2.tgz#afb05f2c5b63e84a4e3d6c8c117c99a0026a839c"
-  integrity sha512-NrzHj8ctStnd1LYx3+L4buS7yildFum7WAbQQxkhPCNi3Qeqv7hoBne2c9n++HWxDG9Nv23pNEyyLCITZTv24Q==
+snakecase-keys@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/snakecase-keys/-/snakecase-keys-3.2.0.tgz#3ac428d643c6634eca461192fc7f731378fa7bd1"
+  integrity sha512-WTJ0NhCH/37J+PU3fuz0x5b6TvtWQChTcKPOndWoUy0pteKOe0hrHMzSRsJOWSIP48EQkzUEsgQPmrG3W8pFNQ==
   dependencies:
     map-obj "^4.0.0"
     to-snake-case "^1.0.0"

@@ -5,27 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { mystDisplay, pricePerGiB, pricePerMinute, Proposal as ProposalType } from "mysterium-vpn-js"
+import { displayMoney, pricePerGiB, pricePerMinute } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
 import { resolveCountry } from "../../location/countries"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
-
-const timeRate = (p: ProposalType): number | undefined => {
-    if (!p.paymentMethod) {
-        return undefined
-    }
-    return mystDisplay(pricePerMinute(p.paymentMethod))
-}
-
-const trafficRate = (p: ProposalType): number | undefined => {
-    if (!p.paymentMethod) {
-        return undefined
-    }
-    return mystDisplay(pricePerGiB(p.paymentMethod))
-}
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -62,7 +48,13 @@ export const SelectedProposal: React.FC = observer(() => {
         return <></>
     }
     const country = resolveCountry(proposal.country)
-    const pricingText = `${timeRate(proposal)}/min ${trafficRate(proposal)}/GiB`
+
+    let pricingText = ""
+    if (proposal.paymentMethod) {
+        const timeRate = displayMoney(pricePerMinute(proposal.paymentMethod))
+        const trafficRate = displayMoney(pricePerGiB(proposal.paymentMethod))
+        pricingText = `${timeRate}/min ${trafficRate}/GiB`
+    }
     return (
         <Container>
             <Flag src={country.flag} alt={country.name} />

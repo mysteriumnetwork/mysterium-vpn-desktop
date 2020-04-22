@@ -8,6 +8,7 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import { useLocation } from "react-router-dom"
 import styled from "styled-components"
+import { Currency, displayMoney } from "mysterium-vpn-js"
 
 import { useStores } from "../../store"
 import { NavToggle } from "../../ui-kit/toggle/nav-toggle"
@@ -15,13 +16,6 @@ import { brandDarker } from "../../ui-kit/colors"
 import { locations } from "../../navigation/locations"
 
 import { Myst } from "./myst"
-
-export const mystDisplay = (m?: number): string => {
-    if (!m) {
-        return "0"
-    }
-    return (m / 100000000).toFixed(3)
-}
 
 const Content = styled.div`
     width: 100%;
@@ -51,7 +45,16 @@ export const WalletButton: React.FC = observer(() => {
     const { identity, navigation } = useStores()
     const location = useLocation()
 
-    const balance = mystDisplay(identity.identity?.balance)
+    const balance = displayMoney(
+        {
+            amount: identity.identity?.balance ?? 0,
+            currency: Currency.MYSTTestToken,
+        },
+        {
+            fractionDigits: 3,
+            removeInsignificantZeros: false,
+        },
+    )
     const active = location.pathname == locations.wallet
     const onClick = (): void => {
         if (!active) {
