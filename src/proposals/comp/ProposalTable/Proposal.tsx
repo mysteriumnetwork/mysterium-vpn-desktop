@@ -32,7 +32,6 @@ const proposalPropsAreEqual = (prevProps: ProposalPureProps, nextProps: Proposal
 
 // eslint-disable-next-line react/display-name
 const ProposalPure: React.FC<ProposalPureProps> = React.memo(({ proposal, active, onToggle }) => {
-    console.log("render ProposalPure")
     return (
         <Toggle active={active} onClick={onToggle}>
             <Cell>{proposal.id10}</Cell>

@@ -28,7 +28,6 @@ const ScrollArea = styled.div`
 export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
-    console.log("render ProposalTable")
     return (
         <Table>
             <Header>
