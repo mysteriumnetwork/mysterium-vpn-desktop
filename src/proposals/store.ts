@@ -7,6 +7,8 @@
 import { action, computed, observable, reaction } from "mobx"
 import tequilapi, {
     ConnectionStatus,
+    pricePerGiB,
+    pricePerMinute,
     ProposalMetrics,
     ProposalQuality,
     QualityCalculator,
@@ -36,6 +38,8 @@ const proposalRefreshRate = 10000
 export type ProposalFilter = {
     noAccessPolicy?: boolean
     text?: string
+    pricePerMinuteMax?: number
+    pricePerGibMax?: number
     quality?: QualityLevel
     ipType?: string
     country?: string
@@ -55,6 +59,8 @@ export class ProposalStore {
     @observable
     filter: ProposalFilter = {
         noAccessPolicy: true,
+        pricePerMinuteMax: 50_000,
+        pricePerGibMax: 7_000_000,
         quality: QualityLevel.HIGH,
     }
 
@@ -163,6 +169,48 @@ export class ProposalStore {
     }
 
     // #####################
+    // Price filter
+    // #####################
+
+    @action
+    setPricePerMinuteMaxFilter(pricePerMinuteMax?: number): void {
+        this.filter.pricePerMinuteMax = pricePerMinuteMax
+    }
+    @action
+    setPricePerGibMaxFilter(pricePerGibMax?: number): void {
+        this.filter.pricePerGibMax = pricePerGibMax
+    }
+
+    @computed
+    get priceMaximums(): { perMinuteMax: number; perGibMax: number } {
+        let perMinuteMax = 0
+        let perGibMax = 0
+        for (const proposal of this.proposals) {
+            perMinuteMax = Math.max(perMinuteMax, pricePerMinute(proposal.paymentMethod).amount)
+            perGibMax = Math.max(perGibMax, pricePerGiB(proposal.paymentMethod).amount)
+        }
+        return { perMinuteMax: perMinuteMax, perGibMax: perGibMax }
+    }
+
+    @computed
+    get priceFiltered(): UIProposal[] {
+        const input = this.textFiltered
+        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax
+        const filterPricePerGibMax = this.filter.pricePerGibMax
+        if (!filterPricePerMinuteMax && !filterPricePerGibMax) {
+            return input
+        }
+        return input.filter((p) => {
+            const pricePerMin = pricePerMinute(p.paymentMethod)
+            const pricePerGib = pricePerGiB(p.paymentMethod)
+            return (
+                (!filterPricePerMinuteMax || pricePerMin.amount <= filterPricePerMinuteMax) &&
+                (!filterPricePerGibMax || pricePerGib.amount <= filterPricePerGibMax)
+            )
+        })
+    }
+
+    // #####################
     // Quality filter
     // #####################
 
@@ -173,7 +221,7 @@ export class ProposalStore {
 
     @computed
     get qualityFiltered(): UIProposal[] {
-        const input = this.textFiltered
+        const input = this.priceFiltered
         const filterQuality = this.filter.quality
         if (!filterQuality) {
             return input

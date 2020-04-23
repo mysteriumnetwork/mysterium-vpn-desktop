@@ -52,12 +52,10 @@ export const SelectedProposal: React.FC = observer(() => {
     }
     const country = resolveCountry(proposal.country)
 
-    let pricingText = ""
-    if (proposal.paymentMethod) {
-        const timeRate = displayMoney(pricePerMinute(proposal.paymentMethod))
-        const trafficRate = displayMoney(pricePerGiB(proposal.paymentMethod))
-        pricingText = `${timeRate}/min ${trafficRate}/GiB`
-    }
+    const timeRate = displayMoney(pricePerMinute(proposal.paymentMethod))
+    const trafficRate = displayMoney(pricePerGiB(proposal.paymentMethod))
+    const pricingText = `${timeRate}/min ${trafficRate}/GiB`
+
     return (
         <Container>
             <Flag src={country.flag} alt={country.name} />

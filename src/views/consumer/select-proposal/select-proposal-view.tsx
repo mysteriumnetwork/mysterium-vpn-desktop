@@ -17,6 +17,7 @@ import { IpTypeFilter } from "../../../proposals/comp/IpTypeFilter"
 import { ProposalTable } from "../../../proposals/comp/ProposalTable/ProposalTable"
 import { SelectedProposal } from "../../../proposals/comp/SelectedProposal"
 import { QualityFilter } from "../../../proposals/comp/QualityFilter"
+import { PriceFilter } from "../../../proposals/comp/PriceFilter"
 
 const Container = styled.div`
     flex: 1;
@@ -58,6 +59,7 @@ export const SelectProposalView: React.FC = observer(() => {
             <Sidebar>
                 <Search onChange={searchDebounced} />
                 <ScrollArea>
+                    <PriceFilter />
                     <QualityFilter />
                     <IpTypeFilter />
                     <CountryFilter />

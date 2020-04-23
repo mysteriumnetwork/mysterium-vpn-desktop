@@ -37,6 +37,9 @@ const Count = styled.span`
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.countryCounts
+    if (!Object.keys(countryCounts).length) {
+        return <></>
+    }
     return (
         <Container>
             <Title>By country</Title>
