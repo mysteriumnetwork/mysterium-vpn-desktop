@@ -34,10 +34,11 @@ const supportedServiceTypes = ["openvpn", "wireguard"]
 const proposalRefreshRate = 10000
 
 export type ProposalFilter = {
+    noAccessPolicy?: boolean
     text?: string
+    quality?: QualityLevel
     ipType?: string
     country?: string
-    noAccessPolicy?: boolean
 }
 
 export class ProposalStore {
@@ -54,6 +55,7 @@ export class ProposalStore {
     @observable
     filter: ProposalFilter = {
         noAccessPolicy: true,
+        quality: QualityLevel.HIGH,
     }
 
     root: RootStore
@@ -161,12 +163,31 @@ export class ProposalStore {
     }
 
     // #####################
+    // Quality filter
+    // #####################
+
+    @action
+    setQualityFilter(quality?: QualityLevel): void {
+        this.filter.quality = quality
+    }
+
+    @computed
+    get qualityFiltered(): UIProposal[] {
+        const input = this.textFiltered
+        const filterQuality = this.filter.quality
+        if (!filterQuality) {
+            return input
+        }
+        return input.filter((p) => p.qualityLevel && p.qualityLevel >= filterQuality)
+    }
+
+    // #####################
     // IP type filter
     // #####################
 
     @computed
     get ipTypeCounts(): { [type: string]: number } {
-        const input = this.textFiltered
+        const input = this.qualityFiltered
         const result = _.groupBy(input, (p) => p.serviceDefinition.locationOriginate?.nodeType)
         return _.mapValues(result, (ps) => ps.length)
     }
@@ -184,12 +205,12 @@ export class ProposalStore {
 
     @computed
     get ipTypeFiltered(): UIProposal[] {
-        const input = this.textFiltered
+        const input = this.qualityFiltered
         if (!this.filter.ipType) {
             return input
         }
         const ipType = (p: UIProposal): string | undefined => p.serviceDefinition.locationOriginate?.nodeType
-        return input.filter((p) => ipType(p) === this.filter.ipType).sort(compareProposal)
+        return input.filter((p) => ipType(p) === this.filter.ipType)
     }
 
     // #####################
@@ -220,7 +241,7 @@ export class ProposalStore {
         if (!this.filter.country) {
             return input
         }
-        return input.filter((p) => p.country == this.filter.country).sort(compareProposal)
+        return input.filter((p) => p.country == this.filter.country)
     }
 
     // #####################
@@ -229,7 +250,7 @@ export class ProposalStore {
 
     @computed
     get filteredProposals(): UIProposal[] {
-        return this.countryFiltered
+        return this.countryFiltered.sort(compareProposal)
     }
 
     // #####################
