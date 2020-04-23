@@ -17,7 +17,7 @@ import * as _ from "lodash"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 
-import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
+import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
 const qc = new QualityCalculator()
 
@@ -46,7 +46,7 @@ export class ProposalStore {
     @observable
     proposals: UIProposal[] = []
     @observable
-    metrics: ProposalQuality[] = []
+    metrics: Map<ProposalKey, ProposalQuality> = new Map<ProposalKey, ProposalQuality>()
 
     @observable
     active?: UIProposal
@@ -121,15 +121,8 @@ export class ProposalStore {
     @computed
     get proposalsWithMetrics(): UIProposal[] {
         return this.proposals.map((proposal) => {
-            const proposalMetrics = _.find(
-                this.metrics,
-                (m) => m.providerId == proposal.providerId && m.serviceType == proposal.serviceType,
-            )
-            const level: any = {}
-            if (proposalMetrics) {
-                level.qualityLevel = qualityLevel(proposalMetrics)
-            }
-            return _.merge({}, proposal, level)
+            const proposalMetrics = this.metrics.get(proposal.key)
+            return { ...proposal, ...{ qualityLevel: qualityLevel(proposalMetrics) } }
         })
     }
 
@@ -264,6 +257,8 @@ export class ProposalStore {
 
     @action
     setMetrics = (metrics: ProposalQuality[]): void => {
-        this.metrics = metrics
+        for (const metric of metrics) {
+            this.metrics.set(proposalKey(metric), metric)
+        }
     }
 }
