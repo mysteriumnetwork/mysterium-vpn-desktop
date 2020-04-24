@@ -30,20 +30,24 @@ const Range = styled.input`
     margin: 0 12px;
 `
 
+const displayFilterPrice = (amount?: number): string => {
+    if (!amount) {
+        return "free"
+    }
+    const pricePerGibDisplay = displayMoney({
+        amount: amount ?? 0,
+        currency: Currency.MYSTTestToken,
+    })
+    return pricePerGibDisplay + " or less"
+}
+
 export const PriceFilter = observer(() => {
     const { proposals } = useStores()
     const { perMinuteMax, perGibMax } = proposals.priceMaximums
     if (!perMinuteMax || !perGibMax) {
         return <></>
     }
-    const pricePerMinDisplay = displayMoney({
-        amount: proposals.filter.pricePerMinuteMax ?? 0,
-        currency: Currency.MYSTTestToken,
-    })
-    const pricePerGibDisplay = displayMoney({
-        amount: proposals.filter.pricePerGibMax ?? 0,
-        currency: Currency.MYSTTestToken,
-    })
+
     const changePerMinuteMaxDebounced = _.debounce((val: number) => {
         proposals.setPricePerMinuteMaxFilter(val)
     }, 500)
@@ -52,7 +56,7 @@ export const PriceFilter = observer(() => {
     }, 500)
     return (
         <Container>
-            <Title>Price/minute: {pricePerMinDisplay}</Title>
+            <Title>Price/minute: {displayFilterPrice(proposals.filter.pricePerMinuteMax)}</Title>
             <Range
                 type="range"
                 min={0}
@@ -63,7 +67,7 @@ export const PriceFilter = observer(() => {
                     changePerMinuteMaxDebounced(event.target.valueAsNumber)
                 }}
             />
-            <Title>Price/GiB: {pricePerGibDisplay}</Title>
+            <Title>Price/GiB: {displayFilterPrice(proposals.filter.pricePerGibMax)}</Title>
             <Range
                 type="range"
                 min={0}

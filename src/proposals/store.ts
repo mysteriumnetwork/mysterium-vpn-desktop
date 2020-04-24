@@ -189,23 +189,40 @@ export class ProposalStore {
             perMinuteMax = Math.max(perMinuteMax, pricePerMinute(proposal.paymentMethod).amount)
             perGibMax = Math.max(perGibMax, pricePerGiB(proposal.paymentMethod).amount)
         }
-        return { perMinuteMax: perMinuteMax, perGibMax: perGibMax }
+        return { perMinuteMax, perGibMax }
+    }
+
+    @computed
+    get toleratedPrices(): { perMinuteMax?: number; perGibMax?: number } {
+        const tolerance = 500
+        let perMinuteMax
+        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax
+        if (filterPricePerMinuteMax !== undefined) {
+            perMinuteMax = filterPricePerMinuteMax + (filterPricePerMinuteMax !== 0 ? tolerance : 0)
+        }
+        let perGibMax
+        const filterPricePerGibMax = this.filter.pricePerGibMax
+        if (filterPricePerGibMax !== undefined) {
+            perGibMax = filterPricePerGibMax + (filterPricePerGibMax !== 0 ? tolerance : 0)
+        }
+        return { perMinuteMax, perGibMax }
     }
 
     @computed
     get priceFiltered(): UIProposal[] {
         const input = this.textFiltered
-        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax
-        const filterPricePerGibMax = this.filter.pricePerGibMax
+        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax ?? 0
+        const filterPricePerGibMax = this.filter.pricePerGibMax ?? 0
         if (!filterPricePerMinuteMax && !filterPricePerGibMax) {
             return input
         }
         return input.filter((p) => {
             const pricePerMin = pricePerMinute(p.paymentMethod)
             const pricePerGib = pricePerGiB(p.paymentMethod)
+            const tolerated = this.toleratedPrices
             return (
-                (!filterPricePerMinuteMax || pricePerMin.amount <= filterPricePerMinuteMax) &&
-                (!filterPricePerGibMax || pricePerGib.amount <= filterPricePerGibMax)
+                (tolerated.perMinuteMax === undefined || pricePerMin.amount <= tolerated.perMinuteMax) &&
+                (tolerated.perGibMax === undefined || pricePerGib.amount <= tolerated.perGibMax)
             )
         })
     }
