@@ -253,7 +253,7 @@ export class ProposalStore {
     @computed
     get ipTypeCounts(): { [type: string]: number } {
         const input = this.qualityFiltered
-        const result = _.groupBy(input, (p) => p.serviceDefinition.locationOriginate?.nodeType)
+        const result = _.groupBy(input, (p) => p.nodeType)
         return _.mapValues(result, (ps) => ps.length)
     }
 
@@ -274,8 +274,7 @@ export class ProposalStore {
         if (!this.filter.ipType) {
             return input
         }
-        const ipType = (p: UIProposal): string | undefined => p.serviceDefinition.locationOriginate?.nodeType
-        return input.filter((p) => ipType(p) === this.filter.ipType)
+        return input.filter((p) => p.nodeType === this.filter.ipType)
     }
 
     // #####################

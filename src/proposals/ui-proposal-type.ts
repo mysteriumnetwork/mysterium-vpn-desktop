@@ -18,6 +18,7 @@ export interface UIProposal extends Proposal {
     id10: string
     serviceType4: string
     qualityLevel?: QualityLevel
+    nodeType: string
 }
 
 const id10 = (id: string): string => id.substr(0, 10)
@@ -38,7 +39,8 @@ export const newUIProposal = (proposal: Proposal): UIProposal => {
     return {
         ...proposal,
         key: proposalKey(proposal),
-        country: proposal.serviceDefinition?.locationOriginate?.country,
+        country: proposal.serviceDefinition?.locationOriginate?.country ?? "unknown",
+        nodeType: proposal.serviceDefinition?.locationOriginate?.nodeType ?? "unknown",
         id10: id10(proposal.providerId),
         serviceType4: serviceType4(proposal.serviceType),
         qualityLevel: QualityLevel.UNKNOWN,
