@@ -19,7 +19,8 @@ declare module "@mysteriumnetwork/terms" {
 // static assets /static
 declare const __static: string
 
-declare module "electron" {
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace Electron {
     export interface App {
         quitting?: boolean
     }
