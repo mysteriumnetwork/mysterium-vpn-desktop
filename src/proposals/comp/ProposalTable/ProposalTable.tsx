@@ -7,6 +7,8 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
+import { FixedSizeList } from "react-window"
+import AutoSizer from "react-virtualized-auto-sizer"
 
 import { useStores } from "../../../store"
 
@@ -21,15 +23,14 @@ const Table = styled.div`
     flex-direction: column;
 `
 
-const ScrollArea = styled.div`
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+const ScrollAreaContainer = styled.div`
+    flex: 1;
 `
 
 export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
+
     return (
         <Table>
             <Header>
@@ -38,11 +39,22 @@ export const ProposalTable: React.FC = observer(() => {
                 <Cell>Quality</Cell>
                 <Cell>Service</Cell>
             </Header>
-            <ScrollArea>
-                {items.map((p) => (
-                    <Proposal key={p.key} proposal={p} />
-                ))}
-            </ScrollArea>
+            <ScrollAreaContainer>
+                <AutoSizer>
+                    {({ width, height }): JSX.Element => (
+                        <FixedSizeList itemCount={items.length} itemSize={32} width={width} height={height}>
+                            {({ index, style }): JSX.Element => {
+                                const proposal = items[index]
+                                return (
+                                    <div style={style}>
+                                        <Proposal key={proposal.key} proposal={proposal} />
+                                    </div>
+                                )
+                            }}
+                        </FixedSizeList>
+                    )}
+                </AutoSizer>
+            </ScrollAreaContainer>
         </Table>
     )
 })
