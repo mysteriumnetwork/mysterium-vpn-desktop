@@ -22,6 +22,10 @@ const Container = styled.div`
     background: linear-gradient(180deg, #d6d6d6 0%, #cccccc 97%, #bababa 100%);
     display: flex;
     justify-content: space-between;
+
+    div {
+        cursor: pointer;
+    }
 `
 
 export const NavBar: React.FC = observer(() => {
