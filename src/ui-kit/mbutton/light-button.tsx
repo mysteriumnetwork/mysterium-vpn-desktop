@@ -6,13 +6,9 @@
  */
 import styled from "styled-components"
 
-export const LightButton = styled.button`
-    padding: 10px 24px;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    border-radius: 4px;
-    border-color: transparent;
+import { BrandButton } from "./brand-button"
+
+export const LightButton = styled(BrandButton)`
     ${(props): string => {
         if (props.disabled) {
             return "background: #ccc; color: #fff;"
