@@ -18,3 +18,9 @@ declare module "@mysteriumnetwork/terms" {
 
 // static assets /static
 declare const __static: string
+
+declare module "electron" {
+    export interface App {
+        quitting?: boolean
+    }
+}

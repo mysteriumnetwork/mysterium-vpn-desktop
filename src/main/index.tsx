@@ -80,6 +80,14 @@ const createWindow = async (): Promise<BrowserWindow> => {
         )
     }
 
+    window.on("close", (event) => {
+        if (app.quitting) {
+            win = null
+        } else {
+            event.preventDefault()
+            win?.hide()
+        }
+    })
     window.on("closed", () => {
         win = null
     })
@@ -114,6 +122,10 @@ app.on("activate", async () => {
         win = await createWindow()
     }
 })
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {
     await supervisor.connect()

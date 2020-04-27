@@ -34,8 +34,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Show window",
                 click: (): void => {
-                    win.setAlwaysOnTop(true)
-                    win.setAlwaysOnTop(false)
+                    win.show()
                 },
             },
             {
