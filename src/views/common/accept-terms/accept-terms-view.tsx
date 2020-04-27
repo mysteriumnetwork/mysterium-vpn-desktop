@@ -13,6 +13,7 @@ import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
+import { Checkbox } from "../../../ui-kit/Checkbox/Checkbox"
 
 import termsBg from "./terms-bg.png"
 
@@ -60,21 +61,10 @@ const BottomBar = styled.div`
     height: 72px;
     margin-top: auto;
     margin-right: 24px;
+    padding-left: 208px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-`
-
-const Checkbox = styled.label`
-    font-size: 14px;
-    color: #333;
-    margin-left: 208px;
-    user-select: none;
-
-    > input {
-        margin-right: 8px;
-        border-radius: 2px;
-    }
 `
 
 export const AcceptTermsView: React.FC = observer(({}) => {
@@ -90,9 +80,8 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 <ReactMarkdown source={TermsEndUser} />
             </Terms>
             <BottomBar>
-                <Checkbox>
-                    <input type="checkbox" checked={agree} onChange={(): void => setAgree(!agree)} />I agree to all
-                    Terms of Service
+                <Checkbox checked={agree} onChange={(): void => setAgree(!agree)}>
+                    I agree to all Terms of Service
                 </Checkbox>
                 <BrandButton
                     disabled={!agree}

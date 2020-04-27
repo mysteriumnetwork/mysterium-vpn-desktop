@@ -11,22 +11,24 @@ import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../store"
 import { textSmall } from "../../ui-kit/typography"
+import { Checkbox } from "../../ui-kit/Checkbox/Checkbox"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 0 12px;
 `
 
 const Title = styled.p`
     ${textSmall}
     color: #777;
-    margin: 12px;
-    margin-left: 12px;
 `
 
-const Range = styled.input`
-    margin: 0 12px;
+const Range = styled.input``
+
+const IncludeFailed = styled.div`
+    margin: 12px 0;
 `
 
 const displayQuality = (q?: QualityLevel): string => {
@@ -48,10 +50,16 @@ export const QualityFilter = observer(() => {
         const val = event.target.valueAsNumber
         proposals.setQualityFilter(val)
     }
+    const includeFailed = proposals.filter.includeFailed
     return (
         <Container>
             <Title>Quality: {qualityText}</Title>
             <Range type="range" min={0} max={2} defaultValue={quality} onChange={onChange} />
+            <IncludeFailed>
+                <Checkbox checked={includeFailed} onChange={(): void => proposals.setIncludeFailed(!includeFailed)}>
+                    Include unreachable nodes
+                </Checkbox>
+            </IncludeFailed>
         </Container>
     )
 })

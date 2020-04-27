@@ -41,6 +41,7 @@ export type ProposalFilter = {
     pricePerMinuteMax?: number
     pricePerGibMax?: number
     quality?: QualityLevel
+    includeFailed: boolean
     ipType?: string
     country?: string
 }
@@ -62,6 +63,7 @@ export class ProposalStore {
         pricePerMinuteMax: 50_000,
         pricePerGibMax: 7_000_000,
         quality: QualityLevel.HIGH,
+        includeFailed: false,
     }
 
     root: RootStore
@@ -130,7 +132,11 @@ export class ProposalStore {
     get proposalsWithMetrics(): UIProposal[] {
         return this.proposals.map((proposal) => {
             const proposalMetrics = this.metrics.get(proposal.key)
-            return { ...proposal, ...{ qualityLevel: qualityLevel(proposalMetrics) } }
+            return {
+                ...proposal,
+                metrics: proposalMetrics,
+                ...{ qualityLevel: qualityLevel(proposalMetrics) },
+            }
         })
     }
 
@@ -236,14 +242,28 @@ export class ProposalStore {
         this.filter.quality = quality
     }
 
+    @action
+    setIncludeFailed(includeFailed: boolean): void {
+        this.filter.includeFailed = includeFailed
+    }
+
     @computed
     get qualityFiltered(): UIProposal[] {
         const input = this.priceFiltered
         const filterQuality = this.filter.quality
-        if (!filterQuality) {
+        const filterIncludeFailed = this.filter.includeFailed
+        if (!filterQuality && !filterIncludeFailed) {
             return input
         }
-        return input.filter((p) => p.qualityLevel && p.qualityLevel >= filterQuality)
+        return input.filter((p) => {
+            if (filterQuality && p.qualityLevel && p.qualityLevel < filterQuality) {
+                return false
+            }
+            if (!filterIncludeFailed && p.metrics?.monitoringFailed) {
+                return false
+            }
+            return true
+        })
     }
 
     // #####################
