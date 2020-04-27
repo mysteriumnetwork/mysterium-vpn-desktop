@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
@@ -21,6 +21,15 @@ const Container = styled.div`
     justify-content: flex-start;
 `
 
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
+
 const Title = styled.h1`
     padding-top: 280px;
     margin: 0;
@@ -29,6 +38,7 @@ const Title = styled.h1`
     font-size: 24px;
     letter-spacing: 1px;
     color: #fff;
+    animation: ${fadeIn} 0.4s ease-in-out;
 `
 
 const Description = styled.p`
@@ -39,6 +49,7 @@ const Description = styled.p`
     line-height: 24px;
     letter-spacing: 0.75px;
     color: #fff;
+    animation: ${fadeIn} 0.4s ease-in-out;
 `
 
 const GetStartedButton = styled(BrandButton)`
