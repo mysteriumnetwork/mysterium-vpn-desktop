@@ -45,14 +45,12 @@ export class NavigationStore {
 
     @action
     navigateTo = (path: string): void => {
-        console.log("navigateTo", path)
         this.history.push(path)
     }
 
     @action
     determineRoute = (): void => {
         const newLocation = this.determineLocation()
-        console.log("current location", this.history.location.pathname, "new location", newLocation)
         if (newLocation && this.history.location.pathname !== newLocation) {
             this.navigateTo(newLocation)
         }
