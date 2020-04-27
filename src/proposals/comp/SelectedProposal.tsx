@@ -7,13 +7,22 @@
 import React from "react"
 import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 
 import { useStores } from "../../store"
 import { resolveCountry } from "../../location/countries"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
 
 import { ProposalQuality } from "./ProposalQuality/ProposalQuality"
+
+const slideIn = keyframes`
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: none;
+    }
+`
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -23,6 +32,7 @@ const Container = styled.div`
     align-items: center;
     border-left: 1px solid #e6e6e6;
     box-shadow: inset 0 1px 1px #e6e6e6;
+    animation: ${slideIn} 150ms ease-in-out;
 `
 
 const Flag = styled.img`
