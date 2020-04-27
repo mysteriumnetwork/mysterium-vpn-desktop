@@ -15,7 +15,6 @@ export const BrandButton = styled.button`
     font-weight: bold;
     letter-spacing: 1px;
     border-radius: 4px;
-    box-shadow: ${(props): string => (!props.disabled ? "inset 0 0.5px 1px #ff25a1;" : "inherit")};
 
     background: ${(props): string => (!props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc")};
     color: #fff;

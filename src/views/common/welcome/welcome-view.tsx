@@ -44,6 +44,7 @@ const Description = styled.p`
 const GetStartedButton = styled(BrandButton)`
     min-width: 134px;
     margin: 0 auto;
+    box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
 `
 
 export const WelcomeView: React.FC = observer(() => {
