@@ -18,6 +18,7 @@ export const BrandButton = styled.button`
     font-weight: bold;
     letter-spacing: 1px;
     border-radius: 4px;
+    outline: none;
 
     background: ${(props): string => (!props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc")};
     color: #fff;

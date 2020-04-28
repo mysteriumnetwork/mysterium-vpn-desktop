@@ -58,6 +58,9 @@ export class ProposalStore {
     active?: UIProposal
 
     @observable
+    customFilter = false
+
+    @observable
     filter: ProposalFilter = {
         noAccessPolicy: true,
         pricePerMinuteMax: 50_000,
@@ -138,6 +141,11 @@ export class ProposalStore {
                 ...{ qualityLevel: qualityLevel(proposalMetrics) },
             }
         })
+    }
+
+    @action
+    toggleCustomFilter(): void {
+        this.customFilter = !this.customFilter
     }
 
     // #####################

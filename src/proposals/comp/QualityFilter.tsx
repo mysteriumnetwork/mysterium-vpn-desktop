@@ -84,7 +84,7 @@ export const QualityFilter = observer(() => {
             </RangeContainer>
             <IncludeFailed>
                 <Checkbox checked={includeFailed} onChange={(): void => proposals.setIncludeFailed(!includeFailed)}>
-                    Include unreachable nodes
+                    Include unreachable
                 </Checkbox>
             </IncludeFailed>
         </Container>

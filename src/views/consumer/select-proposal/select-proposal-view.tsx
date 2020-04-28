@@ -18,6 +18,7 @@ import { ProposalTable } from "../../../proposals/comp/ProposalTable/ProposalTab
 import { SelectedProposal } from "../../../proposals/comp/SelectedProposal"
 import { QualityFilter } from "../../../proposals/comp/QualityFilter"
 import { PriceFilter } from "../../../proposals/comp/PriceFilter"
+import { FilterModeSwitch } from "../../../proposals/comp/FilterModeSwitch"
 
 const Container = styled.div`
     flex: 1;
@@ -27,6 +28,7 @@ const Container = styled.div`
 
 const Sidebar = styled.div`
     height: 100%;
+    width: 240px;
     min-width: 240px;
     background: #fafafa;
     display: flex;
@@ -40,22 +42,29 @@ const Main = styled.div`
     flex-direction: column;
 `
 
-const ScrollArea = styled.div`
-    padding: 0 8px 8px 0;
-    flex: 1;
-    overflow-y: scroll;
+const SidebarActions = styled.div`
+    height: 32px;
+    padding: 8px 0 0 8px;
+    display: flex;
+    justify-content: flex-start;
 `
 
 const Filters = styled.div`
     flex: 1;
     min-height: 0;
-    padding: 8px 0 0 8px;
+    padding: 0 0 0 8px;
     display: flex;
     flex-direction: column;
 `
 
 const SearchDiv = styled.div`
-    padding: 0 16px 0 0;
+    padding: 8px 16px 0 16px;
+`
+
+const ScrollArea = styled.div`
+    padding: 0 8px 8px 0;
+    flex: 1;
+    overflow-y: scroll;
 `
 
 const MainBottom = styled.div`
@@ -70,14 +79,21 @@ export const SelectProposalView: React.FC = observer(() => {
     return (
         <Container>
             <Sidebar>
+                <SidebarActions>
+                    <FilterModeSwitch />
+                </SidebarActions>
                 <Filters>
-                    <SearchDiv>
-                        <Search onChange={searchDebounced} />
-                    </SearchDiv>
                     <ScrollArea>
-                        <PriceFilter />
-                        <QualityFilter />
-                        <IpTypeFilter />
+                        {proposals.customFilter && (
+                            <React.Fragment>
+                                <SearchDiv>
+                                    <Search onChange={searchDebounced} />
+                                </SearchDiv>
+                                <PriceFilter />
+                                <QualityFilter />
+                                <IpTypeFilter />
+                            </React.Fragment>
+                        )}
                         <CountryFilter />
                     </ScrollArea>
                 </Filters>

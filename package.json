@@ -17,6 +17,9 @@
     "bundle": "yarn build && electron-builder"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@mysteriumnetwork/terms": "^0.0.24",
     "byte-size": "^6.2.0",
     "history": "^4.10.1",
