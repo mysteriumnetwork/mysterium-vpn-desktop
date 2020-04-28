@@ -38,7 +38,7 @@ const RangeContainer = styled.div`
 
 const Label = styled.div`
     ${textSmall}
-    color: #777;
+    color: #404040;
     line-height: 16px;
 `
 
