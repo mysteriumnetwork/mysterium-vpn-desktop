@@ -26,8 +26,8 @@ const slideIn = keyframes`
 
 const Container = styled.div`
     box-sizing: border-box;
-    height: 64px;
-    padding: 16px;
+    height: 72px;
+    padding: 8px 16px;
     display: flex;
     align-items: center;
     border-left: 1px solid #e6e6e6;

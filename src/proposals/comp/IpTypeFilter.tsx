@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { textSmall } from "../../ui-kit/typography"
+import { textCaption } from "../../ui-kit/typography"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 
 const Container = styled.div`
@@ -19,11 +19,14 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const Title = styled.p`
-    ${textSmall}
+const Title = styled.div`
+    height: 32px;
+    margin-left: 8px;
+
+    ${textCaption}
     color: #777;
-    margin: 12px;
-    margin-left: 12px;
+    display: flex;
+    align-items: center;
 `
 
 const Count = styled.span`

@@ -7,8 +7,11 @@
 import styled from "styled-components"
 
 export const BrandButton = styled.button`
+    box-sizing: border-box;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 16px;
     border: none;
-    padding: 10px 24px;
     font-size: 14px;
     text-transform: uppercase;
     cursor: pointer;

@@ -11,7 +11,7 @@ import * as _ from "lodash"
 
 import { CountryFilter } from "../../../proposals/comp/CountryFilter"
 import { OriginalLocation } from "../../../location/comp/original-location"
-import { Search } from "../../../ui-kit/search/search"
+import { Search } from "../../../ui-kit/form/Search"
 import { useStores } from "../../../store"
 import { IpTypeFilter } from "../../../proposals/comp/IpTypeFilter"
 import { ProposalTable } from "../../../proposals/comp/ProposalTable/ProposalTable"
@@ -41,8 +41,21 @@ const Main = styled.div`
 `
 
 const ScrollArea = styled.div`
+    padding: 0 8px 8px 0;
     flex: 1;
     overflow-y: scroll;
+`
+
+const Filters = styled.div`
+    flex: 1;
+    min-height: 0;
+    padding: 8px 0 0 8px;
+    display: flex;
+    flex-direction: column;
+`
+
+const SearchDiv = styled.div`
+    padding: 0 16px 0 0;
 `
 
 const MainBottom = styled.div`
@@ -57,13 +70,17 @@ export const SelectProposalView: React.FC = observer(() => {
     return (
         <Container>
             <Sidebar>
-                <Search onChange={searchDebounced} />
-                <ScrollArea>
-                    <PriceFilter />
-                    <QualityFilter />
-                    <IpTypeFilter />
-                    <CountryFilter />
-                </ScrollArea>
+                <Filters>
+                    <SearchDiv>
+                        <Search onChange={searchDebounced} />
+                    </SearchDiv>
+                    <ScrollArea>
+                        <PriceFilter />
+                        <QualityFilter />
+                        <IpTypeFilter />
+                        <CountryFilter />
+                    </ScrollArea>
+                </Filters>
                 <OriginalLocation />
             </Sidebar>
             <Main>

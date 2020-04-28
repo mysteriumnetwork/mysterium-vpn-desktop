@@ -46,6 +46,33 @@ const GlobalStyle = createGlobalStyle`
         user-select: none;
         user-drag: none;
     }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05); 
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: #c1c1c1; 
+    }
+
+    // :root {
+    //     --baseline: 8px;
+    //     --color: hsla(204, 80%, 72%, 0.5);
+    //     --background-baseline: repeating-linear-gradient(
+    //         to bottom,
+    //         var(--color),
+    //         var(--color) 1px,
+    //         transparent 1px,
+    //         transparent var(--baseline)
+    //       );
+    // }
+    // html {
+    //     background-image: var(--background-baseline);
+    //     background-position: 0 0;
+    // }
 `
 
 // Create main element
@@ -57,6 +84,7 @@ const App: React.FC = () => {
         <React.Fragment>
             <GlobalStyle />
             <Routes />
+            <div className="baseline" />
         </React.Fragment>
     )
 }

@@ -6,14 +6,19 @@
  */
 import styled from "styled-components"
 
+import { textCaption } from "../../../ui-kit/typography"
+
 export const Header = styled.div`
-    flex: 0;
+    box-sizing: border-box;
+    height: 32px;
     min-height: 32px;
-    margin-bottom: 2px;
+    flex: 0;
+    margin: 8px 0;
     padding: 0 16px;
     font-size: 12px;
     color: #666;
     display: flex;
     align-items: center;
     box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.2);
+    ${textCaption}
 `

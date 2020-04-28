@@ -10,10 +10,9 @@ import styled from "styled-components"
 import { NavToggle, ToggleProps } from "./nav-toggle"
 
 export const Toggle = styled(NavToggle)`
-    height: 28px;
-    min-height: 28px;
-    width: calc(100% - 4px);
-    margin: 2px;
+    height: 32px;
+    min-height: 32px;
+    width: calc(100%);
     border-radius: 4px;
     justify-content: flex-start;
     background: ${(props: ToggleProps): string =>

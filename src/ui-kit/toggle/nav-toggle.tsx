@@ -15,10 +15,10 @@ export interface ToggleProps {
 }
 
 export const NavToggle = styled.div<ToggleProps>`
-    width: 152px;
-    height: ${(props: ToggleProps): string => (props.small ? "24px" : "28px")};
-    padding: 2px 12px;
     box-sizing: border-box;
+    width: 152px;
+    height: 24px;
+    padding: 2px 16px;
     display: flex;
     flex-direction: row;
     justify-content: center;

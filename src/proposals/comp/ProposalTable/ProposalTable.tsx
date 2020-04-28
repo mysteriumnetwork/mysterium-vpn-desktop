@@ -27,6 +27,10 @@ const ScrollAreaContainer = styled.div`
     flex: 1;
 `
 
+const ProposalContainer = styled.div`
+    padding: 0 8px;
+`
+
 export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
@@ -47,7 +51,9 @@ export const ProposalTable: React.FC = observer(() => {
                                 const proposal = items[index]
                                 return (
                                     <div style={style}>
-                                        <Proposal key={proposal.key} proposal={proposal} />
+                                        <ProposalContainer>
+                                            <Proposal key={proposal.key} proposal={proposal} />
+                                        </ProposalContainer>
                                     </div>
                                 )
                             }}

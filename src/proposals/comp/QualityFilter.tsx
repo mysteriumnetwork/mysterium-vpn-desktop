@@ -10,25 +10,49 @@ import styled from "styled-components"
 import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../store"
-import { textSmall } from "../../ui-kit/typography"
+import { textCaption, textSmall } from "../../ui-kit/typography"
 import { Checkbox } from "../../ui-kit/Checkbox/Checkbox"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 12px;
 `
 
-const Title = styled.p`
+const Title = styled.div`
+    height: 32px;
+    margin-left: 8px;
+
+    ${textCaption}
+    color: #777;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+`
+
+const RangeContainer = styled.div`
+    height: 32px;
+    padding: 0 16px;
+    margin-bottom: 8px;
+`
+
+const Label = styled.div`
     ${textSmall}
     color: #777;
+    line-height: 16px;
 `
 
-const Range = styled.input``
+const Range = styled.input`
+    width: 100%;
+`
 
 const IncludeFailed = styled.div`
-    margin: 12px 0;
+    ${textSmall}
+    height: 32px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
 `
 
 const displayQuality = (q?: QualityLevel): string => {
@@ -53,8 +77,11 @@ export const QualityFilter = observer(() => {
     const includeFailed = proposals.filter.includeFailed
     return (
         <Container>
-            <Title>Quality: {qualityText}</Title>
-            <Range type="range" min={0} max={2} defaultValue={quality} onChange={onChange} />
+            <Title>Quality</Title>
+            <RangeContainer>
+                <Label>{qualityText}</Label>
+                <Range type="range" min={0} max={2} defaultValue={quality} onChange={onChange} />
+            </RangeContainer>
             <IncludeFailed>
                 <Checkbox checked={includeFailed} onChange={(): void => proposals.setIncludeFailed(!includeFailed)}>
                     Include unreachable nodes
