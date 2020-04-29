@@ -9,6 +9,7 @@ import { History } from "history"
 import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
+import { analytics } from "../analytics/analytics-ui"
 
 import { history } from "./history"
 import { locations } from "./locations"
@@ -45,6 +46,7 @@ export class NavigationStore {
 
     @action
     navigateTo = (path: string): void => {
+        analytics.pageview(path)
         this.history.push(path)
     }
 
