@@ -1,7 +1,7 @@
 {
   "name": "mysterium-vpn-desktop",
   "productName": "MysteriumVPN",
-  "version": "2.0.0",
+  "version": "2.0.0-next",
   "main": "index.js",
   "author": {
     "name": "Mysterium Network",
@@ -29,6 +29,7 @@
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.0.6",
     "mysterium-vpn-js": "^3.0.1",
+    "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -40,7 +41,8 @@
     "react-window": "^1.8.5",
     "source-map-support": "^0.5.16",
     "styled-components": "^4.4.1",
-    "sudo-prompt": "^9.1.1"
+    "sudo-prompt": "^9.1.1",
+    "universal-analytics": "^0.4.20"
   },
   "devDependencies": {
     "@types/css-font-loading-module": "^0.0.4",
@@ -52,6 +54,7 @@
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
     "@types/styled-components": "^5.1.0",
+    "@types/universal-analytics": "^0.4.4",
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
