@@ -7,11 +7,11 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import ua from "universal-analytics"
-import { BrowserWindow, screen } from "electron"
+import { App, BrowserWindow, screen } from "electron"
 
 import * as packageJson from "../../package.json"
 
-import { Action, Category } from "./data"
+import { Action, AppAction, Category } from "./data"
 import { getScreenResolution, machineId } from "./resolvers"
 
 const ga = ua("UA-89155936-2", {
@@ -33,13 +33,22 @@ export const pageview = (path: string): void => {
     ga.pageview(path).send()
 }
 
-const setupDimensions = (window: BrowserWindow): void => {
+const setupParameters = (app: App, window: BrowserWindow): void => {
     ga.set("an", packageJson.productName)
     ga.set("aid", "network.mysterium.desktop")
     ga.set("av", packageJson.version)
     ga.set("sr", getScreenResolution(window))
     ga.set("ua", window.webContents.userAgent)
 
+    app.on("window-all-closed", () => {
+        event(Category.App, AppAction.CloseWindow)
+    })
+    app.on("will-quit", () => {
+        event(Category.App, AppAction.Quit)
+    })
+    window.on("minimize", () => {
+        event(Category.App, AppAction.MinimizeWindow)
+    })
     window.on("moved", () => {
         ga.set("sr", getScreenResolution(window))
     })
@@ -48,8 +57,8 @@ const setupDimensions = (window: BrowserWindow): void => {
     })
 }
 
-export const setupAnalytics = (window: BrowserWindow): void => {
-    setupDimensions(window)
+export const setupAnalytics = (app: App, window: BrowserWindow): void => {
+    setupParameters(app, window)
 
     // @ts-ignore
     global.analyticsSetUserId = setUserId

@@ -106,7 +106,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
 // create main BrowserWindow when electron is ready
 app.on("ready", async () => {
     win = await createWindow()
-    setupAnalytics(win)
+    setupAnalytics(app, win)
     tray = createTray(app, win)
 })
 

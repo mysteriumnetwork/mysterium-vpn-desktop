@@ -24,7 +24,7 @@ export type Action =
     | WalletAction
 
 export enum AppAction {
-    HardQuit = "Hard quit",
+    Quit = "Quit",
     CloseWindow = "Close window",
     MinimizeWindow = "Minimize window",
 }
