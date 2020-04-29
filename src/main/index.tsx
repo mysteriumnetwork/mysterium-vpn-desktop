@@ -12,7 +12,7 @@ import { app, BrowserWindow, ipcMain, Tray, Menu } from "electron"
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
-import { setupAnalytics } from "../analytics/analytics-main"
+import { setupAnalyticsGlobals, setupAnalyticsForApp, setupAnalyticsForWindow } from "../analytics/analytics-main"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
@@ -99,6 +99,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
             window.focus()
         })
     })
+    setupAnalyticsForWindow(window)
 
     return window
 }
@@ -106,8 +107,9 @@ const createWindow = async (): Promise<BrowserWindow> => {
 // create main BrowserWindow when electron is ready
 app.on("ready", async () => {
     win = await createWindow()
-    setupAnalytics(app, win)
     tray = createTray(app, win)
+    setupAnalyticsGlobals()
+    setupAnalyticsForApp(app)
 })
 
 // quit application when all windows are closed

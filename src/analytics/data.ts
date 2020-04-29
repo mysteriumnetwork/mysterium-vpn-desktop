@@ -26,6 +26,7 @@ export type Action =
 export enum AppAction {
     Quit = "Quit",
     CloseWindow = "Close window",
+    RestoreWindow = "Restore window",
     MinimizeWindow = "Minimize window",
 }
 

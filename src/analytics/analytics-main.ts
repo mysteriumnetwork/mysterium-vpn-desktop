@@ -33,32 +33,41 @@ export const pageview = (path: string): void => {
     ga.pageview(path).send()
 }
 
-const setupParameters = (app: App, window: BrowserWindow): void => {
+const setupParameters = (): void => {
     ga.set("an", packageJson.productName)
     ga.set("aid", "network.mysterium.desktop")
     ga.set("av", packageJson.version)
-    ga.set("sr", getScreenResolution(window))
-    ga.set("ua", window.webContents.userAgent)
+}
 
-    app.on("window-all-closed", () => {
-        event(Category.App, AppAction.CloseWindow)
-    })
+export const setupAnalyticsForApp = (app: App): void => {
     app.on("will-quit", () => {
         event(Category.App, AppAction.Quit)
     })
+}
+
+export const setupAnalyticsForWindow = (window: BrowserWindow): void => {
+    ga.set("sr", getScreenResolution(window))
+    ga.set("ua", window.webContents.userAgent)
     window.on("minimize", () => {
         event(Category.App, AppAction.MinimizeWindow)
     })
     window.on("moved", () => {
         ga.set("sr", getScreenResolution(window))
     })
+    window.on("close", () => {
+        event(Category.App, AppAction.CloseWindow)
+    })
+    window.on("restore", () => {
+        event(Category.App, AppAction.RestoreWindow)
+    })
+    screen.removeAllListeners()
     screen.on("display-metrics-changed", () => {
         ga.set("sr", getScreenResolution(window))
     })
 }
 
-export const setupAnalytics = (app: App, window: BrowserWindow): void => {
-    setupParameters(app, window)
+export const setupAnalyticsGlobals = (): void => {
+    setupParameters()
 
     // @ts-ignore
     global.analyticsSetUserId = setUserId
