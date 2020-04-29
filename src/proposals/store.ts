@@ -18,6 +18,8 @@ import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
+import { analytics } from "../analytics/analytics-ui"
+import { Category, ProposalAction } from "../analytics/data"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -145,7 +147,9 @@ export class ProposalStore {
 
     @action
     toggleCustomFilter(): void {
-        this.customFilter = !this.customFilter
+        const newVal = !this.customFilter
+        this.customFilter = newVal
+        analytics.event(Category.Proposal, ProposalAction.CustomFilter, String(newVal))
     }
 
     // #####################
@@ -170,6 +174,7 @@ export class ProposalStore {
         this.filter.text = text
         this.setIpTypeFilter(undefined)
         this.setCountryFilter(undefined)
+        analytics.event(Category.Proposal, ProposalAction.TextFilter)
     }
 
     @computed
@@ -189,10 +194,12 @@ export class ProposalStore {
     @action
     setPricePerMinuteMaxFilter(pricePerMinuteMax?: number): void {
         this.filter.pricePerMinuteMax = pricePerMinuteMax
+        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerMinute, String(pricePerMinuteMax))
     }
     @action
     setPricePerGibMaxFilter(pricePerGibMax?: number): void {
         this.filter.pricePerGibMax = pricePerGibMax
+        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerGib, String(pricePerGibMax))
     }
 
     @computed
@@ -248,11 +255,17 @@ export class ProposalStore {
     @action
     setQualityFilter(quality?: QualityLevel): void {
         this.filter.quality = quality
+        analytics.event(
+            Category.Proposal,
+            ProposalAction.QualityFilterLevel,
+            quality ? QualityLevel[quality] : undefined,
+        )
     }
 
     @action
     setIncludeFailed(includeFailed: boolean): void {
         this.filter.includeFailed = includeFailed
+        analytics.event(Category.Proposal, ProposalAction.QualityFilterIncludeUnreachable, String(includeFailed))
     }
 
     @computed
@@ -294,6 +307,7 @@ export class ProposalStore {
     @action
     toggleIpTypeFilter(ipType?: string): void {
         this.setIpTypeFilter(this.filter.ipType !== ipType ? ipType : undefined)
+        analytics.event(Category.Proposal, ProposalAction.IpTypeFilter, ipType)
     }
 
     @computed
@@ -325,6 +339,7 @@ export class ProposalStore {
     toggleCountryFilter(countryCode?: string): void {
         this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
+        analytics.event(Category.Proposal, ProposalAction.CountryFilter, countryCode)
     }
 
     @computed
@@ -349,13 +364,10 @@ export class ProposalStore {
     // End of filters
     // #####################
 
-    set activate(proposal: UIProposal) {
-        this.active = proposal
-    }
-
     @action
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
+        analytics.event(Category.Proposal, ProposalAction.SelectProposal, proposal?.id10)
     }
 
     @action
