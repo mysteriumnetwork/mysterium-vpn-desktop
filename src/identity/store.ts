@@ -9,6 +9,8 @@ import { action, observable, reaction } from "mobx"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
+import { analytics } from "../analytics/analytics-ui"
+import { Category, IdentityAction, WalletAction } from "../analytics/analytics"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -66,6 +68,19 @@ export class IdentityStore {
                 }
             },
         )
+        // analytics
+        reaction(
+            () => this.identity?.registrationStatus,
+            (status) => {
+                analytics.event(Category.Identity, IdentityAction.RegistrationStatusChanged, status)
+            },
+        )
+        reaction(
+            () => this.identity?.balance,
+            (balance) => {
+                analytics.event(Category.Wallet, WalletAction.BalanceChanged, balance ? String(balance) : undefined)
+            },
+        )
     }
 
     @action
@@ -87,6 +102,7 @@ export class IdentityStore {
 
     @action
     async create(): Promise<void> {
+        analytics.event(Category.Identity, IdentityAction.CreateIdentity)
         await tequilapi.identityCreate("")
     }
 
@@ -96,13 +112,14 @@ export class IdentityStore {
             return
         }
         const i = this.identity.id
+        analytics.event(Category.Identity, IdentityAction.UnlockIdentity)
         return await tequilapi.identityUnlock(i, "", 10000)
     }
 
     @action
     async register(id: Identity): Promise<void> {
         const fees = await this.transactorFees()
-        console.log("Transactor fees: ", JSON.stringify(fees))
+        analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
         return tequilapi.identityRegister(id.id, { fee: fees.registration })
     }
 

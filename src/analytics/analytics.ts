@@ -51,8 +51,10 @@ export enum OnboardingAction {
 }
 
 export enum IdentityAction {
-    RegistrationInProgress = "Registration in progress",
-    Registered = "Identity registered",
+    CreateIdentity = "Create identity",
+    UnlockIdentity = "Unlock identity",
+    RegisterIdentity = "Register identity",
+    RegistrationStatusChanged = "Registration status changed",
 }
 
 export enum ProposalAction {
@@ -75,5 +77,6 @@ export enum ConnectAction {
 }
 
 export enum WalletAction {
+    BalanceChanged = "Balance Changed",
     Topup = "Wallet top-up",
 }
