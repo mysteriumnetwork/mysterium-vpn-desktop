@@ -8,6 +8,8 @@ import { action } from "mobx"
 import tequilapi from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
+import { analytics } from "../analytics/analytics-ui"
+import { Category, WalletAction } from "../analytics/analytics"
 
 export class PaymentStore {
     root: RootStore
@@ -18,6 +20,7 @@ export class PaymentStore {
 
     @action
     async topUp(): Promise<void> {
+        analytics.event(Category.Wallet, WalletAction.Topup)
         return await tequilapi.topUp({
             identity: this.root.identity.identity?.id ?? "",
         })
