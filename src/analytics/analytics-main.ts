@@ -25,7 +25,6 @@ const ga = ua(packageJson.analyticsAccountId, {
     cid: machineId(),
     strictCidFormat: false,
 })
-ga.set("ds", "app")
 // ga.debug(true)
 
 export const analytics: Analytics = {
