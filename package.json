@@ -73,6 +73,7 @@
     "url-loader": "^4.1.0",
     "webpack": "^4.42.1"
   },
+  "analyticsAccountId": "UA-89155936-2",
   "electronWebpack": {
     "renderer": {
       "webpackConfig": "webpack.renderer.additions.js"

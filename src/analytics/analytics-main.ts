@@ -21,7 +21,7 @@ export const getScreenResolution = (window: BrowserWindow): string => {
 
 export const machineId = (): string => machineIdSync()
 
-const ga = ua("UA-89155936-2", {
+const ga = ua(packageJson.analyticsAccountId, {
     cid: machineId(),
     strictCidFormat: false,
 })
