@@ -164,7 +164,7 @@ export class ConnectionStore {
     @action
     resetLocation(): void {
         this.setLocation({
-            country: "Unknown",
+            country: "unknown",
             ip: "Updating...",
             asn: 0,
             city: "",
@@ -181,7 +181,7 @@ export class ConnectionStore {
             location = await tequilapi.connectionLocation()
         } catch (err) {
             location = {
-                country: "Unknown",
+                country: "unknown",
                 ip: "Updating...",
                 asn: 0,
                 city: "",

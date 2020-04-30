@@ -9,7 +9,8 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { resolveCountry } from "../countries"
+
+import { Flag } from "./Flag/Flag"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -20,12 +21,12 @@ const Container = styled.div`
     align-items: center;
 `
 
-const Flag = styled.img`
-    padding: 16px;
-`
-
 const ConnectionStatus = styled.p`
     font-weight: bold;
+`
+
+const LocationFlag = styled(Flag)`
+    padding: 16px;
 `
 
 const Location = styled.div`
@@ -38,10 +39,9 @@ const Location = styled.div`
 export const OriginalLocation = observer(() => {
     const { connection } = useStores()
     const ip = `IP: ${connection.originalLocation?.ip ?? "Unknown"}`
-    const flagSrc = resolveCountry(connection.originalLocation?.country).flag
     return (
         <Container>
-            <Flag src={flagSrc} width={24} />
+            <LocationFlag countryCode={connection.originalLocation?.country} />
             <Location>
                 <ConnectionStatus>{connection.status}</ConnectionStatus>
                 <p>{ip}</p>

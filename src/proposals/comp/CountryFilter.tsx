@@ -12,6 +12,7 @@ import { useStores } from "../../store"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 import { textCaption } from "../../ui-kit/typography"
 import { resolveCountry } from "../../location/countries"
+import { Flag } from "../../location/comp/Flag/Flag"
 
 const Container = styled.div`
     flex: 1;
@@ -29,12 +30,12 @@ const Title = styled.div`
     align-items: center;
 `
 
-const Flag = styled.img`
-    margin-right: 6px;
-`
-
 const Count = styled.span`
     margin-left: auto;
+`
+
+const FilterFlag = styled(Flag)`
+    margin-right: 8px;
 `
 
 export const CountryFilter = observer(() => {
@@ -59,7 +60,7 @@ export const CountryFilter = observer(() => {
                             onClick={toggleAction}
                             active={proposals.filter.country == countryCode}
                         >
-                            <Flag src={country.flag} alt={country.name} />
+                            <FilterFlag countryCode={countryCode} />
                             <p>{country.name}</p>
                             <Count>{countryCounts[countryCode]}</Count>
                         </Toggle>

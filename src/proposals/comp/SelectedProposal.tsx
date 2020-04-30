@@ -10,8 +10,8 @@ import { observer } from "mobx-react-lite"
 import styled, { keyframes } from "styled-components"
 
 import { useStores } from "../../store"
-import { resolveCountry } from "../../location/countries"
 import { ConnectDisconnectButton } from "../../connection/comp/connect-disconnect-button"
+import { Flag } from "../../location/comp/Flag/Flag"
 
 import { ProposalQuality } from "./ProposalQuality/ProposalQuality"
 
@@ -35,8 +35,8 @@ const Container = styled.div`
     animation: ${slideIn} 150ms ease-in-out;
 `
 
-const Flag = styled.img`
-    padding: 16px;
+const ProposalFlag = styled(Flag)`
+    padding-right: 16px;
 `
 
 const ProviderId = styled.p`
@@ -60,15 +60,13 @@ export const SelectedProposal: React.FC = observer(() => {
     if (!proposal) {
         return <></>
     }
-    const country = resolveCountry(proposal.country)
-
     const timeRate = displayMoney(pricePerMinute(proposal.paymentMethod))
     const trafficRate = displayMoney(pricePerGiB(proposal.paymentMethod))
     const pricingText = `${timeRate}/min ${trafficRate}/GiB`
 
     return (
         <Container>
-            <Flag src={country.flag} alt={country.name} />
+            <ProposalFlag countryCode={proposal.country} />
             <ServiceInfo>
                 <ProviderId>{proposal.id10}</ProviderId>
                 <p>{pricingText}</p>

@@ -11,8 +11,8 @@ import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
-import { resolveCountry } from "../../../location/countries"
 import { ConnectDisconnectButton } from "../../../connection/comp/connect-disconnect-button"
+import { Flag } from "../../../location/comp/Flag/Flag"
 
 import logoWhiteConnected from "./logo-white-connected.png"
 import { ConnectionProposal } from "./connection-proposal"
@@ -54,7 +54,7 @@ const LocationVisual = styled.div`
     align-items: center;
 `
 
-const Flag = styled.img`
+const LocationFlag = styled(Flag)`
     padding: 16px;
 `
 
@@ -101,16 +101,14 @@ export const ConnectedView: React.FC = observer(() => {
         default:
             statusText = "Working on it..."
     }
-    const countryFrom = resolveCountry(originalLocation?.country)
-    const countryTo = resolveCountry(location?.country)
 
     return (
         <Container>
             <Main>
                 <Status>{statusText}</Status>
                 <LocationVisual>
-                    <Flag src={countryFrom.flag} />
-                    <Flag src={countryTo.flag} />
+                    <LocationFlag countryCode={originalLocation?.country} />
+                    <LocationFlag countryCode={location?.country} />
                 </LocationVisual>
                 <ConnectionIP>{location?.ip}</ConnectionIP>
                 <ConnectionProposal />
