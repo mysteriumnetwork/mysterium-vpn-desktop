@@ -12,6 +12,8 @@ import * as sudo from "sudo-prompt"
 
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
+import { analytics } from "../analytics/analytics-main"
+import { AppAction, Category } from "../analytics/analytics"
 
 const mystSock = "/var/run/myst.sock"
 
@@ -25,6 +27,7 @@ export class Supervisor {
                 .createConnection(mystSock)
                 .on("connect", () => {
                     console.info("Connected to: ", mystSock)
+                    analytics.event(Category.App, AppAction.ConnectedToSupervisor)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {
@@ -41,6 +44,7 @@ export class Supervisor {
         const mystHome = os.homedir()
         const mystPath = staticAssetPath("myst")
         const openvpnPath = staticAssetPath("openvpn")
+        analytics.event(Category.App, AppAction.InstallSupervisor)
         return await new Promise((resolve, reject) => {
             try {
                 sudo.exec(

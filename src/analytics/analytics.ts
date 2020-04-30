@@ -35,6 +35,8 @@ export enum AppAction {
     CloseWindow = "Close window",
     RestoreWindow = "Restore window",
     MinimizeWindow = "Minimize window",
+    InstallSupervisor = "Install supervisor",
+    ConnectedToSupervisor = "Connected to supervisor",
     DaemonStatusChanged = "Daemon status changed",
 }
 
