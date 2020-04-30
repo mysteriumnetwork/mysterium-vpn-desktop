@@ -35,6 +35,7 @@ export enum AppAction {
     CloseWindow = "Close window",
     RestoreWindow = "Restore window",
     MinimizeWindow = "Minimize window",
+    DaemonStatusChanged = "Daemon status changed",
 }
 
 export enum TrayAction {

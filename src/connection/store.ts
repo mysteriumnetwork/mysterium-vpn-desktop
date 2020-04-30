@@ -6,10 +6,10 @@
  */
 import { action, observable, reaction, runInAction } from "mobx"
 import tequilapi, {
+    AppState,
     ConnectionStatistics,
     ConnectionStatus,
     ConsumerLocation,
-    AppState,
     SSEEventType,
 } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
@@ -19,6 +19,8 @@ import { eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 import { MainIpcListenChannels } from "../main/ipc"
+import { analytics } from "../analytics/analytics-ui"
+import { AppAction, Category, ConnectAction } from "../analytics/analytics"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
@@ -59,6 +61,7 @@ export class ConnectionStore {
         reaction(
             () => this.root.daemon.status,
             async (status) => {
+                analytics.event(Category.App, AppAction.DaemonStatusChanged, status)
                 if (status == DaemonStatusType.Up) {
                     await this.resolveOriginalLocation()
                 }
@@ -67,6 +70,7 @@ export class ConnectionStore {
         reaction(
             () => this.root.connection.status,
             async (status) => {
+                analytics.event(Category.Connection, ConnectAction.StatusChanged, status)
                 this.resetLocation()
                 if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
                     await this.resolveLocation()
@@ -80,6 +84,19 @@ export class ConnectionStore {
             },
             { name: "Notify tray with new connection status" },
         )
+        // analytics
+        reaction(
+            () => this.root.daemon.status,
+            async (status) => {
+                analytics.event(Category.App, AppAction.DaemonStatusChanged, status)
+            },
+        )
+        reaction(
+            () => this.root.connection.status,
+            async (status) => {
+                analytics.event(Category.Connection, ConnectAction.StatusChanged, status)
+            },
+        )
     }
 
     @action
@@ -87,6 +104,7 @@ export class ConnectionStore {
         if (!this.root.identity.identity || !this.root.proposals.active) {
             return
         }
+        analytics.event(Category.Connection, ConnectAction.Connect, this.root.proposals.active.country)
         this.setConnectInProgress(true)
         this.setGracePeriod()
         try {
@@ -124,6 +142,7 @@ export class ConnectionStore {
 
     @action
     async disconnect(): Promise<void> {
+        analytics.event(Category.Connection, ConnectAction.Disconnect, this.root.connection.location?.country)
         this.setGracePeriod()
         try {
             await tequilapi.connectionCancel()
