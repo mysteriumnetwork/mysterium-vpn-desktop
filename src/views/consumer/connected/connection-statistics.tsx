@@ -33,7 +33,10 @@ export const ConnectionStatistics: React.FC = observer(() => {
             amount: tokensSpent ?? 0,
             currency: Currency.MYSTTestToken,
         },
-        { showCurrency: true },
+        {
+            showCurrency: true,
+            fractionDigits: 3,
+        },
     )
     return (
         <React.Fragment>
