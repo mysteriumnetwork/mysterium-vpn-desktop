@@ -10,10 +10,13 @@ import ReactMarkdown from "react-markdown"
 import { TermsEndUser } from "@mysteriumnetwork/terms"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import styled from "styled-components"
+import * as _ from "lodash"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/mbutton/brand-button"
 import { Checkbox } from "../../../ui-kit/Checkbox/Checkbox"
+import { Category, OnboardingAction } from "../../../analytics/analytics"
+import { analytics } from "../../../analytics/analytics-ui"
 
 import termsBg from "./terms-bg.png"
 
@@ -70,23 +73,33 @@ const BottomBar = styled.div`
 export const AcceptTermsView: React.FC = observer(({}) => {
     const { config } = useStores()
     const [agree, setAgree] = useState(false)
+    const scrollAnalyticsDebounced = _.debounce((): void => {
+        analytics.event(Category.Onboarding, OnboardingAction.ScrollTerms)
+    }, 1000)
     return (
         <Container>
             <Title>Terms and Conditions</Title>
             <Version>
                 Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
             </Version>
-            <Terms>
+            <Terms onScroll={scrollAnalyticsDebounced}>
                 <ReactMarkdown source={TermsEndUser} />
             </Terms>
             <BottomBar>
-                <Checkbox checked={agree} onChange={(): void => setAgree(!agree)}>
+                <Checkbox
+                    checked={agree}
+                    onChange={(): void => {
+                        setAgree(!agree)
+                        analytics.event(Category.Onboarding, OnboardingAction.CheckBoxAgreeToTerms)
+                    }}
+                >
                     I agree to all Terms of Service
                 </Checkbox>
                 <BrandButton
                     disabled={!agree}
                     onClick={(): void => {
                         config.agreeToTerms()
+                        analytics.event(Category.Onboarding, OnboardingAction.AcceptTerms)
                     }}
                 >
                     Continue
