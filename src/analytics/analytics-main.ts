@@ -26,7 +26,7 @@ const ga = ua(packageJson.analyticsAccountId, {
     strictCidFormat: false,
 })
 ga.set("ds", "app")
-ga.debug(true)
+// ga.debug(true)
 
 export const analytics: Analytics = {
     setUserId(userId: string) {
