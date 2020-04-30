@@ -367,7 +367,7 @@ export class ProposalStore {
     @action
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
-        analytics.event(Category.Proposal, ProposalAction.SelectProposal, proposal?.id10)
+        analytics.event(Category.Proposal, ProposalAction.SelectProposal, proposal?.country)
     }
 
     @action
