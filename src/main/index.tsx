@@ -12,7 +12,12 @@ import { app, BrowserWindow, ipcMain, Tray, Menu } from "electron"
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
-import { setupAnalyticsGlobals, setupAnalyticsForApp, setupAnalyticsForWindow } from "../analytics/analytics-main"
+import {
+    setupGlobals as setupAnalyticsGlobals,
+    setupApp as setupAnalyticsForApp,
+    setupWindow as setupAnalyticsForWindow,
+    initialize as initializeAnalytics,
+} from "../analytics/analytics-main"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
@@ -108,6 +113,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
 app.on("ready", async () => {
     win = await createWindow()
     tray = createTray(app, win)
+    initializeAnalytics()
     setupAnalyticsGlobals()
     setupAnalyticsForApp(app)
 })

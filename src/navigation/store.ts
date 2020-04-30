@@ -5,15 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction } from "mobx"
-import { History } from "history"
+import { History, LocationState } from "history"
 import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { analytics } from "../analytics/analytics-ui"
+import { Category, OnboardingAction } from "../analytics/analytics"
 
 import { history } from "./history"
 import { locations } from "./locations"
-import LocationState = History.LocationState
 
 const connectionInProgress = (status: ConnectionStatus): boolean => {
     return [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)
@@ -86,6 +86,7 @@ export class NavigationStore {
 
     @action
     dismissWelcome = (): void => {
+        analytics.event(Category.Onboarding, OnboardingAction.GetStarted)
         this.welcome = false
         this.navigateTo(locations.terms)
     }

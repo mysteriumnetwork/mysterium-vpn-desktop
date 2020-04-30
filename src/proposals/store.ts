@@ -19,7 +19,7 @@ import * as _ from "lodash"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { analytics } from "../analytics/analytics-ui"
-import { Category, ProposalAction } from "../analytics/data"
+import { Category, ProposalAction } from "../analytics/analytics"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 

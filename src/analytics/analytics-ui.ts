@@ -6,10 +6,10 @@
  */
 import { remote } from "electron"
 
-import { setUserId, event, pageview } from "./analytics-main"
+import { Analytics } from "./analytics"
 
-export const analytics = {
-    setUserId: remote.getGlobal("analyticsSetUserId") as typeof setUserId,
-    event: remote.getGlobal("analyticsEvent") as typeof event,
-    pageview: remote.getGlobal("analyticsPageview") as typeof pageview,
+export const analytics: Analytics = {
+    setUserId: remote.getGlobal("analyticsSetUserId"),
+    event: remote.getGlobal("analyticsEvent"),
+    pageview: remote.getGlobal("analyticsPageview"),
 }

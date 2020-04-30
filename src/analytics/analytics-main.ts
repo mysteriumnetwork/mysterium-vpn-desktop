@@ -8,11 +8,18 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import ua from "universal-analytics"
 import { App, BrowserWindow, screen } from "electron"
+import { machineIdSync } from "node-machine-id"
 
 import * as packageJson from "../../package.json"
 
-import { Action, AppAction, Category } from "./data"
-import { getScreenResolution, machineId } from "./resolvers"
+import { Analytics, Action, AppAction, Category } from "./analytics"
+
+export const getScreenResolution = (window: BrowserWindow): string => {
+    const display = screen.getDisplayMatching(window.getBounds())
+    return `${display.size.width}x${display.size.height}`
+}
+
+export const machineId = (): string => machineIdSync()
 
 const ga = ua("UA-89155936-2", {
     cid: machineId(),
@@ -21,58 +28,56 @@ const ga = ua("UA-89155936-2", {
 ga.set("ds", "app")
 ga.debug(true)
 
-export const setUserId = (userId: string): void => {
-    ga.set("uid", userId)
+export const analytics: Analytics = {
+    setUserId(userId: string) {
+        ga.set("uid", userId)
+    },
+    event(category: Category, action: Action, label?: string, value?: number) {
+        ga.event(category, action, label ?? "", value ?? 0).send()
+    },
+    pageview(path: string) {
+        ga.pageview(path).send()
+    },
 }
 
-export const event = (category: Category, action: Action, label?: string, value?: number): void => {
-    ga.event(category, action, label ?? "", value ?? 0).send()
-}
-
-export const pageview = (path: string): void => {
-    ga.pageview(path).send()
-}
-
-const setupParameters = (): void => {
+export const initialize = (): void => {
     ga.set("an", packageJson.productName)
     ga.set("aid", "network.mysterium.desktop")
     ga.set("av", packageJson.version)
 }
 
-export const setupAnalyticsForApp = (app: App): void => {
+export const setupGlobals = (): void => {
+    // @ts-ignore
+    global.analyticsSetUserId = analytics.setUserId
+    // @ts-ignore
+    global.analyticsEvent = analytics.event
+    // @ts-ignore
+    global.analyticsPageview = analytics.pageview
+}
+
+export const setupApp = (app: App): void => {
     app.on("will-quit", () => {
-        event(Category.App, AppAction.Quit)
+        analytics.event(Category.App, AppAction.Quit)
     })
 }
 
-export const setupAnalyticsForWindow = (window: BrowserWindow): void => {
+export const setupWindow = (window: BrowserWindow): void => {
     ga.set("sr", getScreenResolution(window))
     ga.set("ua", window.webContents.userAgent)
     window.on("minimize", () => {
-        event(Category.App, AppAction.MinimizeWindow)
+        analytics.event(Category.App, AppAction.MinimizeWindow)
     })
     window.on("moved", () => {
         ga.set("sr", getScreenResolution(window))
     })
     window.on("close", () => {
-        event(Category.App, AppAction.CloseWindow)
+        analytics.event(Category.App, AppAction.CloseWindow)
     })
     window.on("restore", () => {
-        event(Category.App, AppAction.RestoreWindow)
+        analytics.event(Category.App, AppAction.RestoreWindow)
     })
     screen.removeAllListeners()
     screen.on("display-metrics-changed", () => {
         ga.set("sr", getScreenResolution(window))
     })
-}
-
-export const setupAnalyticsGlobals = (): void => {
-    setupParameters()
-
-    // @ts-ignore
-    global.analyticsSetUserId = setUserId
-    // @ts-ignore
-    global.analyticsEvent = event
-    // @ts-ignore
-    global.analyticsPageview = pageview
 }

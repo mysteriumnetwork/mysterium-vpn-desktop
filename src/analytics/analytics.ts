@@ -4,6 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
+export interface Analytics {
+    setUserId(userId: string): void
+    event(category: Category, action: Action, label?: string, value?: number): void
+    pageview(path: string): void
+}
+
 export enum Category {
     App = "App",
     Tray = "Tray",

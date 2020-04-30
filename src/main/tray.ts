@@ -10,8 +10,8 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { supervisor } from "../supervisor/supervisor"
-import { event } from "../analytics/analytics-main"
-import { Category, TrayAction } from "../analytics/data"
+import { analytics } from "../analytics/analytics-main"
+import { Category, TrayAction } from "../analytics/analytics"
 
 import { ipcWebDisconnect } from "./index"
 
@@ -36,7 +36,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Show window",
                 click: (): void => {
-                    event(Category.Tray, TrayAction.ShowWindow)
+                    analytics.event(Category.Tray, TrayAction.ShowWindow)
                     win.show()
                 },
             },
@@ -46,7 +46,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Repair supervisor",
                 click: async (): Promise<void> => {
-                    event(Category.Tray, TrayAction.Repair)
+                    analytics.event(Category.Tray, TrayAction.Repair)
                     ipcWebDisconnect()
                     await supervisor.install()
                 },
@@ -59,7 +59,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
                 label: `Quit ${packageJson.productName}`,
                 accelerator: "CommandOrControl+Q",
                 click: (): void => {
-                    event(Category.Tray, TrayAction.Quit)
+                    analytics.event(Category.Tray, TrayAction.Quit)
                     app.quit()
                 },
             },
