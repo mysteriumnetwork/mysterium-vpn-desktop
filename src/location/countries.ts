@@ -720,7 +720,7 @@ const countries: { [key: string]: CountryType } = Object.freeze({
     },
 })
 
-const unknown: CountryType = Object.freeze({
+export const unknownCountry: CountryType = Object.freeze({
     name: "Unknown",
 })
 
@@ -730,11 +730,11 @@ export type CountryType = {
 
 export const resolveCountry = (countryCode?: string): CountryType => {
     if (!countryCode) {
-        return unknown
+        return unknownCountry
     }
     return (
         countries[countryCode.toLowerCase()] || {
-            ...unknown,
+            ...unknownCountry,
             countryCode,
         }
     )

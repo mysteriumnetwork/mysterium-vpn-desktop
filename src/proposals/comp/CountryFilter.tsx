@@ -11,7 +11,7 @@ import styled from "styled-components"
 import { useStores } from "../../store"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 import { textCaption } from "../../ui-kit/typography"
-import { resolveCountry } from "../../location/countries"
+import { resolveCountry, unknownCountry } from "../../location/countries"
 import { Flag } from "../../location/comp/Flag/Flag"
 
 const Container = styled.div`
@@ -48,7 +48,14 @@ export const CountryFilter = observer(() => {
         <Container>
             <Title>Country</Title>
             {Object.keys(countryCounts)
-                .sort()
+                .sort((self, other) => {
+                    const selfName = resolveCountry(self).name
+                    const otherName = resolveCountry(other).name
+                    if (selfName == unknownCountry.name) {
+                        return 1
+                    }
+                    return selfName.localeCompare(otherName)
+                })
                 .map((countryCode) => {
                     const toggleAction = (): void => {
                         proposals.toggleCountryFilter(countryCode)
