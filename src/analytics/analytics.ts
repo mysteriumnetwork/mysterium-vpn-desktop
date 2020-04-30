@@ -76,7 +76,7 @@ export enum ConnectAction {
     Connect = "Connect",
     Disconnect = "Disconnect",
     Cancel = "Cancel",
-    StatusChanged = "Connected",
+    StatusChanged = "StatusChanged",
 }
 
 export enum WalletAction {
