@@ -1,7 +1,7 @@
 {
   "name": "mysterium-vpn-desktop",
   "productName": "MysteriumVPN",
-  "version": "2.0.0-next",
+  "version": "2.0.0-beta1",
   "main": "index.js",
   "author": {
     "name": "Mysterium Network",
