@@ -116,7 +116,6 @@ const createWindow = async (): Promise<BrowserWindow> => {
 app.on("ready", async () => {
     win = await createWindow()
     tray = createTray(app, win)
-    throw new Error("dududu")
     initializeAnalytics()
     setupAnalyticsGlobals()
     setupAnalyticsForApp(app)
