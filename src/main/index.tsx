@@ -7,7 +7,6 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import * as Sentry from "@sentry/electron"
 import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron"
 
 import * as packageJson from "../../package.json"
@@ -19,12 +18,13 @@ import {
     setupGlobals as setupAnalyticsGlobals,
     setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
+import { initialize as initializeSentry } from "../errors/sentry"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
 import { createMenu } from "./menu"
 
-Sentry.init({ dsn: packageJson.sentryDsn })
+initializeSentry()
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
