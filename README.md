@@ -1,5 +1,7 @@
 # mysterium-vpn-desktop
 
+[![Github All Releases](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)]()
+
 **Work in progress: use with care**
 
 This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork/mysterium-vpn) with the following goals:
