@@ -10,9 +10,13 @@ import fs from "fs"
 import React from "react"
 import ReactDOM from "react-dom"
 import { createGlobalStyle } from "styled-components"
+import * as Sentry from "@sentry/electron"
 
 import "mobx-react-lite/batchingForReactDom"
 import { Routes } from "../navigation/routes"
+import * as packageJson from "../../package.json"
+
+Sentry.init({ dsn: packageJson.sentryDsn })
 
 const robotoLightPath = path.join(__static, "/fonts/Roboto-Light.ttf")
 const robotoLightBuffer = fs.readFileSync(robotoLightPath)

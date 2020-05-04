@@ -7,21 +7,24 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import { app, BrowserWindow, ipcMain, Tray, Menu } from "electron"
+import * as Sentry from "@sentry/electron"
+import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron"
 
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
 import {
-    setupGlobals as setupAnalyticsGlobals,
-    setupApp as setupAnalyticsForApp,
-    setupWindow as setupAnalyticsForWindow,
     initialize as initializeAnalytics,
+    setupApp as setupAnalyticsForApp,
+    setupGlobals as setupAnalyticsGlobals,
+    setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
 import { createMenu } from "./menu"
+
+Sentry.init({ dsn: packageJson.sentryDsn })
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -113,6 +116,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
 app.on("ready", async () => {
     win = await createWindow()
     tray = createTray(app, win)
+    throw new Error("dududu")
     initializeAnalytics()
     setupAnalyticsGlobals()
     setupAnalyticsForApp(app)

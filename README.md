@@ -42,3 +42,11 @@ yarn bundle
 ## Development guide
 
 [./docs/DEV_GUIDE.md](./docs/DEV_GUIDE.md)
+
+### Upgrading electron version
+
+When upgrading, upload debug symbols to sentry:
+```
+node sentry-symbols.js
+```
+https://docs.sentry.io/platforms/javascript/electron/#uploading-debug-information
