@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    # If the commit is tagged with a version (e.g. "1.0.0") release the app after building
+    tags: ["*"]
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    # Platforms to build on/for
+    strategy:
+      matrix:
+        os: [macos-10.15]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Read version from tag
+        id: get_version
+        uses: battila7/get-version-action@v1.2.1
+      - name: Replace version
+        run: yarn version --new-version ${{ steps.get_version.outputs.version }}
+
+      - name: Release app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          build_script_name: "build"
+          release: true
+          github_token: ${{ secrets.github_token }}
+          # macOS code signing certificate
+          mac_certs: ${{ secrets.mac_certs }}
+          mac_certs_password: ${{ secrets.mac_certs_password }}

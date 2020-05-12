@@ -1,6 +1,7 @@
 # mysterium-vpn-desktop
 
 [![Github All Releases](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
+![Lint](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/workflows/Lint/badge.svg?event=push)
 
 **Work in progress: use with care**
 
