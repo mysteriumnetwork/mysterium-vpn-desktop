@@ -3,3 +3,6 @@ dist/
 *.log
 .idea
 deploy/darwin/build
+static/ca.cert
+static/server.crt
+static/ta.key
