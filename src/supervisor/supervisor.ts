@@ -78,20 +78,6 @@ export class Supervisor {
             this.conn.destroy()
         }
     }
-
-    startMyst(): void {
-        if (!this.conn) {
-            throw new Error("Supervisor is not connected")
-        }
-        this.conn.write("RUN\n")
-    }
-
-    killMyst(): void {
-        if (!this.conn) {
-            throw new Error("Supervisor is not connected")
-        }
-        this.conn.write("KILL\n")
-    }
 }
 
 export const supervisor = new Supervisor()

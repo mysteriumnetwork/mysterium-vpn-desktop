@@ -4,6 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+
 import * as path from "path"
 import { format as formatUrl } from "url"
 
@@ -19,6 +20,7 @@ import {
     setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
 import { initialize as initializeSentry } from "../errors/sentry"
+import { killMyst } from "../myst/myst"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
@@ -48,9 +50,7 @@ const installExtensions = async (): Promise<void | any[]> => {
     const extensions = ["REACT_DEVELOPER_TOOLS"]
 
     // eslint-disable-next-line prettier/prettier
-    return Promise.all(
-        extensions.map(name => installer.default(installer[name], forceDownload)),
-    ).catch(console.log) // eslint-disable-line no-console
+    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log) // eslint-disable-line no-console
 }
 
 const createWindow = async (): Promise<BrowserWindow> => {
@@ -142,7 +142,7 @@ app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {
     await supervisor.connect()
-    await supervisor.killMyst()
+    await killMyst()
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
