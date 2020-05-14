@@ -115,7 +115,7 @@ export class ConnectionStore {
                     accountantId,
                     serviceType: this.root.proposals.active.serviceType,
                 },
-                5000,
+                30000,
             )
         } catch (err) {
             console.error("Could not connect", err.message)
