@@ -33,7 +33,7 @@ const qualityLevel = (metrics?: ProposalMetrics): QualityLevel | undefined => {
     return qc.calculateLevel(qualityValue)
 }
 
-const supportedServiceTypes = ["openvpn", "wireguard"]
+const supportedServiceType = "wireguard"
 
 const proposalRefreshRate = 10000
 
@@ -106,8 +106,7 @@ export class ProposalStore {
         this.setLoading(true)
         try {
             const proposals = await tequilapi
-                .findProposals()
-                .then((proposals) => proposals.filter((p) => supportedServiceTypes.includes(p.serviceType)))
+                .findProposals({ serviceType: supportedServiceType })
                 .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
