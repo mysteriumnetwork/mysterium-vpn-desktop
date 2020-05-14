@@ -10,6 +10,7 @@ import { remote } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
+import { startMyst } from "../myst/myst"
 
 const supervisor = remote.getGlobal("supervisor")
 
@@ -90,7 +91,7 @@ export class DaemonStore {
             await this.supervisorInstall()
         }
 
-        await supervisor.startMyst()
+        await startMyst()
         this.setStarting(false)
     }
 
