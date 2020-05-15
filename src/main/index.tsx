@@ -20,7 +20,6 @@ import {
     setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
 import { initialize as initializeSentry } from "../errors/sentry"
-import { killMyst } from "../myst/myst"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
@@ -142,7 +141,7 @@ app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {
     await supervisor.connect()
-    await killMyst()
+    await supervisor.killMyst()
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
