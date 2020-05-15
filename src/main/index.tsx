@@ -9,6 +9,7 @@ import * as path from "path"
 import { format as formatUrl } from "url"
 
 import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron"
+import { autoUpdater } from "electron-updater"
 
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
@@ -118,6 +119,7 @@ app.on("ready", async () => {
     initializeAnalytics()
     setupAnalyticsGlobals()
     setupAnalyticsForApp(app)
+    autoUpdater.checkForUpdatesAndNotify()
 })
 
 // quit application when all windows are closed
