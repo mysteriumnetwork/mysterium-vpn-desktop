@@ -7,6 +7,7 @@
 import * as net from "net"
 import { Socket } from "net"
 import * as os from "os"
+import { userInfo } from "os"
 
 import * as sudo from "sudo-prompt"
 
@@ -79,11 +80,12 @@ export class Supervisor {
         }
     }
 
-    startMyst(uid: number, gid: number): void {
+    startMyst(): void {
         if (!this.conn) {
             throw new Error("Supervisor is not connected")
         }
-        this.conn.write(`run -uid=${uid} -gid=${gid}\n`)
+        const user = userInfo()
+        this.conn.write(`run -uid=${user.uid}\n`)
     }
 
     killMyst(): void {

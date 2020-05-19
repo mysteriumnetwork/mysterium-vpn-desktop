@@ -4,7 +4,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { userInfo } from "os"
 
 import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
@@ -92,8 +91,7 @@ export class DaemonStore {
             await this.supervisorInstall()
         }
 
-        const usr = userInfo()
-        await supervisor.startMyst(usr.uid, usr.gid)
+        await supervisor.startMyst()
         this.setStarting(false)
     }
 
