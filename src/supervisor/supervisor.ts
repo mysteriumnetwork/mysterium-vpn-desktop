@@ -6,7 +6,6 @@
  */
 import * as net from "net"
 import { Socket } from "net"
-import * as os from "os"
 import { userInfo } from "os"
 
 import * as sudo from "sudo-prompt"
@@ -42,14 +41,13 @@ export class Supervisor {
 
     async install(): Promise<void> {
         const supervisorPath = staticAssetPath("myst_supervisor")
-        const mystHome = os.homedir()
         const mystPath = staticAssetPath("myst")
         const openvpnPath = staticAssetPath("openvpn")
         analytics.event(Category.App, AppAction.InstallSupervisor)
         return await new Promise((resolve, reject) => {
             try {
                 sudo.exec(
-                    `${supervisorPath} -install -mystHome ${mystHome} -mystPath ${mystPath} -openvpnPath ${openvpnPath}`,
+                    `${supervisorPath} -install -mystPath ${mystPath} -openvpnPath ${openvpnPath}`,
                     {
                         name: packageJson.productName,
                         icns: staticAssetPath("logo.icns"),
