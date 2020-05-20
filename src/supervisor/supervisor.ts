@@ -83,7 +83,7 @@ export class Supervisor {
             throw new Error("Supervisor is not connected")
         }
         const user = userInfo()
-        this.conn.write(`run -uid=${user.uid}\n`)
+        this.conn.write(`run -uid ${user.uid}\n`)
     }
 
     killMyst(): void {
