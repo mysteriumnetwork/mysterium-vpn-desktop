@@ -6,11 +6,12 @@
  */
 import { action, observable, reaction } from "mobx"
 import { History, LocationState } from "history"
-import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
+import { ConnectionStatus } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, OnboardingAction } from "../analytics/analytics"
+import { registered } from "../identity/identity"
 
 import { history } from "./history"
 import { locations } from "./locations"
@@ -67,11 +68,8 @@ export class NavigationStore {
             return locations.welcome
         } else if (!config.currentTermsAgreed()) {
             return locations.terms
-        } else if (
-            !identity.identity ||
-            identity.identity.registrationStatus !== IdentityRegistrationStatus.RegisteredConsumer
-        ) {
-            return locations.identity
+        } else if (!identity.identity || !registered(identity.identity)) {
+            return locations.loading
         } else if (connectionInProgress(connection.status)) {
             return locations.connection
         } else {

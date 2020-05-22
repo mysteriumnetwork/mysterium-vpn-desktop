@@ -7,11 +7,12 @@
 import { Identity, IdentityRegistrationStatus } from "mysterium-vpn-js"
 
 export const registered = (id: Identity): boolean =>
-    id.registrationStatus === IdentityRegistrationStatus.RegisteredConsumer
+    // After fast registration, identity is already usable in 'InProgress' status
+    [IdentityRegistrationStatus.RegisteredConsumer, IdentityRegistrationStatus.InProgress].includes(
+        id.registrationStatus,
+    )
 
 export const eligibleForRegistration = (id: Identity): boolean =>
-    [
-        IdentityRegistrationStatus.Unregistered,
-        IdentityRegistrationStatus.InProgress,
-        IdentityRegistrationStatus.RegistrationError,
-    ].includes(id.registrationStatus)
+    [IdentityRegistrationStatus.Unregistered, IdentityRegistrationStatus.RegistrationError].includes(
+        id.registrationStatus,
+    )
