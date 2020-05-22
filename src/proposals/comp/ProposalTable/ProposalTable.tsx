@@ -41,7 +41,6 @@ export const ProposalTable: React.FC = observer(() => {
                 <Cell>ID</Cell>
                 <Cell>Price</Cell>
                 <Cell>Quality</Cell>
-                <Cell>Service</Cell>
             </Header>
             <ScrollAreaContainer>
                 <AutoSizer>

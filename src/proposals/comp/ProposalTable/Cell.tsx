@@ -6,16 +6,15 @@
  */
 import styled from "styled-components"
 
-export const Cell = styled.span`
-    display: inline-block;
-    width: 110px;
+export const Cell = styled.div`
+    flex: 1;
+
     height: 16px;
 
-    &:nth-child(n + 2) {
-        width: 80px;
+    &:nth-child(1) {
+        min-width: 180px;
     }
     &:nth-child(n + 3) {
-        width: 80px;
         text-align: center;
     }
 `

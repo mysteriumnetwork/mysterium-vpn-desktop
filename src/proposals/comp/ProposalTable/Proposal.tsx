@@ -7,6 +7,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { QualityLevel } from "mysterium-vpn-js"
+import styled from "styled-components"
 
 import { UIProposal } from "../../ui-proposal-type"
 import { useStores } from "../../../store"
@@ -15,6 +16,12 @@ import { PerGiBRate, PerMinuteRate } from "../../../payment/price"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 
 import { Cell } from "./Cell"
+
+const Row = styled.div`
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+`
 
 interface ProposalPureProps {
     proposal: UIProposal
@@ -34,15 +41,16 @@ const proposalPropsAreEqual = (prevProps: ProposalPureProps, nextProps: Proposal
 const ProposalPure: React.FC<ProposalPureProps> = React.memo(({ proposal, active, onToggle }) => {
     return (
         <Toggle active={active} onClick={onToggle}>
-            <Cell>{proposal.id10}</Cell>
-            <Cell>
-                <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />/
-                <PerGiBRate paymentMethod={proposal.paymentMethod} units={false} />
-            </Cell>
-            <Cell>
-                <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
-            </Cell>
-            <Cell>{proposal.serviceType4}</Cell>
+            <Row>
+                <Cell>{proposal.shortId}</Cell>
+                <Cell>
+                    <PerMinuteRate paymentMethod={proposal.paymentMethod} units={false} />/
+                    <PerGiBRate paymentMethod={proposal.paymentMethod} units={false} />
+                </Cell>
+                <Cell>
+                    <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
+                </Cell>
+            </Row>
         </Toggle>
     )
 }, proposalPropsAreEqual)

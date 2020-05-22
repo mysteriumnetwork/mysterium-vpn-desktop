@@ -15,13 +15,13 @@ export const proposalKey = ({ providerId, serviceType }: { providerId: string; s
 export interface UIProposal extends Proposal {
     key: ProposalKey
     country?: string
-    id10: string
+    shortId: string
     serviceType4: string
     qualityLevel?: QualityLevel
     nodeType: string
 }
 
-const id10 = (id: string): string => id.substr(0, 10)
+const shortId = (id: string): string => id.substr(0, 16)
 
 const serviceType4 = (serviceType: string): string => {
     switch (serviceType) {
@@ -41,7 +41,7 @@ export const newUIProposal = (proposal: Proposal): UIProposal => {
         key: proposalKey(proposal),
         country: proposal.serviceDefinition?.locationOriginate?.country ?? "unknown",
         nodeType: proposal.serviceDefinition?.locationOriginate?.nodeType ?? "unknown",
-        id10: id10(proposal.providerId),
+        shortId: shortId(proposal.providerId),
         serviceType4: serviceType4(proposal.serviceType),
         qualityLevel: QualityLevel.UNKNOWN,
     }

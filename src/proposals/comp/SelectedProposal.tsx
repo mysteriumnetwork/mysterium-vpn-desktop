@@ -68,7 +68,7 @@ export const SelectedProposal: React.FC = observer(() => {
         <Container>
             <ProposalFlag countryCode={proposal.country} />
             <ServiceInfo>
-                <ProviderId>{proposal.id10}</ProviderId>
+                <ProviderId>{proposal.shortId}</ProviderId>
                 <p>{pricingText}</p>
             </ServiceInfo>
             <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
