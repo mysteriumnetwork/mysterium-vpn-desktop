@@ -66,7 +66,7 @@ export class ProposalStore {
     filter: ProposalFilter = {
         noAccessPolicy: true,
         pricePerMinuteMax: 50_000,
-        pricePerGibMax: 7_000_000,
+        pricePerGibMax: 15_000_000,
         quality: QualityLevel.HIGH,
         includeFailed: false,
     }
