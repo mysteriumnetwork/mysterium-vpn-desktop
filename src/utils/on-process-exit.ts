@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-export const onProcessExit = (hook: Function): void => {
+export const onProcessExit = (hook: () => void): void => {
     const shutdown = (): void => {
         console.log("Shutting down...")
         hook()

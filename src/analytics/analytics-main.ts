@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import ua from "universal-analytics"
 import { App, BrowserWindow, screen } from "electron"
 import { machineIdSync } from "node-machine-id"
@@ -46,11 +45,8 @@ export const initialize = (): void => {
 }
 
 export const setupGlobals = (): void => {
-    // @ts-ignore
     global.analyticsSetUserId = analytics.setUserId
-    // @ts-ignore
     global.analyticsEvent = analytics.event
-    // @ts-ignore
     global.analyticsPageview = analytics.pageview
 }
 

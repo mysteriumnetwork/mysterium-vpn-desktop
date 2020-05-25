@@ -30,15 +30,11 @@ initializeSentry()
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 global.supervisor = supervisor
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let tray: Tray | null
 
@@ -137,8 +133,6 @@ app.on("activate", async () => {
     }
 })
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
 app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {

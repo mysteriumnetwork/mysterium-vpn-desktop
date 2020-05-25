@@ -11,7 +11,7 @@ export interface ToggleProps {
     small?: boolean
     children: React.ReactNode
     active: boolean
-    onClick: Function
+    onClick: () => void
 }
 
 export const NavToggle = styled.div<ToggleProps>`
