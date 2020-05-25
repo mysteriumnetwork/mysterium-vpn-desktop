@@ -11,8 +11,9 @@ import { remote } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
+import { Supervisor } from "../supervisor/supervisor"
 
-const supervisor = remote.getGlobal("supervisor")
+const supervisor: Supervisor = remote.getGlobal("supervisor")
 
 export enum DaemonStatusType {
     Up = "UP",

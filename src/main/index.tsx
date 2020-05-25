@@ -137,7 +137,7 @@ app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {
     await supervisor.connect()
-    await supervisor.killMyst()
+    supervisor.killMyst()
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
