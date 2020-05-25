@@ -19,7 +19,7 @@ import { AppAction, Category } from "../analytics/analytics"
 function mystSockPath(): string {
     const os = platform()
     if (os === "win32") {
-        return "\\.\pipe\mystpipe"
+        return "\\\\.\\pipe\\mystpipe"
     }
     return "/var/run/myst.sock"
 }
