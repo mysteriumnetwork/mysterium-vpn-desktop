@@ -21,7 +21,7 @@ export interface UIProposal extends Proposal {
     nodeType: string
 }
 
-const shortId = (id: string): string => id.substr(0, 16)
+const shortId = (id: string): string => id.substr(0, 14)
 
 const serviceType4 = (serviceType: string): string => {
     switch (serviceType) {

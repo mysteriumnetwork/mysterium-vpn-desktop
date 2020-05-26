@@ -32,7 +32,7 @@ const QualityImage = styled.img`
 `
 
 export interface QualityProps {
-    level: QualityLevel
+    level?: QualityLevel
 }
 
 export const ProposalQuality: React.FC<QualityProps> = ({ level = QualityLevel.UNKNOWN }) => {

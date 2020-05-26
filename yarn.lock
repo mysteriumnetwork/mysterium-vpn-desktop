@@ -857,6 +857,11 @@
   resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.24.tgz#a819e5a1a485f6dd38b34254e6ed3f6bcf990ac7"
   integrity sha512-rfNDFsS188+rxSQpMaTT49Uw8clgfGd+kpuHbJ7cVZemHMq47YlT32XbiYGjpaPnb7ok6owQWrSo2GGozkVnSg==
 
+"@scarf/scarf@^1.0.4":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.0.5.tgz#accee0bce88a9047672f7c8faf3cada59c996b81"
+  integrity sha512-9WKaGVpQH905Aqkk+BczFEeLQxS07rl04afFRPUG9IcSlOwmo5EVVuuNu0d4M9LMYucObvK0LoAe+5HfMW2QhQ==
+
 "@sentry/apm@5.13.2":
   version "5.13.2"
   resolved "https://registry.yarnpkg.com/@sentry/apm/-/apm-5.13.2.tgz#3a0809912426f52e19b1f4a603e99423a0ac8fb9"
@@ -1097,6 +1102,13 @@
   integrity sha512-RZPdCtZympi6X7EkGyaU7ISiAujDYTWgqMF9owE3P6efITw27IWQykcti0BvA5h4Mu1LLl5rxrpO3r8kHyUZ/Q==
   dependencies:
     "@types/history" "*"
+    "@types/react" "*"
+
+"@types/react-table@^7.0.18":
+  version "7.0.18"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.0.18.tgz#df61f8272fd3add86b442a90baa6dbaef9b1f32a"
+  integrity sha512-O4iKmVYVQz+6Nl9LsLtWQz9Unsmq0UySJrh5hpV5d+wrf15skhB0dqI9ocCNovJpcYxGjHrn3VbeSyAcaxHZtA==
+  dependencies:
     "@types/react" "*"
 
 "@types/react-virtualized-auto-sizer@^1.0.0":
@@ -7073,6 +7085,13 @@ react-router@5.2.0:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-table@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.1.0.tgz#c975cd67e917c54190b6c9df29f085285b0c3f4e"
+  integrity sha512-AZpgW0Xpo6Z7jxXZIBovzCGoYVkuBwATsJh7X4+JXwq9JtDaorOmxWC9gKx5Hui4d+n+I99enyyJS+LRtKydxA==
+  dependencies:
+    "@scarf/scarf" "^1.0.4"
 
 react-virtualized-auto-sizer@^1.0.2:
   version "1.0.2"
