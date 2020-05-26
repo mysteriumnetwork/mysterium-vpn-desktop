@@ -7,7 +7,7 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { CellProps, Column, Renderer, useBlockLayout, useRowSelect, useTable } from "react-table"
+import { CellProps, Column, Renderer, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
@@ -16,6 +16,7 @@ import { useStores } from "../../../store"
 import { UIProposal } from "../../ui-proposal-type"
 import { Flag } from "../../../location/comp/Flag/Flag"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
+import { brand } from "../../../ui-kit/colors"
 
 const Styles = styled.div`
     flex: 1;
@@ -36,6 +37,13 @@ const Styles = styled.div`
         height: 32px;
         line-height: 32px;
         padding: 0 8px;
+
+        &.sorted-asc {
+            box-shadow: inset 1px -4px 0px -2px ${brand};
+        }
+        &.sorted-desc {
+            box-shadow: inset 1px 4px 0px -2px ${brand};
+        }
     }
 
     .thead {
@@ -106,8 +114,8 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             data,
             defaultColumn,
         },
-        useRowSelect,
         useBlockLayout,
+        useSortBy,
     )
     const activeKey = proposals.active?.key
     const renderRow = React.useCallback(
@@ -151,7 +159,12 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
                         <div className="tr" style={{ ...style, width: "100%" }} {...rest}>
                             {headerGroup.headers.map((column) => (
                                 // eslint-disable-next-line react/jsx-key
-                                <div className="th" {...column.getHeaderProps()}>
+                                <div
+                                    className={`th ${
+                                        column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
+                                    }`}
+                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                >
                                     {column.render("Header")}
                                 </div>
                             ))}
