@@ -30,7 +30,7 @@ Instead of using prebuilt Node binary (located in `static/`), you may build [Nod
 ```
 git clone https://github.com/mysteriumnetwork/node
 cd node
-bin/build
+mage build
 mage daemon
 ```
 
