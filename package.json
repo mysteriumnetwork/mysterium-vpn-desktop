@@ -44,7 +44,7 @@
     "react-window": "^1.8.5",
     "source-map-support": "^0.5.16",
     "styled-components": "^4.4.1",
-    "sudo-prompt": "^9.1.1",
+    "sudo-prompt": "^9.2.1",
     "universal-analytics": "^0.4.20"
   },
   "devDependencies": {

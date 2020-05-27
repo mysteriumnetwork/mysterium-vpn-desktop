@@ -59,10 +59,10 @@ export class Supervisor {
                         icns: staticAssetPath("logo.icns"),
                     },
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (err: any, stdout: string, stderr: string) => {
+                    (error, stdout, stderr) => {
                         console.log("[sudo-exec]", stdout, stderr)
-                        if (err) {
-                            return reject(err)
+                        if (error) {
+                            return reject(error)
                         }
                     },
                 )
