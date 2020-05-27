@@ -852,10 +852,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@mysteriumnetwork/terms@^0.0.24":
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.24.tgz#a819e5a1a485f6dd38b34254e6ed3f6bcf990ac7"
-  integrity sha512-rfNDFsS188+rxSQpMaTT49Uw8clgfGd+kpuHbJ7cVZemHMq47YlT32XbiYGjpaPnb7ok6owQWrSo2GGozkVnSg==
+"@mysteriumnetwork/terms@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.27.tgz#235d9f1a74d564d4611b14bf8df4e547bdd4836e"
+  integrity sha512-b72gadNlCCwWR1pQqnthUCFJSr4P/YuV0hskXgmgeBzYLJBbSvEGzxBpmFTm3296CA7KyMoCVIgauSvBW5bGUA==
 
 "@scarf/scarf@^1.0.4":
   version "1.0.5"
