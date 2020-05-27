@@ -113,6 +113,7 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             columns,
             data,
             defaultColumn,
+            autoResetSortBy: false,
         },
         useBlockLayout,
         useSortBy,
