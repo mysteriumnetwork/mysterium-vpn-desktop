@@ -114,6 +114,9 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             data,
             defaultColumn,
             autoResetSortBy: false,
+            initialState: {
+                sortBy: [{ id: "country" }],
+            },
         },
         useBlockLayout,
         useSortBy,
