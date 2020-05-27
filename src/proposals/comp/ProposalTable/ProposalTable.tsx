@@ -7,7 +7,7 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { CellProps, Column, Renderer, useBlockLayout, useSortBy, useTable } from "react-table"
+import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
@@ -190,6 +190,17 @@ export const ProposalTable: React.FC = observer(() => {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
 
+    const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
+        () => (rowA, rowB) => {
+            const q1 = rowA.original.qualityLevel ?? QualityLevel.UNKNOWN
+            const q2 = rowB.original.qualityLevel ?? QualityLevel.UNKNOWN
+            if (q1 == q2) {
+                return 0
+            }
+            return q1 > q2 ? 1 : -1
+        },
+        [],
+    )
     const columns = React.useMemo<Column<UIProposal>[]>(
         () => [
             {
@@ -204,12 +215,24 @@ export const ProposalTable: React.FC = observer(() => {
                 ),
             },
             { Header: "ID", accessor: "shortId", width: 132 },
-            { Header: "Price/min", accessor: (p): string => displayMoney(pricePerMinute(p.paymentMethod)), width: 62 },
-            { Header: "Price/GiB", accessor: (p): string => displayMoney(pricePerGiB(p.paymentMethod)), width: 62 },
+            {
+                Header: "Price/min",
+                accessor: (p): string => displayMoney(pricePerMinute(p.paymentMethod)),
+                width: 62,
+                sortType: "basic",
+            },
+            {
+                Header: "Price/GiB",
+                accessor: (p): string => displayMoney(pricePerGiB(p.paymentMethod)),
+                width: 62,
+                sortType: "basic",
+            },
             {
                 Header: "Quality",
                 accessor: "qualityLevel",
                 width: 60,
+                sortDescFirst: true,
+                sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
                 Cell: (props): Renderer<CellProps<UIProposal, QualityLevel | undefined>> => {
                     return (
