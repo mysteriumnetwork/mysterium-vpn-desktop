@@ -16,9 +16,10 @@ import { staticAssetPath } from "../utils/paths"
 import { analytics } from "../analytics/analytics-main"
 import { AppAction, Category } from "../analytics/analytics"
 
+const isWin = platform() === "win32"
+
 function mystSockPath(): string {
-    const os = platform()
-    if (os === "win32") {
+    if (isWin) {
         return "\\\\.\\pipe\\mystpipe"
     }
     return "/var/run/myst.sock"
@@ -48,7 +49,11 @@ export class Supervisor {
     }
 
     async install(): Promise<void> {
-        const supervisorPath = staticAssetPath("myst_supervisor")
+        let supervisorBinaryName = "myst_supervisor"
+        if (isWin) {
+            supervisorBinaryName += ".exe"
+        }
+        const supervisorPath = staticAssetPath(supervisorBinaryName)
         analytics.event(Category.App, AppAction.InstallSupervisor)
         return await new Promise((resolve, reject) => {
             try {
@@ -94,7 +99,11 @@ export class Supervisor {
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
     startMyst(): Promise<void> {
-        const mystPath = staticAssetPath("myst")
+        let mystBinaryName = "myst"
+        if (isWin) {
+            mystBinaryName += ".exe"
+        }
+        const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
             ["--mymysterium.enabled=false", "--ui.enable=false", "--usermode", "daemon"],
