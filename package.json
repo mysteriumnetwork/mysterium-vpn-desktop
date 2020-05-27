@@ -11,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev",
-    "lint": "eslint --ext .ts,.tsx src",
+    "lint": "eslint src",
     "clean": "rm -rf dist",
     "build": "electron-webpack",
     "bundle": "yarn build && electron-builder"
@@ -68,7 +68,7 @@
     "electron-download": "^4.1.1",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
-    "eslint": "^6.8.0",
+    "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-header": "^3.0.0",
     "eslint-plugin-import": "^2.20.2",
