@@ -9,6 +9,8 @@ import { observer } from "mobx-react-lite"
 import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 import { Currency, displayMoney } from "mysterium-vpn-js"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faWallet } from "@fortawesome/free-solid-svg-icons"
 
 import { useStores } from "../../store"
 import { NavToggle } from "../../ui-kit/toggle/nav-toggle"
@@ -17,8 +19,14 @@ import { locations } from "../../navigation/locations"
 
 import { Myst } from "./myst"
 
+const MoneyToggle = styled(NavToggle)`
+    width: initial;
+    padding: 0;
+`
+
 const Content = styled.div`
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,11 +35,18 @@ const Content = styled.div`
     }
 `
 
+const Icon = styled.div`
+    height: 100%;
+    padding: 0 8px;
+    line-height: 24px;
+`
+
 interface MoneyProps {
     active: boolean
 }
 
 const Money = styled.div<MoneyProps>`
+    padding: 0 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -62,14 +77,16 @@ export const WalletButton: React.FC = observer(() => {
         }
     }
     return (
-        <NavToggle small active={active} onClick={onClick}>
+        <MoneyToggle small active={active} onClick={onClick}>
             <Content>
-                <span>Wallet</span>
+                <Icon>
+                    <FontAwesomeIcon icon={faWallet} color={active ? "#fff" : brandDarker} />
+                </Icon>
                 <Money active={active}>
                     <span>{balance}</span>
                     <Myst light={active} />
                 </Money>
             </Content>
-        </NavToggle>
+        </MoneyToggle>
     )
 })
