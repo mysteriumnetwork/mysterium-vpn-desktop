@@ -6,14 +6,8 @@
  */
 import React from "react"
 import styled from "styled-components"
-import { observer } from "mobx-react-lite"
-import { useLocation } from "react-router-dom"
 
 import { WalletButton } from "../payment/comp/wallet-button"
-import { useStores } from "../store"
-import { NavToggle } from "../ui-kit/toggle/nav-toggle"
-
-import { locations } from "./locations"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -21,32 +15,19 @@ const Container = styled.div`
     padding: 8px 16px;
     background: linear-gradient(180deg, #d6d6d6 0%, #cccccc 97%, #bababa 100%);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 
     div {
         cursor: pointer;
     }
 `
 
-export const NavBar: React.FC = observer(() => {
-    const { navigation } = useStores()
-    const location = useLocation()
-    const consumerModeActive = location.pathname.startsWith(locations.consumer)
-    const consumerModeOnClick = (): void => {
-        if (!consumerModeActive) {
-            navigation.navigateTo(locations.consumer)
-        }
-    }
+export const NavBar: React.FC = () => {
     return (
         <Container>
-            <div>
-                <NavToggle small active={consumerModeActive} onClick={consumerModeOnClick}>
-                    Connect to VPN
-                </NavToggle>
-            </div>
             <div>
                 <WalletButton />
             </div>
         </Container>
     )
-})
+}
