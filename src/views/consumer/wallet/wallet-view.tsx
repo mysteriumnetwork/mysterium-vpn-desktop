@@ -10,6 +10,7 @@ import styled from "styled-components"
 import { Currency, displayMoney } from "mysterium-vpn-js"
 import { faIdCard } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { QRCode } from "react-qr-svg"
 
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
@@ -40,6 +41,17 @@ const Top = styled.div`
     padding: 0 24px;
 `
 
+const Split = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const Right = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
 const Identity = styled.div`
     box-sizing: border-box;
     height: 52px;
@@ -62,18 +74,28 @@ const Amount = styled.div`
     font-weight: bold;
 `
 
-const TestnetDisclaimer = styled.div`
-    padding: 12px 24px;
-    background: #2e1150;
-    border-radius: 4px;
-`
-
 const WalletActions = styled.div`
     margin: 24px 0;
 `
 
 const IdentityIcon = styled.div`
     padding-right: 16px;
+`
+
+const ChannelQR = styled.div`
+    flex: 0;
+    margin-left: 32px;
+    height: 116px;
+    width: 116px;
+    padding: 16px;
+    background: #fff;
+`
+
+const Copy = styled.button`
+    border-radius: 4px;
+    margin-left: 12px;
+    padding: 4px 8px;
+    background: linear-gradient(180deg, #fefefe 0%, #f2f2f2 100%);
 `
 
 export const WalletView: React.FC = observer(() => {
@@ -88,34 +110,49 @@ export const WalletView: React.FC = observer(() => {
             removeInsignificantZeros: false,
         },
     )
+    const chan = identity.identity?.channelAddress
+    const copyChannelAddress = (): void => {
+        if (chan) {
+            navigator.clipboard.writeText(chan)
+        }
+    }
     const topUpAction = (): Promise<void> => payment.topUp()
     return (
         <Container>
             <Top>
-                <Identity>
-                    <IdentityIcon>
-                        <FontAwesomeIcon
-                            className="icon"
-                            icon={faIdCard}
-                            color="white"
-                            size="lg"
-                            title={identity.identity?.registrationStatus ?? ""}
-                        />
-                    </IdentityIcon>
-                    <IdentityAddress title={identity.identity?.registrationStatus ?? ""}>
-                        {identity.identity?.id}
-                    </IdentityAddress>
-                </Identity>
-                <Balance>
-                    <p>Available balance</p>
-                    <Amount>{balanceDisplay}</Amount>
-                </Balance>
-                <TestnetDisclaimer>
-                    MYSTT is a test token which you get for free while we are in the Testnet environment
-                </TestnetDisclaimer>
-                <WalletActions>
-                    <LightButton onClick={topUpAction}>Top Up</LightButton>
-                </WalletActions>
+                <Split>
+                    <div>
+                        <Identity>
+                            <IdentityIcon>
+                                <FontAwesomeIcon
+                                    className="icon"
+                                    icon={faIdCard}
+                                    color="white"
+                                    size="lg"
+                                    title={identity.identity?.registrationStatus ?? ""}
+                                />
+                            </IdentityIcon>
+                            <IdentityAddress title={identity.identity?.registrationStatus ?? ""}>
+                                {identity.identity?.id}
+                            </IdentityAddress>
+                        </Identity>
+                        <Balance>
+                            <p>Available balance</p>
+                            <Amount>{balanceDisplay}</Amount>
+                        </Balance>
+                        <p>Topup your wallet by sending MYSTT to the address below.</p>
+                        <p>
+                            <code>{chan}</code>
+                            <Copy onClick={copyChannelAddress}>Copy</Copy>
+                        </p>
+                        <WalletActions>
+                            <LightButton onClick={topUpAction}>Get free test tokens</LightButton>
+                        </WalletActions>
+                    </div>
+                    <Right>
+                        <ChannelQR>{chan ? <QRCode value={chan} style={{ width: 116 }} /> : <></>}</ChannelQR>
+                    </Right>
+                </Split>
             </Top>
         </Container>
     )
