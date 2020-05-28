@@ -27,6 +27,8 @@ export class NavigationStore {
     consumer = true
     @observable
     welcome = true
+    @observable
+    wallet = false
 
     root: RootStore
 
@@ -87,5 +89,10 @@ export class NavigationStore {
         analytics.event(Category.Onboarding, OnboardingAction.GetStarted)
         this.welcome = false
         this.navigateTo(locations.terms)
+    }
+
+    @action
+    toggleWallet = (): void => {
+        this.wallet = !this.wallet
     }
 }

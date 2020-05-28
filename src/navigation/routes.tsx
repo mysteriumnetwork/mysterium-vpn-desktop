@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom"
+import { Redirect, Route, Switch } from "react-router-dom"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 
@@ -17,14 +17,15 @@ import { SelectProposalView } from "../views/consumer/select-proposal/select-pro
 import { ConnectedView } from "../views/consumer/connected/connected-view"
 import { WalletView } from "../views/consumer/wallet/wallet-view"
 import { useStores } from "../store"
+import { Modal } from "../ui-kit/Modal/Modal"
 
 import { NavBar } from "./navbar"
 import { locations } from "./locations"
 
 export const Routes: React.FC = observer(() => {
-    const { connection } = useStores()
+    const { connection, navigation } = useStores()
     return (
-        <HashRouter>
+        <>
             <Switch>
                 <Route path={locations.welcome}>
                     <WelcomeView />
@@ -61,6 +62,9 @@ export const Routes: React.FC = observer(() => {
                     <LoadingView />
                 </Route>
             </Switch>
-        </HashRouter>
+            <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
+                <WalletView />
+            </Modal>
+        </>
     )
 })

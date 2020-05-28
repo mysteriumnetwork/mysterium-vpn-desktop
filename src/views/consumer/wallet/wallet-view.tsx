@@ -8,6 +8,8 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency, displayMoney } from "mysterium-vpn-js"
+import { faIdCard } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
@@ -15,10 +17,20 @@ import { fontMono, textHuge } from "../../../ui-kit/typography"
 import { LightButton } from "../../../ui-kit/mbutton/light-button"
 
 const Container = styled.div`
-    flex: 1;
-    min-height: 0;
-    background: url(${mosaicBg});
+    width: 100%;
 
+    &:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        opacity: 0.94;
+        background-image: url(${mosaicBg});
+        background-position: 0 -5px;
+    }
     display: flex;
     flex-direction: column;
 `
@@ -32,13 +44,10 @@ const Identity = styled.div`
     box-sizing: border-box;
     height: 52px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `
-
-const IdentityStatus = styled.div``
 
 const IdentityAddress = styled.div`
     ${fontMono}
@@ -63,6 +72,10 @@ const WalletActions = styled.div`
     margin: 24px 0;
 `
 
+const IdentityIcon = styled.div`
+    padding-right: 16px;
+`
+
 export const WalletView: React.FC = observer(() => {
     const { identity, payment } = useStores()
     const balanceDisplay = displayMoney(
@@ -80,8 +93,18 @@ export const WalletView: React.FC = observer(() => {
         <Container>
             <Top>
                 <Identity>
-                    <IdentityStatus>Your identity {identity.identity?.registrationStatus ?? ""}</IdentityStatus>
-                    <IdentityAddress>{identity.identity?.id}</IdentityAddress>
+                    <IdentityIcon>
+                        <FontAwesomeIcon
+                            className="icon"
+                            icon={faIdCard}
+                            color="white"
+                            size="lg"
+                            title={identity.identity?.registrationStatus ?? ""}
+                        />
+                    </IdentityIcon>
+                    <IdentityAddress title={identity.identity?.registrationStatus ?? ""}>
+                        {identity.identity?.id}
+                    </IdentityAddress>
                 </Identity>
                 <Balance>
                     <p>Available balance</p>

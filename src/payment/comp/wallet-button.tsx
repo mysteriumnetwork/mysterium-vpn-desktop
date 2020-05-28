@@ -6,7 +6,6 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { useLocation } from "react-router-dom"
 import styled from "styled-components"
 import { Currency, displayMoney } from "mysterium-vpn-js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -15,7 +14,6 @@ import { faWallet } from "@fortawesome/free-solid-svg-icons"
 import { useStores } from "../../store"
 import { NavToggle } from "../../ui-kit/toggle/nav-toggle"
 import { brandDarker } from "../../ui-kit/colors"
-import { locations } from "../../navigation/locations"
 
 import { Myst } from "./myst"
 
@@ -58,7 +56,6 @@ const Money = styled.div<MoneyProps>`
 
 export const WalletButton: React.FC = observer(() => {
     const { identity, navigation } = useStores()
-    const location = useLocation()
 
     const balance = displayMoney(
         {
@@ -70,11 +67,9 @@ export const WalletButton: React.FC = observer(() => {
             removeInsignificantZeros: false,
         },
     )
-    const active = location.pathname == locations.wallet
+    const active = navigation.wallet
     const onClick = (): void => {
-        if (!active) {
-            navigation.navigateTo(locations.wallet)
-        }
+        navigation.toggleWallet()
     }
     return (
         <MoneyToggle small active={active} onClick={onClick}>

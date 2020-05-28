@@ -10,8 +10,9 @@ import fs from "fs"
 import React from "react"
 import ReactDOM from "react-dom"
 import { createGlobalStyle } from "styled-components"
-
 import "mobx-react-lite/batchingForReactDom"
+import { HashRouter } from "react-router-dom"
+
 import { Routes } from "../navigation/routes"
 import { initialize as initializeSentry } from "../errors/sentry"
 
@@ -86,7 +87,9 @@ const App: React.FC = () => {
     return (
         <React.Fragment>
             <GlobalStyle />
-            <Routes />
+            <HashRouter>
+                <Routes />
+            </HashRouter>
             <div className="baseline" />
         </React.Fragment>
     )
