@@ -18,6 +18,7 @@ import { ConnectedView } from "../views/consumer/connected/connected-view"
 import { WalletView } from "../views/consumer/wallet/wallet-view"
 import { useStores } from "../store"
 import { Modal } from "../ui-kit/Modal/Modal"
+import { FiltersView } from "../views/consumer/FiltersView/FiltersView"
 
 import { NavBar } from "./navbar"
 import { locations } from "./locations"
@@ -64,6 +65,9 @@ export const Routes: React.FC = observer(() => {
             </Switch>
             <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
                 <WalletView />
+            </Modal>
+            <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
+                <FiltersView />
             </Modal>
         </>
     )

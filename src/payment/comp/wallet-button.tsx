@@ -18,7 +18,6 @@ import { brandDarker } from "../../ui-kit/colors"
 import { Myst } from "./myst"
 
 const MoneyToggle = styled(NavToggle)`
-    width: initial;
     padding: 0;
 `
 

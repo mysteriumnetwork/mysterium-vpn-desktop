@@ -29,6 +29,8 @@ export class NavigationStore {
     welcome = true
     @observable
     wallet = false
+    @observable
+    filters = false
 
     root: RootStore
 
@@ -94,5 +96,16 @@ export class NavigationStore {
     @action
     toggleWallet = (): void => {
         this.wallet = !this.wallet
+        if (this.filters) {
+            this.filters = false
+        }
+    }
+
+    @action
+    toggleFilters = (): void => {
+        this.filters = !this.filters
+        if (this.wallet) {
+            this.wallet = false
+        }
     }
 }

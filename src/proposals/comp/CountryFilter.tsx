@@ -10,24 +10,14 @@ import styled from "styled-components"
 
 import { useStores } from "../../store"
 import { Toggle } from "../../ui-kit/toggle/toggle"
-import { textCaption } from "../../ui-kit/typography"
 import { resolveCountry, unknownCountry } from "../../location/countries"
 import { Flag } from "../../location/comp/Flag/Flag"
+import { SectionTitle } from "../../ui-kit/SectionTitle/SectionTitle"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-`
-
-const Title = styled.div`
-    height: 32px;
-    margin-left: 8px;
-
-    ${textCaption}
-    color: #777;
-    display: flex;
-    align-items: center;
 `
 
 const Count = styled.span`
@@ -38,6 +28,11 @@ const FilterFlag = styled(Flag)`
     margin-right: 8px;
 `
 
+const SidebarTitle = styled(SectionTitle)`
+    height: 32px;
+    margin-left: 8px;
+`
+
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.countryCounts
@@ -46,7 +41,7 @@ export const CountryFilter = observer(() => {
     }
     return (
         <Container>
-            <Title>Country</Title>
+            <SidebarTitle>Country</SidebarTitle>
             {Object.keys(countryCounts)
                 .sort((self, other) => {
                     const selfName = resolveCountry(self).name

@@ -20,7 +20,6 @@ export const NavToggle = styled.div<ToggleProps>`
     padding: 2px 16px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     user-select: none;
 

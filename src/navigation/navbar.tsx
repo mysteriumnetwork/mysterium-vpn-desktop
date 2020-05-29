@@ -8,6 +8,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { WalletButton } from "../payment/comp/wallet-button"
+import { FiltersButton } from "../proposals/comp/FiltersButton/FiltersButton"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -15,7 +16,6 @@ const Container = styled.div`
     padding: 8px 16px;
     background: linear-gradient(180deg, #d6d6d6 0%, #cccccc 97%, #bababa 100%);
     display: flex;
-    justify-content: flex-end;
 
     div {
         cursor: pointer;
@@ -25,7 +25,8 @@ const Container = styled.div`
 export const NavBar: React.FC = () => {
     return (
         <Container>
-            <div>
+            <FiltersButton />
+            <div style={{ marginLeft: "auto" }}>
                 <WalletButton />
             </div>
         </Container>

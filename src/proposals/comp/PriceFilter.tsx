@@ -11,7 +11,7 @@ import { Currency, displayMoney } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { useStores } from "../../store"
-import { textCaption, textSmall } from "../../ui-kit/typography"
+import { textSmall } from "../../ui-kit/typography"
 
 const Container = styled.div`
     flex: 1;
@@ -19,20 +19,8 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const Title = styled.div`
-    height: 32px;
-    margin-left: 8px;
-
-    ${textCaption}
-    color: #777;
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-`
-
 const RangeContainer = styled.div`
     height: 32px;
-    padding: 0 16px;
     margin-bottom: 16px;
 `
 
@@ -72,7 +60,6 @@ export const PriceFilter = observer(() => {
     }, 500)
     return (
         <Container>
-            <Title>Price</Title>
             <RangeContainer>
                 <Label>Price/minute: {displayFilterPrice(proposals.filter.pricePerMinuteMax)}</Label>
                 <Range

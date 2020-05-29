@@ -10,23 +10,12 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../store"
-import { textCaption } from "../../ui-kit/typography"
 import { Toggle } from "../../ui-kit/toggle/toggle"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-`
-
-const Title = styled.div`
-    height: 32px;
-    margin-left: 8px;
-
-    ${textCaption}
-    color: #777;
-    display: flex;
-    align-items: center;
 `
 
 const Count = styled.span`
@@ -41,7 +30,6 @@ export const IpTypeFilter = observer(() => {
     }
     return (
         <Container>
-            <Title>IP type</Title>
             {Object.keys(ipTypeCounts)
                 .sort()
                 .map((ipType) => {

@@ -10,7 +10,7 @@ import styled from "styled-components"
 import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../store"
-import { textCaption, textSmall } from "../../ui-kit/typography"
+import { textSmall } from "../../ui-kit/typography"
 import { Checkbox } from "../../ui-kit/Checkbox/Checkbox"
 
 const Container = styled.div`
@@ -19,20 +19,8 @@ const Container = styled.div`
     flex-direction: column;
 `
 
-const Title = styled.div`
-    height: 32px;
-    margin-left: 8px;
-
-    ${textCaption}
-    color: #777;
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-`
-
 const RangeContainer = styled.div`
     height: 32px;
-    padding: 0 16px;
     margin-bottom: 8px;
 `
 
@@ -77,7 +65,6 @@ export const QualityFilter = observer(() => {
     const includeFailed = proposals.filter.includeFailed
     return (
         <Container>
-            <Title>Quality</Title>
             <RangeContainer>
                 <Label>{qualityText}</Label>
                 <Range type="range" min={0} max={2} defaultValue={quality} onChange={onChange} />

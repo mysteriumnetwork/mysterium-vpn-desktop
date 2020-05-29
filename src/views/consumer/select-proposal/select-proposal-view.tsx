@@ -13,12 +13,8 @@ import { CountryFilter } from "../../../proposals/comp/CountryFilter"
 import { OriginalLocation } from "../../../location/comp/original-location"
 import { Search } from "../../../ui-kit/form/Search"
 import { useStores } from "../../../store"
-import { IpTypeFilter } from "../../../proposals/comp/IpTypeFilter"
 import { ProposalTable } from "../../../proposals/comp/ProposalTable/ProposalTable"
 import { SelectedProposal } from "../../../proposals/comp/SelectedProposal"
-import { QualityFilter } from "../../../proposals/comp/QualityFilter"
-import { PriceFilter } from "../../../proposals/comp/PriceFilter"
-import { FilterModeSwitch } from "../../../proposals/comp/FilterModeSwitch"
 
 const Container = styled.div`
     flex: 1;
@@ -42,13 +38,6 @@ const Main = styled.div`
     flex-direction: column;
 `
 
-const SidebarActions = styled.div`
-    height: 32px;
-    padding: 8px 0 0 8px;
-    display: flex;
-    justify-content: flex-start;
-`
-
 const Filters = styled.div`
     flex: 1;
     min-height: 0;
@@ -58,7 +47,7 @@ const Filters = styled.div`
 `
 
 const SearchDiv = styled.div`
-    padding: 8px 16px 0 16px;
+    padding: 16px 16px 0 16px;
 `
 
 const ScrollArea = styled.div`
@@ -79,21 +68,11 @@ export const SelectProposalView: React.FC = observer(() => {
     return (
         <Container>
             <Sidebar>
-                <SidebarActions>
-                    <FilterModeSwitch />
-                </SidebarActions>
                 <Filters>
                     <ScrollArea>
-                        {proposals.customFilter && (
-                            <React.Fragment>
-                                <SearchDiv>
-                                    <Search onChange={searchDebounced} />
-                                </SearchDiv>
-                                <PriceFilter />
-                                <QualityFilter />
-                                <IpTypeFilter />
-                            </React.Fragment>
-                        )}
+                        <SearchDiv>
+                            <Search onChange={searchDebounced} />
+                        </SearchDiv>
                         <CountryFilter />
                     </ScrollArea>
                 </Filters>

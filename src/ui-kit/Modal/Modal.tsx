@@ -70,16 +70,18 @@ const Content = styled.div`
 
 export interface ModalProps {
     visible: boolean
+    light?: boolean
     onClose: () => void
 }
 
-export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({ visible, onClose, children }) => {
+export const Modal: React.FC<PropsWithChildren<ModalProps>> = ({ light = false, visible, onClose, children }) => {
+    const closeIconColor = light ? "#404040" : "#fff"
     return (
         <CSSTransition in={visible} timeout={300}>
             <Container>
                 <Content>
                     <CloseButton onClick={onClose}>
-                        <FontAwesomeIcon className="icon" icon={faTimes} color="white" size="lg" />
+                        <FontAwesomeIcon className="icon" icon={faTimes} color={closeIconColor} size="lg" />
                     </CloseButton>
                     {children}
                 </Content>
