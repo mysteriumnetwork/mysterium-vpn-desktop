@@ -96,6 +96,10 @@
   },
   "build": {
     "appId": "network.mysterium.mysterium-vpn-desktop",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "mac": {
       "target": [
         "dmg",
@@ -116,7 +120,8 @@
       "allowToChangeInstallationDirectory": true,
       "perMachine": true,
       "allowElevation": true,
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "include": "install-wintun.nsi"
     },
     "afterSign": "ci/notarize.js",
     "publish": {
