@@ -49,7 +49,7 @@ export class Supervisor {
     }
 
     async install(): Promise<void> {
-        let supervisorBinaryName = "myst_supervisor"
+        let supervisorBinaryName = "bin/myst_supervisor"
         if (isWin) {
             supervisorBinaryName += ".exe"
         }
@@ -99,7 +99,7 @@ export class Supervisor {
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
     startMyst(): Promise<void> {
-        let mystBinaryName = "myst"
+        let mystBinaryName = "bin/myst"
         if (isWin) {
             mystBinaryName += ".exe"
         }
