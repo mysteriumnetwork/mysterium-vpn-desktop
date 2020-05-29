@@ -203,13 +203,7 @@ export class ProposalStore {
 
     @computed
     get priceMaximums(): { perMinuteMax: number; perGibMax: number } {
-        let perMinuteMax = 0
-        let perGibMax = 0
-        for (const proposal of this.proposals) {
-            perMinuteMax = Math.max(perMinuteMax, pricePerMinute(proposal.paymentMethod).amount)
-            perGibMax = Math.max(perGibMax, pricePerGiB(proposal.paymentMethod).amount)
-        }
-        return { perMinuteMax, perGibMax }
+        return { perMinuteMax: 100_000, perGibMax: 50_000_000 }
     }
 
     @computed
