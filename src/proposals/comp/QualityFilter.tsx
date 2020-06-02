@@ -21,7 +21,7 @@ const Container = styled.div`
 
 const RangeContainer = styled.div`
     height: 32px;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 `
 
 const Label = styled.div`
@@ -37,7 +37,8 @@ const Range = styled.input`
 const IncludeFailed = styled.div`
     ${textSmall}
     height: 32px;
-    padding: 0 16px;
+    line-height: 32px;
+    padding: 0 8px;
     display: flex;
     align-items: center;
     margin-bottom: 8px;

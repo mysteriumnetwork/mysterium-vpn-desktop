@@ -93,7 +93,7 @@ const ChannelQR = styled.div`
 
 const Copy = styled.button`
     border-radius: 4px;
-    margin-left: 12px;
+    margin-left: 8px;
     padding: 4px 8px;
     background: linear-gradient(180deg, #fefefe 0%, #f2f2f2 100%);
 `
