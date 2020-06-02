@@ -61,7 +61,10 @@ const createWindow = async (): Promise<BrowserWindow> => {
         useContentSize: true,
         resizable: false,
         maximizable: false,
-        webPreferences: { nodeIntegration: true },
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true,
+        },
     })
     window.setMenuBarVisibility(false)
     if (!isDevelopment) {
