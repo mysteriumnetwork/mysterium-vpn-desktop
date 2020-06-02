@@ -69,7 +69,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
 
     if (isDevelopment) {
         window.webContents.once("dom-ready", () => {
-            window.webContents.openDevTools()
+            window.webContents.openDevTools({ mode: "detach" })
         })
     }
 
