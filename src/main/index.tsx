@@ -63,6 +63,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
         maximizable: false,
         webPreferences: { nodeIntegration: true },
     })
+    window.setMenuBarVisibility(false)
     if (!isDevelopment) {
         Menu.setApplicationMenu(createMenu())
     }
