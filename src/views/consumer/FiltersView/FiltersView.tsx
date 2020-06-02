@@ -24,7 +24,7 @@ const Container = styled.div`
         left: 0;
         top: 0;
         z-index: -1;
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
     }
 
     padding: 16px;
