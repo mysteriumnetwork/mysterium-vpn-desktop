@@ -33,6 +33,11 @@ const SidebarTitle = styled(SectionTitle)`
     margin-left: 8px;
 `
 
+const CountryToggle = styled(Toggle)`
+    padding: 0 16px;
+    line-height: 32px;
+`
+
 export const CountryFilter = observer(() => {
     const { proposals } = useStores()
     const countryCounts = proposals.countryCounts
@@ -57,7 +62,7 @@ export const CountryFilter = observer(() => {
                     }
                     const country = resolveCountry(countryCode)
                     return (
-                        <Toggle
+                        <CountryToggle
                             key={countryCode}
                             onClick={toggleAction}
                             active={proposals.filter.country == countryCode}
@@ -65,7 +70,7 @@ export const CountryFilter = observer(() => {
                             <FilterFlag countryCode={countryCode} />
                             <p>{country.name}</p>
                             <Count>{countryCounts[countryCode]}</Count>
-                        </Toggle>
+                        </CountryToggle>
                     )
                 })}
         </Container>

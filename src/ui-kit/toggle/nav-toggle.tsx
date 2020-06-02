@@ -17,7 +17,8 @@ export interface ToggleProps {
 export const NavToggle = styled.div<ToggleProps>`
     box-sizing: border-box;
     height: 24px;
-    padding: 2px 16px;
+    line-height: 24px;
+    padding: 0 16px;
     display: flex;
     flex-direction: row;
     align-items: center;
