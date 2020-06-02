@@ -6,6 +6,7 @@
  */
 import path from "path"
 import fs from "fs"
+import { platform } from "os"
 
 import React from "react"
 import ReactDOM from "react-dom"
@@ -18,19 +19,33 @@ import { initialize as initializeSentry } from "../errors/sentry"
 
 initializeSentry()
 
-const robotoLightPath = path.join(__static, "/fonts/Roboto-Light.ttf")
-const robotoLightBuffer = fs.readFileSync(robotoLightPath)
-const robotoLight = new FontFace("Roboto", robotoLightBuffer, { weight: "normal" })
-robotoLight.load().then(() => {
-    document.fonts.add(robotoLight)
-})
+let globalFontStyle
+switch (platform()) {
+    case "win32":
+        globalFontStyle = `
+            font-family: "Segoe UI", sans-serif;
+            font-weight: normal;
+        `
+        break
+    default:
+        const robotoLightPath = path.join(__static, "/fonts/Roboto-Light.ttf")
+        const robotoLightBuffer = fs.readFileSync(robotoLightPath)
+        const robotoLight = new FontFace("Roboto", robotoLightBuffer, { weight: "normal" })
+        robotoLight.load().then(() => {
+            document.fonts.add(robotoLight)
+        })
 
-const robotoMediumPath = path.join(__static, "/fonts/Roboto-Medium.ttf")
-const robotoMediumBuffer = fs.readFileSync(robotoMediumPath)
-const robotoMedium = new FontFace("Roboto", robotoMediumBuffer, { weight: "bold" })
-robotoLight.load().then(() => {
-    document.fonts.add(robotoMedium)
-})
+        const robotoMediumPath = path.join(__static, "/fonts/Roboto-Medium.ttf")
+        const robotoMediumBuffer = fs.readFileSync(robotoMediumPath)
+        const robotoMedium = new FontFace("Roboto", robotoMediumBuffer, { weight: "bold" })
+        robotoLight.load().then(() => {
+            document.fonts.add(robotoMedium)
+        })
+        globalFontStyle = `
+            font-family: Roboto;
+            font-weight: 300;
+        `
+}
 
 const GlobalStyle = createGlobalStyle`
     html, body, #app {
@@ -39,8 +54,7 @@ const GlobalStyle = createGlobalStyle`
         width: 100%;
         height: 100%;
         font-size: 14px;
-        font-family: Roboto;
-        font-weight: 300;
+        ${globalFontStyle}
     }
     #app {
         display: flex;
