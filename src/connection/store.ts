@@ -114,6 +114,9 @@ export class ConnectionStore {
                     providerId: this.root.proposals.active.providerId,
                     accountantId,
                     serviceType: this.root.proposals.active.serviceType,
+                    connectOptions: {
+                        dns: "system",
+                    },
                 },
                 30000,
             )

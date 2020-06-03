@@ -3989,10 +3989,10 @@ filelist@^1.0.1:
   dependencies:
     minimatch "^3.0.4"
 
-filesize@^5.0.0:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/filesize/-/filesize-5.0.3.tgz#2fa284185e9d2e8edbec2915b4dadce4043aac31"
-  integrity sha512-RM123v6KPqgZJmVCh4rLvCo8tLKr4sgD92DeZ+AuoUE8teGZJHKs1cTORwETcpIJSlGsz2WYdwKDQUXby5hNqQ==
+filesize@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-6.1.0.tgz#e81bdaa780e2451d714d71c0d7a4f3238d37ad00"
+  integrity sha512-LpCHtPQ3sFx67z+uh2HnSyWSLLu5Jxo21795uRDuar/EOuYWXib5EmPaGIBuSnRqH2IODiKA2k5re/K9OnN/Yg==
 
 fill-range@^4.0.0:
   version "4.0.0"
@@ -6080,14 +6080,14 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysterium-vpn-js@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-3.2.0.tgz#baab267b114a9a22b1969508a332b58206ed9183"
-  integrity sha512-wKveByS61nb+dpsdEu72r8XwHjs3QugWHPiI90Ya8rKbEEPcx4ENRQ4CIg2sbuOEAMhxDb+6m83iFbJgqHuc3Q==
+mysterium-vpn-js@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-3.3.0.tgz#9a3b35a99af1aec5fd5e0f14da4573387e65280a"
+  integrity sha512-bBLdTnXTVREO2oPgV8YW02JaLpEIQyKPVwABzVggVQrpWpqQDc8ylpMYc8F9XSRLburUyfwRwVnAkzai7D4Jkg==
   dependencies:
     axios "^0.19.2"
     camelcase-keys "^6.2.2"
-    filesize "^5.0.0"
+    filesize "^6.1.0"
     snakecase-keys "^3.2.0"
 
 nan@^2.12.1:
