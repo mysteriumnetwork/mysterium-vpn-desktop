@@ -24,7 +24,7 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
 
 ## Using a custom Mysterium Node version
 
-Instead of using prebuilt Node binary (located in `static/`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
+Instead of using prebuilt Node binary (specified by `@mysteriumnetwork/node` version in `package.json`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
 
 ```
 git clone https://github.com/mysteriumnetwork/node
