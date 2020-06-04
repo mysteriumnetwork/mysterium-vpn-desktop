@@ -10,6 +10,21 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
 - Simplified codebase
 - Integrated payments
 
+## Logging
+
+### App
+
+In development mode, application logs are printed to the console.  
+In a bundled application:
+
+- Linux: `~/.config/MysteriumVPN/logs/*.log`
+- macOS: `~/Library/Logs/MysteriumVPN/*.log`
+- Windows: `%USERPROFILE%\AppData\Roaming\MysteriumVPN\logs\*.log`
+
+### Node
+
+`~/.mysterium/logs/mysterium-node.log`
+
 ## Getting started (development)
 
 1. Install and build the project
