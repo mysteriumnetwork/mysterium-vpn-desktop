@@ -98,7 +98,8 @@
     "appId": "network.mysterium.mysterium-vpn-desktop",
     "mac": {
       "target": [
-        "dmg"
+        "dmg",
+        "zip"
       ],
       "icon": "static/logo.icns",
       "hardenedRuntime": true,
