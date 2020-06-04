@@ -20,9 +20,9 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, ProposalAction } from "../analytics/analytics"
+import { log } from "../log/log"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
-import { log } from "../log/log"
 
 const qc = new QualityCalculator()
 
