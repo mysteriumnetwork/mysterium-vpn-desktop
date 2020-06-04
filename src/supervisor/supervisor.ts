@@ -15,6 +15,7 @@ import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { analytics } from "../analytics/analytics-main"
 import { AppAction, Category } from "../analytics/analytics"
+import { log } from "../log/log"
 
 const isWin = platform() === "win32"
 
@@ -29,18 +30,18 @@ export class Supervisor {
     conn?: Socket
 
     async connect(): Promise<void> {
-        console.log("Connecting to the supervisor...")
+        log.info("Connecting to the supervisor...")
         const mystSock = mystSockPath()
         return await new Promise((resolve, reject) => {
             this.conn = net
                 .createConnection(mystSock)
                 .on("connect", () => {
-                    console.info("Connected to: ", mystSock)
+                    log.info("Connected to: ", mystSock)
                     analytics.event(Category.App, AppAction.ConnectedToSupervisor)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {
-                    console.info("Server:", data.toString())
+                    log.info("Server:", data.toString())
                 })
                 .on("error", function (data) {
                     return reject(data)
@@ -65,7 +66,7 @@ export class Supervisor {
                     },
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (error, stdout, stderr) => {
-                        console.log("[sudo-exec]", stdout, stderr)
+                        log.info("[sudo-exec]", stdout, stderr)
                         if (error) {
                             return reject(error)
                         }
@@ -119,7 +120,7 @@ export class Supervisor {
         mystProcess.unref()
 
         mystProcess.on("close", (code) => {
-            console.log(`myst process exited with code ${code}`)
+            log.info(`myst process exited with code ${code}`)
         })
 
         return Promise.resolve()

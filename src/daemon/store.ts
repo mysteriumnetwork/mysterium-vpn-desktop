@@ -12,6 +12,7 @@ import { remote } from "electron"
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { Supervisor } from "../supervisor/supervisor"
+import { log } from "../log/log"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -64,7 +65,7 @@ export class DaemonStore {
     @action
     async healthcheck(): Promise<void> {
         if (this.starting) {
-            console.log("Daemon is starting, suspending healthcheck")
+            log.info("Daemon is starting, suspending healthcheck")
             return
         }
         this.setStatusLoading(true)
@@ -72,7 +73,7 @@ export class DaemonStore {
             await tequilapi.healthCheck(500)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
-            console.error("Healthcheck failed:", err.message)
+            log.error("Healthcheck failed:", err.message)
             this.setStatus(DaemonStatusType.Down)
         }
         this.setStatusLoading(false)
@@ -81,14 +82,14 @@ export class DaemonStore {
     @action
     async start(): Promise<void> {
         if (this.starting) {
-            console.info("Already starting")
+            log.info("Already starting")
             return
         }
         this.setStarting(true)
         try {
             await supervisor.connect()
         } catch (err) {
-            console.error("Failed to connect to the supervisor, installing", err.message)
+            log.error("Failed to connect to the supervisor, installing", err.message)
             await this.supervisorInstall()
         }
 
@@ -101,7 +102,7 @@ export class DaemonStore {
         try {
             return await supervisor.install()
         } catch (err) {
-            console.error("Failed to install supervisor", err)
+            log.error("Failed to install supervisor", err)
         }
     }
 
