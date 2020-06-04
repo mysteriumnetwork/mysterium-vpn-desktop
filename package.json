@@ -121,7 +121,7 @@
       "perMachine": true,
       "allowElevation": true,
       "runAfterFinish": true,
-      "include": "install-wintun.nsi"
+      "include": "build/nsis/customize.nsi"
     },
     "afterSign": "ci/notarize.js",
     "publish": {

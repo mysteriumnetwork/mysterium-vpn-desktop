@@ -1,7 +1,7 @@
 RequestExecutionLevel admin
 
 !macro customInstall
-  File "${BUILD_RESOURCES_DIR}\wintun-amd64.msi"
+  File "${BUILD_RESOURCES_DIR}\nsis\wintun-amd64.msi"
 
   DetailPrint "Installing Wintun driver..."
   nsExec::ExecToStack '"msiexec" /i "$INSTDIR\wintun-amd64.msi" /qn'
