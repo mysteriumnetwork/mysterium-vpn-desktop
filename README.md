@@ -37,6 +37,10 @@ App will try to connect to the existing instance instead of launching one of its
 
 ## Packaging for distribution
 
+Required env variables (macOS):
+- APPLEID
+- APPLEIDPASS (generate an app-specific password for this)
+
 ```
 yarn bundle
 ```
