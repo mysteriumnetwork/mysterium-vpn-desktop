@@ -1,6 +1,6 @@
 # mysterium-vpn-desktop
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysteriumnetwork/mysterium-vpn-desktop)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysteriumnetwork/mysterium-vpn-desktop)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
 [![Lint](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/workflows/Lint/badge.svg?event=push)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/actions?query=workflow%3ALint)
 
