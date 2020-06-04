@@ -70,6 +70,7 @@
     "electron": "^8.2.3",
     "electron-builder": "^22.6.1",
     "electron-download": "^4.1.1",
+    "electron-notarize": "^0.3.0",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
     "eslint": "^7.1.0",
@@ -114,6 +115,7 @@
       "allowElevation": true,
       "runAfterFinish": true
     },
+    "afterSign": "ci/notarize.js",
     "publish": {
       "provider": "github",
       "releaseType": "prerelease",
