@@ -106,7 +106,7 @@ export class Supervisor {
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
-            ["--mymysterium.enabled=false", "--ui.enable=false", "--usermode", "daemon"],
+            ["--mymysterium.enabled=false", "--ui.enable=false", "--usermode", "--consumer", "daemon"],
             {
                 detached: true, // Needed for unref to work correctly.
                 stdio: "ignore", // Needed for unref to work correctly.
