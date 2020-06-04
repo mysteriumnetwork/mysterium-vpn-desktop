@@ -8,7 +8,7 @@ import { EventEmitter } from "events"
 
 import { parseSSEResponse, TEQUILAPI_SSE_URL } from "mysterium-vpn-js"
 
-import { isDevelopment } from "./utils/mode"
+import { isDevelopment } from "./utils/env"
 
 export const eventBus = new EventEmitter()
 

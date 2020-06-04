@@ -7,8 +7,8 @@
 import React from "react"
 import styled from "styled-components"
 
-import { WalletButton } from "../payment/comp/wallet-button"
-import { FiltersButton } from "../proposals/comp/FiltersButton/FiltersButton"
+import { WalletButton } from "../payment/components/WalletButton/WalletButton"
+import { FiltersButton } from "../proposals/components/FiltersButton/FiltersButton"
 
 const Container = styled.div`
     box-sizing: border-box;
