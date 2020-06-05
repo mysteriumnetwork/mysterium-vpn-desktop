@@ -69,7 +69,7 @@
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^3.0.1",
     "@typescript-eslint/parser": "^3.0.1",
-    "electron": "^8.2.3",
+    "electron": "^9.0.2",
     "electron-builder": "^22.6.1",
     "electron-download": "^4.1.1",
     "electron-notarize": "^0.3.0",
