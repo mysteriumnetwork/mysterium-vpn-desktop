@@ -47,7 +47,7 @@
     "react-transition-group": "^4.4.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "source-map-support": "^0.5.16",
+    "source-map-support": "^0.5.19",
     "styled-components": "^4.4.1",
     "sudo-prompt": "^9.2.1",
     "universal-analytics": "^0.4.20"
