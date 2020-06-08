@@ -116,7 +116,7 @@ export class ConnectionStore {
                     accountantId,
                     serviceType: this.root.proposals.active.serviceType,
                     connectOptions: {
-                        dns: "system",
+                        dns: "auto",
                     },
                 },
                 30000,
