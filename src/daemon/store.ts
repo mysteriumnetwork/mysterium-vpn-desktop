@@ -93,6 +93,7 @@ export class DaemonStore {
             await this.supervisorInstall()
         }
 
+        await supervisor.upgrade()
         await supervisor.startMyst()
         this.setStarting(false)
     }
