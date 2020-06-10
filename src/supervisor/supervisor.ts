@@ -9,14 +9,13 @@ import { platform } from "os"
 import { Socket } from "net"
 import { spawn } from "child_process"
 
-import * as sudo from "sudo-prompt"
-import semverCompare from "semver-compare"
+import semver from "semver"
 
-import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { analytics } from "../analytics/analytics-main"
 import { AppAction, Category } from "../analytics/analytics"
 import { log } from "../log/log"
+import { sudoExec } from "../utils/sudo"
 
 const isWin = platform() === "win32"
 
@@ -119,7 +118,7 @@ export class Supervisor {
             log.error("Error checking running version", err)
         }
 
-        if (bundledVersion && runningVersion && semverCompare(runningVersion, bundledVersion) >= 0) {
+        if (bundledVersion && runningVersion && semver.gte(runningVersion, bundledVersion)) {
             outdated = false
         }
         if (!outdated) {
@@ -140,25 +139,8 @@ export class Supervisor {
 
     async install(): Promise<void> {
         analytics.event(Category.App, AppAction.InstallSupervisor)
-        return await new Promise((resolve, reject) => {
-            try {
-                sudo.exec(
-                    `${this.supervisorBin()} -install`,
-                    {
-                        name: packageJson.productName,
-                        icns: staticAssetPath("logo.icns"),
-                    },
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (error, stdout, stderr) => {
-                        log.info("[sudo-exec]", stdout, stderr)
-                        if (error) {
-                            return reject(error)
-                        }
-                    },
-                )
-            } catch (err) {
-                reject(err)
-            }
+        return await new Promise((resolve) => {
+            sudoExec(`${this.supervisorBin()} -install`)
             const waitUntilConnected = (): void => {
                 this.connect()
                     .then(() => resolve())

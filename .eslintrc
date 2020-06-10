@@ -17,6 +17,7 @@
     "header",
     "import"
   ],
+  "ignorePatterns": ["static/*.js"],
   "rules": {
     "react/prop-types": "off",
     "header/header": [2, "block", [
