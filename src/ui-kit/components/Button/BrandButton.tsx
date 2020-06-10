@@ -6,6 +6,8 @@
  */
 import styled from "styled-components"
 
+import { ButtonProps } from "./ButtonProps"
+
 export const BrandButton = styled.button`
     box-sizing: border-box;
     height: 40px;
@@ -20,7 +22,8 @@ export const BrandButton = styled.button`
     border-radius: 4px;
     outline: none;
 
-    background: ${(props): string => (!props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc")};
+    background: ${(props: ButtonProps): string =>
+        !props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc"};
     color: #fff;
 
     transition: 0.2s all;
