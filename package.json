@@ -125,6 +125,7 @@
       "runAfterFinish": true,
       "include": "build/nsis/customize.nsi"
     },
+    "afterSign": "ci/notarize.js",
     "publish": {
       "provider": "github",
       "releaseType": "prerelease",
