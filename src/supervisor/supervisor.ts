@@ -118,7 +118,10 @@ export class Supervisor {
             log.error("Error checking running version", err)
         }
 
-        if (bundledVersion && runningVersion && semver.gte(runningVersion, bundledVersion)) {
+        if (runningVersion === "source.dev-build") {
+            // Never update development builds of the supervisor
+            outdated = false
+        } else if (bundledVersion && runningVersion && semver.gte(runningVersion, bundledVersion)) {
             outdated = false
         }
         if (!outdated) {
