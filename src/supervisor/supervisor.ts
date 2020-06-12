@@ -143,7 +143,7 @@ export class Supervisor {
     async install(): Promise<void> {
         analytics.event(Category.App, AppAction.InstallSupervisor)
         return await new Promise((resolve) => {
-            sudoExec(`${this.supervisorBin()} -install`)
+            sudoExec(`"${this.supervisorBin()}" -install`)
             const waitUntilConnected = (): void => {
                 this.connect()
                     .then(() => resolve())
