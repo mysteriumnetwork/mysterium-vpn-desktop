@@ -65,7 +65,11 @@ export class DaemonStore {
     @action
     async healthcheck(): Promise<void> {
         if (this.starting) {
-            log.info("Daemon is starting, suspending healthcheck")
+            log.info("Daemon is starting, skipping healthcheck")
+            return
+        }
+        if (this.statusLoading) {
+            log.info("Another healthcheck is in progress, skipping")
             return
         }
         this.setStatusLoading(true)
