@@ -115,7 +115,8 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "static/logo.ico"
     },
     "nsis": {
       "oneClick": false,
