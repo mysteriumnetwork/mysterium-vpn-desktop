@@ -49,6 +49,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Check for updates",
                 click: async (): Promise<void> => {
+                    analytics.event(Category.Tray, TrayAction.CheckForUpdates)
                     await autoUpdater.checkForUpdatesAndNotify()
                 },
             },
