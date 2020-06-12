@@ -4,6 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { platform } from "os"
+
 import { App, BrowserWindow, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
 import { ConnectionStatus } from "mysterium-vpn-js"
@@ -72,5 +74,11 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             },
         ]),
     )
+    tray.on("double-click", () => {
+        if (platform() == "win32") {
+            analytics.event(Category.Tray, TrayAction.DoubleClick)
+            win.show()
+        }
+    })
     return tray
 }

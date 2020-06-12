@@ -41,6 +41,7 @@ export enum AppAction {
 }
 
 export enum TrayAction {
+    DoubleClick = "Tray double click",
     ShowWindow = "Show window",
     Quit = "Quit",
     Repair = "Repair",
