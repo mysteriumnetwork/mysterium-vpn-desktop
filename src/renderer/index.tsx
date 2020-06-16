@@ -4,8 +4,6 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import path from "path"
-import fs from "fs"
 import { platform } from "os"
 
 import React from "react"
@@ -27,23 +25,16 @@ switch (platform()) {
             font-weight: normal;
         `
         break
-    default:
-        const robotoLightPath = path.join(__static, "/fonts/Roboto-Light.ttf")
-        const robotoLightBuffer = fs.readFileSync(robotoLightPath)
-        const robotoLight = new FontFace("Roboto", robotoLightBuffer, { weight: "normal" })
-        robotoLight.load().then(() => {
-            document.fonts.add(robotoLight)
-        })
-
-        const robotoMediumPath = path.join(__static, "/fonts/Roboto-Medium.ttf")
-        const robotoMediumBuffer = fs.readFileSync(robotoMediumPath)
-        const robotoMedium = new FontFace("Roboto", robotoMediumBuffer, { weight: "bold" })
-        robotoLight.load().then(() => {
-            document.fonts.add(robotoMedium)
-        })
+    case "darwin":
         globalFontStyle = `
-            font-family: Roboto;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             font-weight: 300;
+        `
+        break
+    default:
+        globalFontStyle = `
+            font-family: sans-serif;
+            font-weight: normal;
         `
 }
 
