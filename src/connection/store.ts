@@ -21,6 +21,7 @@ import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 import { MainIpcListenChannels } from "../main/ipc"
 import { analytics } from "../analytics/analytics-ui"
 import { AppAction, Category, ConnectAction } from "../analytics/analytics"
+import { log } from "../log/log"
 
 const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
 
@@ -114,11 +115,14 @@ export class ConnectionStore {
                     providerId: this.root.proposals.active.providerId,
                     accountantId,
                     serviceType: this.root.proposals.active.serviceType,
+                    connectOptions: {
+                        dns: "system",
+                    },
                 },
                 30000,
             )
         } catch (err) {
-            console.error("Could not connect", err.message)
+            log.error("Could not connect", err.message)
         }
         this.setConnectInProgress(false)
     }
@@ -135,7 +139,7 @@ export class ConnectionStore {
             }
             this.setStatus(conn.status)
         } catch (err) {
-            console.error("Connection status check failed", err.message)
+            log.error("Connection status check failed", err.message)
             this.setStatus(ConnectionStatus.NOT_CONNECTED)
         }
     }
@@ -147,7 +151,7 @@ export class ConnectionStore {
         try {
             await tequilapi.connectionCancel()
         } catch (err) {
-            console.error("Failed to disconnect", err.message)
+            log.error("Failed to disconnect", err.message)
         }
     }
 
@@ -157,7 +161,7 @@ export class ConnectionStore {
             const location = await tequilapi.location()
             this.setOriginalLocation(location)
         } catch (err) {
-            console.error("Failed to lookup original location", err.message)
+            log.error("Failed to lookup original location", err.message)
         }
     }
 
@@ -189,7 +193,7 @@ export class ConnectionStore {
                 isp: "",
                 nodeType: "",
             }
-            console.error("Failed to lookup location", err.message)
+            log.error("Failed to lookup location", err.message)
         }
         this.setLocation(location)
     }

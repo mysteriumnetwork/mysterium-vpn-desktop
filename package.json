@@ -1,6 +1,7 @@
 {
   "name": "mysterium-vpn-desktop",
   "productName": "MysteriumVPN",
+  "description": "Desktop VPN client for Mysterium Network",
   "version": "0.0.0-snapshot",
   "main": "index.js",
   "author": {
@@ -24,7 +25,9 @@
     "@mysteriumnetwork/node": "^0.0.0-dev",
     "@mysteriumnetwork/terms": "^0.0.27",
     "@sentry/electron": "1.3.0",
+    "@types/semver": "^7.2.0",
     "byte-size": "^6.2.0",
+    "electron-log": "^4.2.1",
     "electron-updater": "^4.3.1",
     "history": "^4.10.1",
     "lodash": "^4.17.15",
@@ -32,7 +35,7 @@
     "mobx": "^5.15.4",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.0.6",
-    "mysterium-vpn-js": "^3.2.0",
+    "mysterium-vpn-js": "^3.3.0",
     "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
     "react": "^16.13.1",
@@ -41,12 +44,13 @@
     "react-markdown": "^4.3.1",
     "react-qr-svg": "^2.2.2",
     "react-router-dom": "^5.2.0",
-    "react-table": "^7.1.0",
+    "react-table": "^7.2.0",
     "react-transition-group": "^4.4.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
-    "source-map-support": "^0.5.16",
-    "styled-components": "^4.4.1",
+    "semver": "^7.3.2",
+    "source-map-support": "^0.5.19",
+    "styled-components": "^5.1.1",
     "sudo-prompt": "^9.2.1",
     "universal-analytics": "^0.4.20"
   },
@@ -58,7 +62,7 @@
     "@types/react": "16.9.33",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
-    "@types/react-table": "^7.0.18",
+    "@types/react-table": "^7.0.19",
     "@types/react-transition-group": "^4.4.0",
     "@types/react-virtualized-auto-sizer": "^1.0.0",
     "@types/react-window": "^1.8.2",
@@ -67,20 +71,21 @@
     "@types/webpack-env": "^1.14.1",
     "@typescript-eslint/eslint-plugin": "^3.0.1",
     "@typescript-eslint/parser": "^3.0.1",
-    "electron": "^8.2.3",
-    "electron-builder": "^22.6.1",
+    "electron": "^9.0.2",
+    "electron-builder": "^22.7.0",
     "electron-download": "^4.1.1",
+    "electron-notarize": "^0.3.0",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
-    "eslint": "^7.1.0",
+    "eslint": "^7.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-header": "^3.0.0",
-    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.20.0",
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
-    "typescript": "^3.9.3",
+    "typescript": "^3.9.5",
     "url-loader": "^4.1.0",
     "webpack": "^4.42.1"
   },
@@ -93,25 +98,35 @@
   },
   "build": {
     "appId": "network.mysterium.mysterium-vpn-desktop",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
     "mac": {
       "target": [
         "dmg",
         "zip"
       ],
-      "icon": "static/logo.icns"
+      "icon": "static/logo.icns",
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "static/logo.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "perMachine": true,
       "allowElevation": true,
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "include": "build/nsis/customize.nsi"
     },
+    "afterSign": "ci/notarize.js",
     "publish": {
       "provider": "github",
       "releaseType": "prerelease",

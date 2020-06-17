@@ -4,6 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { platform } from "os"
+
 import { App, BrowserWindow, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
 import { ConnectionStatus } from "mysterium-vpn-js"
@@ -21,6 +23,8 @@ const trayIconPath = (connectionStatus: ConnectionStatus): string => {
     switch (process.platform) {
         case "darwin":
             return staticAssetPath(`tray/macOS/${connected ? "ActiveTemplate" : "PassiveTemplate"}.png`)
+        case "win32":
+            return staticAssetPath(`tray/windows/${connected ? "logo-active" : "logo"}.ico`)
     }
     return staticAssetPath("tray/macOS/PassiveTemplate.png")
 }
@@ -47,6 +51,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Check for updates",
                 click: async (): Promise<void> => {
+                    analytics.event(Category.Tray, TrayAction.CheckForUpdates)
                     await autoUpdater.checkForUpdatesAndNotify()
                 },
             },
@@ -72,5 +77,11 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             },
         ]),
     )
+    tray.on("double-click", () => {
+        if (platform() == "win32") {
+            analytics.event(Category.Tray, TrayAction.DoubleClick)
+            win.show()
+        }
+    })
     return tray
 }

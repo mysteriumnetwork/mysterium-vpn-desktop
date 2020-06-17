@@ -21,12 +21,18 @@ import {
     setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
 import { initialize as initializeSentry } from "../errors/sentry"
+import { log } from "../log/log"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
 import { createMenu } from "./menu"
 
 initializeSentry()
+
+autoUpdater.logger = log
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+autoUpdater.logger.transports.file.level = "info"
 
 const isDevelopment = process.env.NODE_ENV !== "production"
 
@@ -46,7 +52,7 @@ const installExtensions = async (): Promise<void | any[]> => {
     const extensions = ["REACT_DEVELOPER_TOOLS"]
 
     // eslint-disable-next-line prettier/prettier
-    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(console.log) // eslint-disable-line no-console
+    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(log.debug) // eslint-disable-line no-console
 }
 
 const createWindow = async (): Promise<BrowserWindow> => {
@@ -61,15 +67,19 @@ const createWindow = async (): Promise<BrowserWindow> => {
         useContentSize: true,
         resizable: false,
         maximizable: false,
-        webPreferences: { nodeIntegration: true },
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true,
+        },
     })
+    window.setMenuBarVisibility(false)
     if (!isDevelopment) {
         Menu.setApplicationMenu(createMenu())
     }
 
     if (isDevelopment) {
         window.webContents.once("dom-ready", () => {
-            window.webContents.openDevTools()
+            window.webContents.openDevTools({ mode: "detach" })
         })
     }
 

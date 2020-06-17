@@ -9,12 +9,13 @@ import { platform } from "os"
 import { Socket } from "net"
 import { spawn } from "child_process"
 
-import * as sudo from "sudo-prompt"
+import semver from "semver"
 
-import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { analytics } from "../analytics/analytics-main"
 import { AppAction, Category } from "../analytics/analytics"
+import { log } from "../log/log"
+import { sudoExec } from "../utils/sudo"
 
 const isWin = platform() === "win32"
 
@@ -29,18 +30,18 @@ export class Supervisor {
     conn?: Socket
 
     async connect(): Promise<void> {
-        console.log("Connecting to the supervisor...")
+        log.info("Connecting to the supervisor...")
         const mystSock = mystSockPath()
         return await new Promise((resolve, reject) => {
             this.conn = net
                 .createConnection(mystSock)
                 .on("connect", () => {
-                    console.info("Connected to: ", mystSock)
+                    log.info("Connected to: ", mystSock)
                     analytics.event(Category.App, AppAction.ConnectedToSupervisor)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {
-                    console.info("Server:", data.toString())
+                    log.info("Server:", data.toString())
                 })
                 .on("error", function (data) {
                     return reject(data)
@@ -48,32 +49,101 @@ export class Supervisor {
         })
     }
 
-    async install(): Promise<void> {
+    async bundledVersion(): Promise<string> {
+        const supervisor = spawn(this.supervisorBin(), ["-version"])
+        let stdout = ""
+        supervisor.stdout.on("data", (data) => {
+            log.debug("Supervisor stdout:", data.toString())
+            stdout = data.toString()
+        })
+        supervisor.stderr.on("data", (data) => {
+            log.error("Supervisor stderr:", data.toString())
+        })
+        return new Promise((resolve, reject) => {
+            supervisor.on("error", reject)
+            supervisor.on("exit", (code) => {
+                if (code === 0) {
+                    resolve(stdout)
+                } else {
+                    reject(new Error(`exit code: ${code}`))
+                }
+            })
+        })
+    }
+
+    /**
+     * Sends command to the supervisor and returns the response.
+     */
+    request(command: string, timeout = 2000): Promise<string | void> {
+        return new Promise((resolve, reject) => {
+            // eslint-disable-next-line prefer-const
+            let timer: NodeJS.Timeout
+            this.conn?.write(command + "\n")
+            const responseHandler = (data: Buffer) => {
+                clearTimeout(timer)
+                const message = data.toString()
+                if (!message.startsWith("ok: ")) {
+                    reject(new Error(message.replace("error: ", "")))
+                }
+                const payload = message.replace("ok: ", "")
+                resolve(payload)
+            }
+            this.conn?.once("data", responseHandler)
+            timer = setTimeout(() => {
+                reject(new Error("timed out waiting for response"))
+                this.conn?.removeListener("data", responseHandler)
+            }, timeout)
+        })
+    }
+
+    runningVersion(): Promise<string> {
+        return this.request("version") as Promise<string>
+    }
+
+    async upgrade(): Promise<void> {
+        let outdated = true
+        let bundledVersion = ""
+        try {
+            bundledVersion = await this.bundledVersion()
+            log.info("Bundled supervisor version:", bundledVersion)
+        } catch (err) {
+            log.error("Error checking bundled version", err)
+        }
+
+        let runningVersion = ""
+        try {
+            runningVersion = await this.runningVersion()
+            log.info("Running supervisor version:", runningVersion)
+        } catch (err) {
+            log.error("Error checking running version", err)
+        }
+
+        if (runningVersion === "source.dev-build") {
+            // Never update development builds of the supervisor
+            outdated = false
+        } else if (bundledVersion && runningVersion && semver.gte(runningVersion, bundledVersion)) {
+            outdated = false
+        }
+        if (!outdated) {
+            log.info("Running supervisor version is compatible, skipping the upgrade")
+            return
+        }
+        log.info(`Upgrading supervisor ${runningVersion} → ${bundledVersion}`)
+        return supervisor.install()
+    }
+
+    supervisorBin(): string {
         let supervisorBinaryName = "bin/myst_supervisor"
         if (isWin) {
             supervisorBinaryName += ".exe"
         }
-        const supervisorPath = staticAssetPath(supervisorBinaryName)
+        return staticAssetPath(supervisorBinaryName)
+    }
+
+    async install(): Promise<void> {
         analytics.event(Category.App, AppAction.InstallSupervisor)
-        return await new Promise((resolve, reject) => {
-            try {
-                sudo.exec(
-                    `${supervisorPath} -install`,
-                    {
-                        name: packageJson.productName,
-                        icns: staticAssetPath("logo.icns"),
-                    },
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    (error, stdout, stderr) => {
-                        console.log("[sudo-exec]", stdout, stderr)
-                        if (error) {
-                            return reject(error)
-                        }
-                    },
-                )
-            } catch (err) {
-                reject(err)
-            }
+        return await new Promise((resolve) => {
+            sudoExec(`"${this.supervisorBin()}" -install`)
             const waitUntilConnected = (): void => {
                 this.connect()
                     .then(() => resolve())
@@ -106,7 +176,7 @@ export class Supervisor {
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
-            ["--mymysterium.enabled=false", "--ui.enable=false", "--usermode", "daemon"],
+            ["--mymysterium.enabled=false", "--ui.enable=false", "--usermode", "--consumer", "daemon"],
             {
                 detached: true, // Needed for unref to work correctly.
                 stdio: "ignore", // Needed for unref to work correctly.
@@ -119,7 +189,7 @@ export class Supervisor {
         mystProcess.unref()
 
         mystProcess.on("close", (code) => {
-            console.log(`myst process exited with code ${code}`)
+            log.info(`myst process exited with code ${code}`)
         })
 
         return Promise.resolve()

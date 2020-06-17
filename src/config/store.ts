@@ -10,6 +10,7 @@ import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
+import { log } from "../log/log"
 
 export interface Config {
     desktop?: {
@@ -47,7 +48,7 @@ export class ConfigStore {
         const config = await tequilapi.userConfig()
         runInAction(() => {
             this.config = config.data
-            console.log("use config:", JSON.stringify(this.config))
+            log.info("Using config:", JSON.stringify(this.config))
         })
     }
 

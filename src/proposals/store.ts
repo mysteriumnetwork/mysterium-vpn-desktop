@@ -20,6 +20,7 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, ProposalAction } from "../analytics/analytics"
+import { log } from "../log/log"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -110,7 +111,7 @@ export class ProposalStore {
                 .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
-            console.log("Could not get proposals", err.message)
+            log.error("Could not get proposals", err.message)
         }
         this.setLoading(false)
     }
@@ -127,7 +128,7 @@ export class ProposalStore {
                 this.setMetrics(metrics)
             }
         } catch (err) {
-            console.log("Could not get metrics", err.message)
+            log.error("Could not get metrics", err.message)
         }
         this.setLoading(false)
     }

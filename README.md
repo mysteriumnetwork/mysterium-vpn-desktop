@@ -1,15 +1,29 @@
 # mysterium-vpn-desktop
 
-[![Github All Releases](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/mysteriumnetwork/mysterium-vpn-desktop)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
 [![Lint](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/workflows/Lint/badge.svg?event=push)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/actions?query=workflow%3ALint)
-
-**Work in progress: use with care**
 
 This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork/mysterium-vpn) with the following goals:
 - Improved performance
 - Improved UX
 - Simplified codebase
 - Integrated payments
+
+## Logging
+
+### App
+
+In development mode, application logs are printed to the console.  
+In a bundled application:
+
+- Linux: `~/.config/MysteriumVPN/logs/*.log`
+- macOS: `~/Library/Logs/MysteriumVPN/*.log`
+- Windows: `%USERPROFILE%\AppData\Roaming\MysteriumVPN\logs\*.log`
+
+### Node
+
+`~/.mysterium/logs/mysterium-node.log`
 
 ## Getting started (development)
 
@@ -25,7 +39,7 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
 
 ## Using a custom Mysterium Node version
 
-Instead of using prebuilt Node binary (located in `static/`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
+Instead of using prebuilt Node binary (specified by `@mysteriumnetwork/node` version in `package.json`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
 
 ```
 git clone https://github.com/mysteriumnetwork/node
@@ -37,6 +51,10 @@ mage daemon
 App will try to connect to the existing instance instead of launching one of its own.
 
 ## Packaging for distribution
+
+Required env variables (macOS):
+- APPLEID
+- APPLEIDPASS (generate an app-specific password for this)
 
 ```
 yarn bundle
