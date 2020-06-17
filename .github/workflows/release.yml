@@ -27,7 +27,7 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v1.2.1
       - name: Replace version
-        run: yarn version --new-version ${{ steps.get_version.outputs.version }}
+        run: yarn version --no-git-tag-version --new-version ${{ steps.get_version.outputs.version }}
 
       - name: Release app
         uses: samuelmeuli/action-electron-builder@v1
