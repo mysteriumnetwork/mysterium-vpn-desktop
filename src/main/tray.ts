@@ -23,6 +23,8 @@ const trayIconPath = (connectionStatus: ConnectionStatus): string => {
     switch (process.platform) {
         case "darwin":
             return staticAssetPath(`tray/macOS/${connected ? "ActiveTemplate" : "PassiveTemplate"}.png`)
+        case "win32":
+            return staticAssetPath(`tray/windows/${connected ? "logo-active" : "logo"}.ico`)
     }
     return staticAssetPath("tray/macOS/PassiveTemplate.png")
 }
