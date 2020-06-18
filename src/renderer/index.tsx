@@ -11,7 +11,9 @@ import ReactDOM from "react-dom"
 import { createGlobalStyle } from "styled-components"
 import "mobx-react-lite/batchingForReactDom"
 import { HashRouter } from "react-router-dom"
+import { IntercomProvider } from "react-use-intercom"
 
+import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
 
@@ -93,7 +95,9 @@ const App: React.FC = () => {
         <React.Fragment>
             <GlobalStyle />
             <HashRouter>
-                <Routes />
+                <IntercomProvider appId={packageJson.intercomAppId}>
+                    <Routes />
+                </IntercomProvider>
             </HashRouter>
             <div className="baseline" />
         </React.Fragment>

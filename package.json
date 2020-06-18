@@ -47,6 +47,7 @@
     "react-router-dom": "^5.2.0",
     "react-table": "^7.2.0",
     "react-transition-group": "^4.4.1",
+    "react-use-intercom": "^0.3.0",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
     "semver": "^7.3.2",
@@ -91,6 +92,7 @@
     "webpack": "^4.42.1"
   },
   "analyticsAccountId": "UA-89155936-2",
+  "intercomAppId": "h7hlm9on",
   "sentryDsn": "https://5c3208e8d6124f2db303a2d12c7f48b8@o136129.ingest.sentry.io/5222592",
   "electronWebpack": {
     "renderer": {
