@@ -44,6 +44,7 @@ const Filters = styled.div`
     padding: 0 0 0 8px;
     display: flex;
     flex-direction: column;
+    user-select: none;
 `
 
 const SearchDiv = styled.div`

@@ -31,6 +31,8 @@ export class NavigationStore {
     wallet = false
     @observable
     filters = false
+    @observable
+    menu = false
 
     root: RootStore
 
@@ -107,5 +109,10 @@ export class NavigationStore {
         if (this.wallet) {
             this.wallet = false
         }
+    }
+
+    @action
+    showMenu = (show = true): void => {
+        this.menu = show
     }
 }

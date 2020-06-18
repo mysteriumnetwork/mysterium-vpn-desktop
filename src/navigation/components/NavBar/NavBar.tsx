@@ -7,8 +7,9 @@
 import React from "react"
 import styled from "styled-components"
 
-import { WalletButton } from "../payment/components/WalletButton/WalletButton"
-import { FiltersButton } from "../proposals/components/FiltersButton/FiltersButton"
+import { WalletButton } from "../../../payment/components/WalletButton/WalletButton"
+import { FiltersButton } from "../../../proposals/components/FiltersButton/FiltersButton"
+import { Hamburger } from "../Hamburger/Hamburger"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -28,6 +29,9 @@ export const NavBar: React.FC = () => {
             <FiltersButton />
             <div style={{ marginLeft: "auto" }}>
                 <WalletButton />
+            </div>
+            <div>
+                <Hamburger />
             </div>
         </Container>
     )
