@@ -12,7 +12,7 @@ import { createGlobalStyle } from "styled-components"
 import "mobx-react-lite/batchingForReactDom"
 import { HashRouter } from "react-router-dom"
 
-import { Routes } from "../navigation/routes"
+import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
 
 initializeSentry()
