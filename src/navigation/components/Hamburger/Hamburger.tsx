@@ -7,11 +7,14 @@
 import React, { useEffect, useRef } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
+import { faFacebookSquare, faGithub, faMedium, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { remote } from "electron"
+import { remote, shell } from "electron"
 
 import { useStores } from "../../../store"
+import { textSmall } from "../../../ui-kit/typography"
+import { brandDarker } from "../../../ui-kit/colors"
 
 type Div = React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
 
@@ -64,6 +67,46 @@ export const Hamburger: React.FC = observer(() => {
                     >
                         About the app
                     </MenuItem>
+                    <SocialMenuItem>
+                        <FollowUs>Follow us</FollowUs>
+                        <SocialLinks>
+                            <SocialIcon
+                                icon={faFacebookSquare}
+                                onClick={() => {
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://www.facebook.com/MysteriumNet")
+                                }}
+                            />
+                            <SocialIcon
+                                icon={faTwitter}
+                                onClick={() => {
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://twitter.com/MysteriumNet")
+                                }}
+                            />
+                            <SocialIcon
+                                icon={faMedium}
+                                onClick={() => {
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://medium.com/mysterium-network")
+                                }}
+                            />
+                            <SocialIcon
+                                icon={faReddit}
+                                onClick={() => {
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
+                                }}
+                            />
+                            <SocialIcon
+                                icon={faGithub}
+                                onClick={() => {
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://github.com/mysteriumnetwork")
+                                }}
+                            />
+                        </SocialLinks>
+                    </SocialMenuItem>
                     <Separator />
                     <MenuItem onClick={quit}>Quit</MenuItem>
                 </DropdownMenu>
@@ -87,6 +130,28 @@ const DropdownMenu = styled.div`
     user-select: none;
 ` as Div
 
+const SocialMenuItem = styled.div`
+    padding: 12px 16px;
+`
+
+const FollowUs = styled.div`
+    ${textSmall};
+    margin-bottom: 4px;
+    color: #808080;
+`
+
+const SocialLinks = styled.div`
+    display: flex;
+    justify-content: space-between;
+`
+
+const SocialIcon = styled(FontAwesomeIcon)`
+    font-size: 1.7rem;
+    &:hover {
+        color: ${brandDarker};
+    }
+`
+
 const MenuItem = styled.div`
     min-height: 32px;
     line-height: 32px;
@@ -99,5 +164,6 @@ const MenuItem = styled.div`
 
 const Separator = styled.div`
     height: 1px;
+    margin: 4px 0;
     background: #e6e6e6;
 `
