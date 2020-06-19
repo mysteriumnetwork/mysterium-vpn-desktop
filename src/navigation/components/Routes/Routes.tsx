@@ -8,6 +8,7 @@ import React from "react"
 import { Redirect, Route, Switch } from "react-router-dom"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
+import styled from "styled-components"
 
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
@@ -21,53 +22,73 @@ import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { NavBar } from "../NavBar/NavBar"
 import { locations } from "../../locations"
+import { Chat } from "../../../support/components/Chat/Chat"
+import { winSize } from "../../../config"
+
+const WinContents = styled.div`
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+`
+
+const Main = styled.div`
+    width: ${winSize.width}px;
+    display: flex;
+    flex-direction: column;
+`
 
 export const Routes: React.FC = observer(() => {
     const { connection, navigation } = useStores()
     return (
         <>
-            <Switch>
-                <Route path={locations.welcome}>
-                    <WelcomeView />
-                </Route>
-                <Route path={locations.terms}>
-                    <AcceptTermsView />
-                </Route>
-                <Route path={locations.identity}>
-                    <SelectIdentityView />
-                </Route>
-                <Route path={locations.proposals}>
-                    <NavBar />
-                    <SelectProposalView />
-                </Route>
-                <Route path={locations.consumer} exact>
-                    <Redirect
-                        to={
-                            connection.status === ConnectionStatus.NOT_CONNECTED
-                                ? locations.proposals
-                                : locations.connection
-                        }
-                        push
-                    />
-                </Route>
-                <Route path={locations.connection}>
-                    <NavBar />
-                    <ConnectedView />
-                </Route>
-                <Route path={locations.wallet}>
-                    <NavBar />
-                    <WalletView />
-                </Route>
-                <Route path={locations.loading}>
-                    <LoadingView />
-                </Route>
-            </Switch>
-            <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
-                <WalletView />
-            </Modal>
-            <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
-                <FiltersView />
-            </Modal>
+            <WinContents>
+                <Main>
+                    <Switch>
+                        <Route path={locations.welcome}>
+                            <WelcomeView />
+                        </Route>
+                        <Route path={locations.terms}>
+                            <AcceptTermsView />
+                        </Route>
+                        <Route path={locations.identity}>
+                            <SelectIdentityView />
+                        </Route>
+                        <Route path={locations.proposals}>
+                            <NavBar />
+                            <SelectProposalView />
+                        </Route>
+                        <Route path={locations.consumer} exact>
+                            <Redirect
+                                to={
+                                    connection.status === ConnectionStatus.NOT_CONNECTED
+                                        ? locations.proposals
+                                        : locations.connection
+                                }
+                                push
+                            />
+                        </Route>
+                        <Route path={locations.connection}>
+                            <NavBar />
+                            <ConnectedView />
+                        </Route>
+                        <Route path={locations.wallet}>
+                            <NavBar />
+                            <WalletView />
+                        </Route>
+                        <Route path={locations.loading}>
+                            <LoadingView />
+                        </Route>
+                    </Switch>
+                    <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
+                        <WalletView />
+                    </Modal>
+                    <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
+                        <FiltersView />
+                    </Modal>
+                </Main>
+                {navigation.chat && <Chat />}
+            </WinContents>
         </>
     )
 })

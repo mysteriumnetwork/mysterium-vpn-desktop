@@ -11,7 +11,6 @@ import { faFacebookSquare, faGithub, faMedium, faReddit, faTwitter } from "@fort
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import { remote, shell } from "electron"
-import { useIntercom } from "react-use-intercom"
 
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
@@ -28,8 +27,7 @@ const Icon = styled.div`
 ` as Div
 
 export const Hamburger: React.FC = observer(() => {
-    const { navigation, identity } = useStores()
-    const { boot, show } = useIntercom()
+    const { navigation } = useStores()
     const dropdownMenuRef = useRef<HTMLDivElement>(null)
     const hamburgerRef = useRef<HTMLDivElement>(null)
     const handleClickOutside: EventListener = (event) => {
@@ -64,12 +62,7 @@ export const Hamburger: React.FC = observer(() => {
                     <MenuItem
                         onClick={() => {
                             navigation.showMenu(false)
-                            boot({
-                                customAttributes: {
-                                    node_identity: identity.identity?.id,
-                                },
-                            })
-                            show()
+                            navigation.openChat()
                         }}
                     >
                         Support chat
@@ -133,7 +126,7 @@ export const Hamburger: React.FC = observer(() => {
 const DropdownMenu = styled.div`
     position: absolute;
     top: 36px;
-    right: 2px;
+    left: 400px;
     width: 236px;
     padding: 4px 0;
     background: white;

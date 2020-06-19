@@ -7,11 +7,13 @@
 import { action, observable, reaction } from "mobx"
 import { History, LocationState } from "history"
 import { ConnectionStatus } from "mysterium-vpn-js"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, OnboardingAction } from "../analytics/analytics"
 import { registered } from "../identity/identity"
+import { MainIpcListenChannels } from "../main/ipc"
 
 import { history } from "./history"
 import { locations } from "./locations"
@@ -33,6 +35,8 @@ export class NavigationStore {
     filters = false
     @observable
     menu = false
+    @observable
+    chat = false
 
     root: RootStore
 
@@ -44,6 +48,12 @@ export class NavigationStore {
     setupReactions(): void {
         reaction(() => this.root.connection.status, this.determineRoute)
         reaction(() => this.root.identity.identity?.registrationStatus, this.determineRoute)
+        reaction(
+            () => this.chat,
+            (chatOpen) => {
+                ipcRenderer.send(MainIpcListenChannels.ToggleSupportChat, chatOpen)
+            },
+        )
     }
 
     @action
@@ -114,5 +124,10 @@ export class NavigationStore {
     @action
     showMenu = (show = true): void => {
         this.menu = show
+    }
+
+    @action
+    openChat = (open = true): void => {
+        this.chat = open
     }
 }
