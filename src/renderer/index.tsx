@@ -12,10 +12,12 @@ import { createGlobalStyle } from "styled-components"
 import "mobx-react-lite/batchingForReactDom"
 import { HashRouter } from "react-router-dom"
 import { IntercomProvider } from "react-use-intercom"
+import { observer } from "mobx-react-lite"
 
 import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
+import { useStores } from "../store"
 
 initializeSentry()
 
@@ -69,6 +71,14 @@ const GlobalStyle = createGlobalStyle`
         background: #c1c1c1; 
     }
 
+.intercom-messenger-frame {
+        position: fixed;
+        top: 0 !important;
+        right: 0 !important;
+        width: 400px !important;
+        border-radius: 0 !important;
+        height: 100% !important;
+    }
     // :root {
     //     --baseline: 8px;
     //     --color: hsla(204, 80%, 72%, 0.5);
@@ -90,19 +100,20 @@ const GlobalStyle = createGlobalStyle`
 // const container = document.createElement("div")
 // document.body.appendChild(container)
 
-const App: React.FC = () => {
+const App: React.FC = observer(() => {
+    const { navigation } = useStores()
     return (
         <React.Fragment>
             <GlobalStyle />
             <HashRouter>
-                <IntercomProvider appId={packageJson.intercomAppId}>
+                <IntercomProvider appId={packageJson.intercomAppId} onHide={() => navigation.openChat(false)}>
                     <Routes />
                 </IntercomProvider>
             </HashRouter>
             <div className="baseline" />
         </React.Fragment>
     )
-}
+})
 
 // Render components
 ReactDOM.render(<App />, document.getElementById("app"))

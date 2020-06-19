@@ -14,7 +14,7 @@ const Container = styled.div`
     position: absolute;
     top: 40px;
     height: 512px;
-    width: 100%;
+    width: 640px;
     overflow: hidden;
     z-index: -1;
 
@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const CloseButton = styled.div`
     position: fixed;
-    right: 0;
+    left: 592px;
     padding: 16px;
     cursor: pointer;
 `

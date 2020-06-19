@@ -5,3 +5,5 @@
  * LICENSE file in the root directory of this source tree.
  */
 export const winSize = { width: 640, height: 552 }
+export const supportPanelSize = { width: 400, height: winSize.height }
+export const winSizeExt = { width: winSize.width + supportPanelSize.width, height: winSize.height }

@@ -8,11 +8,11 @@
 import * as path from "path"
 import { format as formatUrl } from "url"
 
-import { app, BrowserWindow, ipcMain, Menu, Tray } from "electron"
+import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
 
 import * as packageJson from "../../package.json"
-import { winSize } from "../config"
+import { winSize, winSizeExt } from "../config"
 import { supervisor } from "../supervisor/supervisor"
 import {
     initialize as initializeAnalytics,
@@ -155,6 +155,13 @@ ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
         return
     }
     refreshTrayIcon(tray, status)
+})
+ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: boolean) => {
+    if (open) {
+        win?.setContentSize(winSizeExt.width, winSizeExt.height, true)
+    } else {
+        win?.setContentSize(winSize.width, winSize.height, true)
+    }
 })
 
 export const ipcWebDisconnect = (): void => {
