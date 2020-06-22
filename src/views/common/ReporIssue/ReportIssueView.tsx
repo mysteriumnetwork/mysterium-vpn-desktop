@@ -86,7 +86,9 @@ export const ReportIssueView: React.FC = observer(() => {
                     and used by the dev team to address the issue you are having.
                 </InputDescription>
                 <FormControls>
-                    <BrandButton onClick={submit}>Submit</BrandButton>
+                    <BrandButton onClick={submit} loading={feedback.loading}>
+                        Submit
+                    </BrandButton>
                 </FormControls>
             </Form>
         </Container>
