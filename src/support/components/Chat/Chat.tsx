@@ -15,6 +15,7 @@ import { useStores } from "../../../store"
 const Container = styled.div`
     width: ${supportPanelSize.width}px;
     height: 100%;
+    background: linear-gradient(135deg, rgb(65, 35, 97) 0%, rgb(15, 8, 22) 100%);
 `
 
 const IntercomStyleOverride = createGlobalStyle`
