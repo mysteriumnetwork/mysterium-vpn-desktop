@@ -5,10 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import styled from "styled-components"
+import React from "react"
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { ButtonProps } from "./ButtonProps"
 
-export const BrandButton = styled.button`
+const Button = styled.button`
     box-sizing: border-box;
     height: 40px;
     min-height: 40px;
@@ -34,4 +37,20 @@ export const BrandButton = styled.button`
     &:active {
         transform: scale(0.95);
     }
+` as React.FC<ButtonProps>
+
+const Icon = styled(FontAwesomeIcon)`
+    margin-left: 8px;
+    animation: fa-spin 0.7s infinite linear;
 `
+
+export const BrandButton: React.FC<React.PropsWithChildren<ButtonProps>> = (props) => {
+    const { loading = false, children, ...rest } = props
+    const indicator = loading ? <Icon icon={faCircleNotch} color="#fff" spin /> : null
+    return (
+        <Button {...rest}>
+            {children}
+            {indicator}
+        </Button>
+    )
+}

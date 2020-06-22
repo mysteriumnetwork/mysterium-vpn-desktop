@@ -11,6 +11,7 @@ import ReactDOM from "react-dom"
 import { createGlobalStyle } from "styled-components"
 import "mobx-react-lite/batchingForReactDom"
 import { HashRouter } from "react-router-dom"
+import { ToastProvider } from "react-toast-notifications"
 import { IntercomProvider } from "react-use-intercom"
 import { observer } from "mobx-react-lite"
 
@@ -71,13 +72,16 @@ const GlobalStyle = createGlobalStyle`
         background: #c1c1c1; 
     }
 
-.intercom-messenger-frame {
+    .intercom-messenger-frame {
         position: fixed;
         top: 0 !important;
         right: 0 !important;
         width: 400px !important;
         border-radius: 0 !important;
         height: 100% !important;
+    }
+    .react-toast-notifications__container {
+        left: 262px !important;
     }
     // :root {
     //     --baseline: 8px;
@@ -106,9 +110,11 @@ const App: React.FC = observer(() => {
         <React.Fragment>
             <GlobalStyle />
             <HashRouter>
-                <IntercomProvider appId={packageJson.intercomAppId} onHide={() => navigation.openChat(false)}>
-                    <Routes />
-                </IntercomProvider>
+                <ToastProvider placement="top-left">
+                    <IntercomProvider appId={packageJson.intercomAppId} onHide={() => navigation.openChat(false)}>
+                        <Routes />
+                    </IntercomProvider>
+                </ToastProvider>
             </HashRouter>
             <div className="baseline" />
         </React.Fragment>
