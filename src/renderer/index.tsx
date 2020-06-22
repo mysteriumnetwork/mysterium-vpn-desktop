@@ -72,13 +72,16 @@ const GlobalStyle = createGlobalStyle`
         background: #c1c1c1; 
     }
 
-.intercom-messenger-frame {
+    .intercom-messenger-frame {
         position: fixed;
         top: 0 !important;
         right: 0 !important;
         width: 400px !important;
         border-radius: 0 !important;
         height: 100% !important;
+    }
+    .react-toast-notifications__container {
+        left: 262px !important;
     }
     // :root {
     //     --baseline: 8px;
@@ -107,7 +110,7 @@ const App: React.FC = observer(() => {
         <React.Fragment>
             <GlobalStyle />
             <HashRouter>
-                <ToastProvider>
+                <ToastProvider placement="top-left">
                     <IntercomProvider appId={packageJson.intercomAppId} onHide={() => navigation.openChat(false)}>
                         <Routes />
                     </IntercomProvider>
