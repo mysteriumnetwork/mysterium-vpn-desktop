@@ -37,6 +37,8 @@ export class NavigationStore {
     menu = false
     @observable
     chat = false
+    @observable
+    report = false
 
     root: RootStore
 
@@ -129,5 +131,10 @@ export class NavigationStore {
     @action
     openChat = (open = true): void => {
         this.chat = open
+    }
+
+    @action
+    openReportIssue = (open = true): void => {
+        this.report = open
     }
 }

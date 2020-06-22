@@ -62,11 +62,20 @@ export const Hamburger: React.FC = observer(() => {
                     <MenuItem
                         onClick={() => {
                             navigation.showMenu(false)
+                            navigation.openReportIssue(true)
+                        }}
+                    >
+                        Report an issue
+                    </MenuItem>
+                    <MenuItem
+                        onClick={() => {
+                            navigation.showMenu(false)
                             navigation.openChat()
                         }}
                     >
                         Support chat
                     </MenuItem>
+                    <Separator />
                     <MenuItem
                         onClick={() => {
                             navigation.showMenu(false)

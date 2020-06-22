@@ -16,6 +16,7 @@ import { ProposalStore } from "./proposals/store"
 import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
 import { WebIpcListenChannels } from "./main/ipc"
+import { FeedbackStore } from "./feedback/store"
 
 // import { enableLogging } from "mobx-logger"
 
@@ -27,6 +28,7 @@ export class RootStore {
     proposals: ProposalStore
     connection: ConnectionStore
     payment: PaymentStore
+    feedback: FeedbackStore
 
     constructor() {
         this.navigation = new NavigationStore(this)
@@ -36,6 +38,7 @@ export class RootStore {
         this.proposals = new ProposalStore(this)
         this.connection = new ConnectionStore(this)
         this.payment = new PaymentStore(this)
+        this.feedback = new FeedbackStore(this)
 
         // Setup cross-store reactions after all injections.
         this.navigation.setupReactions()

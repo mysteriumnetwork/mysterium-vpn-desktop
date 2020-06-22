@@ -22,8 +22,9 @@ import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { NavBar } from "../NavBar/NavBar"
 import { locations } from "../../locations"
-import { Chat } from "../../../support/components/Chat/Chat"
+import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
+import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -85,6 +86,9 @@ export const Routes: React.FC = observer(() => {
                     </Modal>
                     <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
                         <FiltersView />
+                    </Modal>
+                    <Modal visible={navigation.report} onClose={() => navigation.openReportIssue(false)} light>
+                        <ReportIssueView />
                     </Modal>
                 </Main>
                 {navigation.chat && <Chat />}
