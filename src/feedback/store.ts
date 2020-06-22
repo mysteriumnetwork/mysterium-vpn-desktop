@@ -24,9 +24,12 @@ export class FeedbackStore {
     @action
     async reportIssue(issue: Issue): Promise<string> {
         this.setLoading(true)
-        const issueId = await tequilapi.reportIssue(issue)
-        this.setLoading(false)
-        return issueId.issueId
+        try {
+            const issueId = await tequilapi.reportIssue(issue)
+            return issueId.issueId
+        } finally {
+            this.setLoading(false)
+        }
     }
 
     @action
