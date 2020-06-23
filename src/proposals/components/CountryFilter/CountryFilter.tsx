@@ -10,7 +10,7 @@ import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
-import { resolveCountry, unknownCountry } from "../../../location/countries"
+import { countryName, isUnknownCountry } from "../../../location/countries"
 import { Flag } from "../../../location/components/Flag/Flag"
 import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTitle"
 
@@ -49,18 +49,15 @@ export const CountryFilter = observer(() => {
             <SidebarTitle>Country</SidebarTitle>
             {Object.keys(countryCounts)
                 .sort((self, other) => {
-                    const selfName = resolveCountry(self).name
-                    const otherName = resolveCountry(other).name
-                    if (selfName == unknownCountry.name) {
+                    if (isUnknownCountry(self)) {
                         return 1
                     }
-                    return selfName.localeCompare(otherName)
+                    return countryName(self).localeCompare(countryName(other))
                 })
                 .map((countryCode) => {
                     const toggleAction = (): void => {
                         proposals.toggleCountryFilter(countryCode)
                     }
-                    const country = resolveCountry(countryCode)
                     return (
                         <CountryToggle
                             key={countryCode}
@@ -68,7 +65,7 @@ export const CountryFilter = observer(() => {
                             active={proposals.filter.country == countryCode}
                         >
                             <FilterFlag countryCode={countryCode} />
-                            <p>{country.name}</p>
+                            <p>{countryName(countryCode)}</p>
                             <Count>{countryCounts[countryCode]}</Count>
                         </CountryToggle>
                     )

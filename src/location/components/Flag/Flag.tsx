@@ -6,6 +6,8 @@
  */
 import React from "react"
 
+import { isUnknownCountry } from "../../countries"
+
 export interface FlagProps {
     countryCode?: string
     className?: string
@@ -14,12 +16,10 @@ export interface FlagProps {
 const size = 24
 
 export const Flag: React.FC<FlagProps> = ({ className, countryCode = "unknown" }) => {
-    if (countryCode == "unknown") {
-        countryCode = "_unknown"
-    }
+    const imageName = isUnknownCountry(countryCode) ? "_unknown" : countryCode
     // Flags sourced from https://github.com/wiredmax/react-flags (MIT)
-    const x1 = require(`./flags-iso/shiny/${size}/${countryCode}.png`).default
-    const x2 = require(`./flags-iso/shiny/${size * 2}/${countryCode}.png`).default
+    const x1 = require(`./flags-iso/shiny/${size}/${imageName}.png`).default
+    const x2 = require(`./flags-iso/shiny/${size * 2}/${imageName}.png`).default
 
     return <img className={className} srcSet={`${x1} 1x, ${x2} 2x`} src={x1} alt={countryCode} width={size} />
 }
