@@ -7,6 +7,7 @@
 import { ConnectionStatus } from "mysterium-vpn-js"
 import React, { ButtonHTMLAttributes } from "react"
 import { observer } from "mobx-react-lite"
+import { useToasts } from "react-toast-notifications"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -19,6 +20,7 @@ export type ConnectDisconnectButtonProps = {
 
 export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = observer(() => {
     const { connection } = useStores()
+    const { addToast } = useToasts()
     const text = ((): string => {
         switch (connection.status) {
             case ConnectionStatus.NOT_CONNECTED:
@@ -34,7 +36,22 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
     })()
     const onClick = async (): Promise<void> => {
         if (connection.status === ConnectionStatus.NOT_CONNECTED) {
-            return await connection.connect()
+            try {
+                return await connection.connect()
+            } catch (err) {
+                addToast(
+                    <span>
+                        {`Oops! Couldn't connect.`}
+                        <br />
+                        Try another provider?
+                    </span>,
+                    {
+                        appearance: "error",
+                        autoDismiss: true,
+                    },
+                )
+                return
+            }
         }
         return await connection.disconnect()
     }

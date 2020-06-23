@@ -123,8 +123,10 @@ export class ConnectionStore {
             )
         } catch (err) {
             log.error("Could not connect", err.message)
+            throw err
+        } finally {
+            this.setConnectInProgress(false)
         }
-        this.setConnectInProgress(false)
     }
 
     @action
