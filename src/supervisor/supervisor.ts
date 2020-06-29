@@ -16,6 +16,7 @@ import { analytics } from "../analytics/analytics-main"
 import { AppAction, Category } from "../analytics/analytics"
 import { log } from "../log/log"
 import { sudoExec } from "../utils/sudo"
+import { uid } from "../utils/user"
 
 const isWin = platform() === "win32"
 
@@ -143,7 +144,7 @@ export class Supervisor {
     async install(): Promise<void> {
         analytics.event(Category.App, AppAction.InstallSupervisor)
         return await new Promise((resolve) => {
-            sudoExec(`"${this.supervisorBin()}" -install`)
+            sudoExec(`"${this.supervisorBin()}" -install -uid ${uid()}`)
             const waitUntilConnected = (): void => {
                 this.connect()
                     .then(() => resolve())
