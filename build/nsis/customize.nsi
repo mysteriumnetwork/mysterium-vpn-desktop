@@ -12,7 +12,7 @@ RequestExecutionLevel admin
   ${endif}
 
   DetailPrint "Installing Supervisor service..."
-  nsExec::ExecToStack '"$INSTDIR\resources\static\bin\myst_supervisor.exe" --install'
+  nsExec::ExecToStack '"$INSTDIR\resources\static\bin\myst_supervisor.exe" --install --uid "0"'
   Pop $0
   Pop $1
   ${ifNot} $0 == 0
