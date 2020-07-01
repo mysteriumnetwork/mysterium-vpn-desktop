@@ -25,6 +25,11 @@ In a bundled application:
 
 `~/.mysterium/logs/mysterium-node.log`
 
+### Supervisor
+
+- Linux/macOS: `/etc/myst_supervisor.log`
+- Windows: `%PROGRAMDATA%\MystSupervisor\myst_supervisor.log`
+
 ## Getting started (development)
 
 1. Install and build the project
