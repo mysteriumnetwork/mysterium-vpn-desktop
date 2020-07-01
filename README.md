@@ -27,7 +27,7 @@ In a bundled application:
 
 ### Supervisor
 
-- Linux/macOS: `/etc/myst_supervisor.log`
+- Linux/macOS: `/var/log/myst_supervisor.log`
 - Windows: `%PROGRAMDATA%\MystSupervisor\myst_supervisor.log`
 
 ## Getting started (development)
