@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 import * as net from "net"
-import { platform } from "os"
 import { Socket } from "net"
+import { platform } from "os"
 import { spawn } from "child_process"
 
 import semver from "semver"
@@ -102,7 +102,6 @@ export class Supervisor {
     }
 
     async upgrade(): Promise<void> {
-        let outdated = true
         let bundledVersion = ""
         try {
             bundledVersion = await this.bundledVersion()
@@ -119,13 +118,14 @@ export class Supervisor {
             log.error("Error checking running version", err)
         }
 
-        if (runningVersion === "source.dev-build") {
-            // Never update development builds of the supervisor
-            outdated = false
-        } else if (bundledVersion && runningVersion && semver.gte(runningVersion, bundledVersion)) {
-            outdated = false
+        if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
+            log.info(
+                "Exotic versions of supervisor found, not performing the upgrade. Upgrade manually if needed:\n" +
+                    "sudo myst_supervisor -install -uid ...",
+            )
+            return
         }
-        if (!outdated) {
+        if (semver.gte(runningVersion, bundledVersion)) {
             log.info("Running supervisor version is compatible, skipping the upgrade")
             return
         }
