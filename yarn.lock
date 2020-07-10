@@ -6366,10 +6366,10 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysterium-vpn-js@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-3.3.0.tgz#9a3b35a99af1aec5fd5e0f14da4573387e65280a"
-  integrity sha512-bBLdTnXTVREO2oPgV8YW02JaLpEIQyKPVwABzVggVQrpWpqQDc8ylpMYc8F9XSRLburUyfwRwVnAkzai7D4Jkg==
+mysterium-vpn-js@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-4.0.0.tgz#0a236934de1c73795fd0fa8db307fb9c2c0f9495"
+  integrity sha512-FhfI3be0xiCX8+7QuXpOQ+ekOAKPNIRYW/0zUXiyQNuVDBDTJdgSjjYbgL2uxx6Z188UBc5kmAfxtvbw4qdDSQ==
   dependencies:
     axios "^0.19.2"
     camelcase-keys "^6.2.2"
