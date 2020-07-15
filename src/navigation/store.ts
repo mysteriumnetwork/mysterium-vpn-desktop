@@ -36,6 +36,8 @@ export class NavigationStore {
     @observable
     menu = false
     @observable
+    preferences = false
+    @observable
     chat = false
     @observable
     report = false
@@ -136,5 +138,10 @@ export class NavigationStore {
     @action
     openReportIssue = (open = true): void => {
         this.report = open
+    }
+
+    @action
+    openPreferences = (open = true): void => {
+        this.preferences = open
     }
 }

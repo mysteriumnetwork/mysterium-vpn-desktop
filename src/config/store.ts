@@ -4,8 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, observable, reaction, runInAction } from "mobx"
-import tequilapi from "mysterium-vpn-js"
+import { action, computed, observable, reaction, runInAction } from "mobx"
+import tequilapi, { DNSOption } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 
 import { RootStore } from "../store"
@@ -18,6 +18,7 @@ export interface Config {
             at?: string
             version?: string
         }
+        dns?: DNSOption
     }
 }
 
@@ -72,5 +73,18 @@ export class ConfigStore {
         const version = this.config.desktop?.["terms-agreed"]?.version
         const at = this.config.desktop?.["terms-agreed"]?.at
         return !!version && !!at && version == termsPackageJson.version
+    }
+
+    @action
+    setDnsOption = async (value: string): Promise<void> => {
+        await tequilapi.updateUserConfig({
+            data: { "desktop.dns": value },
+        })
+        await this.fetchConfig()
+    }
+
+    @computed
+    get dnsOption(): DNSOption {
+        return this.config.desktop?.dns ?? "1.1.1.1"
     }
 }
