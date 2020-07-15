@@ -17,6 +17,7 @@ import { AppAction, Category } from "../analytics/analytics"
 import { log } from "../log/log"
 import { sudoExec } from "../utils/sudo"
 import { uid } from "../utils/user"
+import { isDevelopment } from "../utils/env"
 
 const isWin = platform() === "win32"
 
@@ -120,12 +121,13 @@ export class Supervisor {
 
         if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
             log.info(
-                "Exotic versions of supervisor found, not performing the upgrade. Upgrade manually if needed:\n" +
+                "Exotic versions of supervisor found, proceeding to upgrade. In the development mode, upgrade manually if needed:\n" +
                     "sudo myst_supervisor -install -uid ...",
             )
-            return
-        }
-        if (semver.gte(runningVersion, bundledVersion)) {
+            if (isDevelopment()) {
+                return
+            }
+        } else if (semver.gte(runningVersion, bundledVersion)) {
             log.info("Running supervisor version is compatible, skipping the upgrade")
             return
         }

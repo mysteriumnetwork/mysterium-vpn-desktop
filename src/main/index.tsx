@@ -22,6 +22,7 @@ import {
 } from "../analytics/analytics-main"
 import { initialize as initializeSentry } from "../errors/sentry"
 import { log } from "../log/log"
+import { isDevelopment } from "../utils/env"
 
 import { createTray, refreshTrayIcon } from "./tray"
 import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
@@ -33,8 +34,6 @@ autoUpdater.logger = log
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 autoUpdater.logger.transports.file.level = "info"
-
-const isDevelopment = process.env.NODE_ENV !== "production"
 
 global.supervisor = supervisor
 
@@ -56,7 +55,7 @@ const installExtensions = async (): Promise<void | any[]> => {
 }
 
 const createWindow = async (): Promise<BrowserWindow> => {
-    if (isDevelopment) {
+    if (isDevelopment()) {
         await installExtensions()
     }
 
@@ -73,17 +72,17 @@ const createWindow = async (): Promise<BrowserWindow> => {
         },
     })
     window.setMenuBarVisibility(false)
-    if (!isDevelopment) {
+    if (!isDevelopment()) {
         Menu.setApplicationMenu(createMenu())
     }
 
-    if (isDevelopment) {
+    if (isDevelopment()) {
         window.webContents.once("dom-ready", () => {
             window.webContents.openDevTools({ mode: "detach" })
         })
     }
 
-    if (isDevelopment) {
+    if (isDevelopment()) {
         window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
     } else {
         window.loadURL(
