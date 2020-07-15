@@ -25,6 +25,7 @@ import { locations } from "../../locations"
 import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
 import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
+import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -89,6 +90,9 @@ export const Routes: React.FC = observer(() => {
                     </Modal>
                     <Modal visible={navigation.report} onClose={() => navigation.openReportIssue(false)} light>
                         <ReportIssueView />
+                    </Modal>
+                    <Modal visible={navigation.preferences} onClose={() => navigation.openPreferences(false)} light>
+                        <Preferences />
                     </Modal>
                 </Main>
                 {navigation.chat && <Chat />}
