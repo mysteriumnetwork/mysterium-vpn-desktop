@@ -119,6 +119,10 @@ export class Supervisor {
             log.error("Error checking running version", err)
         }
 
+        if (runningVersion == bundledVersion) {
+            log.info("Running supervisor version matches, skipping the upgrade")
+            return
+        }
         if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
             log.info(
                 "Exotic versions of supervisor found, proceeding to upgrade. In the development mode, upgrade manually if needed:\n" +
