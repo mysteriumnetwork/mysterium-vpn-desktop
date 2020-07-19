@@ -13,6 +13,7 @@ import tequilapi, {
     SSEEventType,
 } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
+import retry from "async-retry"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
@@ -182,21 +183,24 @@ export class ConnectionStore {
 
     @action
     async resolveLocation(): Promise<void> {
-        let location: ConsumerLocation
-        try {
-            location = await tequilapi.connectionLocation()
-        } catch (err) {
-            location = {
-                country: "unknown",
-                ip: "Updating...",
-                asn: 0,
-                city: "",
-                continent: "",
-                isp: "",
-                nodeType: "",
-            }
-            log.error("Failed to lookup location", err.message)
+        let location: ConsumerLocation = {
+            country: "unknown",
+            ip: "Updating...",
+            asn: 0,
+            city: "",
+            continent: "",
+            isp: "",
+            nodeType: "",
         }
+        await retry(
+            async () => {
+                location = await tequilapi.connectionLocation()
+            },
+            {
+                retries: 5,
+                onRetry: (e, attempt) => log.warn(`Retrying location update (${attempt}): ${e.message}`),
+            },
+        )
         this.setLocation(location)
     }
 
