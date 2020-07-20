@@ -8,7 +8,7 @@ import { platform } from "os"
 
 import React from "react"
 import ReactDOM from "react-dom"
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle, keyframes } from "styled-components"
 import "mobx-react-lite/batchingForReactDom"
 import { HashRouter } from "react-router-dom"
 import { ToastProvider } from "react-toast-notifications"
@@ -43,6 +43,15 @@ switch (platform()) {
         `
 }
 
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
+
 const GlobalStyle = createGlobalStyle`
     html, body, #app {
         margin: 0;
@@ -55,6 +64,7 @@ const GlobalStyle = createGlobalStyle`
     #app {
         display: flex;
         flex-direction: column;
+        animation: ${fadeIn} .5s;
     }
     img {
         user-select: none;

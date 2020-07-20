@@ -20,6 +20,7 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     overflow: hidden;
+    background: #fafafa;
 `
 
 const Sidebar = styled.div`
