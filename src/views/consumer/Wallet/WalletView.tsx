@@ -62,6 +62,7 @@ const Identity = styled.div`
 `
 
 const IdentityAddress = styled.div`
+    user-select: text;
     ${fontMono}
 `
 
@@ -80,6 +81,10 @@ const WalletActions = styled.div`
 
 const IdentityIcon = styled.div`
     padding-right: 16px;
+`
+
+const ChannelAddress = styled.code`
+    user-select: text;
 `
 
 const ChannelQR = styled.div`
@@ -142,7 +147,7 @@ export const WalletView: React.FC = observer(() => {
                         </Balance>
                         <p>Topup your wallet by sending MYSTT to the address below.</p>
                         <p>
-                            <code>{chan}</code>
+                            <ChannelAddress>{chan}</ChannelAddress>
                             <Copy onClick={copyChannelAddress}>Copy</Copy>
                         </p>
                         <WalletActions>

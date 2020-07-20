@@ -26,6 +26,10 @@ const Label = styled.span`
     width: 120px;
 `
 
+const Val = styled.span`
+    user-select: text;
+`
+
 export const ConnectionProposal: React.FC = observer(() => {
     const {
         connection: { proposal: { paymentMethod, providerId } = {} },
@@ -35,7 +39,7 @@ export const ConnectionProposal: React.FC = observer(() => {
         <Container>
             <Row>
                 <Label>Provider ID</Label>
-                {providerId ?? ""}
+                <Val>{providerId ?? ""}</Val>
             </Row>
             <Row>
                 <Label>Price</Label>

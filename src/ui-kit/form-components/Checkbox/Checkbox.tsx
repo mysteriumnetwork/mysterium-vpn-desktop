@@ -10,7 +10,6 @@ import React from "react"
 const Label = styled.label`
     font-size: 14px;
     color: #333;
-    user-select: none;
 
     > input {
         margin-right: 8px;

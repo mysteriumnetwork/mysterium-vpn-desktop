@@ -39,6 +39,7 @@ const ProposalFlag = styled(Flag)`
 `
 
 const ProviderId = styled.p`
+    user-select: text;
     font-weight: bold;
 `
 

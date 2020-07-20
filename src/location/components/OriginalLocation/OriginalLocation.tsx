@@ -35,6 +35,10 @@ const Location = styled.div`
     }
 `
 
+const IP = styled.p`
+    user-select: text;
+`
+
 export const OriginalLocation = observer(() => {
     const { connection } = useStores()
     const ip = `IP: ${connection.originalLocation?.ip ?? "Unknown"}`
@@ -43,7 +47,7 @@ export const OriginalLocation = observer(() => {
             <LocationFlag countryCode={connection.originalLocation?.country} />
             <Location>
                 <ConnectionStatus>{connection.status}</ConnectionStatus>
-                <p>{ip}</p>
+                <IP>{ip}</IP>
             </Location>
         </Container>
     )

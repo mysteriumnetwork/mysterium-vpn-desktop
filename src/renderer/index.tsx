@@ -65,8 +65,7 @@ const GlobalStyle = createGlobalStyle`
         display: flex;
         flex-direction: column;
         animation: ${fadeIn} .5s;
-    }
-    img {
+
         user-select: none;
         user-drag: none;
     }

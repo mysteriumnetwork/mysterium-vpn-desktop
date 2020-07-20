@@ -153,7 +153,6 @@ const DropdownMenu = styled.div`
     z-index: 5;
     overflow: hidden;
     color: #404040;
-    user-select: none;
 ` as Div
 
 const SocialMenuItem = styled.div`

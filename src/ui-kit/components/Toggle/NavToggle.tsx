@@ -22,7 +22,6 @@ export const NavToggle = styled.div<ToggleProps>`
     display: flex;
     flex-direction: row;
     align-items: center;
-    user-select: none;
 
     color: ${(props: ToggleProps): string => (props.active ? "#fff" : "#404040")};
     background: ${(props: ToggleProps): string =>
