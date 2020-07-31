@@ -39,6 +39,7 @@
     "mysterium-vpn-js": "^4.0.0",
     "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
+    "pushy-electron": "^1.0.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-is": "^16.13.1",
@@ -97,6 +98,7 @@
   },
   "analyticsAccountId": "UA-89155936-2",
   "intercomAppId": "h7hlm9on",
+  "pushyAppId": "5f23dc54d4786d7760003a71",
   "sentryDsn": "https://5c3208e8d6124f2db303a2d12c7f48b8@o136129.ingest.sentry.io/5222592",
   "electronWebpack": {
     "renderer": {
