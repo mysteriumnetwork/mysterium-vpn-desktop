@@ -145,6 +145,7 @@ app.on("activate", async () => {
     if (win === null) {
         win = await createWindow()
     }
+    win.show()
 })
 
 app.on("before-quit", () => (app.quitting = true))
