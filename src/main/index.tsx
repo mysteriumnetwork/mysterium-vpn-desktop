@@ -20,6 +20,7 @@ import {
     setupGlobals as setupAnalyticsGlobals,
     setupWindow as setupAnalyticsForWindow,
 } from "../analytics/analytics-main"
+import { initialize as initializePushNotifications } from "../push/push"
 import { initialize as initializeSentry } from "../errors/sentry"
 import { log } from "../log/log"
 import { isDevelopment } from "../utils/env"
@@ -112,6 +113,9 @@ const createWindow = async (): Promise<BrowserWindow> => {
         setImmediate(() => {
             window.focus()
         })
+    })
+    window.webContents.on("did-finish-load", () => {
+        initializePushNotifications()
     })
     setupAnalyticsForWindow(window)
 

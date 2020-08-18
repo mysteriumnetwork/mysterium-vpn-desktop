@@ -19,6 +19,7 @@ export enum Category {
     Proposal = "Proposal",
     Connection = "Connection",
     Wallet = "Wallet",
+    Notification = "Notification",
 }
 
 export type Action =
@@ -29,6 +30,7 @@ export type Action =
     | ProposalAction
     | ConnectAction
     | WalletAction
+    | NotificationAction
 
 export enum AppAction {
     Quit = "Quit",
@@ -84,4 +86,9 @@ export enum ConnectAction {
 export enum WalletAction {
     BalanceChanged = "Balance Changed",
     Topup = "Wallet top-up",
+}
+
+export enum NotificationAction {
+    Shown = "Notification shown",
+    Clicked = "Notification clicked",
 }
