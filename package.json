@@ -94,7 +94,7 @@
     "shx": "^0.3.2",
     "typescript": "^3.9.5",
     "url-loader": "^4.1.0",
-    "webpack": "^4.42.1"
+    "webpack": "^4.44.1"
   },
   "analyticsAccountId": "UA-89155936-2",
   "intercomAppId": "h7hlm9on",
