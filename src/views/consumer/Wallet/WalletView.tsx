@@ -7,7 +7,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { Currency, displayMoney } from "mysterium-vpn-js"
+import { Currency } from "mysterium-vpn-js"
 import { faIdCard } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { QRCode } from "react-qr-svg"
@@ -16,6 +16,7 @@ import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
 import { fontMono, textHuge } from "../../../ui-kit/typography"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
+import { fmtMoney } from "../../../payment/display"
 
 const Container = styled.div`
     width: 100%;
@@ -105,7 +106,7 @@ const Copy = styled.button`
 
 export const WalletView: React.FC = observer(() => {
     const { identity, payment } = useStores()
-    const balanceDisplay = displayMoney(
+    const balanceDisplay = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
             currency: Currency.MYSTTestToken,

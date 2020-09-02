@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
+import { pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import styled, { keyframes } from "styled-components"
 
@@ -13,6 +13,7 @@ import { useStores } from "../../../store"
 import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
+import { fmtMoney } from "../../../payment/display"
 
 const slideIn = keyframes`
     from {
@@ -60,8 +61,8 @@ export const SelectedProposal: React.FC = observer(() => {
     if (!proposal) {
         return <></>
     }
-    const timeRate = displayMoney(pricePerMinute(proposal.paymentMethod))
-    const trafficRate = displayMoney(pricePerGiB(proposal.paymentMethod))
+    const timeRate = fmtMoney(pricePerMinute(proposal.paymentMethod))
+    const trafficRate = fmtMoney(pricePerGiB(proposal.paymentMethod))
     const pricingText = `${timeRate}/min ${trafficRate}/GiB`
 
     return (

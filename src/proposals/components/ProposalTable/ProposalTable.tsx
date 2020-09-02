@@ -10,13 +10,14 @@ import { observer } from "mobx-react-lite"
 import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { displayMoney, pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
+import { pricePerGiB, pricePerMinute, QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { UIProposal } from "../../ui-proposal-type"
 import { Flag } from "../../../location/components/Flag/Flag"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { brand } from "../../../ui-kit/colors"
+import { fmtMoney } from "../../../payment/display"
 
 const Styles = styled.div`
     flex: 1;
@@ -219,13 +220,13 @@ export const ProposalTable: React.FC = observer(() => {
             { Header: "ID", accessor: "shortId", width: 132 },
             {
                 Header: "Price/min",
-                accessor: (p): string => displayMoney(pricePerMinute(p.paymentMethod)),
+                accessor: (p): string => fmtMoney(pricePerMinute(p.paymentMethod)),
                 width: 62,
                 sortType: "basic",
             },
             {
                 Header: "Price/GiB",
-                accessor: (p): string => displayMoney(pricePerGiB(p.paymentMethod)),
+                accessor: (p): string => fmtMoney(pricePerGiB(p.paymentMethod)),
                 width: 62,
                 sortType: "basic",
             },
