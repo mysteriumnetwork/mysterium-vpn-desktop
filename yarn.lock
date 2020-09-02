@@ -1032,10 +1032,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@mysteriumnetwork/node@^0.39.0-rc0":
-  version "0.39.0-rc0"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.39.0-rc0.tgz#908b7774d73c135c5d0fd58289b99d50df55c5be"
-  integrity sha512-OceJKPEk1KNfCVyOUAZR7sPGWm+WWmy1YyI2S3ARXEk9GzOMIXEUdzDpNDqKq7x+m42d3OS+t0TWhMfc+iueBA==
+"@mysteriumnetwork/node@0.0.0-dev.2":
+  version "0.0.0-dev.2"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.0.0-dev.2.tgz#b82a06a6e33614aead7bc811208d109aafc01e31"
+  integrity sha512-Y842XLRFKrCAGMlRQBMxbaKmdRn4PLUTtDJiXdFdBdhY/QI9PpHVXnLw6vpd66I9oT2LHFMVlXwU/QlsTCnLSw==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
@@ -6633,10 +6633,10 @@ mute-stream@0.0.8:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
   integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
 
-mysterium-vpn-js@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-4.0.0.tgz#0a236934de1c73795fd0fa8db307fb9c2c0f9495"
-  integrity sha512-FhfI3be0xiCX8+7QuXpOQ+ekOAKPNIRYW/0zUXiyQNuVDBDTJdgSjjYbgL2uxx6Z188UBc5kmAfxtvbw4qdDSQ==
+mysterium-vpn-js@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-5.0.2.tgz#969af0bb1ad01bf9dd31e7d730c471dc53ea0af1"
+  integrity sha512-CXorqXmpNcH/bAf8MTrSmdjC+3shGwl5IsUUPk8hfiniPlkZnHrw3IgyICCRAAQKFRt/Nf6+ldzFkm420c01Kg==
   dependencies:
     axios "^0.19.2"
     camelcase-keys "^6.2.2"

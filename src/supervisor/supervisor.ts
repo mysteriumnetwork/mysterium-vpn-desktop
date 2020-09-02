@@ -181,7 +181,7 @@ export class Supervisor {
             mystBinaryName += ".exe"
         }
         const mystPath = staticAssetPath(mystBinaryName)
-        const mystProcess = spawn(mystPath, ["--ui.enable=false", "--usermode", "--consumer", "daemon"], {
+        const mystProcess = spawn(mystPath, ["--ui.enable=false", "--betanet", "--usermode", "--consumer", "daemon"], {
             detached: true, // Needed for unref to work correctly.
             stdio: "ignore", // Needed for unref to work correctly.
         })

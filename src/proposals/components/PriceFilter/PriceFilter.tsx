@@ -7,11 +7,12 @@
 import React, { ChangeEvent } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { Currency, displayMoney } from "mysterium-vpn-js"
+import { Currency } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
+import { fmtMoney } from "../../../payment/display"
 
 const Container = styled.div`
     flex: 1;
@@ -38,7 +39,7 @@ const displayFilterPrice = (amount?: number): string => {
     if (!amount) {
         return "free"
     }
-    const pricePerGibDisplay = displayMoney({
+    const pricePerGibDisplay = fmtMoney({
         amount: amount ?? 0,
         currency: Currency.MYSTTestToken,
     })

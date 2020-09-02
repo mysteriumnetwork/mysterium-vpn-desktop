@@ -21,6 +21,7 @@ import { DaemonStatusType } from "../daemon/store"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
+import { decimalPart } from "../payment/display"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -66,8 +67,8 @@ export class ProposalStore {
     @observable
     filter: ProposalFilter = {
         noAccessPolicy: true,
-        pricePerMinuteMax: 50_000,
-        pricePerGibMax: 15_000_000,
+        pricePerMinuteMax: 0.0005 * decimalPart(),
+        pricePerGibMax: 0.11 * decimalPart(),
         quality: QualityLevel.HIGH,
         includeFailed: false,
     }
@@ -204,12 +205,12 @@ export class ProposalStore {
 
     @computed
     get priceMaximums(): { perMinuteMax: number; perGibMax: number } {
-        return { perMinuteMax: 100_000, perGibMax: 50_000_000 }
+        return { perMinuteMax: 0.0005 * decimalPart(), perGibMax: 0.11 * decimalPart() }
     }
 
     @computed
     get toleratedPrices(): { perMinuteMax?: number; perGibMax?: number } {
-        const tolerance = 500
+        const tolerance = 0.000005 * decimalPart()
         let perMinuteMax
         const filterPricePerMinuteMax = this.filter.pricePerMinuteMax
         if (filterPricePerMinuteMax !== undefined) {

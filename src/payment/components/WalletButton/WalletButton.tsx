@@ -7,7 +7,7 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { Currency, displayMoney } from "mysterium-vpn-js"
+import { Currency } from "mysterium-vpn-js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faWallet } from "@fortawesome/free-solid-svg-icons"
 
@@ -15,6 +15,7 @@ import { useStores } from "../../../store"
 import { NavToggle } from "../../../ui-kit/components/Toggle/NavToggle"
 import { brandDarker } from "../../../ui-kit/colors"
 import { MystToken } from "../MystToken/MystToken"
+import { fmtMoney } from "../../display"
 
 const MoneyToggle = styled(NavToggle)`
     padding: 0;
@@ -55,7 +56,7 @@ const Money = styled.div<MoneyProps>`
 export const WalletButton: React.FC = observer(() => {
     const { identity, navigation } = useStores()
 
-    const balance = displayMoney(
+    const balance = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
             currency: Currency.MYSTTestToken,

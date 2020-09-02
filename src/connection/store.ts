@@ -24,8 +24,6 @@ import { analytics } from "../analytics/analytics-ui"
 import { AppAction, Category, ConnectAction } from "../analytics/analytics"
 import { log } from "../log/log"
 
-const accountantId = "0x0214281cf15c1a66b51990e2e65e1f7b7c363318"
-
 export class ConnectionStore {
     @observable
     connectInProgress = false
@@ -114,7 +112,6 @@ export class ConnectionStore {
                 {
                     consumerId: this.root.identity.identity.id,
                     providerId: this.root.proposals.active.providerId,
-                    accountantId,
                     serviceType: this.root.proposals.active.serviceType,
                     connectOptions: {
                         dns: this.root.config.dnsOption,
