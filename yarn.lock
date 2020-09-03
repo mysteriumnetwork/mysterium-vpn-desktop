@@ -7651,10 +7651,10 @@ pupa@^2.0.1:
   dependencies:
     escape-goat "^2.0.0"
 
-pushy-electron@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/pushy-electron/-/pushy-electron-1.0.7.tgz#9ce1602539045857ea61f467da0ef58909b32e24"
-  integrity sha512-Cs/K65Kh3ADyE2lyuQc3Xkjr5C0m5075HuQrqs6Yb1FVvq6lEYNikzng1cCjC/LktwvZDqlraN3g0eCZbGcLWg==
+pushy-electron@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/pushy-electron/-/pushy-electron-1.0.8.tgz#905a659e72bf83bf5c5d16bff5ac2d04dfad9971"
+  integrity sha512-iiAJqLuVhUBw+YYYsoHCxJFO1o8q7Vp+1B3kNTynNfKPIRKL/b6aEnvhnKBmbIZ2gYh4sYoTd8BijsqMybgG2A==
   dependencies:
     electron-store "^5.1.0"
     mqtt "^3.0.0"
