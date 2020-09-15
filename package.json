@@ -59,7 +59,7 @@
     "universal-analytics": "^0.4.20"
   },
   "devDependencies": {
-    "@sentry/cli": "^1.55.1",
+    "@sentry/cli": "^1.56.1",
     "@types/async-retry": "^1.4.2",
     "@types/css-font-loading-module": "^0.0.4",
     "@types/lodash": "^4.14.159",
