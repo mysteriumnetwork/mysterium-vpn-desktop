@@ -7912,10 +7912,10 @@ react-transition-group@^4.3.0, react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-use-intercom@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-0.3.0.tgz#79517528a00c92206d14a8d0160d5b90611c6e1f"
-  integrity sha512-Qy31gDRedGDvfnd+gKpab1KNkO47t9aYCfsippJ9lifxX1uFtwJkenljuP+QhAyxm8tFPXZ5jkBD9uiUo+JFJQ==
+react-use-intercom@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-1.1.0.tgz#b375b5ea96008e29382b01f1a900169e4a8e6f30"
+  integrity sha512-QQLLTpRJ6cJNQQ2PIwY7fEiIY8zMv0htDyZIc8/ChYHCBTz5ouOmseJD9Ekkdh0cFr3xxO0WFLXFlSXBn+jJ+w==
 
 react-virtualized-auto-sizer@^1.0.2:
   version "1.0.2"
