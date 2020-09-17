@@ -18,7 +18,9 @@ const size = 24
 export const Flag: React.FC<FlagProps> = ({ className, countryCode = "unknown" }) => {
     const imageName = isUnknownCountry(countryCode) ? "_unknown" : countryCode
     // Flags sourced from https://github.com/wiredmax/react-flags (MIT)
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const x1 = require(`./flags-iso/shiny/${size}/${imageName}.png`).default
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const x2 = require(`./flags-iso/shiny/${size * 2}/${imageName}.png`).default
 
     return <img className={className} srcSet={`${x1} 1x, ${x2} 2x`} src={x1} alt={countryCode} width={size} />
