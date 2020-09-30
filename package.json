@@ -36,7 +36,7 @@
     "mobx": "^5.15.6",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^2.2.2",
-    "mysterium-vpn-js": "^5.0.2",
+    "mysterium-vpn-js": "^6.0.0",
     "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
     "pushy-electron": "^1.0.8",

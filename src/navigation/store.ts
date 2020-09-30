@@ -84,17 +84,23 @@ export class NavigationStore {
         if (this.history.location.pathname == locations.wallet) {
             return undefined
         }
+
         if (!config.currentTermsAgreed() && this.welcome) {
             return locations.welcome
-        } else if (!config.currentTermsAgreed()) {
-            return locations.terms
-        } else if (!identity.identity || !registered(identity.identity)) {
-            return locations.loading
-        } else if (connectionInProgress(connection.status)) {
-            return locations.connection
-        } else {
-            return locations.proposals
         }
+        if (!config.currentTermsAgreed()) {
+            return locations.terms
+        }
+        if (!identity.identity) {
+            return locations.loading
+        }
+        if (!registered(identity.identity)) {
+            return locations.identity
+        }
+        if (connectionInProgress(connection.status)) {
+            return locations.connection
+        }
+        return locations.proposals
     }
 
     @action
