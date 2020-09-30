@@ -4,13 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import tequilapi, { AppState, Identity, SSEEventType, TransactorFeesResponse } from "mysterium-vpn-js"
+import tequilapi, { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
 import { action, observable, reaction } from "mobx"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, IdentityAction, WalletAction } from "../analytics/analytics"
+import { log } from "../log/log"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -54,6 +55,9 @@ export class IdentityStore {
                     return
                 }
                 await this.unlock()
+                if (!registered(identity)) {
+                    await this.root.payment.fetchTransactorFees()
+                }
                 if (eligibleForRegistration(identity)) {
                     await this.register(identity)
                 }
@@ -63,8 +67,14 @@ export class IdentityStore {
         reaction(
             () => this.identity?.balance,
             async () => {
-                if (this.identity && !this.identity.balance) {
+                if (!this.identity) {
+                    return
+                }
+                if (!this.identity.balance) {
                     await this.unlock()
+                }
+                if (!registered(this.identity)) {
+                    await this.register(this.identity)
                 }
             },
         )
@@ -118,14 +128,25 @@ export class IdentityStore {
 
     @action
     async register(id: Identity): Promise<void> {
-        const fees = await this.transactorFees()
+        if (!this.root.payment?.fees) {
+            await this.root.payment.fetchTransactorFees()
+        }
+        const registrationFee = this.root.payment.fees?.registration
+        if (!registrationFee) {
+            log.error("Registration fee is unknown, can't proceed with the registration")
+            return
+        }
+        const requiredTopup = this.root.payment.registrationTopup
+        if (!requiredTopup) {
+            log.error("Registration topup amount is unknown, can't proceed with the registration")
+            return
+        }
+        if (id.balance < requiredTopup) {
+            log.info(`Balance is less than the required topup amount: ${id.balance} < ${requiredTopup}, can't register`)
+            return
+        }
         analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
-        return tequilapi.identityRegister(id.id, { fee: fees.registration })
-    }
-
-    @action
-    async transactorFees(): Promise<TransactorFeesResponse> {
-        return await tequilapi.transactorFees()
+        return tequilapi.identityRegister(id.id, { fee: registrationFee })
     }
 
     @action

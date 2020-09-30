@@ -8,10 +8,14 @@ import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import { QRCode } from "react-qr-svg"
+import { faSpinner } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Currency } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { brandDarker } from "../../../ui-kit/colors"
 import { Spinner } from "../../../ui-kit/components/Spinner/spinner"
+import { fmtMoney } from "../../../payment/display"
 
 import identityBg from "./identity-bg.png"
 
@@ -64,11 +68,6 @@ const Copy = styled.button`
     background: linear-gradient(180deg, #fefefe 0%, #f2f2f2 100%);
 `
 
-const TestnetDisclaimer = styled.p`
-    color: crimson;
-    font-weight: bold;
-`
-
 const ChannelQR = styled.div`
     flex: 0;
     height: 116px;
@@ -99,7 +98,7 @@ const BlockchainStatus = styled.div`
 `
 
 export const SelectIdentityView: React.FC = observer(() => {
-    const { identity } = useStores()
+    const { identity, payment } = useStores()
     const chan = identity.identity?.channelAddress
 
     const copyChannelAddress = (): void => {
@@ -108,12 +107,21 @@ export const SelectIdentityView: React.FC = observer(() => {
         }
     }
 
+    const registrationTopup = payment.registrationTopup
+    const registrationFee = registrationTopup ? (
+        fmtMoney({
+            amount: registrationTopup,
+            currency: Currency.MYST,
+        })
+    ) : (
+        <FontAwesomeIcon icon={faSpinner} spin />
+    )
     return (
         <Container>
             <Title>Activate account</Title>
             <InstructionsDiv>
                 <InstructionsText>
-                    <p>To activate your account and top up 100 MYST, transfer ... to</p>
+                    <p>To activate your account, transfer {registrationFee} MYST to:</p>
                     <p>
                         <code>
                             <b>{chan}</b>
@@ -123,11 +131,6 @@ export const SelectIdentityView: React.FC = observer(() => {
                     <small>
                         Do not send any other cryptocurrency to this address! Only MYST and ETH tokens are accepted.
                     </small>
-                    <TestnetDisclaimer>
-                        Registration is automatic in testnet. Sit back and relax.
-                        <br />
-                        Status: {identity.identity?.registrationStatus}
-                    </TestnetDisclaimer>
                 </InstructionsText>
                 <ChannelQR>{chan ? <QRCode value={chan} style={{ width: 116 }} /> : <></>}</ChannelQR>
             </InstructionsDiv>

@@ -7,6 +7,7 @@
 import React from "react"
 import { configure } from "mobx"
 import { ipcRenderer } from "electron"
+// import { enableLogging } from "mobx-logger"
 
 import { NavigationStore } from "./navigation/store"
 import { DaemonStore } from "./daemon/store"
@@ -17,8 +18,6 @@ import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
 import { WebIpcListenChannels } from "./main/ipc"
 import { FeedbackStore } from "./feedback/store"
-
-// import { enableLogging } from "mobx-logger"
 
 export class RootStore {
     navigation: NavigationStore
