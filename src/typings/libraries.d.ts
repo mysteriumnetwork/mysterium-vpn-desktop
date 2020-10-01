@@ -5,10 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 declare module "byte-size" {
+    type ByteSize = {
+        value: string
+        unit: string
+        long: string
+        toString(): string
+    }
     const byteSize: (
         bytes: number,
         options?: { precision?: number; units?: "metric" | "iec" | "metric_octet" | "iec_octet" },
-    ) => string
+    ) => ByteSize
     export default byteSize
 }
 
