@@ -150,6 +150,21 @@ export class IdentityStore {
     }
 
     @action
+    async registerWithReferralToken(token: string): Promise<void> {
+        if (!this.identity) {
+            return
+        }
+        this.setLoading(true)
+        try {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            await tequilapi.identityRegister(this.identity?.id, { token })
+        } finally {
+            this.setLoading(false)
+        }
+    }
+
+    @action
     setLoading = (b: boolean): void => {
         this.loading = b
     }
