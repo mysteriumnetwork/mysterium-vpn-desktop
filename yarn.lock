@@ -1110,10 +1110,10 @@
     "@sentry/utils" "5.21.1"
     tslib "^1.9.3"
 
-"@sentry/cli@^1.56.1":
-  version "1.56.1"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.56.1.tgz#8fc5b78859f33ffb02a4f19a7a559573b90971bf"
-  integrity sha512-NKCjgWH6d5JRn0afwP9DrLhSc81oHdxsriceZ0oZhv4cWjRObV9+bvy7hYKDhJ/7tMiTVwHTME05KPjiG9tSCQ==
+"@sentry/cli@^1.58.0":
+  version "1.58.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.58.0.tgz#b1609f10e71539951499866502b13bf3a270fe79"
+  integrity sha512-bUBKBYyKVzjNhQpAfPJ3XAvAyNNvrD2Rtpo6B0MR3Okw3prdLFgv9Ta8TN19IXT7u9w13B2EdMnNA6dQDtrD4g==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -1132,10 +1132,10 @@
     "@sentry/utils" "5.21.1"
     tslib "^1.9.3"
 
-"@sentry/electron@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.0.0.tgz#f36c050f0ffc578dab1bc8a93e2e8601b5d79061"
-  integrity sha512-zXnvUYWBgja2N7BZHsMxqaLzn0pIOl3+uW/AUJpdWaVqKWptC1NG2P4ws88OxMFPS5gfvZlspm5Yz1T0RhqUvw==
+"@sentry/electron@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.0.1.tgz#0d647f14beb832ade54bd8b04aefb00b7a0274ad"
+  integrity sha512-7jWkM0EHdkOkMFg5duCNXWzh6Jn5+eC2PztoGhQf5iJwLrZUpr0Q6FrX1J2uaswnNFJNOFIk2hQe2vcP8CLCzw==
   dependencies:
     "@sentry/browser" "~5.21.1"
     "@sentry/core" "~5.21.1"
@@ -3752,10 +3752,10 @@ electron-webpack@^2.8.2:
     webpack-merge "^4.2.2"
     yargs "^15.3.1"
 
-electron@^9.2.0:
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-9.2.0.tgz#d9fc8c8c9e5109669c366bd7b9ba83b06095d7a4"
-  integrity sha512-4ecZ3rcGg//Gk4fAK3Jo61T+uh36JhU6HHR/PTujQqQiBw1g4tNPd4R2hGGth2d+7FkRIs5GdRNef7h64fQEMw==
+electron@^10.1.3:
+  version "10.1.3"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-10.1.3.tgz#7e276e373bf30078bd4cb1184850a91268dc0e6c"
+  integrity sha512-CR8LrlG47MdAp317SQ3vGYa2o2cIMdMSMPYH46OVitFLk35dwE9fn3VqvhUIXhCHYcNWIAPzMhkVHpkoFdKWuw==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
