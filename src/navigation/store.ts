@@ -95,7 +95,7 @@ export class NavigationStore {
             return locations.loading
         }
         if (!registered(identity.identity)) {
-            return locations.identity
+            return locations.activate
         }
         if (connectionInProgress(connection.status)) {
             return locations.connection

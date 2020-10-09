@@ -13,9 +13,15 @@ export const TextInput = styled.input`
     width: 100%;
 
     padding: 2px;
-    border: 2px solid transparent;
+    border: 2px solid #c4c4c4;
     border-radius: 4px;
 
-    background: rgba(0, 0, 0, 0.08);
+    background: #fff;
+    color: #4d4d4d;
     font-size: 13px;
-`
+
+    &:disabled {
+        background: #f2f2f2;
+        color: #808080;
+    }
+` as React.FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>

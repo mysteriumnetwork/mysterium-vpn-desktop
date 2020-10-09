@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { configure } from "mobx"
+import { action, configure, observable } from "mobx"
 import { ipcRenderer } from "electron"
 // import { enableLogging } from "mobx-logger"
 
@@ -18,6 +18,7 @@ import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
 import { WebIpcListenChannels } from "./main/ipc"
 import { FeedbackStore } from "./feedback/store"
+import { isDevelopment } from "./utils/env"
 
 export class RootStore {
     navigation: NavigationStore
@@ -28,6 +29,9 @@ export class RootStore {
     connection: ConnectionStore
     payment: PaymentStore
     feedback: FeedbackStore
+
+    @observable
+    showGrid = false
 
     constructor() {
         this.navigation = new NavigationStore(this)
@@ -45,7 +49,21 @@ export class RootStore {
         this.config.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
+        this.payment.setupReactions()
         this.connection.setupReactions()
+
+        document.addEventListener("keydown", (ev: KeyboardEvent) => {
+            if (ev.code == "F5") {
+                this.toggleGrid()
+            }
+        })
+    }
+
+    @action
+    toggleGrid = (): void => {
+        if (isDevelopment()) {
+            this.showGrid = !this.showGrid
+        }
     }
 }
 

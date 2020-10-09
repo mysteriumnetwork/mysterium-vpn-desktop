@@ -136,17 +136,29 @@ export class IdentityStore {
             log.error("Registration fee is unknown, can't proceed with the registration")
             return
         }
-        const requiredTopup = this.root.payment.registrationTopup
-        if (!requiredTopup) {
-            log.error("Registration topup amount is unknown, can't proceed with the registration")
-            return
-        }
-        if (id.balance < requiredTopup) {
-            log.info(`Balance is less than the required topup amount: ${id.balance} < ${requiredTopup}, can't register`)
+        if (id.balance < registrationFee) {
+            log.info(
+                `Balance is less than the required topup amount: ${id.balance} < ${registrationFee}, can't register`,
+            )
             return
         }
         analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
         return tequilapi.identityRegister(id.id, { fee: registrationFee })
+    }
+
+    @action
+    async registerWithReferralToken(token: string): Promise<void> {
+        if (!this.identity) {
+            return
+        }
+        this.setLoading(true)
+        try {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            await tequilapi.identityRegister(this.identity?.id, { token })
+        } finally {
+            this.setLoading(false)
+        }
     }
 
     @action

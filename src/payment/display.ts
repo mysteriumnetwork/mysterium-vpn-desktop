@@ -6,6 +6,7 @@
  */
 import { DECIMAL_PART, displayMoney, DisplayMoneyOptions } from "mysterium-vpn-js"
 import { Money } from "mysterium-vpn-js/lib/payment/method"
+import { Decimal } from "decimal.js-light"
 
 export const decimalPart = (): number => {
     return DECIMAL_PART
@@ -16,4 +17,12 @@ export const fmtMoney = (m: Money, opts?: DisplayMoneyOptions): string => {
         ...opts,
         decimalPart: decimalPart(),
     })
+}
+
+export const displayMYST = (amount: number): string => {
+    return new Decimal(amount).toFixed(4) + " MYSTT"
+}
+
+export const displayUSD = (amount: number): string => {
+    return "$" + new Decimal(amount).toFixed(4)
 }
