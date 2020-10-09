@@ -50,7 +50,7 @@
     "react-table": "^7.5.0",
     "react-toast-notifications": "^2.4.0",
     "react-transition-group": "^4.4.1",
-    "react-use-intercom": "^1.1.0",
+    "react-use-intercom": "^1.1.1",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
     "semver": "^7.3.2",
