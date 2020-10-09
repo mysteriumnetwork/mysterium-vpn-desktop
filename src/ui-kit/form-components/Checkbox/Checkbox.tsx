@@ -6,17 +6,23 @@
  */
 import styled from "styled-components"
 import React from "react"
+import { uniqueId } from "lodash"
 
-const Label = styled.label`
+const Container = styled.div`
     height: 24px;
     font-size: 14px;
+    display: flex;
+`
 
-    > input {
-        margin-right: 8px;
-        border-radius: 2px;
-        vertical-align: middle;
-        height: 24px;
-    }
+const Input = styled.input`
+    margin-right: 8px;
+    border-radius: 2px;
+    height: 18px;
+` as React.FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>
+
+const Label = styled.label`
+    display: inline;
+    line-height: 24px;
 `
 
 export type CheckboxProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
@@ -24,10 +30,11 @@ export type CheckboxProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HT
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({ children, ...rest }) => {
+    const inputId = uniqueId("checkbox")
     return (
-        <Label>
-            <input type="checkbox" {...rest} />
-            {children}
-        </Label>
+        <Container>
+            <Input id={inputId} type="checkbox" {...rest} />
+            <Label htmlFor={inputId}>{children}</Label>
+        </Container>
     )
 }

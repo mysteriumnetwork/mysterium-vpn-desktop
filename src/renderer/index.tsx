@@ -99,7 +99,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         if (props.showGrid) {
             return `
             :root {
-                --baseline: 16px;
+                --baseline: 8px;
                 // --color: hsla(204, 80%, 72%, 0.5);
                 --color: rgba(255, 0, 0, 0.5);
                 --background-baseline: repeating-linear-gradient(

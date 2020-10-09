@@ -7,13 +7,15 @@
 import React from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
+import { faCircleNotch, faShieldAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { useStores } from "../../../store"
 import { brandDarker } from "../../../ui-kit/colors"
 import { displayMYST } from "../../../payment/display"
 import { QR } from "../../../ui-kit/components/QR/QR"
+import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
+import { locations } from "../../../navigation/locations"
 
 import identityBg from "./identity-bg.png"
 
@@ -25,16 +27,23 @@ const Container = styled.div`
     flex-direction: column;
 `
 
+const Content = styled.div`
+    flex: 1;
+    padding: 32px 20px 0 20px;
+`
+
 const Title = styled.h1`
-    margin: 0;
-    padding: 32px 24px;
     font-weight: 300;
     font-size: 24px;
+    line-height: 32px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
     color: ${brandDarker};
 `
 
 const InstructionsDiv = styled.div`
-    padding: 0 24px;
     display: flex;
 `
 
@@ -64,6 +73,7 @@ const InstructionsText = styled.div`
 
 const BottomBar = styled.div`
     height: 72px;
+    padding: 0 20px;
     margin-top: auto;
     display: flex;
     justify-content: flex-end;
@@ -71,7 +81,7 @@ const BottomBar = styled.div`
 `
 
 const BlockchainStatus = styled.div`
-    padding: 0 16px;
+    margin-left: 16px;
     p {
         font-weight: bold;
         color: #4d4d4d;
@@ -86,31 +96,40 @@ const BlockchainStatus = styled.div`
 `
 
 export const ActivateAccountTopup: React.FC = observer(() => {
-    const { identity, payment } = useStores()
+    const { identity, payment, navigation } = useStores()
 
     const chan = identity.identity?.channelAddress
-
     const topupAmount = displayMYST(payment.topupTotal ?? 0)
+    const handleBackAction = () => {
+        navigation.navigateTo(locations.activate)
+    }
 
     return (
         <Container>
-            <Title>Activate account</Title>
-            <InstructionsDiv>
-                <RegistrationByTopup>
-                    <p>
-                        To activate your account, transfer {topupAmount} to your wallet (Görli Testnet blockchain)
-                    </p>
-                    <div style={{ paddingBottom: 16 }}>
-                        <QR text={chan} />
-                    </div>
-                    <InstructionsText>
-                        <small>
-                            Do not send any other cryptocurrency to this address! Only MYST tokens are accepted.
-                        </small>
-                    </InstructionsText>
-                </RegistrationByTopup>
-            </InstructionsDiv>
+            <Content>
+                <Title>
+                    <FontAwesomeIcon icon={faShieldAlt} /> Activate Account
+                </Title>
+                <InstructionsDiv>
+                    <RegistrationByTopup>
+                        <p>
+                            To activate your account, transfer {topupAmount} to your wallet (Görli Testnet blockchain)
+                        </p>
+                        <div style={{ paddingBottom: 16 }}>
+                            <QR text={chan} />
+                        </div>
+                        <InstructionsText>
+                            <small>
+                                Do not send any other cryptocurrency to this address! Only MYST tokens are accepted.
+                            </small>
+                        </InstructionsText>
+                    </RegistrationByTopup>
+                </InstructionsDiv>
+            </Content>
             <BottomBar>
+                <div style={{ marginRight: "auto" }}>
+                    <BrandButton onClick={handleBackAction}>Back</BrandButton>
+                </div>
                 <FontAwesomeIcon icon={faCircleNotch} size="lg" spin />
                 <BlockchainStatus>
                     <p>Waiting for transfer</p>

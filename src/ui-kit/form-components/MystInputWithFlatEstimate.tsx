@@ -48,6 +48,7 @@ const FlatEstimate = styled(TextInput).attrs(() => ({
 
 export interface MoneyInputProps {
     value?: number
+    defaultValue?: number
     rate?: number
     suffix?: string
     onChange?: (val?: number) => void
@@ -69,6 +70,7 @@ const mystToUSD = (myst: number, rate?: number): number | undefined => {
 
 export const ControlledMystInputWithFlatEstimate: React.FC<MoneyInputProps> = ({
     value,
+    defaultValue,
     rate,
     suffix,
     disabled = false,
@@ -77,7 +79,7 @@ export const ControlledMystInputWithFlatEstimate: React.FC<MoneyInputProps> = ({
     return (
         <Container>
             <div style={{ flex: 2 }}>
-                <MystInput value={value ?? 0} disabled={disabled} length={14} />
+                <MystInput defaultValue={defaultValue} value={value ?? 0} disabled={disabled} length={14} />
                 <Suffix>{suffix ?? ""}</Suffix>
             </div>
             <div style={{ flex: 1 }}>
@@ -88,13 +90,14 @@ export const ControlledMystInputWithFlatEstimate: React.FC<MoneyInputProps> = ({
 }
 
 export const UncontrolledMystInputWithFlatEstimate: React.FC<MoneyInputProps> = observer(
-    ({ suffix, rate, onChange, disabled = false }) => {
+    ({ suffix, defaultValue, rate, onChange, disabled = false }) => {
         const [val, setVal] = useState<number | undefined>(undefined)
         const usd = displayUSD(mystToUSD(val ?? 0, rate) ?? 0)
         return (
             <Container>
                 <div style={{ flex: 2 }}>
                     <MystInput
+                        defaultValue={defaultValue}
                         disabled={disabled}
                         length={14}
                         onChangeFn={(val) => {

@@ -8,7 +8,7 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons"
+import { faShieldAlt } from "@fortawesome/free-solid-svg-icons"
 import { Currency } from "mysterium-vpn-js"
 import { useToasts } from "react-toast-notifications"
 
@@ -34,12 +34,12 @@ const Container = styled.div`
 
 const Content = styled.div`
     flex: 1;
-    padding: 32px 40px 0 40px;
+    padding: 32px 20px 0 20px;
 `
 
 const ActionBar = styled.div`
     height: 72px;
-    padding: 0 24px;
+    padding: 0 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -48,16 +48,22 @@ const ActionBar = styled.div`
     background: #f7f7f7;
 `
 
-const Title = styled.div`
+const Title = styled.h1`
     font-weight: 300;
     font-size: 24px;
-    line-height: 24px;
-    margin: 16px 0 24px 0;
+    line-height: 32px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 16px;
     letter-spacing: 1px;
     color: ${brandDarker};
 `
 
-const ExplainActivation = styled.div`
+const ExplainActivation = styled.p`
+    font-size: 14px;
+    line-height: 24px;
+    margin: 0;
+    padding: 0;
     margin-bottom: 16px;
 `
 
@@ -116,10 +122,10 @@ export const ActivateAccount: React.FC = observer(() => {
         <Container>
             <Content>
                 <Title>
-                    <FontAwesomeIcon icon={faUserCircle} /> Activate Account
+                    <FontAwesomeIcon icon={faShieldAlt} /> Activate Account
                 </Title>
                 <ExplainActivation>
-                    Connecting to Mysterium VPN requires account activation to prevent spam and network attacks.
+                    Mysterium VPN requires account activation to prevent spam and network attacks.
                 </ExplainActivation>
                 <LineItem style={{ marginBottom: 16 }}>
                     <Checkbox checked={state.useReferralCode} onChange={handleUseReferralCodeChange}>
@@ -146,6 +152,7 @@ export const ActivateAccount: React.FC = observer(() => {
                         <Label>Top-up Amount</Label>
                         <UncontrolledMystInputWithFlatEstimate
                             rate={payment.mystToUsdRate?.value}
+                            defaultValue={payment.registrationTopupAmount}
                             onChange={(val) => payment.setRegistrationTopupAmount(val)}
                             suffix={Currency.MYSTTestToken}
                         />
