@@ -19,9 +19,13 @@ const Container = styled.div`
 `
 
 const IntercomStyleOverride = createGlobalStyle`
+    .intercom-app {
+        margin-left: 200px;
+    }
     .intercom-messenger-frame {
         position: fixed;
-        top: 0 !important;
+        top: 0 !important; 
+        left: initial !important;
         right: 0 !important;
         width: 400px !important;
         border-radius: 0 !important;
@@ -53,7 +57,7 @@ export const Chat: React.FC = observer(() => {
         }
     }, [navigation.chat])
     return (
-        <Container className="chat">
+        <Container>
             <IntercomStyleOverride />
         </Container>
     )

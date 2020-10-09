@@ -83,15 +83,6 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         border-radius: 4px;
         background: #c1c1c1; 
     }
-
-    .intercom-messenger-frame {
-        position: fixed;
-        top: 0 !important;
-        right: 0 !important;
-        width: 400px !important;
-        border-radius: 0 !important;
-        height: 100% !important;
-    }
     .react-toast-notifications__container {
         left: 262px !important;
     }
