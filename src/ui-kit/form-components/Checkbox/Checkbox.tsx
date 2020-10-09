@@ -8,12 +8,14 @@ import styled from "styled-components"
 import React from "react"
 
 const Label = styled.label`
+    height: 24px;
     font-size: 14px;
-    color: #333;
 
     > input {
         margin-right: 8px;
         border-radius: 2px;
+        vertical-align: middle;
+        height: 24px;
     }
 `
 

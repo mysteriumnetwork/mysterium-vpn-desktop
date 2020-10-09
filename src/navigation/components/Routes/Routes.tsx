@@ -13,7 +13,7 @@ import styled from "styled-components"
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
 import { WelcomeView } from "../../../views/common/Welcome/WelcomeView"
-import { SelectIdentityView } from "../../../views/common/SelectIdentity/SelectIdentityView"
+import { ActivateAccountTopup } from "../../../views/common/ActivateAccountTopup/ActivateAccountTopup"
 import { SelectProposalView } from "../../../views/consumer/SelectProposal/SelectProposalView"
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
@@ -26,6 +26,7 @@ import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
 import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
+import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -53,8 +54,11 @@ export const Routes: React.FC = observer(() => {
                         <Route path={locations.terms}>
                             <AcceptTermsView />
                         </Route>
-                        <Route path={locations.identity}>
-                            <SelectIdentityView />
+                        <Route path={locations.activate}>
+                            <ActivateAccount />
+                        </Route>
+                        <Route path={locations.activateTopup}>
+                            <ActivateAccountTopup />
                         </Route>
                         <Route path={locations.proposals}>
                             <NavBar />

@@ -23,11 +23,11 @@ const TextPart = styled.div`
     margin-top: 8px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
 `
 
 const Text = styled.code`
     user-select: initial;
-    font-size: 12px;
     line-height: 21px;
     overflow-wrap: anywhere;
 `

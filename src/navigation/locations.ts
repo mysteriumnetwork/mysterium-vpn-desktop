@@ -8,6 +8,8 @@
 export const locations = Object.freeze({
     welcome: "/welcome",
     terms: "/terms",
+    activate: "/activate",
+    activateTopup: "/activate-topup",
     identity: "/identity",
     loading: "/loading",
     wallet: "/wallet",

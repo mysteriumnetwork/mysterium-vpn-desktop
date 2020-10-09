@@ -45,6 +45,7 @@ export class RootStore {
         this.config.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
+        this.payment.setupReactions()
         this.connection.setupReactions()
     }
 }
