@@ -93,7 +93,7 @@
     "eslint-plugin-react": "^7.20.0",
     "prettier": "^2.1.2",
     "shx": "^0.3.2",
-    "typescript": "^4.0.2",
+    "typescript": "^4.0.3",
     "url-loader": "^4.1.0",
     "webpack": "^4.44.2"
   },
