@@ -51,7 +51,11 @@ const fadeIn = keyframes`
     }
 `
 
-const GlobalStyle = createGlobalStyle`
+interface GlobalStyleProps {
+    showGrid: boolean
+}
+
+const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
     html, body, #app {
         margin: 0;
         padding: 0;
@@ -91,21 +95,29 @@ const GlobalStyle = createGlobalStyle`
     .react-toast-notifications__container {
         left: 262px !important;
     }
-    // :root {
-    //     --baseline: 8px;
-    //     --color: hsla(204, 80%, 72%, 0.5);
-    //     --background-baseline: repeating-linear-gradient(
-    //         to bottom,
-    //         var(--color),
-    //         var(--color) 1px,
-    //         transparent 1px,
-    //         transparent var(--baseline)
-    //       );
-    // }
-    // html {
-    //     background-image: var(--background-baseline);
-    //     background-position: 0 0;
-    // }
+    ${(props) => {
+        if (props.showGrid) {
+            return `
+            :root {
+                --baseline: 16px;
+                // --color: hsla(204, 80%, 72%, 0.5);
+                --color: rgba(255, 0, 0, 0.5);
+                --background-baseline: repeating-linear-gradient(
+                    to bottom,
+                    var(--color),
+                    var(--color) 1px,
+                    transparent 1px,
+                    transparent var(--baseline)
+                  );
+            }
+            html {
+                background-image: var(--background-baseline);
+                background-position: 0 0;
+            }
+            `
+        }
+        return ""
+    }}
 `
 
 // Create main element
@@ -113,13 +125,13 @@ const GlobalStyle = createGlobalStyle`
 // document.body.appendChild(container)
 
 const App: React.FC = observer(() => {
-    const { navigation } = useStores()
+    const root = useStores()
     return (
         <React.Fragment>
-            <GlobalStyle />
+            <GlobalStyle showGrid={root.showGrid} />
             <HashRouter>
                 <ToastProvider placement="top-left">
-                    <IntercomProvider appId={packageJson.intercomAppId} onHide={() => navigation.openChat(false)}>
+                    <IntercomProvider appId={packageJson.intercomAppId} onHide={() => root.navigation.openChat(false)}>
                         <Routes />
                     </IntercomProvider>
                 </ToastProvider>
