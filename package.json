@@ -23,7 +23,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "@mysteriumnetwork/node": "0.0.0-dev.2",
+    "@mysteriumnetwork/node": "0.40.6-pre",
     "@mysteriumnetwork/terms": "^0.0.27",
     "@sentry/electron": "^2.0.1",
     "async-retry": "^1.3.1",
