@@ -11,7 +11,6 @@ import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, IdentityAction, WalletAction } from "../analytics/analytics"
-import { log } from "../log/log"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -128,22 +127,9 @@ export class IdentityStore {
 
     @action
     async register(id: Identity): Promise<void> {
-        if (!this.root.payment?.fees) {
-            await this.root.payment.fetchTransactorFees()
-        }
-        const registrationFee = this.root.payment.fees?.registration
-        if (!registrationFee) {
-            log.error("Registration fee is unknown, can't proceed with the registration")
-            return
-        }
-        if (id.balance < registrationFee) {
-            log.info(
-                `Balance is less than the required topup amount: ${id.balance} < ${registrationFee}, can't register`,
-            )
-            return
-        }
+        await this.root.payment.fetchTransactorFees()
         analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
-        return tequilapi.identityRegister(id.id, { fee: registrationFee })
+        return tequilapi.identityRegister(id.id, { fee: this.root.payment.fees?.registration, stake: 0 })
     }
 
     @action

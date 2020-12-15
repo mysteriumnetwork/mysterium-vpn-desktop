@@ -91,11 +91,8 @@ export class NavigationStore {
         if (!config.currentTermsAgreed()) {
             return locations.terms
         }
-        if (!identity.identity) {
+        if (!identity.identity || !registered(identity.identity)) {
             return locations.loading
-        }
-        if (!registered(identity.identity)) {
-            return locations.activate
         }
         if (connectionInProgress(connection.status)) {
             return locations.connection
