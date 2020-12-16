@@ -68,7 +68,7 @@ export class ProposalStore {
     filter: ProposalFilter = {
         noAccessPolicy: true,
         pricePerMinuteMax: 0.0005 * decimalPart(),
-        pricePerGibMax: 0.11 * decimalPart(),
+        pricePerGibMax: 0.75 * decimalPart(),
         quality: QualityLevel.HIGH,
         includeFailed: false,
     }
@@ -205,7 +205,7 @@ export class ProposalStore {
 
     @computed
     get priceMaximums(): { perMinuteMax: number; perGibMax: number } {
-        return { perMinuteMax: 0.0005 * decimalPart(), perGibMax: 0.11 * decimalPart() }
+        return { perMinuteMax: 0.001 * decimalPart(), perGibMax: 1.0 * decimalPart() }
     }
 
     @computed
