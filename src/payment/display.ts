@@ -4,8 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { DECIMAL_PART, displayMoney, DisplayMoneyOptions } from "mysterium-vpn-js"
-import { Money } from "mysterium-vpn-js/lib/payment/method"
+import { DECIMAL_PART, displayMoney, DisplayMoneyOptions, Money } from "mysterium-vpn-js"
 import { Decimal } from "decimal.js-light"
 
 export const decimalPart = (): number => {

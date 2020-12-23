@@ -5,11 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, runInAction, when } from "mobx"
-import tequilapi, { Currency, HttpTequilapiClient, TransactorFeesResponse } from "mysterium-vpn-js"
+import tequilapi, { Currency, HttpTequilapiClient, Fees } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
-import { analytics } from "../analytics/analytics-ui"
-import { Category, WalletAction } from "../analytics/analytics"
 import { DaemonStatusType } from "../daemon/store"
 
 import { Money } from "./exchange"
@@ -19,7 +17,7 @@ export class PaymentStore {
     root: RootStore
 
     @observable
-    fees?: TransactorFeesResponse
+    fees?: Fees
     @observable
     mystToUsdRate?: Money
     @observable
@@ -36,14 +34,6 @@ export class PaymentStore {
                 await this.fetchMystToUsdRate()
             },
         )
-    }
-
-    @action
-    async topUp(): Promise<void> {
-        analytics.event(Category.Wallet, WalletAction.Topup)
-        return await tequilapi.topUp({
-            identity: this.root.identity.identity?.id ?? "",
-        })
     }
 
     @action
