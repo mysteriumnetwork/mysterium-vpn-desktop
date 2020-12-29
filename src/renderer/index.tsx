@@ -9,15 +9,17 @@ import { platform } from "os"
 import React from "react"
 import ReactDOM from "react-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
-import { HashRouter } from "react-router-dom"
+import { Router } from "react-router-dom"
 import { ToastProvider } from "react-toast-notifications"
 import { IntercomProvider } from "react-use-intercom"
 import { observer } from "mobx-react-lite"
+import { createHashHistory } from "history"
 
 import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
-import { useStores } from "../store"
+import { rootStore, useStores, StoreContext } from "../store"
+import { synchronizedHistory } from "../navigation/routerStore"
 
 initializeSentry()
 
@@ -115,18 +117,23 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 // const container = document.createElement("div")
 // document.body.appendChild(container)
 
+const hashHistory = createHashHistory()
+const history = synchronizedHistory(hashHistory, rootStore.router)
+
 const App: React.FC = observer(() => {
     const root = useStores()
     return (
         <React.Fragment>
             <GlobalStyle showGrid={root.showGrid} />
-            <HashRouter>
+            <Router history={history}>
                 <ToastProvider placement="top-left">
                     <IntercomProvider appId={packageJson.intercomAppId} onHide={() => root.navigation.openChat(false)}>
-                        <Routes />
+                        <StoreContext.Provider value={rootStore}>
+                            <Routes />
+                        </StoreContext.Provider>
                     </IntercomProvider>
                 </ToastProvider>
-            </HashRouter>
+            </Router>
             <div className="baseline" />
         </React.Fragment>
     )

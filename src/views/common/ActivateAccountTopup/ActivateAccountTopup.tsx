@@ -96,12 +96,12 @@ const BlockchainStatus = styled.div`
 `
 
 export const ActivateAccountTopup: React.FC = observer(() => {
-    const { identity, payment, navigation } = useStores()
+    const { identity, payment, router } = useStores()
 
     const chan = identity.identity?.channelAddress
     const topupAmount = displayMYST(payment.topupTotal ?? 0)
     const handleBackAction = () => {
-        navigation.navigateTo(locations.activate)
+        router.push(locations.activate)
     }
 
     return (

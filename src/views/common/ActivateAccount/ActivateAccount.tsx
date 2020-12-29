@@ -89,7 +89,7 @@ const TotalBreak = styled.div`
 `
 
 export const ActivateAccount: React.FC = observer(() => {
-    const { payment, identity, navigation } = useStores()
+    const { payment, identity, router } = useStores()
     const { addToast } = useToasts()
     const [state, setState] = useState({
         useReferralCode: false,
@@ -107,7 +107,7 @@ export const ActivateAccount: React.FC = observer(() => {
                 log.error("Could not register with the given token", err.message)
             }
         } else {
-            navigation.navigateTo(locations.activateTopup)
+            router.push(locations.activateTopup)
         }
     }
     const handleUseReferralCodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {

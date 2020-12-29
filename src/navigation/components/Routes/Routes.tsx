@@ -48,6 +48,9 @@ export const Routes: React.FC = observer(() => {
             <WinContents>
                 <Main>
                     <Switch>
+                        <Route exact path="/">
+                            <Redirect to={locations.loading} />
+                        </Route>
                         <Route path={locations.welcome}>
                             <WelcomeView />
                         </Route>
