@@ -11,4 +11,5 @@ export enum WebIpcListenChannels {
 export enum MainIpcListenChannels {
     ConnectionStatus = "connection-status",
     ToggleSupportChat = "open-support-chat",
+    TopupWindow = "topup-window",
 }

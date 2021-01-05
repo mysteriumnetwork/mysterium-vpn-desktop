@@ -19,9 +19,11 @@ import { PaymentStore } from "./payment/store"
 import { WebIpcListenChannels } from "./main/ipc"
 import { FeedbackStore } from "./feedback/store"
 import { isDevelopment } from "./utils/env"
+import { RouterStore } from "./navigation/routerStore"
 
 export class RootStore {
     navigation: NavigationStore
+    router: RouterStore
     daemon: DaemonStore
     config: ConfigStore
     identity: IdentityStore
@@ -35,6 +37,7 @@ export class RootStore {
 
     constructor() {
         this.navigation = new NavigationStore(this)
+        this.router = new RouterStore()
         this.daemon = new DaemonStore(this)
         this.config = new ConfigStore(this)
         this.identity = new IdentityStore(this)
@@ -68,7 +71,7 @@ export class RootStore {
 }
 
 export const rootStore = new RootStore()
-export const storesContext = React.createContext(rootStore)
+export const StoreContext = React.createContext(rootStore)
 
 ipcRenderer.on(WebIpcListenChannels.Disconnect, async () => {
     await rootStore.connection.disconnect()
@@ -77,4 +80,4 @@ ipcRenderer.on(WebIpcListenChannels.Disconnect, async () => {
 
 configure({ enforceActions: "always" })
 
-export const useStores = (): RootStore => React.useContext(storesContext)
+export const useStores = (): RootStore => React.useContext(StoreContext)

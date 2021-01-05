@@ -10,7 +10,6 @@ import tequilapi, {
     pricePerGiB,
     pricePerMinute,
     ProposalMetrics,
-    ProposalQuality,
     QualityCalculator,
     QualityLevel,
 } from "mysterium-vpn-js"
@@ -56,7 +55,7 @@ export class ProposalStore {
     @observable
     proposals: UIProposal[] = []
     @observable
-    metrics: Map<ProposalKey, ProposalQuality> = new Map<ProposalKey, ProposalQuality>()
+    metrics: Map<ProposalKey, ProposalMetrics> = new Map<ProposalKey, ProposalMetrics>()
 
     @observable
     active?: UIProposal
@@ -376,7 +375,7 @@ export class ProposalStore {
     }
 
     @action
-    setMetrics = (metrics: ProposalQuality[]): void => {
+    setMetrics = (metrics: ProposalMetrics[]): void => {
         for (const metric of metrics) {
             this.metrics.set(proposalKey(metric), metric)
         }

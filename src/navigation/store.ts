@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction } from "mobx"
-import { History, LocationState } from "history"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
@@ -15,7 +14,6 @@ import { Category, OnboardingAction } from "../analytics/analytics"
 import { registered } from "../identity/identity"
 import { MainIpcListenChannels } from "../main/ipc"
 
-import { history } from "./history"
 import { locations } from "./locations"
 
 const connectionInProgress = (status: ConnectionStatus): boolean => {
@@ -23,8 +21,6 @@ const connectionInProgress = (status: ConnectionStatus): boolean => {
 }
 
 export class NavigationStore {
-    history: History<LocationState>
-
     @observable
     consumer = true
     @observable
@@ -46,7 +42,6 @@ export class NavigationStore {
 
     constructor(root: RootStore) {
         this.root = root
-        this.history = history
     }
 
     setupReactions(): void {
@@ -62,26 +57,23 @@ export class NavigationStore {
 
     @action
     showLoading = (): void => {
-        this.navigateTo(locations.loading)
-    }
-
-    @action
-    navigateTo = (path: string): void => {
-        analytics.pageview(path)
-        this.history.push(path)
+        this.root.router.push(locations.loading)
     }
 
     @action
     determineRoute = (): void => {
         const newLocation = this.determineLocation()
-        if (newLocation && this.history.location.pathname !== newLocation) {
-            this.navigateTo(newLocation)
+        if (newLocation) {
+            this.root.router.push(newLocation)
         }
     }
 
     determineLocation = (): string | undefined => {
         const { config, identity, connection } = this.root
-        if (this.history.location.pathname == locations.wallet) {
+        if (this.root.router.location.pathname == locations.wallet) {
+            return undefined
+        }
+        if (this.root.router.location.pathname == locations.topup) {
             return undefined
         }
 
@@ -109,7 +101,7 @@ export class NavigationStore {
     dismissWelcome = (): void => {
         analytics.event(Category.Onboarding, OnboardingAction.GetStarted)
         this.welcome = false
-        this.navigateTo(locations.terms)
+        this.root.router.push(locations.terms)
     }
 
     @action
@@ -146,5 +138,10 @@ export class NavigationStore {
     @action
     openPreferences = (open = true): void => {
         this.preferences = open
+    }
+
+    @action
+    toggleTopupWindow = (): void => {
+        ipcRenderer.send(MainIpcListenChannels.TopupWindow)
     }
 }

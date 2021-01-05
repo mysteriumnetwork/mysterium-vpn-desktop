@@ -5,13 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
-import tequilapi, {
-    AppState,
-    ConnectionStatistics,
-    ConnectionStatus,
-    ConsumerLocation,
-    SSEEventType,
-} from "mysterium-vpn-js"
+import tequilapi, { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
 
@@ -36,9 +30,9 @@ export class ConnectionStore {
     @observable
     proposal?: UIProposal
     @observable
-    location?: ConsumerLocation
+    location?: Location
     @observable
-    originalLocation?: ConsumerLocation
+    originalLocation?: Location
 
     root: RootStore
 
@@ -174,20 +168,20 @@ export class ConnectionStore {
             city: "",
             continent: "",
             isp: "",
-            nodeType: "",
+            userType: "",
         })
     }
 
     @action
     async resolveLocation(): Promise<void> {
-        let location: ConsumerLocation = {
+        let location: Location = {
             country: "unknown",
             ip: "Updating...",
             asn: 0,
             city: "",
             continent: "",
             isp: "",
-            nodeType: "",
+            userType: "",
         }
         await retry(
             async () => {
@@ -227,12 +221,12 @@ export class ConnectionStore {
     }
 
     @action
-    setLocation = (l: ConsumerLocation): void => {
+    setLocation = (l: Location): void => {
         this.location = l
     }
 
     @action
-    setOriginalLocation = (l: ConsumerLocation): void => {
+    setOriginalLocation = (l: Location): void => {
         this.originalLocation = l
     }
 

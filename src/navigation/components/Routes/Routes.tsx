@@ -27,6 +27,7 @@ import { winSize } from "../../../config"
 import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
+import { TopupView } from "../../../views/consumer/Topup/TopupView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -48,6 +49,12 @@ export const Routes: React.FC = observer(() => {
             <WinContents>
                 <Main>
                     <Switch>
+                        <Route exact path="/">
+                            <Redirect to={locations.loading} />
+                        </Route>
+                        <Route path={locations.topup}>
+                            <TopupView />
+                        </Route>
                         <Route path={locations.welcome}>
                             <WelcomeView />
                         </Route>

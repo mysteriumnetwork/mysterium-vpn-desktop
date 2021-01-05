@@ -15,8 +15,8 @@ import { QRCode } from "react-qr-svg"
 import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
 import { fontMono, textHuge } from "../../../ui-kit/typography"
-import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { fmtMoney } from "../../../payment/display"
+import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 
 const Container = styled.div`
     width: 100%;
@@ -105,7 +105,7 @@ const Copy = styled.button`
 `
 
 export const WalletView: React.FC = observer(() => {
-    const { identity, payment } = useStores()
+    const { identity, navigation } = useStores()
     const balanceDisplay = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
@@ -122,7 +122,9 @@ export const WalletView: React.FC = observer(() => {
             navigator.clipboard.writeText(chan)
         }
     }
-    const topUpAction = (): Promise<void> => payment.topUp()
+    const openTopupWindow = () => {
+        navigation.toggleTopupWindow()
+    }
     return (
         <Container>
             <Top>
@@ -152,7 +154,7 @@ export const WalletView: React.FC = observer(() => {
                             <Copy onClick={copyChannelAddress}>Copy</Copy>
                         </p>
                         <WalletActions>
-                            <LightButton onClick={topUpAction}>Get free test tokens</LightButton>
+                            <LightButton onClick={openTopupWindow}>Topup with crypto</LightButton>
                         </WalletActions>
                     </div>
                     <Right>

@@ -16,4 +16,6 @@ export const locations = Object.freeze({
     consumer: "/consumer",
     proposals: "/consumer/proposals",
     connection: "/consumer/connection",
+    // modal child window
+    topup: "/topup",
 })
