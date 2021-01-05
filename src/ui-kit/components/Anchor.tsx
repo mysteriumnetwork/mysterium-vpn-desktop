@@ -6,12 +6,10 @@
  */
 import styled from "styled-components"
 
-import { textCaption } from "../../typography"
+import { brandDarker } from "../colors"
 
-export const SectionTitle = styled.div`
-    ${textCaption}
-    color: #777;
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
+export const Anchor = styled.a`
+    cursor: pointer;
+    text-decoration: underline;
+    color: ${brandDarker};
 `

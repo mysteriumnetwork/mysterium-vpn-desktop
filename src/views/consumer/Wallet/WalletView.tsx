@@ -16,6 +16,7 @@ import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
 import { fontMono, textHuge } from "../../../ui-kit/typography"
 import { fmtMoney } from "../../../payment/display"
+import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 
 const Container = styled.div`
     width: 100%;
@@ -104,7 +105,7 @@ const Copy = styled.button`
 `
 
 export const WalletView: React.FC = observer(() => {
-    const { identity } = useStores()
+    const { identity, navigation } = useStores()
     const balanceDisplay = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
@@ -120,6 +121,9 @@ export const WalletView: React.FC = observer(() => {
         if (chan) {
             navigator.clipboard.writeText(chan)
         }
+    }
+    const openTopupWindow = () => {
+        navigation.toggleTopupWindow()
     }
     return (
         <Container>
@@ -149,7 +153,9 @@ export const WalletView: React.FC = observer(() => {
                             <ChannelAddress>{chan}</ChannelAddress>
                             <Copy onClick={copyChannelAddress}>Copy</Copy>
                         </p>
-                        <WalletActions />
+                        <WalletActions>
+                            <LightButton onClick={openTopupWindow}>Topup with crypto</LightButton>
+                        </WalletActions>
                     </div>
                     <Right>
                         <ChannelQR>{chan ? <QRCode value={chan} style={{ width: 116 }} /> : <></>}</ChannelQR>

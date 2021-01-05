@@ -40,6 +40,7 @@ global.supervisor = supervisor
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
+let topupWin: BrowserWindow | null
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let tray: Tray | null
@@ -119,6 +120,38 @@ const createWindow = async (): Promise<BrowserWindow> => {
     })
     setupAnalyticsForWindow(window)
 
+    topupWin = new BrowserWindow({
+        parent: window,
+        modal: true,
+        show: false,
+        width: winSize.width,
+        height: winSize.height,
+        useContentSize: true,
+        resizable: false,
+        backgroundColor: "#fff",
+        webPreferences: {
+            nodeIntegration: true,
+            enableRemoteModule: true,
+        },
+    })
+    if (isDevelopment()) {
+        topupWin.webContents.once("dom-ready", () => {
+            topupWin!.webContents.openDevTools({ mode: "detach" })
+        })
+    }
+    if (isDevelopment()) {
+        topupWin.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}#/topup`)
+    } else {
+        topupWin.loadURL(
+            formatUrl({
+                pathname: path.join(__dirname, "index.html"),
+                protocol: "file",
+                slashes: true,
+                hash: "/topup",
+            }),
+        )
+    }
+
     return window
 }
 
@@ -166,6 +199,13 @@ ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: 
         win?.setContentSize(winSizeExt.width, winSizeExt.height, true)
     } else {
         win?.setContentSize(winSize.width, winSize.height, true)
+    }
+})
+ipcMain.on(MainIpcListenChannels.TopupWindow, () => {
+    if (topupWin?.isVisible()) {
+        topupWin?.hide()
+    } else {
+        topupWin?.show()
     }
 })
 

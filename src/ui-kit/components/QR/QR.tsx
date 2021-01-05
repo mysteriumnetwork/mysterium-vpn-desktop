@@ -27,7 +27,8 @@ const TextPart = styled.div`
 `
 
 const Text = styled.code`
-    user-select: initial;
+    user-select: text;
+    font-size: 12px;
     line-height: 21px;
     overflow-wrap: anywhere;
 `
@@ -38,9 +39,10 @@ const Copy = styled.button`
 
 export interface QRProps {
     text?: string
+    copyButton?: boolean
 }
 
-export const QR: React.FC<QRProps> = ({ text }) => {
+export const QR: React.FC<QRProps> = ({ text, copyButton = false }) => {
     if (!text) {
         return <></>
     }
@@ -54,9 +56,11 @@ export const QR: React.FC<QRProps> = ({ text }) => {
             </Image>
             <TextPart>
                 <Text>{text}</Text>
-                <div>
-                    <Copy onClick={copyText}>Copy</Copy>
-                </div>
+                {copyButton && (
+                    <div>
+                        <Copy onClick={copyText}>Copy</Copy>
+                    </div>
+                )}
             </TextPart>
         </Container>
     )

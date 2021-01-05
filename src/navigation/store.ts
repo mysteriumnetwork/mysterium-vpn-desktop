@@ -73,6 +73,9 @@ export class NavigationStore {
         if (this.root.router.location.pathname == locations.wallet) {
             return undefined
         }
+        if (this.root.router.location.pathname == locations.topup) {
+            return undefined
+        }
 
         if (!config.currentTermsAgreed() && this.welcome) {
             return locations.welcome
@@ -135,5 +138,10 @@ export class NavigationStore {
     @action
     openPreferences = (open = true): void => {
         this.preferences = open
+    }
+
+    @action
+    toggleTopupWindow = (): void => {
+        ipcRenderer.send(MainIpcListenChannels.TopupWindow)
     }
 }
