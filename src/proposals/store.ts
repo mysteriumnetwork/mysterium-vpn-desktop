@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, observable, reaction } from "mobx"
+import { action, computed, observable, observe, reaction, toJS } from "mobx"
 import tequilapi, {
     ConnectionStatus,
     pricePerGiB,
@@ -21,6 +21,7 @@ import { analytics } from "../analytics/analytics-ui"
 import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
+import { loadJSON, storeJSON } from "../storage/local-storage"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -49,6 +50,14 @@ export type ProposalFilter = {
     country?: string
 }
 
+const defaultProposalFilter = (): ProposalFilter => ({
+    noAccessPolicy: true,
+    pricePerMinuteMax: 0.0005 * decimalPart(),
+    pricePerGibMax: 0.75 * decimalPart(),
+    quality: QualityLevel.HIGH,
+    includeFailed: false,
+})
+
 export class ProposalStore {
     @observable
     loading = false
@@ -64,18 +73,13 @@ export class ProposalStore {
     customFilter = false
 
     @observable
-    filter: ProposalFilter = {
-        noAccessPolicy: true,
-        pricePerMinuteMax: 0.0005 * decimalPart(),
-        pricePerGibMax: 0.75 * decimalPart(),
-        quality: QualityLevel.HIGH,
-        includeFailed: false,
-    }
+    filter: ProposalFilter
 
     root: RootStore
 
     constructor(root: RootStore) {
         this.root = root
+        this.filter = loadJSON<ProposalFilter>("proposalFilter", defaultProposalFilter)
     }
 
     setupReactions(): void {
@@ -87,6 +91,10 @@ export class ProposalStore {
                 }
             },
         )
+        observe(this.filter, (a) => {
+            const updatedFilter = toJS<ProposalFilter>(a.object)
+            storeJSON("proposalFilter", updatedFilter)
+        })
         setInterval(async () => {
             if (this.root.daemon.status != DaemonStatusType.Up) {
                 return
