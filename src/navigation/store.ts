@@ -26,10 +26,6 @@ export class NavigationStore {
     @observable
     welcome = true
     @observable
-    wallet = false
-    @observable
-    filters = false
-    @observable
     menu = false
     @observable
     preferences = false
@@ -37,6 +33,14 @@ export class NavigationStore {
     chat = false
     @observable
     report = false
+
+    //top navbar bar
+    @observable
+    wallet = false
+    @observable
+    filters = false
+    @observable
+    referrals = false
 
     root: RootStore
 
@@ -110,6 +114,9 @@ export class NavigationStore {
         if (this.filters) {
             this.filters = false
         }
+        if (this.referrals) {
+            this.referrals = false
+        }
     }
 
     @action
@@ -117,6 +124,20 @@ export class NavigationStore {
         this.filters = !this.filters
         if (this.wallet) {
             this.wallet = false
+        }
+        if (this.referrals) {
+            this.wallet = false
+        }
+    }
+
+    @action
+    toggleReferrals = (): void => {
+        this.referrals = !this.referrals
+        if (this.wallet) {
+            this.wallet = false
+        }
+        if (this.filters) {
+            this.filters = false
         }
     }
 

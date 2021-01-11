@@ -10,6 +10,7 @@ import styled from "styled-components"
 import { WalletButton } from "../../../payment/components/WalletButton/WalletButton"
 import { FiltersButton } from "../../../proposals/components/FiltersButton/FiltersButton"
 import { Hamburger } from "../Hamburger/Hamburger"
+import { ReferralButton } from "../../../referral/components/ReferralButton/ReferralButton"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -23,10 +24,18 @@ const Container = styled.div`
     }
 `
 
+const FlexGrow = styled.div`
+    flex-grow: 1;
+`
+
 export const NavBar: React.FC = () => {
     return (
         <Container>
             <FiltersButton />
+            <FlexGrow />
+            <div style={{ marginRight: "4px" }}>
+                <ReferralButton />
+            </div>
             <div style={{ marginLeft: "auto" }}>
                 <WalletButton />
             </div>

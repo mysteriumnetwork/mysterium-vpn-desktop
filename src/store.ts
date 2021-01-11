@@ -20,6 +20,7 @@ import { WebIpcListenChannels } from "./main/ipc"
 import { FeedbackStore } from "./feedback/store"
 import { isDevelopment } from "./utils/env"
 import { RouterStore } from "./navigation/routerStore"
+import { ReferralStore } from "./referral/store"
 
 export class RootStore {
     navigation: NavigationStore
@@ -31,6 +32,7 @@ export class RootStore {
     connection: ConnectionStore
     payment: PaymentStore
     feedback: FeedbackStore
+    referral: ReferralStore
 
     @observable
     showGrid = false
@@ -45,6 +47,7 @@ export class RootStore {
         this.connection = new ConnectionStore(this)
         this.payment = new PaymentStore(this)
         this.feedback = new FeedbackStore(this)
+        this.referral = new ReferralStore(this)
 
         // Setup cross-store reactions after all injections.
         this.navigation.setupReactions()
@@ -54,6 +57,7 @@ export class RootStore {
         this.proposals.setupReactions()
         this.payment.setupReactions()
         this.connection.setupReactions()
+        this.referral.setupReactions()
 
         document.addEventListener("keydown", (ev: KeyboardEvent) => {
             if (ev.code == "F5") {
