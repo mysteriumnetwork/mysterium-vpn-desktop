@@ -46,7 +46,7 @@ export class ConfigStore {
 
     @action
     fetchConfig = async (): Promise<void> => {
-        const config = await tequilapi.userConfig()
+        const config = await tequilapi.config()
         runInAction(() => {
             this.config = config.data
             log.info("Using config:", JSON.stringify(this.config))
