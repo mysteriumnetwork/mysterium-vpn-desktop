@@ -22,6 +22,7 @@ import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { loadJSON, storeJSON } from "../storage/local-storage"
+import { PricesCeiling } from "../config/store"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -42,21 +43,25 @@ const proposalRefreshRate = 10000
 export type ProposalFilter = {
     noAccessPolicy?: boolean
     text?: string
-    pricePerMinuteMax?: number
-    pricePerGibMax?: number
-    quality?: QualityLevel
+    pricePerMinute: number
+    pricePerGib: number
+    quality: QualityLevel
     includeFailed: boolean
     ipType?: string
     country?: string
+    createdOn: Date
 }
 
-const defaultProposalFilter = (): ProposalFilter => ({
-    noAccessPolicy: true,
-    pricePerMinuteMax: 0.0005 * decimalPart(),
-    pricePerGibMax: 0.75 * decimalPart(),
-    quality: QualityLevel.HIGH,
-    includeFailed: false,
-})
+const defaultProposalFilter = (c: PricesCeiling): ProposalFilter => {
+    return {
+        noAccessPolicy: true,
+        pricePerMinute: c.perMinuteMax / 2,
+        pricePerGib: c.perGibMax / 2,
+        quality: QualityLevel.HIGH,
+        includeFailed: false,
+        createdOn: new Date(),
+    }
+}
 
 export class ProposalStore {
     @observable
@@ -79,7 +84,9 @@ export class ProposalStore {
 
     constructor(root: RootStore) {
         this.root = root
-        this.filter = loadJSON<ProposalFilter>("proposalFilter", defaultProposalFilter)
+        this.filter = loadJSON<ProposalFilter>("proposalFilter", () =>
+            defaultProposalFilter(this.root.config.pricesCeiling),
+        )
     }
 
     setupReactions(): void {
@@ -200,13 +207,13 @@ export class ProposalStore {
     // #####################
 
     @action
-    setPricePerMinuteMaxFilter(pricePerMinuteMax?: number): void {
-        this.filter.pricePerMinuteMax = pricePerMinuteMax
+    setPricePerMinuteMaxFilter(pricePerMinuteMax: number): void {
+        this.filter.pricePerMinute = pricePerMinuteMax
         analytics.event(Category.Proposal, ProposalAction.PriceFilterPerMinute, String(pricePerMinuteMax))
     }
     @action
-    setPricePerGibMaxFilter(pricePerGibMax?: number): void {
-        this.filter.pricePerGibMax = pricePerGibMax
+    setPricePerGibMaxFilter(pricePerGibMax: number): void {
+        this.filter.pricePerGib = pricePerGibMax
         analytics.event(Category.Proposal, ProposalAction.PriceFilterPerGib, String(pricePerGibMax))
     }
 
@@ -219,12 +226,12 @@ export class ProposalStore {
     get toleratedPrices(): { perMinuteMax?: number; perGibMax?: number } {
         const tolerance = 0.000005 * decimalPart()
         let perMinuteMax
-        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax
+        const filterPricePerMinuteMax = this.filter.pricePerMinute
         if (filterPricePerMinuteMax !== undefined) {
             perMinuteMax = filterPricePerMinuteMax + (filterPricePerMinuteMax !== 0 ? tolerance : 0)
         }
         let perGibMax
-        const filterPricePerGibMax = this.filter.pricePerGibMax
+        const filterPricePerGibMax = this.filter.pricePerGib
         if (filterPricePerGibMax !== undefined) {
             perGibMax = filterPricePerGibMax + (filterPricePerGibMax !== 0 ? tolerance : 0)
         }
@@ -234,8 +241,8 @@ export class ProposalStore {
     @computed
     get priceFiltered(): UIProposal[] {
         const input = this.textFiltered
-        const filterPricePerMinuteMax = this.filter.pricePerMinuteMax ?? 0
-        const filterPricePerGibMax = this.filter.pricePerGibMax ?? 0
+        const filterPricePerMinuteMax = this.filter.pricePerMinute ?? 0
+        const filterPricePerGibMax = this.filter.pricePerGib ?? 0
         if (!filterPricePerMinuteMax && !filterPricePerGibMax) {
             return input
         }
@@ -255,7 +262,7 @@ export class ProposalStore {
     // #####################
 
     @action
-    setQualityFilter(quality?: QualityLevel): void {
+    setQualityFilter(quality: QualityLevel): void {
         this.filter.quality = quality
         analytics.event(
             Category.Proposal,
@@ -387,5 +394,10 @@ export class ProposalStore {
         for (const metric of metrics) {
             this.metrics.set(proposalKey(metric), metric)
         }
+    }
+
+    @action
+    resetFiltersToDefaults = (): void => {
+        this.filter = defaultProposalFilter(this.root.config.pricesCeiling)
     }
 }

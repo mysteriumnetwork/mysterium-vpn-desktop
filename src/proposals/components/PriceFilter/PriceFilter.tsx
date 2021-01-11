@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { ChangeEvent } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
@@ -47,8 +47,17 @@ const displayFilterPrice = (amount?: number): string => {
 }
 
 export const PriceFilter = observer(() => {
-    const { proposals } = useStores()
-    const { perMinuteMax, perGibMax } = proposals.priceMaximums
+    const { proposals, config } = useStores()
+    const { perMinuteMax, perGibMax } = config.pricesCeiling
+
+    const [price, setPrice] = useState<{ perMinute: number; perGib: number }>({
+        perMinute: proposals.filter.pricePerMinute,
+        perGib: proposals.filter.pricePerGib,
+    })
+    useEffect(() => {
+        setPrice({ ...price, perMinute: proposals.filter.pricePerMinute, perGib: proposals.filter.pricePerGib })
+    }, [proposals.filter.createdOn])
+
     if (!perMinuteMax || !perGibMax) {
         return <></>
     }
@@ -62,28 +71,32 @@ export const PriceFilter = observer(() => {
     return (
         <Container>
             <RangeContainer>
-                <Label>Price/minute: {displayFilterPrice(proposals.filter.pricePerMinuteMax)}</Label>
+                <Label>Price/minute: {displayFilterPrice(price.perMinute)}</Label>
                 <Range
                     type="range"
                     min={0}
                     max={perMinuteMax}
-                    defaultValue={proposals.filter.pricePerMinuteMax ?? 0}
+                    value={price.perMinute}
                     step={1000}
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                        changePerMinuteMaxDebounced(event.target.valueAsNumber)
+                        const pricePerMinute = event.target.valueAsNumber
+                        setPrice({ ...price, perMinute: pricePerMinute })
+                        changePerMinuteMaxDebounced(pricePerMinute)
                     }}
                 />
             </RangeContainer>
             <RangeContainer>
-                <Label>Price/GiB: {displayFilterPrice(proposals.filter.pricePerGibMax)}</Label>
+                <Label>Price/GiB: {displayFilterPrice(price.perGib)}</Label>
                 <Range
                     type="range"
                     min={0}
-                    max={proposals.priceMaximums.perGibMax}
-                    defaultValue={proposals.filter.pricePerGibMax ?? 0}
+                    max={perGibMax}
+                    value={price.perGib}
                     step={1000}
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                        changePerGibMaxDebounced(event.target.valueAsNumber)
+                        const valueAsNumber = event.target.valueAsNumber
+                        setPrice({ ...price, perGib: valueAsNumber })
+                        changePerGibMaxDebounced(valueAsNumber)
                     }}
                 />
             </RangeContainer>

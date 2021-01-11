@@ -7,6 +7,7 @@
 import { action, computed, observable, reaction, runInAction } from "mobx"
 import tequilapi, { DNSOption } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
+import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
@@ -20,6 +21,17 @@ export interface Config {
         }
         dns?: DNSOption
     }
+    payments?: {
+        consumer?: {
+            "price-pergib-max"?: number
+            "price-perminute-max"?: number
+        }
+    }
+}
+
+export interface PricesCeiling {
+    perMinuteMax: number
+    perGibMax: number
 }
 
 export class ConfigStore {
@@ -86,5 +98,13 @@ export class ConfigStore {
     @computed
     get dnsOption(): DNSOption {
         return this.config.desktop?.dns ?? "1.1.1.1"
+    }
+
+    @computed
+    get pricesCeiling(): PricesCeiling {
+        return {
+            perMinuteMax: _.get<Config, any>(this.config, `payments.consumer.price-perminute-max`) || 0,
+            perGibMax: _.get<Config, any>(this.config, `payments.consumer.price-pergib-max`) || 0,
+        }
     }
 }
