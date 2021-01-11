@@ -22,7 +22,7 @@ import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { loadJSON, storeJSON } from "../storage/local-storage"
-import { PricesCeiling } from "../config/store"
+import { ConfigStatus, PricesCeiling } from "../config/store"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -95,6 +95,20 @@ export class ProposalStore {
             async (status) => {
                 if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     await this.fetchProposals()
+                }
+            },
+        )
+        reaction(
+            () => this.root.config.configStatus,
+            async (status) => {
+                if (status === ConfigStatus.FETCHED) {
+                    const prices = this.root.config.pricesCeiling
+                    if (
+                        this.filter.pricePerGib > prices.perGibMax ||
+                        this.filter.pricePerMinute > prices.perMinuteMax
+                    ) {
+                        this.resetFiltersToDefaults()
+                    }
                 }
             },
         )

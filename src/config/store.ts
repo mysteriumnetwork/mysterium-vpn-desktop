@@ -29,6 +29,12 @@ export interface Config {
     }
 }
 
+export enum ConfigStatus {
+    ABSENT,
+    FETCHING,
+    FETCHED,
+}
+
 export interface PricesCeiling {
     perMinuteMax: number
     perGibMax: number
@@ -37,6 +43,9 @@ export interface PricesCeiling {
 export class ConfigStore {
     @observable
     config: Config = {}
+
+    @observable
+    configStatus: ConfigStatus = ConfigStatus.ABSENT
 
     root: RootStore
 
@@ -57,11 +66,18 @@ export class ConfigStore {
     }
 
     @action
+    setConfigState = (cs: ConfigStatus) => {
+        this.configStatus = cs
+    }
+
+    @action
     fetchConfig = async (): Promise<void> => {
+        this.setConfigState(ConfigStatus.FETCHING)
         const config = await tequilapi.config()
         runInAction(() => {
             this.config = config.data
             log.info("Using config:", JSON.stringify(this.config))
+            this.setConfigState(ConfigStatus.FETCHED)
         })
     }
 
@@ -103,8 +119,8 @@ export class ConfigStore {
     @computed
     get pricesCeiling(): PricesCeiling {
         return {
-            perMinuteMax: _.get<Config, any>(this.config, `payments.consumer.price-perminute-max`) || 0,
-            perGibMax: _.get<Config, any>(this.config, `payments.consumer.price-pergib-max`) || 0,
+            perMinuteMax: this.config.payments?.consumer?.["price-perminute-max"] || 0,
+            perGibMax: this.config.payments?.consumer?.["price-pergib-max"] || 0,
         }
     }
 }
