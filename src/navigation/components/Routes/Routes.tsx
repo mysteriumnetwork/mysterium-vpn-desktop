@@ -28,6 +28,7 @@ import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueVie
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 import { TopupView } from "../../../views/consumer/Topup/TopupView"
+import ReferralView from "../../../views/consumer/Referral/ReferralView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -98,6 +99,9 @@ export const Routes: React.FC = observer(() => {
                     </Modal>
                     <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
                         <FiltersView />
+                    </Modal>
+                    <Modal visible={navigation.referrals} onClose={navigation.toggleReferrals}>
+                        <ReferralView />
                     </Modal>
                     <Modal visible={navigation.report} onClose={() => navigation.openReportIssue(false)} light>
                         <ReportIssueView />
