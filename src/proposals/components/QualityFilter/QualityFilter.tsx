@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { ChangeEvent } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { QualityLevel } from "mysterium-vpn-js"
@@ -58,17 +58,24 @@ const displayQuality = (q?: QualityLevel): string => {
 export const QualityFilter = observer(() => {
     const { proposals } = useStores()
     const quality = proposals.filter.quality
+
+    const [range, setRange] = useState<{ quality: QualityLevel }>({ quality })
+    useEffect(() => {
+        setRange({ ...range, quality: proposals.filter.quality })
+    }, [proposals.filter.createdOn])
+
     const qualityText = displayQuality(quality)
     const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const val = event.target.valueAsNumber
         proposals.setQualityFilter(val)
+        setRange({ ...range, quality: val })
     }
     const includeFailed = proposals.filter.includeFailed
     return (
         <Container>
             <RangeContainer>
                 <Label>{qualityText}</Label>
-                <Range type="range" min={0} max={2} defaultValue={quality} onChange={onChange} />
+                <Range type="range" min={0} max={2} value={range.quality} onChange={onChange} />
             </RangeContainer>
             <IncludeFailed>
                 <Checkbox checked={includeFailed} onChange={(): void => proposals.setIncludeFailed(!includeFailed)}>

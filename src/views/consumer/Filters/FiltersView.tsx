@@ -14,6 +14,7 @@ import { PriceFilter } from "../../../proposals/components/PriceFilter/PriceFilt
 import { QualityFilter } from "../../../proposals/components/QualityFilter/QualityFilter"
 import { IpTypeFilter } from "../../../proposals/components/IpTypeFilter/IpTypeFilter"
 import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTitle"
+import { ResetFilters } from "../../../proposals/components/ResetFilters/ResetFilters"
 
 const Container = styled.div`
     &:after {
@@ -31,7 +32,7 @@ const Container = styled.div`
     padding-top: 24px;
 `
 
-const Content = styled.div`
+const Row = styled.div`
     display: flex;
     flex-direction: row;
 `
@@ -58,7 +59,7 @@ const Icon = styled(FontAwesomeIcon)`
 export const FiltersView: React.FC = observer(() => {
     return (
         <Container>
-            <Content>
+            <Row>
                 <Col>
                     <FilterTitle>
                         <Icon icon={faMoneyBill} size="3x" />
@@ -80,7 +81,10 @@ export const FiltersView: React.FC = observer(() => {
                     </FilterTitle>
                     <IpTypeFilter />
                 </Col>
-            </Content>
+            </Row>
+            <Row>
+                <ResetFilters />
+            </Row>
         </Container>
     )
 })
