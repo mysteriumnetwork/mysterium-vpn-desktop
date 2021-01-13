@@ -6,13 +6,13 @@
  */
 import React from "react"
 
-import { brandDarker } from "../../../ui-kit/colors"
+import { brandDarker } from "../colors"
 
 export interface MystTokenProps {
     light?: boolean
 }
 
-export const MystToken: React.FC<MystTokenProps> = ({ light }) => {
+export const IconMystToken: React.FC<MystTokenProps> = ({ light = false }) => {
     const stroke = light ? "#fff" : brandDarker
     return (
         <svg width="21px" height="12px" viewBox="0 0 14 8" version="1.1" xmlns="http://www.w3.org/2000/svg">

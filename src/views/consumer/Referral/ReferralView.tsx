@@ -102,9 +102,7 @@ const ReferralView: React.FC = observer(() => {
     const { token, message, loading } = referral
 
     useEffect(() => {
-        if (identity.identity) {
-            referral.generateToken(identity.identity.id)
-        }
+        referral.generateToken()
     }, [identity.identity])
 
     const header =

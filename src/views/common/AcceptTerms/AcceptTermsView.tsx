@@ -53,7 +53,7 @@ const Terms = styled.div`
     overflow-y: scroll;
     font-size: 13px;
     border: 1px solid #e9e9e9;
-    background-color: #fafafa;
+    background-color: #fff;
 
     > ul {
         padding-inline-start: 20px;

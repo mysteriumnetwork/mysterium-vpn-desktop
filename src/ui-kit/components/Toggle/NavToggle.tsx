@@ -16,7 +16,7 @@ export interface ToggleProps {
 
 export const NavToggle = styled.div<ToggleProps>`
     box-sizing: border-box;
-    height: 24px;
+    height: 30px;
     line-height: 24px;
     padding: 0 16px;
     display: flex;
@@ -25,7 +25,10 @@ export const NavToggle = styled.div<ToggleProps>`
 
     color: ${(props: ToggleProps): string => (props.active ? "#fff" : "#404040")};
     background: ${(props: ToggleProps): string =>
-        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#fff"};
+        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "none"};
+    &:hover {
+        background: #eee8e8;
+    }
     border-radius: 4px;
     overflow: hidden;
 ` as React.FC<ToggleProps>
