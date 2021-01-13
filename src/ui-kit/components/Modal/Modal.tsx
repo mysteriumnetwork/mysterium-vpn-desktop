@@ -40,7 +40,7 @@ const Content = styled.div`
     opacity: 0;
     z-index: 0;
 
-    transition: all 0.3s ease-in-out;
+    transition: all 0s ease-in-out;
 
     .enter-active &,
     .enter-done & {
