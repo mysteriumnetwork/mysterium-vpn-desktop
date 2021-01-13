@@ -220,7 +220,7 @@ export const ProposalTable: React.FC = observer(() => {
             {
                 Header: "Price/min",
                 accessor: (p): string => fmtMoney(pricePerMinute(p.paymentMethod)),
-                width: 62,
+                width: 70,
                 sortType: "basic",
             },
             {
@@ -232,7 +232,7 @@ export const ProposalTable: React.FC = observer(() => {
             {
                 Header: "Quality",
                 accessor: "qualityLevel",
-                width: 60,
+                width: 52,
                 sortDescFirst: true,
                 sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
