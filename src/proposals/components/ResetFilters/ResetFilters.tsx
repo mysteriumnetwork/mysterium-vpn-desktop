@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
+import { Anchor } from "../../../ui-kit/components/Anchor"
 
 const Container = styled.div`
     width: 100%;
@@ -16,23 +17,18 @@ const Container = styled.div`
     justify-content: space-evenly;
 `
 
-const Link = styled.div`
-    cursor: pointer;
-    color: #0000ee;
-`
-
 export const ResetFilters = observer(() => {
     const { proposals } = useStores()
 
     return (
         <Container>
-            <Link
+            <Anchor
                 onClick={() => {
                     proposals.resetFiltersToDefaults()
                 }}
             >
                 Reset all filters
-            </Link>
+            </Anchor>
         </Container>
     )
 })
