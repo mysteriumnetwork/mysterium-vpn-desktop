@@ -142,6 +142,16 @@ export class NavigationStore {
     }
 
     @action
+    hideModals = (): void => {
+        this.filters = false
+        this.referrals = false
+        this.wallet = false
+        this.menu = false
+        this.preferences = false
+        this.report = false
+    }
+
+    @action
     showMenu = (show = true): void => {
         this.menu = show
     }

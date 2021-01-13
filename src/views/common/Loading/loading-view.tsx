@@ -11,7 +11,7 @@ import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
 import { Spinner } from "../../../ui-kit/components/Spinner/spinner"
 
 const Container = styled.div`
-    background-image: url(${welcomeBg});
+    background: url(${welcomeBg}) no-repeat, #2e265d;
     width: 100%;
     height: 100%;
     display: flex;

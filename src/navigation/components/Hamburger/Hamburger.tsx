@@ -6,7 +6,6 @@
  */
 import React, { useEffect, useRef } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { faFacebookSquare, faGithub, faMedium, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
@@ -18,22 +17,17 @@ import { brandDarker } from "../../../ui-kit/colors"
 
 type Div = React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
 
-const Icon = styled.div`
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding: 0 8px;
-    margin-left: 8px;
-` as Div
+export interface HamburgerProps {
+    buttonRef: React.RefObject<HTMLDivElement>
+}
 
-export const Hamburger: React.FC = observer(() => {
+export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: buttonRef }) => {
     const { navigation } = useStores()
     const dropdownMenuRef = useRef<HTMLDivElement>(null)
-    const hamburgerRef = useRef<HTMLDivElement>(null)
     const handleClickOutside: EventListener = (event) => {
         const isOutsideClick =
             !dropdownMenuRef.current?.contains(event.target as Node) &&
-            !hamburgerRef.current?.contains(event.target as Node)
+            !buttonRef.current?.contains(event.target as Node)
         if (isOutsideClick) {
             navigation.showMenu(false)
         }
@@ -47,103 +41,94 @@ export const Hamburger: React.FC = observer(() => {
     const quit = () => {
         remote.app.quit()
     }
+    if (!navigation.menu) {
+        return <></>
+    }
     return (
-        <>
-            <Icon
-                ref={hamburgerRef}
+        <DropdownMenu ref={dropdownMenuRef}>
+            <MenuItem
                 onClick={() => {
-                    navigation.showMenu(!navigation.menu)
+                    navigation.showMenu(false)
+                    navigation.openPreferences()
                 }}
             >
-                <FontAwesomeIcon icon={faBars} size="lg" color="#434343" />
-            </Icon>
-            {navigation.menu && (
-                <DropdownMenu ref={dropdownMenuRef}>
-                    <MenuItem
+                Preferences
+            </MenuItem>
+            <Separator />
+            <MenuItem
+                onClick={() => {
+                    navigation.showMenu(false)
+                    navigation.openReportIssue(true)
+                }}
+            >
+                Report an issue
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    navigation.showMenu(false)
+                    navigation.openChat()
+                }}
+            >
+                Support chat
+            </MenuItem>
+            <Separator />
+            <MenuItem
+                onClick={() => {
+                    navigation.showMenu(false)
+                    remote.app.showAboutPanel()
+                }}
+            >
+                About the app
+            </MenuItem>
+            <SocialMenuItem>
+                <FollowUs>Follow us</FollowUs>
+                <SocialLinks>
+                    <SocialIcon
+                        icon={faFacebookSquare}
                         onClick={() => {
                             navigation.showMenu(false)
-                            navigation.openPreferences()
+                            shell.openExternal("https://www.facebook.com/MysteriumNet")
                         }}
-                    >
-                        Preferences
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem
+                    />
+                    <SocialIcon
+                        icon={faTwitter}
                         onClick={() => {
                             navigation.showMenu(false)
-                            navigation.openReportIssue(true)
+                            shell.openExternal("https://twitter.com/MysteriumNet")
                         }}
-                    >
-                        Report an issue
-                    </MenuItem>
-                    <MenuItem
+                    />
+                    <SocialIcon
+                        icon={faMedium}
                         onClick={() => {
                             navigation.showMenu(false)
-                            navigation.openChat()
+                            shell.openExternal("https://medium.com/mysterium-network")
                         }}
-                    >
-                        Support chat
-                    </MenuItem>
-                    <Separator />
-                    <MenuItem
+                    />
+                    <SocialIcon
+                        icon={faReddit}
                         onClick={() => {
                             navigation.showMenu(false)
-                            remote.app.showAboutPanel()
+                            shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
                         }}
-                    >
-                        About the app
-                    </MenuItem>
-                    <SocialMenuItem>
-                        <FollowUs>Follow us</FollowUs>
-                        <SocialLinks>
-                            <SocialIcon
-                                icon={faFacebookSquare}
-                                onClick={() => {
-                                    navigation.showMenu(false)
-                                    shell.openExternal("https://www.facebook.com/MysteriumNet")
-                                }}
-                            />
-                            <SocialIcon
-                                icon={faTwitter}
-                                onClick={() => {
-                                    navigation.showMenu(false)
-                                    shell.openExternal("https://twitter.com/MysteriumNet")
-                                }}
-                            />
-                            <SocialIcon
-                                icon={faMedium}
-                                onClick={() => {
-                                    navigation.showMenu(false)
-                                    shell.openExternal("https://medium.com/mysterium-network")
-                                }}
-                            />
-                            <SocialIcon
-                                icon={faReddit}
-                                onClick={() => {
-                                    navigation.showMenu(false)
-                                    shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
-                                }}
-                            />
-                            <SocialIcon
-                                icon={faGithub}
-                                onClick={() => {
-                                    navigation.showMenu(false)
-                                    shell.openExternal("https://github.com/mysteriumnetwork")
-                                }}
-                            />
-                        </SocialLinks>
-                    </SocialMenuItem>
-                    <Separator />
-                    <MenuItem onClick={quit}>Quit</MenuItem>
-                </DropdownMenu>
-            )}
-        </>
+                    />
+                    <SocialIcon
+                        icon={faGithub}
+                        onClick={() => {
+                            navigation.showMenu(false)
+                            shell.openExternal("https://github.com/mysteriumnetwork")
+                        }}
+                    />
+                </SocialLinks>
+            </SocialMenuItem>
+            <Separator />
+            <MenuItem onClick={quit}>Quit</MenuItem>
+        </DropdownMenu>
     )
 })
 
 const DropdownMenu = styled.div`
     position: absolute;
-    top: 36px;
+    top: 40px;
     left: 400px;
     width: 236px;
     padding: 4px 0;

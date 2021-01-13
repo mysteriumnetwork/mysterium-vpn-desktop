@@ -12,8 +12,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 const Container = styled.div`
     position: absolute;
-    top: 40px;
-    height: 512px;
+    top: 53px;
+    height: 511px;
     width: 640px;
     overflow: hidden;
     z-index: -1;

@@ -67,6 +67,8 @@ const createWindow = async (): Promise<BrowserWindow> => {
         title: packageJson.productName,
         width: winSize.width,
         height: winSize.height,
+        frame: false,
+        titleBarStyle: "hiddenInset",
         useContentSize: true,
         resizable: false,
         maximizable: false,

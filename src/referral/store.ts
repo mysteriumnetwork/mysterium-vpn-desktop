@@ -7,6 +7,7 @@
 
 import tequilapi from "mysterium-vpn-js"
 import { action, observable } from "mobx"
+import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { log } from "../log/log"
@@ -33,17 +34,23 @@ export class ReferralStore {
     }
 
     @action
-    async generateToken(identity: string): Promise<void> {
-        this.setIsLoading(true)
-        try {
-            const tokenResponse = await tequilapi.getReferralToken(identity)
-            this.setToken(tokenResponse.token)
-        } catch (err) {
-            this.setMessage(parseError(err))
-            log.error("Referral token generation failed", err)
-        } finally {
-            this.setIsLoading(false)
+    async generateToken(): Promise<void> {
+        const id = this.root.identity.identity?.id
+        if (!id) {
+            return
         }
+        return _.throttle(async () => {
+            this.setIsLoading(true)
+            try {
+                const tokenResponse = await tequilapi.getReferralToken(id)
+                this.setToken(tokenResponse.token)
+            } catch (err) {
+                this.setMessage(parseError(err))
+                log.error("Referral token generation failed", err)
+            } finally {
+                this.setIsLoading(false)
+            }
+        }, 60_000)()
     }
 
     @action
