@@ -14,6 +14,7 @@ import { ToastProvider } from "react-toast-notifications"
 import { IntercomProvider } from "react-use-intercom"
 import { observer } from "mobx-react-lite"
 import { createHashHistory } from "history"
+import { remote } from "electron"
 
 import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
@@ -140,4 +141,8 @@ const App: React.FC = observer(() => {
 })
 
 // Render components
-ReactDOM.render(<App />, document.getElementById("app"))
+const app = document.getElementById("app")
+ReactDOM.render(<App />, app)
+if (app) {
+    app.className = remote.getGlobal("os")
+}
