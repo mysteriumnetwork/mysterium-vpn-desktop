@@ -76,7 +76,6 @@ interface ToggleProps {
 }
 
 const TableToggle = styled.div`
-    cursor: pointer;
     border-radius: 4px;
     color: ${(props: ToggleProps): string => (props.active ? "#fff" : "#404040")};
     background: ${(props: ToggleProps): string =>
