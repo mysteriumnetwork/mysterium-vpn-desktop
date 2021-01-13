@@ -126,7 +126,7 @@ export class NavigationStore {
             this.wallet = false
         }
         if (this.referrals) {
-            this.wallet = false
+            this.referrals = false
         }
     }
 
