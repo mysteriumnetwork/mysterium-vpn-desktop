@@ -12,6 +12,7 @@ import type { analytics } from "../analytics/analytics-main"
 declare global {
     namespace NodeJS {
         interface Global {
+            os: Platform
             supervisor: Supervisor
             analyticsSetUserId: typeof analytics.setUserId
             analyticsEvent: typeof analytics.event

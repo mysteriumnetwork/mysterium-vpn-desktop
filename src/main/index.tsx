@@ -7,6 +7,7 @@
 
 import * as path from "path"
 import { format as formatUrl } from "url"
+import * as os from "os"
 
 import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
@@ -37,6 +38,7 @@ autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 
 global.supervisor = supervisor
+global.os = os.platform()
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let win: BrowserWindow | null
