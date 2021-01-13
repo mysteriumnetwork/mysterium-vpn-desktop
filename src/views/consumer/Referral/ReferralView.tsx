@@ -38,7 +38,6 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     color: #fff;
-    border: azure 1px solid;
 `
 
 const Column = styled.div`
