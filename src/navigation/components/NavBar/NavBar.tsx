@@ -22,7 +22,7 @@ const Container = styled.div`
     height: 53px;
     padding: 8px 16px;
     .darwin & {
-        padding-left: 72px;
+        padding-left: 80px;
     }
     color: #565454;
     background: #fbf4f5;
