@@ -21,9 +21,8 @@ import { analytics } from "../../../analytics/analytics-ui"
 import termsBg from "./terms-bg.png"
 
 const Container = styled.div`
+    background: url(${termsBg}) no-repeat, #fff;
     height: 100%;
-    background-image: url(${termsBg});
-    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

@@ -13,9 +13,8 @@ import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
 
 const Container = styled.div`
+    background: url(${welcomeBg}) no-repeat, #8e3061;
     height: 100%;
-    background-image: url(${welcomeBg});
-    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
