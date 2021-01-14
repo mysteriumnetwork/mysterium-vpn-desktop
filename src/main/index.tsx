@@ -128,6 +128,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
         parent: window,
         modal: true,
         frame: false,
+        titleBarStyle: "hidden",
         show: false,
         width: winSize.width,
         height: winSize.height,
