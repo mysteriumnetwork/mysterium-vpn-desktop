@@ -67,7 +67,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
         title: packageJson.productName,
         width: winSize.width,
         height: winSize.height,
-        frame: false,
+        frame: os.platform() == "darwin" ? false : true,
         titleBarStyle: "hiddenInset",
         useContentSize: true,
         resizable: false,
@@ -127,6 +127,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
     topupWin = new BrowserWindow({
         parent: window,
         modal: true,
+        frame: false,
         show: false,
         width: winSize.width,
         height: winSize.height,
