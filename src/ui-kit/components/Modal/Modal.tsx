@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
 const Container = styled.div`
-    position: absolute;
+    position: fixed;
     top: 53px;
     height: 511px;
     width: 640px;
