@@ -8,7 +8,6 @@ import React, { ChangeEvent, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
-import * as _ from "lodash"
 
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
@@ -48,26 +47,20 @@ const displayFilterPrice = (amount?: number): string => {
 
 export const PriceFilter = observer(() => {
     const { proposals, config } = useStores()
-    const { perMinuteMax, perGibMax } = config.pricesCeiling
+    const { perMinuteMax, perGibMax } = config.priceCeiling
 
-    const [price, setPrice] = useState<{ perMinute: number; perGib: number }>({
-        perMinute: proposals.filter.pricePerMinute,
-        perGib: proposals.filter.pricePerGib,
+    const [price, setPrice] = useState<{ perMinute?: number; perGib?: number }>({
+        perMinute: config.filters.price?.perminute,
+        perGib: config.filters.price?.pergib,
     })
     useEffect(() => {
-        setPrice({ ...price, perMinute: proposals.filter.pricePerMinute, perGib: proposals.filter.pricePerGib })
-    }, [proposals.filter.createdOn])
+        setPrice({ ...price, perMinute: config.filters.price?.perminute, perGib: config.filters.price?.pergib })
+    }, [config.filters.price])
 
     if (!perMinuteMax || !perGibMax) {
         return <></>
     }
 
-    const changePerMinuteMaxDebounced = _.debounce((val: number) => {
-        proposals.setPricePerMinuteMaxFilter(val)
-    }, 500)
-    const changePerGibMaxDebounced = _.debounce((val: number) => {
-        proposals.setPricePerGibMaxFilter(val)
-    }, 500)
     return (
         <Container>
             <RangeContainer>
@@ -81,7 +74,7 @@ export const PriceFilter = observer(() => {
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
                         const pricePerMinute = event.target.valueAsNumber
                         setPrice({ ...price, perMinute: pricePerMinute })
-                        changePerMinuteMaxDebounced(pricePerMinute)
+                        proposals.setPricePerMinuteMaxFilterDebounced(pricePerMinute)
                     }}
                 />
             </RangeContainer>
@@ -96,7 +89,7 @@ export const PriceFilter = observer(() => {
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
                         const valueAsNumber = event.target.valueAsNumber
                         setPrice({ ...price, perGib: valueAsNumber })
-                        changePerGibMaxDebounced(valueAsNumber)
+                        proposals.setPricePerGibMaxFilterDebounced(valueAsNumber)
                     }}
                 />
             </RangeContainer>
