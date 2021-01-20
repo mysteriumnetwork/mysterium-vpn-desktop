@@ -18,13 +18,13 @@ const Container = styled.div`
 `
 
 export const ResetFilters = observer(() => {
-    const { proposals } = useStores()
+    const { config } = useStores()
 
     return (
         <Container>
             <Anchor
                 onClick={() => {
-                    proposals.resetFiltersToDefaults()
+                    config.resetFilters()
                 }}
             >
                 Reset all filters

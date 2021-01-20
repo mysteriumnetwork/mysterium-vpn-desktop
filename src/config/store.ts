@@ -5,21 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction, runInAction } from "mobx"
-import tequilapi, { DNSOption } from "mysterium-vpn-js"
+import tequilapi, { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
-import { DaemonStatusType } from "../daemon/store"
 import { log } from "../log/log"
+import { DaemonStatusType } from "../daemon/store"
 
 export interface Config {
-    desktop?: {
+    desktop: {
         "terms-agreed"?: {
             at?: string
             version?: string
         }
         dns?: DNSOption
+        filters?: ProposalFilters
     }
     payments?: {
         consumer?: {
@@ -29,23 +30,32 @@ export interface Config {
     }
 }
 
-export enum ConfigStatus {
-    ABSENT,
-    FETCHING,
-    FETCHED,
+export interface ProposalFilters {
+    price?: {
+        pergib?: number
+        perminute?: number
+    }
+    quality?: {
+        "include-failed"?: boolean
+        level?: QualityLevel
+    }
+    other?: {
+        country?: string
+        "no-access-policy"?: boolean
+        "ip-type"?: string
+    }
 }
 
-export interface PricesCeiling {
+export interface PriceCeiling {
     perMinuteMax: number
     perGibMax: number
 }
 
 export class ConfigStore {
     @observable
-    config: Config = {}
-
+    config: Config = { desktop: {} }
     @observable
-    configStatus: ConfigStatus = ConfigStatus.ABSENT
+    defaultConfig: Config = { desktop: {} }
 
     root: RootStore
 
@@ -63,21 +73,44 @@ export class ConfigStore {
                 }
             },
         )
-    }
-
-    @action
-    setConfigState = (cs: ConfigStatus) => {
-        this.configStatus = cs
+        reaction(
+            () => [this.config, this.defaultConfig],
+            async ([config, defaultConfig]) => {
+                if (config.desktop.filters?.price?.perminute == null) {
+                    // apply default filters
+                    this.resetFilters()
+                    return
+                }
+                if (defaultConfig.payments?.consumer?.["price-perminute-max"] == null) {
+                    // default config not loaded yet
+                    return
+                }
+                const perMinute = config.desktop.filters?.price?.perminute || 0
+                const perGib = config.desktop.filters?.price?.pergib || 0
+                if (perMinute > this.priceCeiling.perMinuteMax || perGib > this.priceCeiling.perGibMax) {
+                    log.info("Configured prices are outside maximum range, resetting filters...")
+                    this.resetFilters()
+                }
+            },
+        )
     }
 
     @action
     fetchConfig = async (): Promise<void> => {
-        this.setConfigState(ConfigStatus.FETCHING)
-        const config = await tequilapi.config()
+        const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
         runInAction(() => {
-            this.config = config.data
+            this.config = {
+                desktop: {},
+                ...config.data,
+            }
             log.info("Using config:", JSON.stringify(this.config))
-            this.setConfigState(ConfigStatus.FETCHED)
+        })
+        runInAction(() => {
+            this.defaultConfig = {
+                desktop: {},
+                ...defaultConfig.data,
+            }
+            log.info("Default node config:", JSON.stringify(this.defaultConfig))
         })
     }
 
@@ -117,10 +150,58 @@ export class ConfigStore {
     }
 
     @computed
-    get pricesCeiling(): PricesCeiling {
+    get priceCeiling(): PriceCeiling {
         return {
-            perMinuteMax: this.config.payments?.consumer?.["price-perminute-max"] || 0,
-            perGibMax: this.config.payments?.consumer?.["price-pergib-max"] || 0,
+            perMinuteMax: this.defaultConfig.payments?.consumer?.["price-perminute-max"] || 0,
+            perGibMax: this.defaultConfig.payments?.consumer?.["price-pergib-max"] || 0,
         }
+    }
+
+    @action
+    persistConfig = _.debounce(async () => {
+        const cfg = this.config
+        log.info("Persisting user configuration:", JSON.stringify(cfg))
+        await tequilapi.updateUserConfig({
+            data: cfg,
+        })
+        await this.fetchConfig()
+    }, 3_000)
+
+    @computed
+    get filters(): ProposalFilters {
+        return this.config.desktop?.filters || {}
+    }
+
+    @computed
+    get defaultFilters(): ProposalFilters {
+        const ceil = this.priceCeiling
+        return {
+            price: {
+                perminute: ceil ? ceil.perMinuteMax / 2 : undefined,
+                pergib: ceil ? ceil.perGibMax / 2 : undefined,
+            },
+            quality: {
+                level: QualityLevel.HIGH,
+                "include-failed": false,
+            },
+            other: {
+                "no-access-policy": true,
+            },
+        }
+    }
+
+    @action
+    setFiltersPartial = async (filters: ProposalFilters): Promise<void> => {
+        this.config.desktop.filters = _.merge({}, this.config.desktop.filters, filters)
+        this.persistConfig()
+    }
+
+    @action
+    resetFilters = async (): Promise<void> => {
+        if (!this.config.desktop) {
+            this.config.desktop = {}
+        }
+        this.config.desktop.filters = this.defaultFilters
+        this.persistConfig()
     }
 }
