@@ -19,6 +19,8 @@ import { sudoExec } from "../utils/sudo"
 import { uid } from "../utils/user"
 import { isDevelopment } from "../utils/env"
 
+import { Supervisor } from "./index"
+
 const isWin = platform() === "win32"
 
 function mystSockPath(): string {
@@ -28,11 +30,11 @@ function mystSockPath(): string {
     return "/var/run/myst.sock"
 }
 
-export class Supervisor {
+export class DarwinWinSupervisor implements Supervisor {
     conn?: Socket
 
     async connect(): Promise<void> {
-        log.info("Connecting to the supervisor...")
+        log.info("Connecting to the Darwin/Windows supervisor...")
         const mystSock = mystSockPath()
         return await new Promise((resolve, reject) => {
             this.conn = net
@@ -136,7 +138,7 @@ export class Supervisor {
             return
         }
         log.info(`Upgrading supervisor ${runningVersion} → ${bundledVersion}`)
-        return supervisor.install()
+        return this.install()
     }
 
     supervisorBin(): string {
@@ -181,7 +183,7 @@ export class Supervisor {
             mystBinaryName += ".exe"
         }
         const mystPath = staticAssetPath(mystBinaryName)
-        const mystProcess = spawn(mystPath, ["--ui.enable=false", "--testnet2", "--usermode", "--consumer", "daemon"], {
+        const mystProcess = spawn(mystPath, ["--ui.enable=false", "--testnet2", "--consumer", "daemon"], {
             detached: true, // Needed for unref to work correctly.
             stdio: "ignore", // Needed for unref to work correctly.
         })
@@ -198,5 +200,3 @@ export class Supervisor {
         return Promise.resolve()
     }
 }
-
-export const supervisor = new Supervisor()

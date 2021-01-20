@@ -11,8 +11,8 @@ import { remote } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
-import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
+import { Supervisor } from "../supervisor"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 

@@ -12,7 +12,7 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
-import { supervisor } from "../supervisor/supervisor"
+import { supervisor } from "../supervisor"
 import { analytics } from "../analytics/analytics-main"
 import { Category, TrayAction } from "../analytics/analytics"
 
@@ -60,7 +60,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
                 click: async (): Promise<void> => {
                     analytics.event(Category.Tray, TrayAction.Repair)
                     ipcWebDisconnect()
-                    await supervisor.install()
+                    await supervisor().install()
                 },
             },
             {

@@ -14,7 +14,7 @@ import { autoUpdater } from "electron-updater"
 
 import * as packageJson from "../../package.json"
 import { winSize, winSizeExt } from "../config"
-import { supervisor } from "../supervisor/supervisor"
+import { supervisor } from "../supervisor"
 import {
     initialize as initializeAnalytics,
     setupApp as setupAnalyticsForApp,
@@ -37,7 +37,7 @@ autoUpdater.logger = log
 // @ts-ignore
 autoUpdater.logger.transports.file.level = "info"
 
-global.supervisor = supervisor
+global.supervisor = supervisor()
 global.os = os.platform()
 
 // global reference to win (necessary to prevent window from being garbage collected)
@@ -191,8 +191,8 @@ app.on("activate", async () => {
 app.on("before-quit", () => (app.quitting = true))
 
 app.on("will-quit", async () => {
-    await supervisor.connect()
-    supervisor.killMyst()
+    await supervisor().connect()
+    supervisor().killMyst()
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
