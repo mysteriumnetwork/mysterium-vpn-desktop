@@ -7,7 +7,7 @@
 import React, { useRef } from "react"
 import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
-import { faEllipsisV, faHome, faRetweet, faSlidersH } from "@fortawesome/free-solid-svg-icons"
+import { faEllipsisV, faHome, faSlidersH } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { observer } from "mobx-react-lite"
 
@@ -66,20 +66,20 @@ const Money = styled.div`
 `
 
 export const NavBar: React.FC = observer(() => {
-    const { navigation, referral, identity } = useStores()
-    const { referrals: referralsActive, menu: menuActive } = navigation
+    const { navigation, identity } = useStores()
+    const { menu: menuActive } = navigation
     const clickHome = () => {
         navigation.hideModals()
     }
     const clickFilters = () => {
         navigation.toggleFilters()
     }
-    const clickReferrals = () => {
-        navigation.toggleReferrals()
-        if (!referralsActive) {
-            referral.generateToken()
-        }
-    }
+    // const clickReferrals = () => {
+    //     navigation.toggleReferrals()
+    //     if (!referralsActive) {
+    //         referral.generateToken()
+    //     }
+    // }
     const clickWallet = () => {
         navigation.toggleWallet()
     }
@@ -105,10 +105,11 @@ export const NavBar: React.FC = observer(() => {
             <NavigationButton onClick={clickFilters}>
                 <NavigationIcon icon={faSlidersH} size="1x" />
             </NavigationButton>
-            <NavigationButton onClick={clickReferrals}>
+            {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
+                /*<NavigationButton onClick={clickReferrals}>
                 <NavigationIcon icon={faRetweet} size="1x" />
                 <span style={{ marginLeft: 5 }}>Refer a friend</span>
-            </NavigationButton>
+            </NavigationButton>*/}
             <div style={{ marginLeft: "auto" }}>
                 <NavigationButton onClick={clickWallet}>
                     <Money>
