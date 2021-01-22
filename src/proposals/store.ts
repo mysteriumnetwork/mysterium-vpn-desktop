@@ -89,8 +89,8 @@ export class ProposalStore {
     }
 
     @computed
-    get configFilters(): ProposalFilters {
-        return this.root.config.filters
+    get filters(): ProposalFilters {
+        return this.root.filters.config
     }
 
     @action
@@ -153,7 +153,7 @@ export class ProposalStore {
     @computed
     get accessPolicyFiltered(): UIProposal[] {
         const input = this.proposalsWithMetrics
-        if (!this.configFilters.other?.["no-access-policy"]) {
+        if (!this.filters.other?.["no-access-policy"]) {
             return input
         }
         return input.filter((p) => !p.accessPolicies).sort(compareProposal)
@@ -186,7 +186,7 @@ export class ProposalStore {
 
     @action
     setPricePerMinuteMaxFilter(pricePerMinuteMax: number): void {
-        this.root.config.setFiltersPartial({
+        this.root.filters.setPartial({
             price: {
                 perminute: pricePerMinuteMax,
             },
@@ -199,7 +199,7 @@ export class ProposalStore {
 
     @action
     setPricePerGibMaxFilter(pricePerGibMax: number): void {
-        this.root.config.setFiltersPartial({
+        this.root.filters.setPartial({
             price: {
                 pergib: pricePerGibMax,
             },
@@ -214,12 +214,12 @@ export class ProposalStore {
     get toleratedPrices(): { perMinuteMax?: number; perGibMax?: number } {
         const tolerance = 0.000005 * decimalPart()
         let perMinuteMax
-        const filterPricePerMinuteMax = this.configFilters.price?.perminute
+        const filterPricePerMinuteMax = this.filters.price?.perminute
         if (filterPricePerMinuteMax !== undefined) {
             perMinuteMax = filterPricePerMinuteMax + (filterPricePerMinuteMax !== 0 ? tolerance : 0)
         }
         let perGibMax
-        const filterPricePerGibMax = this.configFilters.price?.pergib
+        const filterPricePerGibMax = this.filters.price?.pergib
         if (filterPricePerGibMax !== undefined) {
             perGibMax = filterPricePerGibMax + (filterPricePerGibMax !== 0 ? tolerance : 0)
         }
@@ -229,8 +229,8 @@ export class ProposalStore {
     @computed
     get priceFiltered(): UIProposal[] {
         const input = this.textFiltered
-        const filterPricePerMinuteMax = this.configFilters.price?.perminute
-        const filterPricePerGibMax = this.configFilters.price?.pergib
+        const filterPricePerMinuteMax = this.filters.price?.perminute
+        const filterPricePerGibMax = this.filters.price?.pergib
         if (filterPricePerMinuteMax == null && filterPricePerGibMax == null) {
             return input
         }
@@ -251,7 +251,7 @@ export class ProposalStore {
 
     @action
     setQualityFilter(level: QualityLevel): void {
-        this.root.config.setFiltersPartial({
+        this.root.filters.setPartial({
             quality: { level },
         })
         analytics.event(Category.Proposal, ProposalAction.QualityFilterLevel, level ? QualityLevel[level] : undefined)
@@ -259,7 +259,7 @@ export class ProposalStore {
 
     @action
     setIncludeFailed(includeFailed: boolean): void {
-        this.root.config.setFiltersPartial({
+        this.root.filters.setPartial({
             quality: {
                 "include-failed": includeFailed,
             },
@@ -270,8 +270,8 @@ export class ProposalStore {
     @computed
     get qualityFiltered(): UIProposal[] {
         const input = this.priceFiltered
-        const filterQuality = this.configFilters.quality?.level
-        const filterIncludeFailed = this.configFilters.quality?.["include-failed"]
+        const filterQuality = this.filters.quality?.level
+        const filterIncludeFailed = this.filters.quality?.["include-failed"]
         if (!filterQuality && !filterIncludeFailed) {
             return input
         }
@@ -299,7 +299,7 @@ export class ProposalStore {
 
     @action
     setIpTypeFilter(ipType?: string): void {
-        this.root.config.setFiltersPartial({
+        this.root.filters.setPartial({
             other: {
                 "ip-type": ipType,
             },
@@ -309,7 +309,7 @@ export class ProposalStore {
 
     @action
     toggleIpTypeFilter(ipType?: string): void {
-        this.setIpTypeFilter(this.configFilters.other?.["ip-type"] !== ipType ? ipType : "")
+        this.setIpTypeFilter(this.filters.other?.["ip-type"] !== ipType ? ipType : "")
         analytics.event(Category.Proposal, ProposalAction.IpTypeFilter, ipType)
     }
 
@@ -319,7 +319,7 @@ export class ProposalStore {
         if (!this.root.config.config.desktop.filters?.other?.["ip-type"]) {
             return input
         }
-        return input.filter((p) => p.nodeType === this.configFilters.other?.["ip-type"])
+        return input.filter((p) => p.nodeType === this.filters.other?.["ip-type"])
     }
 
     // #####################

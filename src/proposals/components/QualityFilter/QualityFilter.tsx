@@ -56,21 +56,21 @@ const displayQuality = (q?: QualityLevel): string => {
 }
 
 export const QualityFilter = observer(() => {
-    const { proposals, config } = useStores()
-    const quality = config.filters.quality?.level
+    const { proposals, filters } = useStores()
+    const quality = filters.config.quality?.level
     const qualityText = displayQuality(quality)
 
     const [range, setRange] = useState<{ quality?: QualityLevel }>({ quality })
     useEffect(() => {
-        setRange({ ...range, quality: config.filters.quality?.level })
-    }, [config.filters.quality?.level])
+        setRange({ ...range, quality: filters.config.quality?.level })
+    }, [filters.config.quality?.level])
 
     const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const val = event.target.valueAsNumber
         proposals.setQualityFilter(val)
         setRange({ ...range, quality: val })
     }
-    const includeFailed = config.filters.quality?.["include-failed"]
+    const includeFailed = filters.config.quality?.["include-failed"]
     return (
         <Container>
             <RangeContainer>

@@ -36,7 +36,7 @@ export const IpTypeFilter = observer(() => {
                     const toggleAction = (): void => {
                         proposals.toggleIpTypeFilter(ipType)
                     }
-                    const active = proposals.configFilters.other?.["ip-type"] === ipType
+                    const active = proposals.filters.other?.["ip-type"] === ipType
                     const count = ipTypeCounts[ipType]
                     const ipTypeDisplay = _.capitalize(ipType)
                     return (

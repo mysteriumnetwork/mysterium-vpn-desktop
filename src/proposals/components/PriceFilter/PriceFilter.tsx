@@ -35,7 +35,10 @@ const Range = styled.input`
 `
 
 const displayFilterPrice = (amount?: number): string => {
-    if (!amount) {
+    if (amount == null) {
+        return "unlimited"
+    }
+    if (amount == 0) {
         return "free"
     }
     const pricePerGibDisplay = fmtMoney({
@@ -46,20 +49,15 @@ const displayFilterPrice = (amount?: number): string => {
 }
 
 export const PriceFilter = observer(() => {
-    const { proposals, config } = useStores()
-    const { perMinuteMax, perGibMax } = config.priceCeiling
+    const { proposals, filters } = useStores()
 
     const [price, setPrice] = useState<{ perMinute?: number; perGib?: number }>({
-        perMinute: config.filters.price?.perminute,
-        perGib: config.filters.price?.pergib,
+        perMinute: filters.config.price?.perminute,
+        perGib: filters.config.price?.pergib,
     })
     useEffect(() => {
-        setPrice({ ...price, perMinute: config.filters.price?.perminute, perGib: config.filters.price?.pergib })
-    }, [config.filters.price])
-
-    if (!perMinuteMax || !perGibMax) {
-        return <></>
-    }
+        setPrice({ ...price, perMinute: filters.config.price?.perminute, perGib: filters.config.price?.pergib })
+    }, [filters.config.price])
 
     return (
         <Container>
@@ -68,7 +66,7 @@ export const PriceFilter = observer(() => {
                 <Range
                     type="range"
                     min={0}
-                    max={perMinuteMax}
+                    max={filters.priceCeiling?.perMinuteMax}
                     value={price.perMinute}
                     step={1000}
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
@@ -83,7 +81,7 @@ export const PriceFilter = observer(() => {
                 <Range
                     type="range"
                     min={0}
-                    max={perGibMax}
+                    max={filters.priceCeiling?.perGibMax}
                     value={price.perGib}
                     step={1000}
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
