@@ -21,12 +21,14 @@ import { FeedbackStore } from "./feedback/store"
 import { isDevelopment } from "./utils/env"
 import { RouterStore } from "./navigation/routerStore"
 import { ReferralStore } from "./referral/store"
+import { Filters } from "./config/filters"
 
 export class RootStore {
     navigation: NavigationStore
     router: RouterStore
     daemon: DaemonStore
     config: ConfigStore
+    filters: Filters
     identity: IdentityStore
     proposals: ProposalStore
     connection: ConnectionStore
@@ -42,6 +44,7 @@ export class RootStore {
         this.router = new RouterStore()
         this.daemon = new DaemonStore(this)
         this.config = new ConfigStore(this)
+        this.filters = new Filters(this)
         this.identity = new IdentityStore(this)
         this.proposals = new ProposalStore(this)
         this.connection = new ConnectionStore(this)
@@ -53,6 +56,7 @@ export class RootStore {
         this.navigation.setupReactions()
         this.daemon.setupReactions()
         this.config.setupReactions()
+        this.filters.setupReactions()
         this.identity.setupReactions()
         this.proposals.setupReactions()
         this.payment.setupReactions()

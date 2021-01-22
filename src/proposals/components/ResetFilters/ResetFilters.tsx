@@ -18,13 +18,13 @@ const Container = styled.div`
 `
 
 export const ResetFilters = observer(() => {
-    const { config } = useStores()
+    const { filters } = useStores()
 
     return (
         <Container>
             <Anchor
                 onClick={() => {
-                    config.resetFilters()
+                    filters.reset()
                 }}
             >
                 Reset all filters
