@@ -14,7 +14,6 @@ import { Flag } from "../Flag/Flag"
 const Container = styled.div`
     box-sizing: border-box;
     height: 72px;
-    background: #fff;
     box-shadow: inset 0 1px 1px #e6e6e6;
     display: flex;
     align-items: center;

@@ -59,7 +59,12 @@ const Money = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: bold;
     color: ${brandDarker};
+    svg line,
+    svg path {
+        stroke: ${brandDarker};
+    }
     span {
         padding-right: 4px;
     }

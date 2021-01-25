@@ -6,3 +6,4 @@
  */
 export const brand = "#853773"
 export const brandDarker = "#632462"
+export const brandLighter = "#c16aad"

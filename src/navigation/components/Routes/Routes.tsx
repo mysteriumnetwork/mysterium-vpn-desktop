@@ -41,6 +41,9 @@ const Main = styled.div`
     width: ${winSize.width}px;
     display: flex;
     flex-direction: column;
+
+    color: #404040;
+    background: #fff;
 `
 
 export const Routes: React.FC = observer(() => {
