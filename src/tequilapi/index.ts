@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { TequilapiClientFactory, TIMEOUT_DEFAULT } from "mysterium-vpn-js"
+import { TEQUILAPI_SSE_URL, TequilapiClientFactory, TIMEOUT_DEFAULT } from "mysterium-vpn-js"
 import { TequilapiClient } from "mysterium-vpn-js/lib/tequilapi-client"
 import { tequilapi as defaultTequilapiClient } from "mysterium-vpn-js/lib/tequilapi-client-factory"
 
@@ -15,6 +15,7 @@ const URL = `http://127.0.0.1`
 class TequilapiClientProvider {
     __defaultClient: TequilapiClient
     __customClient?: TequilapiClient = undefined
+    __customPort?: number
 
     constructor() {
         this.__defaultClient = defaultTequilapiClient
@@ -25,11 +26,19 @@ class TequilapiClientProvider {
         if (port === DEFAULT_TEQUILAPI_PORT) {
             return
         }
+        this.__customPort = port
         this.__customClient = new TequilapiClientFactory(`${URL}:${port}`, TIMEOUT_DEFAULT).build()
     }
 
     client(): TequilapiClient {
         return this.__customClient ? this.__customClient : this.__defaultClient
+    }
+
+    sseUrl(): string {
+        if (!this.__customPort) {
+            return TEQUILAPI_SSE_URL
+        }
+        return `${URL}:${this.__customPort}/events/state`
     }
 }
 
@@ -40,3 +49,5 @@ export const defaultTequilapi = (): TequilapiClient => defaultTequilapiClient
 export const tequilapi = (): TequilapiClient => tequilapiProvider.client()
 
 export const rebuildTequilapiClient = (port: number): void => tequilapiProvider.rebuildClient(port)
+
+export const sseUrl = (): string => tequilapiProvider.sseUrl()

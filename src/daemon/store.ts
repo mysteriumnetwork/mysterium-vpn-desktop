@@ -13,7 +13,7 @@ import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
-import { DEFAULT_TEQUILAPI_PORT, defaultTequilapi, rebuildTequilapiClient, tequilapiProvider } from "../tequilapi"
+import { DEFAULT_TEQUILAPI_PORT, defaultTequilapi, rebuildTequilapiClient, tequilapi } from "../tequilapi"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -84,7 +84,7 @@ export class DaemonStore {
         }
         this.setStatusLoading(true)
         try {
-            await tequilapiProvider.client().healthCheck(10000)
+            await tequilapi().healthCheck(10000)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
             log.error("Healthcheck failed:", err.message)
