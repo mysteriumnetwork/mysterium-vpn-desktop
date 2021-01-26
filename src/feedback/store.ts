@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import tequilapi from "mysterium-vpn-js"
 import { action, observable } from "mobx"
 import { Issue } from "mysterium-vpn-js/lib/feedback/issue"
 
 import { RootStore } from "../store"
+import { tequilapi } from "../tequilapi"
 
 export class FeedbackStore {
     root: RootStore
@@ -25,7 +25,7 @@ export class FeedbackStore {
     async reportIssue(issue: Issue): Promise<string> {
         this.setLoading(true)
         try {
-            const issueId = await tequilapi.reportIssue(issue)
+            const issueId = await tequilapi().reportIssue(issue)
             return issueId.issueId
         } finally {
             this.setLoading(false)

@@ -5,13 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction, runInAction } from "mobx"
-import tequilapi, { DNSOption, QualityLevel } from "mysterium-vpn-js"
+import { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { log } from "../log/log"
 import { DaemonStatusType } from "../daemon/store"
+import { tequilapi } from "../tequilapi"
 
 export interface Config {
     desktop: DesktopConfig
@@ -79,7 +80,7 @@ export class ConfigStore {
 
     @action
     fetchConfig = async (): Promise<void> => {
-        const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
+        const [config, defaultConfig] = await Promise.all([tequilapi().userConfig(), tequilapi().defaultConfig()])
         runInAction(() => {
             this.config = {
                 desktop: {},
@@ -107,7 +108,7 @@ export class ConfigStore {
                 },
             },
         }
-        await tequilapi.updateUserConfig({ data })
+        await tequilapi().updateUserConfig({ data })
         await this.fetchConfig()
         this.root.navigation.determineRoute()
     }
@@ -120,7 +121,7 @@ export class ConfigStore {
 
     @action
     setDnsOption = async (value: string): Promise<void> => {
-        await tequilapi.updateUserConfig({
+        await tequilapi().updateUserConfig({
             data: { "desktop.dns": value },
         })
         await this.fetchConfig()
@@ -135,7 +136,7 @@ export class ConfigStore {
     persistConfig = _.debounce(async () => {
         const cfg = this.config
         log.info("Persisting user configuration:", JSON.stringify(cfg))
-        await tequilapi.updateUserConfig({
+        await tequilapi().updateUserConfig({
             data: cfg,
         })
         await this.fetchConfig()

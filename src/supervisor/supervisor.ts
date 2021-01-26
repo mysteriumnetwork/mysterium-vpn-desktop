@@ -175,15 +175,31 @@ export class Supervisor {
 
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
-    startMyst(): Promise<void> {
+    startMyst(tequilApiPort: number): Promise<void> {
         let mystBinaryName = "bin/myst"
         if (isWin) {
             mystBinaryName += ".exe"
         }
+
         const mystPath = staticAssetPath(mystBinaryName)
-        const mystProcess = spawn(mystPath, ["--ui.enable=false", "--testnet2", "--usermode", "--consumer", "daemon"], {
-            detached: true, // Needed for unref to work correctly.
-            stdio: "ignore", // Needed for unref to work correctly.
+        const mystProcess = spawn(
+            mystPath,
+            [
+                "--ui.enable=false",
+                "--testnet2",
+                "--usermode",
+                "--consumer",
+                `--tequilapi.port=${tequilApiPort}`,
+                "daemon",
+            ],
+            {
+                detached: true, // Needed for unref to work correctly.
+                stdio: "ignore", // Needed for unref to work correctly.
+            },
+        )
+
+        mystProcess.stdout?.on("data", (d) => {
+            log.info(d)
         })
 
         // Unreference myst node process from main electron process which allow myst to run

@@ -84,7 +84,6 @@ export const StoreContext = React.createContext(rootStore)
 ipcRenderer.on(WebIpcListenChannels.Disconnect, async () => {
     await rootStore.connection.disconnect()
 })
-// enableLogging()
 
 configure({ enforceActions: "always" })
 

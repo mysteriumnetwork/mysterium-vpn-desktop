@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import tequilapi, {
+import {
     ConnectionStatus,
     pricePerGiB,
     pricePerMinute,
@@ -22,6 +22,7 @@ import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { ProposalFilters } from "../config/store"
+import { tequilapi } from "../tequilapi"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -100,7 +101,7 @@ export class ProposalStore {
         }
         this.setLoading(true)
         try {
-            const proposals = await tequilapi
+            const proposals = await tequilapi()
                 .findProposals({ serviceType: supportedServiceType })
                 .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
@@ -117,7 +118,7 @@ export class ProposalStore {
         }
         this.setLoading(true)
         try {
-            const metrics = await tequilapi.proposalsQuality()
+            const metrics = await tequilapi().proposalsQuality()
             if (metrics.length) {
                 this.setMetrics(metrics)
             }

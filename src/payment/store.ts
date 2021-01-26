@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, runInAction, when } from "mobx"
-import tequilapi, {
+import {
     Currency,
     Fees,
     HttpTequilapiClient,
@@ -17,6 +17,7 @@ import retry from "async-retry"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { log } from "../log/log"
+import { tequilapi } from "../tequilapi"
 
 import { Money } from "./exchange"
 import { fmtMoney } from "./display"
@@ -67,7 +68,7 @@ export class PaymentStore {
 
     @action
     async fetchTransactorFees(): Promise<void> {
-        const fees = await tequilapi.transactorFees()
+        const fees = await tequilapi().transactorFees()
         runInAction(() => {
             this.fees = fees
         })
@@ -75,7 +76,7 @@ export class PaymentStore {
 
     @action
     async fetchMystToUsdRate(): Promise<void> {
-        const res = await (tequilapi as HttpTequilapiClient).http.get("/exchange/myst/usd")
+        const res = await (tequilapi() as HttpTequilapiClient).http.get("/exchange/myst/usd")
         runInAction(() => {
             this.mystToUsdRate = res
         })
@@ -83,7 +84,7 @@ export class PaymentStore {
 
     @action
     async fetchCurrencies(): Promise<void> {
-        const currencies = await tequilapi.getPaymentOrderCurrencies()
+        const currencies = await tequilapi().getPaymentOrderCurrencies()
         runInAction(() => {
             this.currencies = currencies
             if (!this.paymentCurrency) {
@@ -103,7 +104,7 @@ export class PaymentStore {
 
     @action
     async fetchPaymentOptions(): Promise<void> {
-        const options = await tequilapi.getPaymentOrderOptions()
+        const options = await tequilapi().getPaymentOrderOptions()
         runInAction(() => {
             this.orderOptions = options
         })
@@ -137,7 +138,7 @@ export class PaymentStore {
         if (!this.paymentCurrency) {
             return
         }
-        const order = await tequilapi.createPaymentOrder(id, {
+        const order = await tequilapi().createPaymentOrder(id, {
             mystAmount: this.topupAmount,
             payCurrency: this.paymentCurrency,
             lightningNetwork: this.lightningNetwork,
@@ -152,7 +153,7 @@ export class PaymentStore {
                 if (!this.order) {
                     return
                 }
-                const order = await tequilapi.getPaymentOrder(id, this.order.id)
+                const order = await tequilapi().getPaymentOrder(id, this.order.id)
                 runInAction(() => {
                     this.order = order
                     log.info("Updated order", this.order)

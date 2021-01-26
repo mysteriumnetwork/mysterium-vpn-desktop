@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
-import tequilapi, { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
+import { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
 
@@ -17,6 +17,7 @@ import { MainIpcListenChannels } from "../main/ipc"
 import { analytics } from "../analytics/analytics-ui"
 import { AppAction, Category, ConnectAction } from "../analytics/analytics"
 import { log } from "../log/log"
+import { tequilapi } from "../tequilapi"
 
 export class ConnectionStore {
     @observable
@@ -102,7 +103,7 @@ export class ConnectionStore {
         this.setConnectInProgress(true)
         this.setGracePeriod()
         try {
-            await tequilapi.connectionCreate(
+            await tequilapi().connectionCreate(
                 {
                     consumerId: this.root.identity.identity.id,
                     providerId: this.root.proposals.active.providerId,
@@ -127,7 +128,7 @@ export class ConnectionStore {
             if (this.connectInProgress) {
                 return
             }
-            const conn = await tequilapi.connectionStatus()
+            const conn = await tequilapi().connectionStatus()
             if (this.connectInProgress) {
                 return
             }
@@ -143,7 +144,7 @@ export class ConnectionStore {
         analytics.event(Category.Connection, ConnectAction.Disconnect, this.root.connection.location?.country)
         this.setGracePeriod()
         try {
-            await tequilapi.connectionCancel()
+            await tequilapi().connectionCancel()
         } catch (err) {
             log.error("Failed to disconnect", err.message)
         }
@@ -152,7 +153,7 @@ export class ConnectionStore {
     @action
     async resolveOriginalLocation(): Promise<void> {
         try {
-            const location = await tequilapi.location()
+            const location = await tequilapi().location()
             this.setOriginalLocation(location)
         } catch (err) {
             log.error("Failed to lookup original location", err.message)
@@ -185,7 +186,7 @@ export class ConnectionStore {
         }
         await retry(
             async () => {
-                location = await tequilapi.connectionLocation()
+                location = await tequilapi().connectionLocation()
             },
             {
                 retries: 5,
