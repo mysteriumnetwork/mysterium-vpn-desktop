@@ -58,6 +58,8 @@ const installExtensions = async (): Promise<void | any[]> => {
     return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(log.debug) // eslint-disable-line no-console
 }
 
+const appInstanceLock = app.requestSingleInstanceLock()
+
 const createWindow = async (): Promise<BrowserWindow> => {
     if (isDevelopment()) {
         await installExtensions()
@@ -162,15 +164,27 @@ const createWindow = async (): Promise<BrowserWindow> => {
     return window
 }
 
-// create main BrowserWindow when electron is ready
-app.on("ready", async () => {
-    win = await createWindow()
-    tray = createTray(app, win)
-    initializeAnalytics()
-    setupAnalyticsGlobals()
-    setupAnalyticsForApp(app)
-    autoUpdater.checkForUpdatesAndNotify()
-})
+if (!appInstanceLock) {
+    app.quit()
+} else {
+    app.on("second-instance", async () => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (win) {
+            if (win.isMinimized()) win.restore()
+            win.focus()
+        }
+    })
+
+    // create main BrowserWindow when electron is ready
+    app.on("ready", async () => {
+        win = await createWindow()
+        tray = createTray(app, win)
+        initializeAnalytics()
+        setupAnalyticsGlobals()
+        setupAnalyticsForApp(app)
+        autoUpdater.checkForUpdatesAndNotify()
+    })
+}
 
 // quit application when all windows are closed
 app.on("window-all-closed", () => {
