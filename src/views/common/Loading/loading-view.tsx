@@ -8,7 +8,7 @@ import React from "react"
 import styled from "styled-components"
 
 import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
-import { Spinner } from "../../../ui-kit/components/Spinner/spinner"
+import { Spinner } from "../../../ui-kit/components/Spinner/Spinner"
 
 const Container = styled.div`
     background: url(${welcomeBg}) no-repeat, #8e3061;
