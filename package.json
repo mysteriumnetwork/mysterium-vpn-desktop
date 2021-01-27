@@ -23,7 +23,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "@mysteriumnetwork/node": "0.41.3",
+    "@mysteriumnetwork/node": "0.41.5",
     "@mysteriumnetwork/terms": "^0.0.27",
     "@sentry/electron": "^2.0.1",
     "@types/portscanner": "^2.1.0",

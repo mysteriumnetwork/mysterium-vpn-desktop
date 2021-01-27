@@ -1053,10 +1053,10 @@
   dependencies:
     prop-types "^15.7.2"
 
-"@mysteriumnetwork/node@0.41.3":
-  version "0.41.3"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.41.3.tgz#67cd892ee14c5bf14ef87ee22169e471bc4cacb7"
-  integrity sha512-9GX4UOLwQStfh4YMchbP2l6UETVsG7nt6pYBLuNZ8ZzeZN8GqIqCApBoOx0j3DTCfdoDBv+sluunwr/34eBurg==
+"@mysteriumnetwork/node@0.41.5":
+  version "0.41.5"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.41.5.tgz#2e99eccdb5b9552bd3bfd605a2ede3b416ef9cbb"
+  integrity sha512-YYrpJhID/twdxhtb6UkdZMkgjJEGzM4cO2L1r808h3ZFD11Ad9n7lSuZ8n71VOuETQqIntdcyBYruMHYJFDyig==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
