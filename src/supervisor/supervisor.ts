@@ -102,6 +102,11 @@ export class Supervisor {
         return this.request("version") as Promise<string>
     }
 
+    setSupervisorTequilapiPort(port: number): Promise<string> {
+        log.info(`myst supervisor tequilapi port set to: ${port}`)
+        return this.request(`ta-set-port ${port}`) as Promise<string>
+    }
+
     async upgrade(): Promise<void> {
         let bundledVersion = ""
         try {
@@ -180,6 +185,8 @@ export class Supervisor {
         if (isWin) {
             mystBinaryName += ".exe"
         }
+
+        this.setSupervisorTequilapiPort(tequilApiPort)
 
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
