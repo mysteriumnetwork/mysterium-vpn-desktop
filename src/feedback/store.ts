@@ -25,7 +25,7 @@ export class FeedbackStore {
     async reportIssue(issue: Issue): Promise<string> {
         this.setLoading(true)
         try {
-            const issueId = await tequilapi().reportIssue(issue)
+            const issueId = await tequilapi.reportIssue(issue)
             return issueId.issueId
         } finally {
             this.setLoading(false)

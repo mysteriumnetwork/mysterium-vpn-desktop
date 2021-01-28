@@ -7,13 +7,12 @@
 
 import { action, observable, reaction, when } from "mobx"
 import { remote } from "electron"
-import portscanner from "portscanner"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
-import { DEFAULT_TEQUILAPI_PORT, defaultTequilapi, rebuildTequilapiClient, tequilapi } from "../tequilapi"
+import { TEQUILAPI_PORT, tequilapi } from "../tequilapi"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -30,9 +29,6 @@ export class DaemonStore {
 
     @observable
     starting = false
-
-    @observable
-    tequilApiPort = DEFAULT_TEQUILAPI_PORT
 
     eventSource?: EventSource
 
@@ -64,12 +60,6 @@ export class DaemonStore {
                 }
             },
         )
-        reaction(
-            () => this.tequilApiPort,
-            async (port: number) => {
-                rebuildTequilapiClient(port)
-            },
-        )
     }
 
     @action
@@ -84,7 +74,7 @@ export class DaemonStore {
         }
         this.setStatusLoading(true)
         try {
-            await tequilapi().healthCheck(10000)
+            await tequilapi.healthCheck(10000)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
             log.error("Healthcheck failed:", err.message)
@@ -107,25 +97,9 @@ export class DaemonStore {
             await this.supervisorInstall()
         }
 
-        try {
-            // maybe 4050 is used by already running myst node
-            await defaultTequilapi().healthCheck()
-        } catch (err) {
-            // if not, discover port
-            const port = await this.discoverTequilApiPort(DEFAULT_TEQUILAPI_PORT, DEFAULT_TEQUILAPI_PORT + 20)
-            log.info(`Port: ${port} discovered for tequilApi`)
-            this.setTequilApiPort(port)
-        }
-
         await supervisor.upgrade()
-        await supervisor.startMyst(this.tequilApiPort)
+        await supervisor.startMyst(TEQUILAPI_PORT)
         this.setStarting(false)
-    }
-
-    @action
-    async discoverTequilApiPort(from: number, to: number): Promise<number> {
-        log.info(`Discovering free port for tequilApi: [${from} - ${to}]`)
-        return portscanner.findAPortNotInUse(from, to, "127.0.0.1")
     }
 
     @action
@@ -150,10 +124,5 @@ export class DaemonStore {
     @action
     setStatusLoading = (s: boolean): void => {
         this.statusLoading = s
-    }
-
-    @action
-    setTequilApiPort = (p: number): void => {
-        this.tequilApiPort = p
     }
 }

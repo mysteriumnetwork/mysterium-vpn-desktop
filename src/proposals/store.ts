@@ -101,7 +101,7 @@ export class ProposalStore {
         }
         this.setLoading(true)
         try {
-            const proposals = await tequilapi()
+            const proposals = await tequilapi
                 .findProposals({ serviceType: supportedServiceType })
                 .then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
@@ -118,7 +118,7 @@ export class ProposalStore {
         }
         this.setLoading(true)
         try {
-            const metrics = await tequilapi().proposalsQuality()
+            const metrics = await tequilapi.proposalsQuality()
             if (metrics.length) {
                 this.setMetrics(metrics)
             }

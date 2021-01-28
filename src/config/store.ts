@@ -80,7 +80,7 @@ export class ConfigStore {
 
     @action
     fetchConfig = async (): Promise<void> => {
-        const [config, defaultConfig] = await Promise.all([tequilapi().userConfig(), tequilapi().defaultConfig()])
+        const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
         runInAction(() => {
             this.config = {
                 desktop: {},
@@ -108,7 +108,7 @@ export class ConfigStore {
                 },
             },
         }
-        await tequilapi().updateUserConfig({ data })
+        await tequilapi.updateUserConfig({ data })
         await this.fetchConfig()
         this.root.navigation.determineRoute()
     }
@@ -121,7 +121,7 @@ export class ConfigStore {
 
     @action
     setDnsOption = async (value: string): Promise<void> => {
-        await tequilapi().updateUserConfig({
+        await tequilapi.updateUserConfig({
             data: { "desktop.dns": value },
         })
         await this.fetchConfig()
@@ -136,7 +136,7 @@ export class ConfigStore {
     persistConfig = _.debounce(async () => {
         const cfg = this.config
         log.info("Persisting user configuration:", JSON.stringify(cfg))
-        await tequilapi().updateUserConfig({
+        await tequilapi.updateUserConfig({
             data: cfg,
         })
         await this.fetchConfig()

@@ -42,7 +42,7 @@ export class ReferralStore {
         return _.throttle(async () => {
             this.setIsLoading(true)
             try {
-                const tokenResponse = await tequilapi().getReferralToken(id)
+                const tokenResponse = await tequilapi.getReferralToken(id)
                 this.setToken(tokenResponse.token)
             } catch (err) {
                 this.setMessage(parseError(err))

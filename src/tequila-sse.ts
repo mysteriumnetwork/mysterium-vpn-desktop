@@ -14,7 +14,7 @@ import { sseUrl } from "./tequilapi"
 export const eventBus = new EventEmitter()
 
 export const sseConnect = (): EventSource => {
-    const es = new EventSource(sseUrl())
+    const es = new EventSource(sseUrl)
     es.onerror = (evt): void => {
         log.error("[sse error]", evt)
     }
