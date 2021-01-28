@@ -50,12 +50,12 @@ let tray: Tray | null
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const installExtensions = async (): Promise<void | any[]> => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const installer = require("electron-devtools-installer")
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } = require("electron-devtools-installer")
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
-    const extensions = ["REACT_DEVELOPER_TOOLS"]
+    const extensions = [REACT_DEVELOPER_TOOLS]
 
     // eslint-disable-next-line prettier/prettier
-    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(log.debug) // eslint-disable-line no-console
+    return Promise.all(extensions.map((extension) => installExtension(extension, forceDownload))).catch((e) => log.debug(e)) // eslint-disable-line no-console
 }
 
 const createWindow = async (): Promise<BrowserWindow> => {

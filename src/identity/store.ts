@@ -4,13 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import tequilapi, { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
+import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
 import { action, observable, reaction } from "mobx"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { analytics } from "../analytics/analytics-ui"
 import { Category, IdentityAction, WalletAction } from "../analytics/analytics"
+import { tequilapi } from "../tequilapi"
 
 import { eligibleForRegistration, registered } from "./identity"
 

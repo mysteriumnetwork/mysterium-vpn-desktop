@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, runInAction, when } from "mobx"
-import tequilapi, {
+import {
     Currency,
     Fees,
     HttpTequilapiClient,
@@ -17,6 +17,7 @@ import retry from "async-retry"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { log } from "../log/log"
+import { tequilapi } from "../tequilapi"
 
 import { Money } from "./exchange"
 import { fmtMoney } from "./display"

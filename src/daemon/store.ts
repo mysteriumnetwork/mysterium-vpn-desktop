@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import tequilapi from "mysterium-vpn-js"
 import { action, observable, reaction, when } from "mobx"
 import { remote } from "electron"
 
@@ -13,6 +12,7 @@ import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
+import { TEQUILAPI_PORT, tequilapi } from "../tequilapi"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -98,7 +98,7 @@ export class DaemonStore {
         }
 
         await supervisor.upgrade()
-        await supervisor.startMyst()
+        await supervisor.startMyst(TEQUILAPI_PORT)
         this.setStarting(false)
     }
 

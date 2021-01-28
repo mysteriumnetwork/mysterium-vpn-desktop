@@ -5,13 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction, runInAction } from "mobx"
-import tequilapi, { DNSOption, QualityLevel } from "mysterium-vpn-js"
+import { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { log } from "../log/log"
 import { DaemonStatusType } from "../daemon/store"
+import { tequilapi } from "../tequilapi"
 
 export interface Config {
     desktop: DesktopConfig

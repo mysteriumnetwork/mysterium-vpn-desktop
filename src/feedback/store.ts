@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import tequilapi from "mysterium-vpn-js"
 import { action, observable } from "mobx"
 import { Issue } from "mysterium-vpn-js/lib/feedback/issue"
 
 import { RootStore } from "../store"
+import { tequilapi } from "../tequilapi"
 
 export class FeedbackStore {
     root: RootStore

@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import tequilapi from "mysterium-vpn-js"
 import { action, observable } from "mobx"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { log } from "../log/log"
 import { parseError } from "../errors/parse"
+import { tequilapi } from "../tequilapi"
 
 export class ReferralStore {
     @observable

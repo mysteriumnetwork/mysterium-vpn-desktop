@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, reaction, runInAction } from "mobx"
-import tequilapi, { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
+import { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
 
@@ -17,6 +17,7 @@ import { MainIpcListenChannels } from "../main/ipc"
 import { analytics } from "../analytics/analytics-ui"
 import { AppAction, Category, ConnectAction } from "../analytics/analytics"
 import { log } from "../log/log"
+import { tequilapi } from "../tequilapi"
 
 export class ConnectionStore {
     @observable

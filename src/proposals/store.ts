@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import tequilapi, {
+import {
     ConnectionStatus,
     pricePerGiB,
     pricePerMinute,
@@ -22,6 +22,7 @@ import { Category, ProposalAction } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { ProposalFilters } from "../config/store"
+import { tequilapi } from "../tequilapi"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 

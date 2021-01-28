@@ -6,14 +6,15 @@
  */
 import { EventEmitter } from "events"
 
-import { parseSSEResponse, TEQUILAPI_SSE_URL } from "mysterium-vpn-js"
+import { parseSSEResponse } from "mysterium-vpn-js"
 
 import { log } from "./log/log"
+import { sseUrl } from "./tequilapi"
 
 export const eventBus = new EventEmitter()
 
 export const sseConnect = (): EventSource => {
-    const es = new EventSource(TEQUILAPI_SSE_URL)
+    const es = new EventSource(sseUrl)
     es.onerror = (evt): void => {
         log.error("[sse error]", evt)
     }
