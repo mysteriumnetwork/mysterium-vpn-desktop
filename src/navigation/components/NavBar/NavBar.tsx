@@ -16,6 +16,7 @@ import { useStores } from "../../../store"
 import { brandDarker } from "../../../ui-kit/colors"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
 import { fmtMoney } from "../../../payment/display"
+import { locations } from "../../locations"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -71,13 +72,13 @@ const Money = styled.div`
 `
 
 export const NavBar: React.FC = observer(() => {
-    const { navigation, identity } = useStores()
+    const { navigation, router, identity } = useStores()
     const { menu: menuActive } = navigation
     const clickHome = () => {
-        navigation.hideModals()
+        navigation.goHome()
     }
     const clickFilters = () => {
-        navigation.toggleFilters()
+        router.push(locations.preferencesFilters)
     }
     // const clickReferrals = () => {
     //     navigation.toggleReferrals()
@@ -86,7 +87,7 @@ export const NavBar: React.FC = observer(() => {
     //     }
     // }
     const clickWallet = () => {
-        navigation.toggleWallet()
+        router.push(locations.wallet)
     }
     const balance = fmtMoney(
         {

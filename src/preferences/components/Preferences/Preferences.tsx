@@ -13,9 +13,10 @@ import { textHuge } from "../../../ui-kit/typography"
 import { useStores } from "../../../store"
 
 const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    background: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 `
 
 const Title = styled.div`

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, observable, reaction } from "mobx"
+import { action, computed, observable, observe, reaction } from "mobx"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
@@ -22,25 +22,11 @@ const connectionInProgress = (status: ConnectionStatus): boolean => {
 
 export class NavigationStore {
     @observable
-    consumer = true
-    @observable
     welcome = true
     @observable
     menu = false
     @observable
-    preferences = false
-    @observable
     chat = false
-    @observable
-    report = false
-
-    //top navbar bar
-    @observable
-    wallet = false
-    @observable
-    filters = false
-    @observable
-    referrals = false
 
     root: RootStore
 
@@ -49,8 +35,20 @@ export class NavigationStore {
     }
 
     setupReactions(): void {
-        reaction(() => this.root.connection.status, this.determineRoute)
-        reaction(() => this.root.identity.identity?.registrationStatus, this.determineRoute)
+        observe(
+            computed(() => this.root.identity.identity?.registrationStatus),
+            ({ oldValue, newValue }) => {
+                if (oldValue != newValue) {
+                    this.determineRoute()
+                }
+            },
+        )
+        reaction(
+            () => this.root.connection.status,
+            () => {
+                this.determineRoute()
+            },
+        )
         reaction(
             () => this.chat,
             (chatOpen) => {
@@ -62,6 +60,15 @@ export class NavigationStore {
     @action
     showLoading = (): void => {
         this.root.router.push(locations.loading)
+    }
+
+    @action
+    goHome = (): void => {
+        if (connectionInProgress(this.root.connection.status)) {
+            this.root.router.push(locations.connection)
+        } else {
+            this.root.router.push(locations.proposals)
+        }
     }
 
     @action
@@ -109,49 +116,6 @@ export class NavigationStore {
     }
 
     @action
-    toggleWallet = (): void => {
-        this.wallet = !this.wallet
-        if (this.filters) {
-            this.filters = false
-        }
-        if (this.referrals) {
-            this.referrals = false
-        }
-    }
-
-    @action
-    toggleFilters = (): void => {
-        this.filters = !this.filters
-        if (this.wallet) {
-            this.wallet = false
-        }
-        if (this.referrals) {
-            this.referrals = false
-        }
-    }
-
-    @action
-    toggleReferrals = (): void => {
-        this.referrals = !this.referrals
-        if (this.wallet) {
-            this.wallet = false
-        }
-        if (this.filters) {
-            this.filters = false
-        }
-    }
-
-    @action
-    hideModals = (): void => {
-        this.filters = false
-        this.referrals = false
-        this.wallet = false
-        this.menu = false
-        this.preferences = false
-        this.report = false
-    }
-
-    @action
     showMenu = (show = true): void => {
         this.menu = show
     }
@@ -159,16 +123,6 @@ export class NavigationStore {
     @action
     openChat = (open = true): void => {
         this.chat = open
-    }
-
-    @action
-    openReportIssue = (open = true): void => {
-        this.report = open
-    }
-
-    @action
-    openPreferences = (open = true): void => {
-        this.preferences = open
     }
 
     @action

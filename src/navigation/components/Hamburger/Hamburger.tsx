@@ -14,6 +14,7 @@ import { remote, shell } from "electron"
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
 import { brandDarker } from "../../../ui-kit/colors"
+import { locations } from "../../locations"
 
 type Div = React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
 
@@ -22,7 +23,7 @@ export interface HamburgerProps {
 }
 
 export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: buttonRef }) => {
-    const { navigation } = useStores()
+    const { navigation, router } = useStores()
     const dropdownMenuRef = useRef<HTMLDivElement>(null)
     const handleClickOutside: EventListener = (event) => {
         const isOutsideClick =
@@ -49,7 +50,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
             <MenuItem
                 onClick={() => {
                     navigation.showMenu(false)
-                    navigation.openPreferences()
+                    router.push(locations.preferences)
                 }}
             >
                 Preferences
@@ -58,7 +59,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
             <MenuItem
                 onClick={() => {
                     navigation.showMenu(false)
-                    navigation.openReportIssue(true)
+                    router.push(locations.reportIssue)
                 }}
             >
                 Report an issue

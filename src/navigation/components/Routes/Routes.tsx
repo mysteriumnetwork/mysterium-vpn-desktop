@@ -18,7 +18,6 @@ import { SelectProposalView } from "../../../views/consumer/SelectProposal/Selec
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
 import { useStores } from "../../../store"
-import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { NavBar } from "../NavBar/NavBar"
 import { locations } from "../../locations"
@@ -89,29 +88,30 @@ export const Routes: React.FC = observer(() => {
                             <NavBar />
                             <ConnectedView />
                         </Route>
+                        <Route path={locations.preferences} exact>
+                            <NavBar />
+                            <Preferences />
+                        </Route>
+                        <Route path={locations.preferencesFilters} exact>
+                            <NavBar />
+                            <FiltersView />
+                        </Route>
+                        <Route path={locations.referrals}>
+                            <NavBar />
+                            <ReferralView />
+                        </Route>
                         <Route path={locations.wallet}>
                             <NavBar />
                             <WalletView />
+                        </Route>
+                        <Route path={locations.reportIssue}>
+                            <NavBar />
+                            <ReportIssueView />
                         </Route>
                         <Route path={locations.loading}>
                             <LoadingView />
                         </Route>
                     </Switch>
-                    <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
-                        <WalletView />
-                    </Modal>
-                    <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
-                        <FiltersView />
-                    </Modal>
-                    <Modal visible={navigation.referrals} onClose={navigation.toggleReferrals}>
-                        <ReferralView />
-                    </Modal>
-                    <Modal visible={navigation.report} onClose={() => navigation.openReportIssue(false)} light>
-                        <ReportIssueView />
-                    </Modal>
-                    <Modal visible={navigation.preferences} onClose={() => navigation.openPreferences(false)} light>
-                        <Preferences />
-                    </Modal>
                 </Main>
                 {navigation.chat && <Chat />}
             </WinContents>

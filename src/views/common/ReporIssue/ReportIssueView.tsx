@@ -19,9 +19,10 @@ import { useStores } from "../../../store"
 import { log } from "../../../log/log"
 
 const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    background: #fff;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 `
 
 const Title = styled.div`
@@ -59,7 +60,7 @@ const FormControls = styled.div`
 `
 
 export const ReportIssueView: React.FC = observer(() => {
-    const { feedback, navigation } = useStores()
+    const { feedback, router } = useStores()
     const { addToast } = useToasts()
     const email = useRef<HTMLInputElement>(null)
     const description = useRef<HTMLTextAreaElement>(null)
@@ -78,7 +79,7 @@ export const ReportIssueView: React.FC = observer(() => {
                 description: description.current?.value ?? "",
             })
             addToast(`Thanks for the feedback! Issue reference #${issueId}`, { appearance: "success" })
-            navigation.openReportIssue(false)
+            router.history?.goBack()
             clearInputs()
         } catch (err) {
             addToast("Could not submit the report.\nPlease try again later.", {

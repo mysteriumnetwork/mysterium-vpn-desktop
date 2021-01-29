@@ -99,15 +99,7 @@ export class IdentityStore {
             return
         }
         const matchingId = identities.find((id) => id.id == this.identity?.id)
-        if (!matchingId) {
-            this.setIdentity(undefined)
-            return
-        }
-        this.identity.balance = matchingId.balance
-        this.identity.registrationStatus = matchingId.registrationStatus
-        if (registered(matchingId)) {
-            this.root.navigation.determineRoute()
-        }
+        this.setIdentity(matchingId)
     }
 
     @action
