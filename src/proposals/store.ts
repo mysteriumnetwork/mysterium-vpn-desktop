@@ -5,14 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import {
-    ConnectionStatus,
-    pricePerGiB,
-    pricePerMinute,
-    ProposalMetrics,
-    QualityCalculator,
-    QualityLevel,
-} from "mysterium-vpn-js"
+import { ConnectionStatus, pricePerGiB, ProposalMetrics, QualityCalculator, QualityLevel } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
@@ -23,6 +16,7 @@ import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
+import { pricePerHour } from "../payment/rate"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -186,17 +180,17 @@ export class ProposalStore {
     // #####################
 
     @action
-    setPricePerMinuteMaxFilter(pricePerMinuteMax: number): void {
+    setPricePerHourMaxFilter(pricePerHourMax: number): void {
         this.root.filters.setPartial({
             price: {
-                perminute: pricePerMinuteMax,
+                perhour: pricePerHourMax,
             },
         })
-        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerMinute, String(pricePerMinuteMax))
+        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerHour, String(pricePerHourMax))
     }
 
     @action
-    setPricePerMinuteMaxFilterDebounced = _.debounce(this.setPricePerMinuteMaxFilter, 800)
+    setPricePerHourMaxFilterDebounced = _.debounce(this.setPricePerHourMaxFilter, 800)
 
     @action
     setPricePerGibMaxFilter(pricePerGibMax: number): void {
@@ -212,36 +206,36 @@ export class ProposalStore {
     setPricePerGibMaxFilterDebounced = _.debounce(this.setPricePerGibMaxFilter, 800)
 
     @computed
-    get toleratedPrices(): { perMinuteMax?: number; perGibMax?: number } {
+    get toleratedPrices(): { perHourMax?: number; perGibMax?: number } {
         const tolerance = 0.000005 * decimalPart()
-        let perMinuteMax
-        const filterPricePerMinuteMax = this.filters.price?.perminute
-        if (filterPricePerMinuteMax !== undefined) {
-            perMinuteMax = filterPricePerMinuteMax + (filterPricePerMinuteMax !== 0 ? tolerance : 0)
+        let perHourMax
+        const filterPricePerHourMax = this.filters.price?.perhour
+        if (filterPricePerHourMax !== undefined) {
+            perHourMax = filterPricePerHourMax + (filterPricePerHourMax !== 0 ? tolerance : 0)
         }
         let perGibMax
         const filterPricePerGibMax = this.filters.price?.pergib
         if (filterPricePerGibMax !== undefined) {
             perGibMax = filterPricePerGibMax + (filterPricePerGibMax !== 0 ? tolerance : 0)
         }
-        return { perMinuteMax, perGibMax }
+        return { perHourMax: perHourMax, perGibMax }
     }
 
     @computed
     get priceFiltered(): UIProposal[] {
         const input = this.textFiltered
-        const filterPricePerMinuteMax = this.filters.price?.perminute
+        const filterPricePerHourMax = this.filters.price?.perhour
         const filterPricePerGibMax = this.filters.price?.pergib
-        if (filterPricePerMinuteMax == null && filterPricePerGibMax == null) {
+        if (filterPricePerHourMax == null && filterPricePerGibMax == null) {
             return input
         }
         return input.filter((p) => {
-            const pricePerMin = pricePerMinute(p.paymentMethod)
-            const pricePerGib = pricePerGiB(p.paymentMethod)
+            const proposalPricePerHour = pricePerHour(p.paymentMethod).amount / 60
+            const pricePerGib = pricePerGiB(p.paymentMethod).amount
             const tolerated = this.toleratedPrices
             return (
-                (tolerated.perMinuteMax === undefined || pricePerMin.amount <= tolerated.perMinuteMax) &&
-                (tolerated.perGibMax === undefined || pricePerGib.amount <= tolerated.perGibMax)
+                (tolerated.perHourMax === undefined || proposalPricePerHour <= tolerated.perHourMax) &&
+                (tolerated.perGibMax === undefined || pricePerGib <= tolerated.perGibMax)
             )
         })
     }

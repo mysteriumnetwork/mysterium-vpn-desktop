@@ -67,7 +67,7 @@ export enum IdentityAction {
 export enum ProposalAction {
     CustomFilter = "Custom filter",
     TextFilter = "Text filter",
-    PriceFilterPerMinute = "Price filter / minute",
+    PriceFilterPerHour = "Price filter / hour",
     PriceFilterPerGib = "Price filter / GiB",
     QualityFilterLevel = "Quality filter level",
     QualityFilterIncludeUnreachable = "Quality filter include unreachable",

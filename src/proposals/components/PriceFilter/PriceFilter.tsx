@@ -41,38 +41,38 @@ const displayFilterPrice = (amount?: number): string => {
     if (amount == 0) {
         return "free"
     }
-    const pricePerGibDisplay = fmtMoney({
+    const priceDisplay = fmtMoney({
         amount: amount ?? 0,
         currency: Currency.MYSTTestToken,
     })
-    return pricePerGibDisplay + " or less"
+    return priceDisplay + " or less"
 }
 
 export const PriceFilter = observer(() => {
     const { proposals, filters } = useStores()
 
-    const [price, setPrice] = useState<{ perMinute?: number; perGib?: number }>({
-        perMinute: filters.config.price?.perminute,
+    const [price, setPrice] = useState<{ perHour?: number; perGib?: number }>({
+        perHour: filters.config.price?.perhour,
         perGib: filters.config.price?.pergib,
     })
     useEffect(() => {
-        setPrice({ ...price, perMinute: filters.config.price?.perminute, perGib: filters.config.price?.pergib })
+        setPrice({ ...price, perHour: filters.config.price?.perhour, perGib: filters.config.price?.pergib })
     }, [filters.config.price])
 
     return (
         <Container>
             <RangeContainer>
-                <Label>Price/minute: {displayFilterPrice(price.perMinute)}</Label>
+                <Label>Price/hour: {displayFilterPrice(price.perHour)}</Label>
                 <Range
                     type="range"
                     min={0}
-                    max={filters.priceCeiling?.perMinuteMax}
-                    value={price.perMinute}
+                    max={filters.priceCeiling?.perHourMax}
+                    value={price.perHour}
                     step={1000}
                     onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                        const pricePerMinute = event.target.valueAsNumber
-                        setPrice({ ...price, perMinute: pricePerMinute })
-                        proposals.setPricePerMinuteMaxFilterDebounced(pricePerMinute)
+                        const pricePerHour = event.target.valueAsNumber
+                        setPrice({ ...price, perHour: pricePerHour })
+                        proposals.setPricePerHourMaxFilterDebounced(pricePerHour)
                     }}
                 />
             </RangeContainer>

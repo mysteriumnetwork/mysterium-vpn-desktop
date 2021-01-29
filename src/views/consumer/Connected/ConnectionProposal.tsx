@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
-import { perGiB, perMinute } from "../../../payment/rate"
+import { perGiB, perHour } from "../../../payment/rate"
 
 const Container = styled.div`
     color: #c0b3c9;
@@ -34,7 +34,7 @@ export const ConnectionProposal: React.FC = observer(() => {
     const {
         connection: { proposal: { paymentMethod, providerId } = {} },
     } = useStores()
-    const price = paymentMethod ? `${perMinute(paymentMethod)}/min ＋ ${perGiB(paymentMethod)}/GiB` : ""
+    const price = paymentMethod ? `${perHour(paymentMethod)}/hour ＋ ${perGiB(paymentMethod)}/GiB` : ""
     return (
         <Container>
             <Row>

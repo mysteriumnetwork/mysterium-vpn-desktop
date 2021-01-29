@@ -25,7 +25,7 @@ export class Filters {
     }
 
     onConfigChanged = (): void => {
-        const initialized = this.config.price?.perminute != null
+        const initialized = this.config.price?.perhour != null
         if (!initialized) {
             log.info("Config loaded. Filter configuration does not exist, initializing to defaults.")
             this.reset()
@@ -33,7 +33,7 @@ export class Filters {
     }
 
     onNodeDefaultConfigChanged = (): void => {
-        const initialized = this.config.price?.perminute != null
+        const initialized = this.config.price?.perhour != null
         if (!initialized) {
             log.info("Node defaults loaded. Filter configuration does not exist, initializing to defaults.")
             this.reset()
@@ -47,7 +47,7 @@ export class Filters {
             return undefined
         }
         return {
-            perMinuteMax: consumerConfig["price-perminute-max"],
+            perHourMax: consumerConfig["price-perminute-max"] * 60,
             perGibMax: consumerConfig["price-pergib-max"],
         }
     }
@@ -64,7 +64,7 @@ export class Filters {
 
     @computed
     get initialized(): boolean {
-        return this.config.price?.perminute != null
+        return this.config.price?.perhour != null
     }
 
     @computed
@@ -72,7 +72,7 @@ export class Filters {
         const ceil = this.priceCeiling
         return {
             price: {
-                perminute: ceil ? ceil.perMinuteMax / 2 : undefined,
+                perhour: ceil ? ceil.perHourMax / 2 : undefined,
                 pergib: ceil ? ceil.perGibMax / 2 : undefined,
             },
             quality: {
