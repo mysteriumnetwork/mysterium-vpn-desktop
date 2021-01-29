@@ -277,7 +277,7 @@ export class ProposalStore {
             return input
         }
         return input.filter((p) => {
-            if (filterQuality && p.qualityLevel && p.qualityLevel < filterQuality) {
+            if (filterQuality != null && p.qualityLevel != null && p.qualityLevel < filterQuality) {
                 return false
             }
             if (!filterIncludeFailed && p.metrics?.monitoringFailed) {
