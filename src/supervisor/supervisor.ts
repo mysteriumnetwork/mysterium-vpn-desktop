@@ -85,11 +85,16 @@ export class Supervisor {
             const responseHandler = (data: Buffer) => {
                 clearTimeout(timer)
                 const message = data.toString()
-                if (!message.startsWith("ok: ")) {
+
+                if (!message.startsWith("ok")) {
                     reject(new Error(message.replace("error: ", "")))
                 }
-                const payload = message.replace("ok: ", "")
-                resolve(payload)
+
+                if (message.startsWith("ok: ")) {
+                    resolve(message.replace("ok: ", ""))
+                } else {
+                    resolve()
+                }
             }
             this.conn?.once("data", responseHandler)
             timer = setTimeout(() => {
