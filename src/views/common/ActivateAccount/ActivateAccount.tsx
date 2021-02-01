@@ -26,8 +26,7 @@ import { log } from "../../../log/log"
 import { locations } from "../../../navigation/locations"
 
 const Container = styled.div`
-    height: 100%;
-    background: #fff;
+    flex: 1;
     display: flex;
     flex-direction: column;
 `

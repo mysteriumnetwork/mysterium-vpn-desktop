@@ -18,7 +18,6 @@ import { SelectProposalView } from "../../../views/consumer/SelectProposal/Selec
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
 import { useStores } from "../../../store"
-import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { NavBar } from "../NavBar/NavBar"
 import { locations } from "../../locations"
@@ -41,6 +40,9 @@ const Main = styled.div`
     width: ${winSize.width}px;
     display: flex;
     flex-direction: column;
+
+    color: #404040;
+    background: #fff;
 `
 
 export const Routes: React.FC = observer(() => {
@@ -51,64 +53,65 @@ export const Routes: React.FC = observer(() => {
                 <Main>
                     <Switch>
                         <Route exact path="/">
-                            <Redirect to={locations.loading} />
+                            <Redirect to={locations.loading.path} />
                         </Route>
-                        <Route path={locations.topup}>
+                        <Route path={locations.topup.path}>
                             <TopupView />
                         </Route>
-                        <Route path={locations.welcome}>
+                        <Route path={locations.welcome.path}>
                             <WelcomeView />
                         </Route>
-                        <Route path={locations.terms}>
+                        <Route path={locations.terms.path}>
                             <AcceptTermsView />
                         </Route>
-                        <Route path={locations.activate}>
+                        <Route path={locations.activate.path}>
                             <ActivateAccount />
                         </Route>
-                        <Route path={locations.activateTopup}>
+                        <Route path={locations.activateTopup.path}>
                             <ActivateAccountTopup />
                         </Route>
-                        <Route path={locations.proposals}>
+                        <Route path={locations.proposals.path}>
                             <NavBar />
                             <SelectProposalView />
                         </Route>
-                        <Route path={locations.consumer} exact>
+                        <Route path={locations.consumer.path} exact>
                             <Redirect
                                 to={
                                     connection.status === ConnectionStatus.NOT_CONNECTED
-                                        ? locations.proposals
-                                        : locations.connection
+                                        ? locations.proposals.path
+                                        : locations.connection.path
                                 }
                                 push
                             />
                         </Route>
-                        <Route path={locations.connection}>
+                        <Route path={locations.connection.path}>
                             <NavBar />
                             <ConnectedView />
                         </Route>
-                        <Route path={locations.wallet}>
+                        <Route path={locations.preferences.path} exact>
+                            <NavBar />
+                            <Preferences />
+                        </Route>
+                        <Route path={locations.preferencesFilters.path} exact>
+                            <NavBar />
+                            <FiltersView />
+                        </Route>
+                        <Route path={locations.referrals.path}>
+                            <NavBar />
+                            <ReferralView />
+                        </Route>
+                        <Route path={locations.wallet.path}>
                             <NavBar />
                             <WalletView />
                         </Route>
-                        <Route path={locations.loading}>
+                        <Route path={locations.reportIssue.path}>
+                            <NavBar />
+                            <ReportIssueView />
+                        </Route>
+                        <Route path={locations.loading.path}>
                             <LoadingView />
                         </Route>
                     </Switch>
-                    <Modal visible={navigation.wallet} onClose={navigation.toggleWallet}>
-                        <WalletView />
-                    </Modal>
-                    <Modal visible={navigation.filters} onClose={navigation.toggleFilters} light>
-                        <FiltersView />
-                    </Modal>
-                    <Modal visible={navigation.referrals} onClose={navigation.toggleReferrals}>
-                        <ReferralView />
-                    </Modal>
-                    <Modal visible={navigation.report} onClose={() => navigation.openReportIssue(false)} light>
-                        <ReportIssueView />
-                    </Modal>
-                    <Modal visible={navigation.preferences} onClose={() => navigation.openPreferences(false)} light>
-                        <Preferences />
-                    </Modal>
                 </Main>
                 {navigation.chat && <Chat />}
             </WinContents>

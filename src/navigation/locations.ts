@@ -5,17 +5,64 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export const locations = Object.freeze({
-    welcome: "/welcome",
-    terms: "/terms",
-    activate: "/activate",
-    activateTopup: "/activate-topup",
-    identity: "/identity",
-    loading: "/loading",
-    wallet: "/wallet",
-    consumer: "/consumer",
-    proposals: "/consumer/proposals",
-    connection: "/consumer/connection",
+export interface AppLocation {
+    path: string
+    title?: string
+}
+
+export const locations: { [key: string]: AppLocation } = {
+    welcome: {
+        path: "/welcome",
+    },
+    terms: {
+        path: "/terms",
+    },
+    activate: {
+        path: "/activate",
+    },
+    activateTopup: {
+        path: "/activate-topup",
+    },
+    identity: {
+        path: "/identity",
+    },
+    loading: {
+        path: "/loading",
+    },
+    wallet: {
+        path: "/wallet",
+        title: "Wallet",
+    },
+    consumer: {
+        path: "/consumer",
+    },
+    proposals: {
+        path: "/consumer/proposals",
+    },
+    connection: {
+        path: "/consumer/connection",
+    },
+    referrals: {
+        path: "/referrals",
+        title: "Refer a friend",
+    },
+    reportIssue: {
+        path: "/report-issue",
+        title: "Bug report",
+    },
+    preferences: {
+        path: "/preferences",
+        title: "Preferences",
+    },
+    preferencesFilters: {
+        path: "/preferences/filters",
+        title: "Filters",
+    },
     // modal child window
-    topup: "/topup",
-})
+    topup: {
+        path: "/topup",
+    },
+}
+
+export const titleForPath = (path: string): string | undefined =>
+    Object.values(locations).find((loc) => loc.path == path)?.title

@@ -7,7 +7,7 @@
 import React, { useRef } from "react"
 import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
-import { faEllipsisV, faHome, faSlidersH } from "@fortawesome/free-solid-svg-icons"
+import { faChevronLeft, faEllipsisV, faSlidersH } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { observer } from "mobx-react-lite"
 
@@ -16,6 +16,7 @@ import { useStores } from "../../../store"
 import { brandDarker } from "../../../ui-kit/colors"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
 import { fmtMoney } from "../../../payment/display"
+import { locations, titleForPath } from "../../locations"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -32,6 +33,12 @@ const Container = styled.div`
 
     -webkit-user-select: none;
     -webkit-app-region: drag;
+`
+
+const Location = styled.div`
+    padding-left: 8px;
+    font-size: 15px;
+    font-weight: 600;
 `
 
 const NavigationButton = styled.div`
@@ -59,20 +66,25 @@ const Money = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: bold;
     color: ${brandDarker};
+    svg line,
+    svg path {
+        stroke: ${brandDarker};
+    }
     span {
         padding-right: 4px;
     }
 `
 
 export const NavBar: React.FC = observer(() => {
-    const { navigation, identity } = useStores()
+    const { navigation, router, identity } = useStores()
     const { menu: menuActive } = navigation
     const clickHome = () => {
-        navigation.hideModals()
+        navigation.goHome()
     }
     const clickFilters = () => {
-        navigation.toggleFilters()
+        router.push(locations.preferencesFilters)
     }
     // const clickReferrals = () => {
     //     navigation.toggleReferrals()
@@ -81,8 +93,10 @@ export const NavBar: React.FC = observer(() => {
     //     }
     // }
     const clickWallet = () => {
-        navigation.toggleWallet()
+        router.push(locations.wallet)
     }
+    const locationTitle = titleForPath(router.location.pathname)
+    const hasTitle = locationTitle != null
     const balance = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
@@ -99,17 +113,27 @@ export const NavBar: React.FC = observer(() => {
     }
     return (
         <Container>
-            <NavigationButton onClick={clickHome}>
-                <NavigationIcon icon={faHome} size="1x" />
-            </NavigationButton>
-            <NavigationButton onClick={clickFilters}>
-                <NavigationIcon icon={faSlidersH} size="1x" />
-            </NavigationButton>
+            {hasTitle && (
+                <>
+                    <NavigationButton onClick={clickHome}>
+                        <NavigationIcon icon={faChevronLeft} size="1x" />
+                    </NavigationButton>
+                    <Location>{locationTitle}</Location>
+                </>
+            )}
+            {!hasTitle && (
+                <>
+                    <NavigationButton onClick={clickFilters}>
+                        <NavigationIcon icon={faSlidersH} size="1x" />
+                    </NavigationButton>
+                </>
+            )}
+
             {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
-                /*<NavigationButton onClick={clickReferrals}>
-                <NavigationIcon icon={faRetweet} size="1x" />
-                <span style={{ marginLeft: 5 }}>Refer a friend</span>
-            </NavigationButton>*/}
+             /*<NavigationButton onClick={clickReferrals}>
+             <NavigationIcon icon={faRetweet} size="1x" />
+             <span style={{ marginLeft: 5 }}>Refer a friend</span>
+             </NavigationButton>*/}
             <div style={{ marginLeft: "auto" }}>
                 <NavigationButton onClick={clickWallet}>
                     <Money>

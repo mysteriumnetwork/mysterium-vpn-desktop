@@ -19,22 +19,12 @@ import { fmtMoney } from "../../../payment/display"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 
 const Container = styled.div`
-    width: 100%;
-
-    &:after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        z-index: -1;
-        opacity: 0.94;
-        background-image: url(${mosaicBg});
-        background-position: 0 -5px;
-    }
+    background-image: url(${mosaicBg});
+    background-position: 0 -5px;
+    flex: 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 `
 
 const Top = styled.div`

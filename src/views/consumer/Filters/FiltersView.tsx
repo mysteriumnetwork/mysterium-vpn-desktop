@@ -17,17 +17,9 @@ import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTit
 import { ResetFilters } from "../../../proposals/components/ResetFilters/ResetFilters"
 
 const Container = styled.div`
-    &:after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        z-index: -1;
-        background: rgba(255, 255, 255, 0.95);
-    }
-
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 16px;
     padding-top: 24px;
 `

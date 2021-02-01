@@ -6,12 +6,10 @@
  */
 import React, { useRef } from "react"
 import styled from "styled-components"
-import { faBug } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { observer } from "mobx-react-lite"
 import { useToasts } from "react-toast-notifications"
 
-import { textHuge, textSmall } from "../../../ui-kit/typography"
+import { textSmall } from "../../../ui-kit/typography"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
 import { TextArea } from "../../../ui-kit/form-components/TextArea"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -19,19 +17,10 @@ import { useStores } from "../../../store"
 import { log } from "../../../log/log"
 
 const Container = styled.div`
-    width: 100%;
-    height: 100%;
-    background: #fff;
-`
-
-const Title = styled.div`
-    padding-top: 12px;
-    ${textHuge};
-    text-align: center;
-`
-
-const Icon = styled(FontAwesomeIcon)`
-    margin-right: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 `
 
 const Form = styled.div`
@@ -59,7 +48,7 @@ const FormControls = styled.div`
 `
 
 export const ReportIssueView: React.FC = observer(() => {
-    const { feedback, navigation } = useStores()
+    const { feedback, router } = useStores()
     const { addToast } = useToasts()
     const email = useRef<HTMLInputElement>(null)
     const description = useRef<HTMLTextAreaElement>(null)
@@ -78,7 +67,7 @@ export const ReportIssueView: React.FC = observer(() => {
                 description: description.current?.value ?? "",
             })
             addToast(`Thanks for the feedback! Issue reference #${issueId}`, { appearance: "success" })
-            navigation.openReportIssue(false)
+            router.history?.goBack()
             clearInputs()
         } catch (err) {
             addToast("Could not submit the report.\nPlease try again later.", {
@@ -90,10 +79,6 @@ export const ReportIssueView: React.FC = observer(() => {
     }
     return (
         <Container>
-            <Title>
-                <Icon icon={faBug} size="lg" color="#404040" />
-                Report an issue
-            </Title>
             <Form>
                 <TextInput placeholder="E-mail (optional)" ref={email} />
                 <InputDescription>

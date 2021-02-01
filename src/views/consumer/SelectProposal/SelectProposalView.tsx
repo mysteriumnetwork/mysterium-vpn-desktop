@@ -20,14 +20,12 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     overflow: hidden;
-    background: #fff;
 `
 
 const Sidebar = styled.div`
     height: 100%;
     width: 240px;
     min-width: 240px;
-    background: #fff;
     display: flex;
     flex-direction: column;
 `

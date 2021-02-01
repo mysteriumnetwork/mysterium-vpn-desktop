@@ -36,7 +36,7 @@ export interface DesktopConfig {
 export interface ProposalFilters {
     price?: {
         pergib?: number
-        perminute?: number
+        perhour?: number
     }
     quality?: {
         "include-failed"?: boolean
@@ -50,7 +50,7 @@ export interface ProposalFilters {
 }
 
 export interface PriceCeiling {
-    perMinuteMax: number
+    perHourMax: number
     perGibMax: number
 }
 
@@ -110,7 +110,7 @@ export class ConfigStore {
         }
         await tequilapi.updateUserConfig({ data })
         await this.fetchConfig()
-        this.root.navigation.determineRoute()
+        this.root.navigation.goHome()
     }
 
     currentTermsAgreed = (): boolean => {
