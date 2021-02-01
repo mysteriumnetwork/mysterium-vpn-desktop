@@ -62,7 +62,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     router.push(locations.reportIssue)
                 }}
             >
-                Report an issue
+                Bug report
             </MenuItem>
             <MenuItem
                 onClick={() => {
@@ -70,7 +70,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     navigation.openChat()
                 }}
             >
-                Support chat
+                Get help
             </MenuItem>
             <Separator />
             <MenuItem

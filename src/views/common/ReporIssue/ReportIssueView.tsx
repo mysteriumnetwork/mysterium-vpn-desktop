@@ -6,12 +6,10 @@
  */
 import React, { useRef } from "react"
 import styled from "styled-components"
-import { faBug } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { observer } from "mobx-react-lite"
 import { useToasts } from "react-toast-notifications"
 
-import { textHuge, textSmall } from "../../../ui-kit/typography"
+import { textSmall } from "../../../ui-kit/typography"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
 import { TextArea } from "../../../ui-kit/form-components/TextArea"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -23,16 +21,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     overflow: hidden;
-`
-
-const Title = styled.div`
-    padding-top: 12px;
-    ${textHuge};
-    text-align: center;
-`
-
-const Icon = styled(FontAwesomeIcon)`
-    margin-right: 12px;
 `
 
 const Form = styled.div`
@@ -91,10 +79,6 @@ export const ReportIssueView: React.FC = observer(() => {
     }
     return (
         <Container>
-            <Title>
-                <Icon icon={faBug} size="lg" color="#404040" />
-                Report an issue
-            </Title>
             <Form>
                 <TextInput placeholder="E-mail (optional)" ref={email} />
                 <InputDescription>
