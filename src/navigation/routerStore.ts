@@ -5,9 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, observable, observe } from "mobx"
-import { History, Location, LocationListener, Path, UnregisterCallback } from "history"
+import { History, Location, LocationListener, UnregisterCallback } from "history"
 
 import { analytics } from "../analytics/analytics-ui"
+
+import { AppLocation } from "./locations"
 
 export class RouterStore {
     @observable
@@ -25,9 +27,9 @@ export class RouterStore {
         this.location = newLocation
     }
 
-    push = (path: Path): void => {
-        analytics.pageview(path)
-        this.history?.push(path)
+    push = (loc: AppLocation): void => {
+        analytics.pageview(loc.path)
+        this.history?.push(loc.path)
     }
 }
 

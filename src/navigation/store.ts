@@ -14,7 +14,7 @@ import { Category, OnboardingAction } from "../analytics/analytics"
 import { registered } from "../identity/identity"
 import { MainIpcListenChannels } from "../main/ipc"
 
-import { locations } from "./locations"
+import { AppLocation, locations } from "./locations"
 
 const connectionInProgress = (status: ConnectionStatus): boolean => {
     return [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)
@@ -79,12 +79,12 @@ export class NavigationStore {
         }
     }
 
-    determineLocation = (): string | undefined => {
+    determineLocation = (): AppLocation | undefined => {
         const { config, identity, connection } = this.root
-        if (this.root.router.location.pathname == locations.wallet) {
+        if (this.root.router.location.pathname == locations.wallet.path) {
             return undefined
         }
-        if (this.root.router.location.pathname == locations.topup) {
+        if (this.root.router.location.pathname == locations.topup.path) {
             return undefined
         }
 
