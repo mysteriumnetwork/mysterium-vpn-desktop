@@ -23,6 +23,10 @@ export const createMenu = (): Menu => {
             ],
         },
         {
+            label: "Edit",
+            submenu: [{ role: "copy" }, { role: "paste" }],
+        },
+        {
             role: "window",
             submenu: [{ role: "minimize" }, { role: "close" }],
         },
