@@ -12,6 +12,7 @@ const Container = styled.div`
     height: 24px;
     font-size: 14px;
     display: flex;
+    -webkit-app-region: no-drag;
 `
 
 const Input = styled.input`

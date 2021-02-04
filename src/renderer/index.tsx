@@ -73,7 +73,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         animation: ${fadeIn} .5s;
 
         user-select: none;
-        user-drag: none;
+        -webkit-app-region: no-drag;
     }
 
     ::-webkit-scrollbar {

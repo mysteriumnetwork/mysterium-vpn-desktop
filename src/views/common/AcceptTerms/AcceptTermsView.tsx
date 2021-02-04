@@ -26,6 +26,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    -webkit-app-region: drag;
 `
 
 const Title = styled.h1`
@@ -53,6 +54,8 @@ const Terms = styled.div`
     font-size: 13px;
     border: 1px solid #e9e9e9;
     background-color: #fff;
+    user-select: text;
+    -webkit-app-region: no-drag;
 
     > ul {
         padding-inline-start: 20px;
@@ -67,6 +70,7 @@ const BottomBar = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    -webkit-app-region: no-drag;
 `
 
 export const AcceptTermsView: React.FC = observer(({}) => {

@@ -17,7 +17,6 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    -webkit-user-select: none;
     -webkit-app-region: drag;
 `
 

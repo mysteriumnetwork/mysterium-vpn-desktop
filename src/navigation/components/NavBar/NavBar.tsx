@@ -31,7 +31,7 @@ const Container = styled.div`
     align-items: center;
     border-bottom: 1px solid #d9d9d9;
 
-    -webkit-user-select: none;
+    user-select: none;
     -webkit-app-region: drag;
 `
 
