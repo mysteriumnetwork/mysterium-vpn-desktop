@@ -4,17 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Money, PaymentMethod, pricePerGiB, pricePerMinute } from "mysterium-vpn-js"
+import { PaymentMethod, pricePerGiB, pricePerHour } from "mysterium-vpn-js"
 
 import { fmtMoney } from "./display"
-
-export const pricePerHour = (p?: PaymentMethod): Money => {
-    const price = pricePerMinute(p)
-    return {
-        currency: price.currency,
-        amount: price.amount * 60,
-    }
-}
 
 export const perHour = (p: PaymentMethod): string => (p ? fmtMoney(pricePerHour(p), { fractionDigits: 4 }) : "")
 

@@ -142,7 +142,7 @@ export const TopupView: React.FC = observer(() => {
                 <SectionTitle>Amount (min: {payment.orderMinimumAmount})</SectionTitle>
                 <UncontrolledMystInputWithFlatEstimate
                     disabled={progress == Progress.CREATED}
-                    rate={payment.mystToUsdRate?.value}
+                    rate={payment.mystToUsdRate?.amount}
                     defaultValue={payment.topupAmount}
                     onChange={(val) => payment.setTopupAmount(val)}
                     suffix={Currency.MYSTTestToken}

@@ -5,13 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, runInAction, when } from "mobx"
-import {
-    Currency,
-    Fees,
-    HttpTequilapiClient,
-    PaymentOrderOptionsResponse,
-    PaymentOrderResponse,
-} from "mysterium-vpn-js"
+import { Currency, Fees, Money, PaymentOrderOptionsResponse, PaymentOrderResponse } from "mysterium-vpn-js"
 import retry from "async-retry"
 
 import { RootStore } from "../store"
@@ -19,7 +13,6 @@ import { DaemonStatusType } from "../daemon/store"
 import { log } from "../log/log"
 import { tequilapi } from "../tequilapi"
 
-import { Money } from "./exchange"
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
 
@@ -76,7 +69,7 @@ export class PaymentStore {
 
     @action
     async fetchMystToUsdRate(): Promise<void> {
-        const res = await (tequilapi as HttpTequilapiClient).http.get("/exchange/myst/usd")
+        const res = await tequilapi.exchangeRate("usd")
         runInAction(() => {
             this.mystToUsdRate = res
         })

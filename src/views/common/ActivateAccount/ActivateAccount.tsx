@@ -141,7 +141,7 @@ export const ActivateAccount: React.FC = observer(() => {
                         <Label>Registration Fee</Label>
                         <ControlledMystInputWithFlatEstimate
                             disabled
-                            rate={payment.mystToUsdRate?.value}
+                            rate={payment.mystToUsdRate?.amount}
                             value={payment.registrationFee}
                             suffix={Currency.MYSTTestToken}
                         />
@@ -150,7 +150,7 @@ export const ActivateAccount: React.FC = observer(() => {
                     <LineItem>
                         <Label>Top-up Amount</Label>
                         <UncontrolledMystInputWithFlatEstimate
-                            rate={payment.mystToUsdRate?.value}
+                            rate={payment.mystToUsdRate?.amount}
                             defaultValue={payment.registrationTopupAmount}
                             onChange={(val) => payment.setRegistrationTopupAmount(val)}
                             suffix={Currency.MYSTTestToken}
@@ -167,7 +167,7 @@ export const ActivateAccount: React.FC = observer(() => {
                         </Label>
                         <ControlledMystInputWithFlatEstimate
                             disabled
-                            rate={payment.mystToUsdRate?.value}
+                            rate={payment.mystToUsdRate?.amount}
                             value={payment.topupTotal}
                             suffix={Currency.MYSTTestToken}
                         />

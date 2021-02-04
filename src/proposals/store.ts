@@ -5,7 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, observable, reaction } from "mobx"
-import { ConnectionStatus, pricePerGiB, ProposalMetrics, QualityCalculator, QualityLevel } from "mysterium-vpn-js"
+import {
+    ConnectionStatus,
+    pricePerGiB,
+    pricePerHour,
+    ProposalMetrics,
+    QualityCalculator,
+    QualityLevel,
+} from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
@@ -16,7 +23,6 @@ import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
-import { pricePerHour } from "../payment/rate"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 

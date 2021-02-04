@@ -122,7 +122,7 @@ export class IdentityStore {
     async register(id: Identity): Promise<void> {
         await this.root.payment.fetchTransactorFees()
         analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
-        return tequilapi.identityRegister(id.id, { fee: this.root.payment.fees?.registration, stake: 0 })
+        return tequilapi.identityRegister(id.id, { stake: 0 })
     }
 
     @action
