@@ -124,9 +124,4 @@ export class NavigationStore {
     openChat = (open = true): void => {
         this.chat = open
     }
-
-    @action
-    toggleTopupWindow = (): void => {
-        ipcRenderer.send(MainIpcListenChannels.TopupWindow)
-    }
 }

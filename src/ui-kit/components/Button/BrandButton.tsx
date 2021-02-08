@@ -28,7 +28,7 @@ const Button = styled.button`
         !props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc"};
     color: #fff;
 
-    transition: 0.2s all;
+    transition: transform 0.2s;
 
     &:enabled:hover {
         filter: brightness(115%);
