@@ -4,26 +4,33 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import { QRCode } from "react-qr-svg"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFont, faQrcode } from "@fortawesome/free-solid-svg-icons"
 
 const Container = styled.div`
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 `
 
 const Image = styled.div`
-    flex: 0;
-    height: 120px;
-    width: 120px;
     margin: 0 auto;
 `
 
-const TextPart = styled.div`
-    margin-top: 8px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+const IconButton = styled.div`
+    padding: 8px;
+    border-radius: 6px;
+    align-self: flex-end;
+    &:hover {
+        background: rgba(0, 0, 0, 0.15);
+    }
+`
+
+const Content = styled.div`
+    margin: 0 auto;
 `
 
 const Text = styled.code`
@@ -33,35 +40,29 @@ const Text = styled.code`
     overflow-wrap: anywhere;
 `
 
-const Copy = styled.button`
-    margin-left: 12px;
-`
-
 export interface QRProps {
     text?: string
-    copyButton?: boolean
+    height?: number
 }
 
-export const QR: React.FC<QRProps> = ({ text, copyButton = false }) => {
+export const QR: React.FC<QRProps> = ({ text, height = 100 }) => {
     if (!text) {
         return <></>
     }
-    const copyText = (): void => {
-        navigator.clipboard.writeText(text)
-    }
+    const [imageView, setImageView] = useState(true)
+    const toggleView = () => setImageView(!imageView)
+    const icon = imageView ? <FontAwesomeIcon icon={faFont} size="1x" /> : <FontAwesomeIcon icon={faQrcode} size="1x" />
+    const content = imageView ? (
+        <Image>
+            <QRCode value={text} style={{ height }} />
+        </Image>
+    ) : (
+        <Text>{text}</Text>
+    )
     return (
         <Container>
-            <Image>
-                <QRCode value={text} style={{ width: 120 }} />
-            </Image>
-            <TextPart>
-                <Text>{text}</Text>
-                {copyButton && (
-                    <div>
-                        <Copy onClick={copyText}>Copy</Copy>
-                    </div>
-                )}
-            </TextPart>
+            <IconButton onClick={toggleView}>{icon}</IconButton>
+            <Content style={{ height }}>{content}</Content>
         </Container>
     )
 }
