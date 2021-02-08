@@ -5,9 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { TequilapiClientFactory, TIMEOUT_DEFAULT } from "mysterium-vpn-js"
+import { TequilapiClientFactory } from "mysterium-vpn-js"
 
 export const TEQUILAPI_PORT = 44050
-export const tequilapi = new TequilapiClientFactory(`http://127.0.0.1:${TEQUILAPI_PORT}`, TIMEOUT_DEFAULT).build()
+export const tequilapi = new TequilapiClientFactory(`http://127.0.0.1:${TEQUILAPI_PORT}`, 8_000).build()
 
 export const sseUrl = `http://127.0.0.1:${TEQUILAPI_PORT}/events/state`
