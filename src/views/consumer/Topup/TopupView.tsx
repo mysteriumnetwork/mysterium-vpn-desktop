@@ -4,10 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { faCheckCircle, faCircleNotch, faExclamationCircle, faTimes } from "@fortawesome/free-solid-svg-icons"
+import { faCheckCircle, faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Currency } from "mysterium-vpn-js"
 import { useToasts } from "react-toast-notifications"
@@ -22,53 +22,49 @@ import { isLightningAvailable } from "../../../payment/currency"
 import { log } from "../../../log/log"
 import { Anchor } from "../../../ui-kit/components/Anchor"
 import { OrderStatus } from "../../../payment/store"
+import { Spinner } from "../../../ui-kit/components/Spinner/Spinner"
 
 const Container = styled.div`
-    width: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-`
-
-const Content = styled.div`
-    padding: 40px 36px;
+    padding: 12px;
 `
 
 const Title = styled.div`
-    font-size: 22px;
+    user-select: text;
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 `
 
 const Alert = styled.div`
-    margin-top: 160px;
+    margin-top: 110px;
     text-align: center;
 `
 
 const SectionTitle = styled.div`
     margin-bottom: 12px;
-    font-size: 13px;
-    color: #777;
-    font-weight: bold;
-`
-
-const CloseButton = styled.div`
-    position: fixed;
-    left: 592px;
-    padding: 16px;
-    cursor: pointer;
 `
 
 const Select = styled.select`
     padding: 5px;
-    margin: 0 24px 24px 0;
+    margin: 0 24px 0 0;
 `
 
 const LightningCheckbox = styled(Checkbox)``
 
+const FormRow = styled.div`
+    margin-bottom: 12px;
+`
+
 const Currencies = styled.div`
     display: flex;
     flex-direction: row;
+`
+
+const Actions = styled.div`
+    margin-top: auto;
 `
 
 enum Progress {
@@ -78,14 +74,14 @@ enum Progress {
 }
 
 export const TopupView: React.FC = observer(() => {
-    const { navigation, payment } = useStores()
+    const { payment } = useStores()
     const { addToast } = useToasts()
-    const onClose = () => {
-        navigation.toggleTopupWindow()
-        payment.clearOrder()
-        setProgress(Progress.NONE)
-    }
     const [progress, setProgress] = useState(Progress.NONE)
+    useEffect(() => {
+        if (payment.order == null) {
+            setProgress(Progress.NONE)
+        }
+    }, [payment.order])
     const createPaymentOrder = async () => {
         try {
             setProgress(Progress.CREATING)
@@ -103,12 +99,6 @@ export const TopupView: React.FC = observer(() => {
     if (payment.orderStatus == OrderStatus.SUCCESS) {
         return (
             <Container>
-                <CloseButton onClick={onClose}>
-                    <FontAwesomeIcon className="icon" icon={faTimes} color="#404040" size="lg" />
-                </CloseButton>
-                <Content>
-                    <Title>Topup Wallet</Title>
-                </Content>
                 <Alert>
                     <FontAwesomeIcon className="icon" icon={faCheckCircle} color="#55efc4" size="lg" />
                     <span style={{ marginLeft: 12 }}>Payment successful! MYSTT will be credited shortly.</span>
@@ -119,12 +109,6 @@ export const TopupView: React.FC = observer(() => {
     if (payment.orderStatus == OrderStatus.FAILED) {
         return (
             <Container>
-                <CloseButton onClick={onClose}>
-                    <FontAwesomeIcon className="icon" icon={faTimes} color="#404040" size="lg" />
-                </CloseButton>
-                <Content>
-                    <Title>Topup Wallet</Title>
-                </Content>
                 <Alert>
                     <FontAwesomeIcon className="icon" icon={faExclamationCircle} color="#E17055" size="lg" />
                     <span style={{ marginLeft: 12 }}>Payment failed. Please try again later.</span>
@@ -132,58 +116,26 @@ export const TopupView: React.FC = observer(() => {
             </Container>
         )
     }
-    return (
-        <Container>
-            <CloseButton onClick={onClose}>
-                <FontAwesomeIcon className="icon" icon={faTimes} color="#404040" size="lg" />
-            </CloseButton>
-            <Content>
-                <Title>Topup Wallet</Title>
-                <SectionTitle>Amount (min: {payment.orderMinimumAmount})</SectionTitle>
-                <UncontrolledMystInputWithFlatEstimate
-                    disabled={progress == Progress.CREATED}
-                    rate={payment.mystToUsdRate?.amount}
-                    defaultValue={payment.topupAmount}
-                    onChange={(val) => payment.setTopupAmount(val)}
-                    suffix={Currency.MYSTTestToken}
-                />
-                <SectionTitle>Currency</SectionTitle>
-                <Currencies>
-                    <Select
-                        disabled={progress == Progress.CREATED}
-                        onChange={(event) => {
-                            payment.setPaymentCurrency(event.target.value)
-                        }}
-                    >
-                        {payment.currencies.map((cur) => (
-                            <option key={cur} value={cur}>
-                                {cur}
-                            </option>
-                        ))}
-                    </Select>
-                    {isLightningAvailable(payment.paymentCurrency) && (
-                        <LightningCheckbox
-                            disabled={progress == Progress.CREATED}
-                            checked={payment.lightningNetwork}
-                            onChange={(): void => payment.setLightningNetwork(!payment.lightningNetwork)}
-                        >
-                            Use lightning network
-                        </LightningCheckbox>
-                    )}
-                </Currencies>
+    if (progress == Progress.CREATING) {
+        return (
+            <Container>
+                <div style={{ textAlign: "center", marginTop: 60 }}>
+                    <p>Generating payment details</p>
+                    <Spinner dark />
+                </div>
+            </Container>
+        )
+    }
+    if (progress == Progress.CREATED) {
+        return (
+            <Container>
                 <div>
-                    {progress == Progress.NONE && (
-                        <BrandButton disabled={!payment.orderOptionsValid} onClick={createPaymentOrder}>
-                            Start payment
-                        </BrandButton>
-                    )}
-                    {progress == Progress.CREATING && <FontAwesomeIcon icon={faCircleNotch} size="lg" spin />}
                     {progress == Progress.CREATED && (
                         <>
                             <Title>
                                 {payment.order?.payAmount} {payment.order?.payCurrency}
                             </Title>
-                            <p>
+                            <div>
                                 Send the indicated amount to the address below. (
                                 <Anchor
                                     onClick={() => {
@@ -195,12 +147,61 @@ export const TopupView: React.FC = observer(() => {
                                     Pay in browser instead?
                                 </Anchor>
                                 )
-                            </p>
-                            <QR text={payment.order?.paymentAddress} />
+                            </div>
+                            <QR height={140} text={payment.order?.paymentAddress} />
                         </>
                     )}
                 </div>
-            </Content>
+            </Container>
+        )
+    }
+    return (
+        <Container>
+            <FormRow>
+                <SectionTitle>Amount (min: {payment.orderMinimumAmount})</SectionTitle>
+                <UncontrolledMystInputWithFlatEstimate
+                    disabled={progress != Progress.NONE}
+                    rate={payment.mystToUsdRate?.amount}
+                    defaultValue={payment.topupAmount}
+                    onChange={(val) => payment.setTopupAmount(val)}
+                    suffix={Currency.MYSTTestToken}
+                />
+            </FormRow>
+            <FormRow>
+                <SectionTitle>Currency</SectionTitle>
+                <Currencies>
+                    <Select
+                        disabled={progress != Progress.NONE}
+                        onChange={(event) => {
+                            payment.setPaymentCurrency(event.target.value)
+                        }}
+                    >
+                        {payment.currencies.map((cur) => (
+                            <option key={cur} value={cur}>
+                                {cur}
+                            </option>
+                        ))}
+                    </Select>
+                </Currencies>
+            </FormRow>
+            {isLightningAvailable(payment.paymentCurrency) && (
+                <FormRow>
+                    <LightningCheckbox
+                        disabled={progress != Progress.NONE}
+                        checked={payment.lightningNetwork}
+                        onChange={(): void => payment.setLightningNetwork(!payment.lightningNetwork)}
+                    >
+                        Use lightning network
+                    </LightningCheckbox>
+                </FormRow>
+            )}
+            <Actions>
+                {progress == Progress.NONE && (
+                    <BrandButton disabled={!payment.orderOptionsValid} onClick={createPaymentOrder}>
+                        Start payment
+                    </BrandButton>
+                )}
+            </Actions>
         </Container>
     )
 })

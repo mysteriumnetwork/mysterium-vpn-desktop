@@ -11,13 +11,18 @@ import styled from "styled-components"
 // With Loading.io Free license ( LD-FREE / FREE / Free License ),
 // items are dedicated to the public domain by waiving all our right worldwide under copyright law.
 // You can use items under LD-FREE freely for any purpose. No attribution is required.
-import spinnerFile from "./Bars-1s-50px.gif"
+import spinnerFile from "./Dual Ring-1s-100px.svg"
+import spinnerDarkFile from "./Dual Ring-1s-100px-dark.svg"
 
 const Img = styled.img`
     width: 50;
     height: 50;
 `
 
-export const Spinner: React.FC = () => {
-    return <Img src={spinnerFile} />
+export interface SpinnerProps {
+    dark?: boolean
+}
+
+export const Spinner: React.FC<SpinnerProps> = ({ dark = false }) => {
+    return <Img src={dark ? spinnerDarkFile : spinnerFile} />
 }

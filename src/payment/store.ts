@@ -181,6 +181,9 @@ export class PaymentStore {
     @action
     clearOrder(): void {
         this.order = undefined
+        this.setPaymentCurrency(this.currencies[0])
+        this.setLightningNetwork(isLightningAvailable(this.currencies[0]))
+        this.setTopupAmount(undefined)
     }
 
     @computed
