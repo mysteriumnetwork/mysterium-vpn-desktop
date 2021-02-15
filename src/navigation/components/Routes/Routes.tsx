@@ -26,7 +26,6 @@ import { winSize } from "../../../config"
 import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
-import { TopupView } from "../../../views/consumer/Topup/TopupView"
 import ReferralView from "../../../views/consumer/Referral/ReferralView"
 
 const WinContents = styled.div`
@@ -54,9 +53,6 @@ export const Routes: React.FC = observer(() => {
                     <Switch>
                         <Route exact path="/">
                             <Redirect to={locations.loading.path} />
-                        </Route>
-                        <Route path={locations.topup.path}>
-                            <TopupView />
                         </Route>
                         <Route path={locations.welcome.path}>
                             <WelcomeView />

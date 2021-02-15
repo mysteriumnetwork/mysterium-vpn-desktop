@@ -20,6 +20,8 @@ import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { TopupView } from "../Topup/TopupView"
 import { GhostButton } from "../../../ui-kit/components/Button/GhostButton"
 import { ReceiveTokens } from "../ReceiveTokens/ReceiveTokens"
+import { userEvent } from "../../../analytics/analytics"
+import { WalletAction } from "../../../analytics/actions"
 
 const Container = styled.div`
     background-image: url(${mosaicBg});
@@ -78,16 +80,29 @@ export const WalletView: React.FC = observer(() => {
             removeInsignificantZeros: false,
         },
     )
+    const openTopupModal = () => {
+        userEvent(WalletAction.TopupModalOpen)
+        setTopupModal(true)
+    }
     const closeTopupModal = () => {
+        userEvent(WalletAction.TopupModalClose)
         setTopupModal(false)
         payment.clearOrder()
+    }
+    const openReceiveTokensModal = () => {
+        userEvent(WalletAction.ReceiveTokensOpen)
+        setReceiveTokensModal(true)
+    }
+    const closeReceiveTokensModal = () => {
+        userEvent(WalletAction.ReceiveTokensClose)
+        setReceiveTokensModal(false)
     }
     return (
         <Container>
             <Modal title="Topup" visible={topupModal} onClose={closeTopupModal}>
                 <TopupView />
             </Modal>
-            <Modal title="Receive MYSTT" visible={receiveTokensModal} onClose={() => setReceiveTokensModal(false)}>
+            <Modal title="Receive MYSTT" visible={receiveTokensModal} onClose={closeReceiveTokensModal}>
                 <ReceiveTokens />
             </Modal>
             <Top>
@@ -102,12 +117,12 @@ export const WalletView: React.FC = observer(() => {
                     <Amount>{balanceDisplay}</Amount>
                 </Balance>
                 <WalletActions>
-                    <LightButton onClick={() => setTopupModal(true)}>
+                    <LightButton onClick={openTopupModal}>
                         <FontAwesomeIcon icon={faDownload} size="1x" />
                         &nbsp;Topup
                     </LightButton>
                     <div style={{ width: 12 }} />
-                    <GhostButton onClick={() => setReceiveTokensModal(true)}>
+                    <GhostButton onClick={openReceiveTokensModal}>
                         <FontAwesomeIcon icon={faUpload} size="1x" />
                         &nbsp;Receive MYSTT
                     </GhostButton>

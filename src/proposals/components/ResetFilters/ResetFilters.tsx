@@ -10,6 +10,8 @@ import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { Anchor } from "../../../ui-kit/components/Anchor"
+import { userEvent } from "../../../analytics/analytics"
+import { ProposalViewAction } from "../../../analytics/actions"
 
 const Container = styled.div`
     width: 100%;
@@ -24,6 +26,7 @@ export const ResetFilters = observer(() => {
         <Container>
             <Anchor
                 onClick={() => {
+                    userEvent(ProposalViewAction.FilterReset)
                     filters.reset()
                 }}
             >

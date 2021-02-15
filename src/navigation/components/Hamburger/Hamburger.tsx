@@ -15,6 +15,8 @@ import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
 import { brandDarker } from "../../../ui-kit/colors"
 import { locations } from "../../locations"
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../analytics/actions"
 
 type Div = React.FC<React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
 
@@ -40,6 +42,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
         }
     })
     const quit = () => {
+        userEvent(OtherAction.MenuQuit)
         remote.app.quit()
     }
     if (!navigation.menu) {
@@ -66,6 +69,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
             </MenuItem>
             <MenuItem
                 onClick={() => {
+                    userEvent(OtherAction.GetHelp)
                     navigation.showMenu(false)
                     navigation.openChat()
                 }}
@@ -75,6 +79,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
             <Separator />
             <MenuItem
                 onClick={() => {
+                    userEvent(OtherAction.AboutApp)
                     navigation.showMenu(false)
                     remote.app.showAboutPanel()
                 }}
@@ -87,6 +92,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     <SocialIcon
                         icon={faFacebookSquare}
                         onClick={() => {
+                            userEvent(OtherAction.SocialFacebook)
                             navigation.showMenu(false)
                             shell.openExternal("https://www.facebook.com/MysteriumNet")
                         }}
@@ -94,6 +100,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     <SocialIcon
                         icon={faTwitter}
                         onClick={() => {
+                            userEvent(OtherAction.SocialTwitter)
                             navigation.showMenu(false)
                             shell.openExternal("https://twitter.com/MysteriumNet")
                         }}
@@ -101,6 +108,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     <SocialIcon
                         icon={faMedium}
                         onClick={() => {
+                            userEvent(OtherAction.SocialMedium)
                             navigation.showMenu(false)
                             shell.openExternal("https://medium.com/mysterium-network")
                         }}
@@ -108,6 +116,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     <SocialIcon
                         icon={faReddit}
                         onClick={() => {
+                            userEvent(OtherAction.SocialReddit)
                             navigation.showMenu(false)
                             shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
                         }}
@@ -115,6 +124,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
                     <SocialIcon
                         icon={faGithub}
                         onClick={() => {
+                            userEvent(OtherAction.SocialGithub)
                             navigation.showMenu(false)
                             shell.openExternal("https://github.com/mysteriumnetwork")
                         }}

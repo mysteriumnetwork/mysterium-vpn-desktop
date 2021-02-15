@@ -7,7 +7,7 @@
 import { action, observable, observe } from "mobx"
 import { History, Location, LocationListener, UnregisterCallback } from "history"
 
-import { analytics } from "../analytics/analytics-ui"
+import { pageview } from "../analytics/analytics"
 
 import { AppLocation } from "./locations"
 
@@ -28,7 +28,10 @@ export class RouterStore {
     }
 
     push = (loc: AppLocation): void => {
-        analytics.pageview(loc.path)
+        pageview({
+            documentTitle: loc.title,
+            href: loc.path,
+        })
         this.history?.push(loc.path)
     }
 }

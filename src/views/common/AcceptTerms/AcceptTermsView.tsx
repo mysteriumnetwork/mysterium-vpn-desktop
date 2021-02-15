@@ -15,8 +15,8 @@ import * as _ from "lodash"
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
-import { Category, OnboardingAction } from "../../../analytics/analytics"
-import { analytics } from "../../../analytics/analytics-ui"
+import { userEvent } from "../../../analytics/analytics"
+import { OnboardingAction } from "../../../analytics/actions"
 
 import termsBg from "./terms-bg.png"
 
@@ -77,7 +77,7 @@ export const AcceptTermsView: React.FC = observer(({}) => {
     const { config } = useStores()
     const [agree, setAgree] = useState(false)
     const scrollAnalyticsDebounced = _.debounce((): void => {
-        analytics.event(Category.Onboarding, OnboardingAction.ScrollTerms)
+        userEvent(OnboardingAction.TermsScroll)
     }, 1000)
     return (
         <Container>
@@ -93,7 +93,7 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                     checked={agree}
                     onChange={(): void => {
                         setAgree(!agree)
-                        analytics.event(Category.Onboarding, OnboardingAction.CheckBoxAgreeToTerms)
+                        userEvent(OnboardingAction.AcceptTermsCheckbox)
                     }}
                 >
                     I agree to all Terms of Service
@@ -102,7 +102,7 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                     disabled={!agree}
                     onClick={(): void => {
                         config.agreeToTerms()
-                        analytics.event(Category.Onboarding, OnboardingAction.AcceptTerms)
+                        userEvent(OnboardingAction.AcceptTermsContinue)
                     }}
                 >
                     Continue

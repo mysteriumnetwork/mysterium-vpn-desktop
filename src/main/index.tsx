@@ -15,12 +15,7 @@ import { autoUpdater } from "electron-updater"
 import * as packageJson from "../../package.json"
 import { winSize, winSizeExt } from "../config"
 import { supervisor } from "../supervisor/supervisor"
-import {
-    initialize as initializeAnalytics,
-    setupApp as setupAnalyticsForApp,
-    setupGlobals as setupAnalyticsGlobals,
-    setupWindow as setupAnalyticsForWindow,
-} from "../analytics/analytics-main"
+import { initialize as initializeAnalytics } from "../analytics/analytics-main"
 import { initialize as initializePushNotifications } from "../push/push"
 import { initialize as initializeSentry } from "../errors/sentry"
 import { log } from "../log/log"
@@ -41,7 +36,7 @@ global.supervisor = supervisor
 global.os = os.platform()
 
 // global reference to win (necessary to prevent window from being garbage collected)
-let win: BrowserWindow | null
+let mainWindow: BrowserWindow | null
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let tray: Tray | null
@@ -59,7 +54,7 @@ const installExtensions = async (): Promise<void | any[]> => {
 
 const appInstanceLock = app.requestSingleInstanceLock()
 
-const createWindow = async (): Promise<BrowserWindow> => {
+const createMainWindow = async (): Promise<BrowserWindow> => {
     if (isDevelopment()) {
         await installExtensions()
     }
@@ -105,14 +100,14 @@ const createWindow = async (): Promise<BrowserWindow> => {
 
     window.on("close", (event) => {
         if (app.quitting) {
-            win = null
+            mainWindow = null
         } else {
             event.preventDefault()
-            win?.hide()
+            mainWindow?.hide()
         }
     })
     window.on("closed", () => {
-        win = null
+        mainWindow = null
     })
 
     window.webContents.on("devtools-opened", () => {
@@ -124,7 +119,7 @@ const createWindow = async (): Promise<BrowserWindow> => {
     window.webContents.on("did-finish-load", () => {
         initializePushNotifications()
     })
-    setupAnalyticsForWindow(window)
+    initializeAnalytics(window)
 
     return window
 }
@@ -134,19 +129,16 @@ if (!appInstanceLock) {
 } else {
     app.on("second-instance", async () => {
         // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            if (win.isMinimized()) win.restore()
-            win.show()
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.show()
         }
     })
 
     // create main BrowserWindow when electron is ready
     app.on("ready", async () => {
-        win = await createWindow()
-        tray = createTray(app, win)
-        initializeAnalytics()
-        setupAnalyticsGlobals()
-        setupAnalyticsForApp(app)
+        mainWindow = await createMainWindow()
+        tray = createTray(app, mainWindow)
         autoUpdater.checkForUpdatesAndNotify()
     })
 }
@@ -161,10 +153,10 @@ app.on("window-all-closed", () => {
 
 app.on("activate", async () => {
     // on macOS it is common to re-create a window even after all windows have been closed
-    if (win === null) {
-        win = await createWindow()
+    if (mainWindow === null) {
+        mainWindow = await createMainWindow()
     }
-    win.show()
+    mainWindow.show()
 })
 
 app.on("before-quit", () => (app.quitting = true))
@@ -182,12 +174,12 @@ ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
 })
 ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: boolean) => {
     if (open) {
-        win?.setContentSize(winSizeExt.width, winSizeExt.height, true)
+        mainWindow?.setContentSize(winSizeExt.width, winSizeExt.height, true)
     } else {
-        win?.setContentSize(winSize.width, winSize.height, true)
+        mainWindow?.setContentSize(winSize.width, winSize.height, true)
     }
 })
 
 export const ipcWebDisconnect = (): void => {
-    win?.webContents.send(WebIpcListenChannels.Disconnect)
+    mainWindow?.webContents.send(WebIpcListenChannels.Disconnect)
 }

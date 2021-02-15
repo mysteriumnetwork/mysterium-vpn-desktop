@@ -12,12 +12,13 @@ import { spawn } from "child_process"
 import semver from "semver"
 
 import { staticAssetPath } from "../utils/paths"
-import { analytics } from "../analytics/analytics-main"
-import { AppAction, Category } from "../analytics/analytics"
+import { appStateEvent } from "../analytics/analytics"
 import { log } from "../log/log"
 import { sudoExec } from "../utils/sudo"
 import { uid } from "../utils/user"
 import { isDevelopment } from "../utils/env"
+import { webAnalyticsAppStateEvent } from "../analytics/analytics-main"
+import { AppStateAction } from "../analytics/actions"
 
 const isWin = platform() === "win32"
 
@@ -39,7 +40,7 @@ export class Supervisor {
                 .createConnection(mystSock)
                 .on("connect", () => {
                     log.info("Connected to: ", mystSock)
-                    analytics.event(Category.App, AppAction.ConnectedToSupervisor)
+                    webAnalyticsAppStateEvent(AppStateAction.SupervisorConnected)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {
@@ -153,7 +154,7 @@ export class Supervisor {
     }
 
     async install(): Promise<void> {
-        analytics.event(Category.App, AppAction.InstallSupervisor)
+        appStateEvent(AppStateAction.SupervisorInstall)
         return await new Promise((resolve) => {
             sudoExec(`"${this.supervisorBin()}" -install -uid ${uid()}`)
             const waitUntilConnected = (): void => {

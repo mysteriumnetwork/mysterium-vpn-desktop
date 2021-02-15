@@ -19,8 +19,10 @@ import { remote } from "electron"
 import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
-import { rootStore, useStores, StoreContext } from "../store"
+import { rootStore, StoreContext, useStores } from "../store"
 import { synchronizedHistory } from "../navigation/routerStore"
+import { initialize as initializeAnalytics, userEvent } from "../analytics/analytics"
+import { OtherAction } from "../analytics/actions"
 
 initializeSentry()
 
@@ -120,6 +122,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
 const hashHistory = createHashHistory()
 const history = synchronizedHistory(hashHistory, rootStore.router)
+initializeAnalytics()
 
 const App: React.FC = observer(() => {
     const root = useStores()
@@ -128,7 +131,13 @@ const App: React.FC = observer(() => {
             <GlobalStyle showGrid={root.showGrid} />
             <Router history={history}>
                 <ToastProvider placement="top-left">
-                    <IntercomProvider appId={packageJson.intercomAppId} onHide={() => root.navigation.openChat(false)}>
+                    <IntercomProvider
+                        appId={packageJson.intercomAppId}
+                        onHide={() => {
+                            userEvent(OtherAction.GetHelpClose)
+                            root.navigation.openChat(false)
+                        }}
+                    >
                         <StoreContext.Provider value={rootStore}>
                             <Routes />
                         </StoreContext.Provider>

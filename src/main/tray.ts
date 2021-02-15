@@ -13,8 +13,8 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { supervisor } from "../supervisor/supervisor"
-import { analytics } from "../analytics/analytics-main"
-import { Category, TrayAction } from "../analytics/analytics"
+import { webAnalyticsUserEvent } from "../analytics/analytics-main"
+import { TrayAction } from "../analytics/actions"
 
 import { ipcWebDisconnect } from "./index"
 
@@ -41,7 +41,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Show window",
                 click: (): void => {
-                    analytics.event(Category.Tray, TrayAction.ShowWindow)
+                    webAnalyticsUserEvent(TrayAction.ShowWindow)
                     win.show()
                 },
             },
@@ -51,14 +51,14 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Check for updates",
                 click: async (): Promise<void> => {
-                    analytics.event(Category.Tray, TrayAction.CheckForUpdates)
+                    webAnalyticsUserEvent(TrayAction.CheckForUpdates)
                     await autoUpdater.checkForUpdatesAndNotify()
                 },
             },
             {
                 label: "Repair supervisor",
                 click: async (): Promise<void> => {
-                    analytics.event(Category.Tray, TrayAction.Repair)
+                    webAnalyticsUserEvent(TrayAction.RepairSupervisor)
                     ipcWebDisconnect()
                     await supervisor.install()
                 },
@@ -71,7 +71,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
                 label: `Quit ${packageJson.productName}`,
                 accelerator: "CommandOrControl+Q",
                 click: (): void => {
-                    analytics.event(Category.Tray, TrayAction.Quit)
+                    webAnalyticsUserEvent(TrayAction.Quit)
                     app.quit()
                 },
             },
@@ -79,7 +79,7 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
     )
     tray.on("double-click", () => {
         if (platform() == "win32") {
-            analytics.event(Category.Tray, TrayAction.DoubleClick)
+            webAnalyticsUserEvent(TrayAction.DoubleClickActivate)
             win.show()
         }
     })
