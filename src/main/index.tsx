@@ -153,7 +153,7 @@ app.on("window-all-closed", () => {
 
 app.on("activate", async () => {
     // on macOS it is common to re-create a window even after all windows have been closed
-    if (mainWindow === null) {
+    if (mainWindow == null) {
         mainWindow = await createMainWindow()
     }
     mainWindow.show()
