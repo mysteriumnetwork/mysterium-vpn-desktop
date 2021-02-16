@@ -11,6 +11,8 @@ import styled from "styled-components"
 import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTitle"
 import { textHuge } from "../../../ui-kit/typography"
 import { useStores } from "../../../store"
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../analytics/actions"
 
 const Container = styled.div`
     flex: 1;
@@ -42,13 +44,18 @@ const FormLabel = styled.label`
 
 export const Preferences: React.FC = observer(() => {
     const { config } = useStores()
+    const onDnsOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const val = event.target.value
+        userEvent(OtherAction.SetDnsOption, val)
+        config.setDnsOption(val)
+    }
     return (
         <Container>
             <Content>
                 <Title>Preferences</Title>
                 <FormSectionTitle>Connection</FormSectionTitle>
                 <FormLabel htmlFor="dns">DNS</FormLabel>
-                <select id="dns" value={config.dnsOption} onChange={(event) => config.setDnsOption(event.target.value)}>
+                <select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>
                     <option value="1.1.1.1">Cloudflare (default)</option>
                     <option value="auto">Automatic</option>
                     <option value="provider">Provider</option>

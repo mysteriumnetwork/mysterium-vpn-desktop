@@ -17,12 +17,12 @@ import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
-import { analytics } from "../analytics/analytics-ui"
-import { Category, ProposalAction } from "../analytics/analytics"
+import { userEvent } from "../analytics/analytics"
 import { log } from "../log/log"
 import { decimalPart } from "../payment/display"
 import { ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
+import { ProposalViewAction } from "../analytics/actions"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
 
@@ -55,9 +55,6 @@ export class ProposalStore {
 
     @observable
     active?: UIProposal
-
-    @observable
-    customFilter = false
 
     @observable
     filter: TransientFilter = {}
@@ -140,13 +137,6 @@ export class ProposalStore {
         })
     }
 
-    @action
-    toggleCustomFilter(): void {
-        const newVal = !this.customFilter
-        this.customFilter = newVal
-        analytics.event(Category.Proposal, ProposalAction.CustomFilter, String(newVal))
-    }
-
     // #####################
     // Access policy filter (invisible yet)
     // #####################
@@ -168,7 +158,7 @@ export class ProposalStore {
     setTextFilter(text?: string): void {
         this.filter.text = text
         this.setCountryFilter(undefined)
-        analytics.event(Category.Proposal, ProposalAction.TextFilter)
+        userEvent(ProposalViewAction.FilterText, text)
     }
 
     @computed
@@ -192,7 +182,7 @@ export class ProposalStore {
                 perhour: pricePerHourMax,
             },
         })
-        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerHour, String(pricePerHourMax))
+        userEvent(ProposalViewAction.FilterPriceTime, String(pricePerHourMax))
     }
 
     @action
@@ -205,7 +195,7 @@ export class ProposalStore {
                 pergib: pricePerGibMax,
             },
         })
-        analytics.event(Category.Proposal, ProposalAction.PriceFilterPerGib, String(pricePerGibMax))
+        userEvent(ProposalViewAction.FilterPriceData, String(pricePerGibMax))
     }
 
     @action
@@ -255,7 +245,7 @@ export class ProposalStore {
         this.root.filters.setPartial({
             quality: { level },
         })
-        analytics.event(Category.Proposal, ProposalAction.QualityFilterLevel, level ? QualityLevel[level] : undefined)
+        userEvent(ProposalViewAction.FilterQuality, level ? QualityLevel[level] : undefined)
     }
 
     @action
@@ -265,7 +255,7 @@ export class ProposalStore {
                 "include-failed": includeFailed,
             },
         })
-        analytics.event(Category.Proposal, ProposalAction.QualityFilterIncludeUnreachable, String(includeFailed))
+        userEvent(ProposalViewAction.FilterIncludeFailed, String(includeFailed))
     }
 
     @computed
@@ -311,7 +301,7 @@ export class ProposalStore {
     @action
     toggleIpTypeFilter(ipType?: string): void {
         this.setIpTypeFilter(this.filters.other?.["ip-type"] !== ipType ? ipType : "")
-        analytics.event(Category.Proposal, ProposalAction.IpTypeFilter, ipType)
+        userEvent(ProposalViewAction.FilterIpType, ipType)
     }
 
     @computed
@@ -343,7 +333,7 @@ export class ProposalStore {
     toggleCountryFilter(countryCode?: string): void {
         this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
-        analytics.event(Category.Proposal, ProposalAction.CountryFilter, countryCode)
+        userEvent(ProposalViewAction.FilterCountry, countryCode)
     }
 
     @computed
@@ -371,7 +361,7 @@ export class ProposalStore {
     @action
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
-        analytics.event(Category.Proposal, ProposalAction.SelectProposal, proposal?.country)
+        userEvent(ProposalViewAction.SelectProposal, proposal?.country)
     }
 
     @action

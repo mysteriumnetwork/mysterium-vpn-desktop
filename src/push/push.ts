@@ -10,8 +10,8 @@ import { Notification, shell } from "electron"
 import * as packageJson from "../../package.json"
 import { log } from "../log/log"
 // eslint-disable-next-line no-restricted-imports
-import { analytics } from "../analytics/analytics-main"
-import { Category, NotificationAction } from "../analytics/analytics"
+import { webAnalyticsAppStateEvent, webAnalyticsUserEvent } from "../analytics/analytics-main"
+import { AppStateAction, OtherAction } from "../analytics/actions"
 
 interface PushPayload {
     title?: string
@@ -39,9 +39,9 @@ const listener = (data: PushPayload) => {
         title: data.title ?? packageJson.productName,
         body: data.message ?? "",
     })
-    analytics.event(Category.Notification, NotificationAction.Shown, data.url)
+    webAnalyticsAppStateEvent(AppStateAction.PushNotificationShown, data.url)
     notification.on("click", () => {
-        analytics.event(Category.Notification, NotificationAction.Clicked, data.url)
+        webAnalyticsUserEvent(OtherAction.PushNotificationClick, data.url)
         if (data.url != null) {
             shell.openExternal(data.url)
         }

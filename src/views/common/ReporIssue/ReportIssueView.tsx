@@ -15,6 +15,8 @@ import { TextArea } from "../../../ui-kit/form-components/TextArea"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { useStores } from "../../../store"
 import { log } from "../../../log/log"
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../analytics/actions"
 
 const Container = styled.div`
     flex: 1;
@@ -61,6 +63,7 @@ export const ReportIssueView: React.FC = observer(() => {
         }
     }
     const submit = async () => {
+        userEvent(OtherAction.SubmitBugReport)
         try {
             const issueId = await feedback.reportIssue({
                 email: email.current?.value,

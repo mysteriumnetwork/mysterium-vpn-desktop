@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
-import { action, observable, reaction } from "mobx"
+import { action, observable, reaction, runInAction } from "mobx"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
-import { analytics } from "../analytics/analytics-ui"
-import { Category, IdentityAction, WalletAction } from "../analytics/analytics"
+import { appStateEvent } from "../analytics/analytics"
 import { tequilapi } from "../tequilapi"
+import { AppStateAction } from "../analytics/actions"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -20,6 +20,8 @@ export class IdentityStore {
     loading = false
     @observable
     identity?: Identity
+    @observable
+    unlocked = false
     @observable
     identities: Identity[] = []
 
@@ -54,7 +56,9 @@ export class IdentityStore {
                 if (!identity) {
                     return
                 }
-                await this.unlock()
+                if (!this.unlocked) {
+                    await this.unlock()
+                }
                 if (!registered(identity)) {
                     await this.root.payment.fetchTransactorFees()
                 }
@@ -82,13 +86,13 @@ export class IdentityStore {
         reaction(
             () => this.identity?.registrationStatus,
             (status) => {
-                analytics.event(Category.Identity, IdentityAction.RegistrationStatusChanged, status)
+                appStateEvent(AppStateAction.IdentityStatus, status)
             },
         )
         reaction(
             () => this.identity?.balance,
             (balance) => {
-                analytics.event(Category.Wallet, WalletAction.BalanceChanged, balance ? String(balance) : undefined)
+                appStateEvent(AppStateAction.BalanceChanged, String(balance))
             },
         )
     }
@@ -99,12 +103,13 @@ export class IdentityStore {
             return
         }
         const matchingId = identities.find((id) => id.id == this.identity?.id)
+
         this.setIdentity(matchingId)
     }
 
     @action
     async create(): Promise<void> {
-        analytics.event(Category.Identity, IdentityAction.CreateIdentity)
+        appStateEvent(AppStateAction.IdentityCreate)
         await tequilapi.identityCreate("")
     }
 
@@ -114,14 +119,17 @@ export class IdentityStore {
             return
         }
         const i = this.identity.id
-        analytics.event(Category.Identity, IdentityAction.UnlockIdentity)
-        return await tequilapi.identityUnlock(i, "", 10000)
+        appStateEvent(AppStateAction.IdentityUnlock)
+        await tequilapi.identityUnlock(i, "", 10000)
+        runInAction(() => {
+            this.unlocked = true
+        })
     }
 
     @action
     async register(id: Identity): Promise<void> {
         await this.root.payment.fetchTransactorFees()
-        analytics.event(Category.Identity, IdentityAction.RegisterIdentity)
+        appStateEvent(AppStateAction.IdentityRegister)
         return tequilapi.identityRegister(id.id, { stake: 0 })
     }
 

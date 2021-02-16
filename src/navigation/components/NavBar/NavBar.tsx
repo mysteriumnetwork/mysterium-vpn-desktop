@@ -16,7 +16,7 @@ import { useStores } from "../../../store"
 import { brandDarker } from "../../../ui-kit/colors"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
 import { fmtMoney } from "../../../payment/display"
-import { locations, titleForPath } from "../../locations"
+import { locationByPath, locations } from "../../locations"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -95,8 +95,7 @@ export const NavBar: React.FC = observer(() => {
     const clickWallet = () => {
         router.push(locations.wallet)
     }
-    const locationTitle = titleForPath(router.location.pathname)
-    const hasTitle = locationTitle != null
+    const location = locationByPath(router.location.pathname)
     const balance = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
@@ -113,15 +112,15 @@ export const NavBar: React.FC = observer(() => {
     }
     return (
         <Container>
-            {hasTitle && (
+            {location?.breadcrumb && (
                 <>
                     <NavigationButton onClick={clickHome}>
                         <NavigationIcon icon={faChevronLeft} size="1x" />
                     </NavigationButton>
-                    <Location>{locationTitle}</Location>
+                    <Location>{location?.title ?? ""}</Location>
                 </>
             )}
-            {!hasTitle && (
+            {!location?.breadcrumb && (
                 <>
                     <NavigationButton onClick={clickFilters}>
                         <NavigationIcon icon={faSlidersH} size="1x" />

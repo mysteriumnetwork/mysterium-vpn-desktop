@@ -19,6 +19,7 @@
     "bundle": "yarn build && electron-builder"
   },
   "dependencies": {
+    "@datapunt/matomo-tracker-js": "^0.3.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
@@ -56,8 +57,7 @@
     "semver": "^7.3.2",
     "source-map-support": "^0.5.19",
     "styled-components": "^5.1.1",
-    "sudo-prompt": "^9.2.1",
-    "universal-analytics": "^0.4.20"
+    "sudo-prompt": "^9.2.1"
   },
   "devDependencies": {
     "@sentry/cli": "^1.58.0",
@@ -76,7 +76,6 @@
     "@types/react-window": "^1.8.2",
     "@types/semver": "^7.3.1",
     "@types/styled-components": "^5.1.1",
-    "@types/universal-analytics": "^0.4.4",
     "@types/webpack-env": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
@@ -102,7 +101,7 @@
   "resolutions": {
     "@types/react": "^17.0.0"
   },
-  "analyticsAccountId": "UA-89155936-2",
+  "analyticsUrl": "https://analytics.mysterium.network",
   "intercomAppId": "h7hlm9on",
   "pushyAppId": "5f23dc54d4786d7760003a71",
   "sentryDsn": "https://5c3208e8d6124f2db303a2d12c7f48b8@o136129.ingest.sentry.io/5222592",

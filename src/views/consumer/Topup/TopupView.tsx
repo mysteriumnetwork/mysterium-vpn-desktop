@@ -23,6 +23,8 @@ import { log } from "../../../log/log"
 import { Anchor } from "../../../ui-kit/components/Anchor"
 import { OrderStatus } from "../../../payment/store"
 import { Spinner } from "../../../ui-kit/components/Spinner/Spinner"
+import { userEvent } from "../../../analytics/analytics"
+import { WalletAction } from "../../../analytics/actions"
 
 const Container = styled.div`
     flex: 1;
@@ -82,7 +84,8 @@ export const TopupView: React.FC = observer(() => {
             setProgress(Progress.NONE)
         }
     }, [payment.order])
-    const createPaymentOrder = async () => {
+    const onCreatePaymentClick = async () => {
+        userEvent(WalletAction.CreatePayment)
         try {
             setProgress(Progress.CREATING)
             await payment.createOrder()
@@ -127,6 +130,12 @@ export const TopupView: React.FC = observer(() => {
         )
     }
     if (progress == Progress.CREATED) {
+        const onPayInBrowserClick = () => {
+            userEvent(WalletAction.PayInBrowser)
+            if (payment.order?.paymentUrl) {
+                shell.openExternal(payment.order?.paymentUrl)
+            }
+        }
         return (
             <Container>
                 <div>
@@ -137,16 +146,7 @@ export const TopupView: React.FC = observer(() => {
                             </Title>
                             <div>
                                 Send the indicated amount to the address below. (
-                                <Anchor
-                                    onClick={() => {
-                                        if (payment.order?.paymentUrl) {
-                                            shell.openExternal(payment.order?.paymentUrl)
-                                        }
-                                    }}
-                                >
-                                    Pay in browser instead?
-                                </Anchor>
-                                )
+                                <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>)
                             </div>
                             <QR height={140} text={payment.order?.paymentAddress} />
                         </>
@@ -154,6 +154,20 @@ export const TopupView: React.FC = observer(() => {
                 </div>
             </Container>
         )
+    }
+    const onTopupAmountChange = (val?: number): void => {
+        userEvent(WalletAction.ChangeTopupAmount, String(val))
+        payment.setTopupAmount(val)
+    }
+    const onCurrencyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const val = event.target.value
+        userEvent(WalletAction.ChangeTopupCurrency, val)
+        payment.setPaymentCurrency(val)
+    }
+    const onLightningChange = (): void => {
+        const val = !payment.lightningNetwork
+        userEvent(WalletAction.UseLightningNetwork, String(val))
+        payment.setLightningNetwork(val)
     }
     return (
         <Container>
@@ -163,19 +177,14 @@ export const TopupView: React.FC = observer(() => {
                     disabled={progress != Progress.NONE}
                     rate={payment.mystToUsdRate?.amount}
                     defaultValue={payment.topupAmount}
-                    onChange={(val) => payment.setTopupAmount(val)}
+                    onChange={onTopupAmountChange}
                     suffix={Currency.MYSTTestToken}
                 />
             </FormRow>
             <FormRow>
                 <SectionTitle>Currency</SectionTitle>
                 <Currencies>
-                    <Select
-                        disabled={progress != Progress.NONE}
-                        onChange={(event) => {
-                            payment.setPaymentCurrency(event.target.value)
-                        }}
-                    >
+                    <Select disabled={progress != Progress.NONE} onChange={onCurrencyChange}>
                         {payment.currencies.map((cur) => (
                             <option key={cur} value={cur}>
                                 {cur}
@@ -189,7 +198,7 @@ export const TopupView: React.FC = observer(() => {
                     <LightningCheckbox
                         disabled={progress != Progress.NONE}
                         checked={payment.lightningNetwork}
-                        onChange={(): void => payment.setLightningNetwork(!payment.lightningNetwork)}
+                        onChange={onLightningChange}
                     >
                         Use lightning network
                     </LightningCheckbox>
@@ -197,7 +206,7 @@ export const TopupView: React.FC = observer(() => {
             )}
             <Actions>
                 {progress == Progress.NONE && (
-                    <BrandButton disabled={!payment.orderOptionsValid} onClick={createPaymentOrder}>
+                    <BrandButton disabled={!payment.orderOptionsValid} onClick={onCreatePaymentClick}>
                         Start payment
                     </BrandButton>
                 )}

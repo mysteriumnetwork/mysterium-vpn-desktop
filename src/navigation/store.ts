@@ -9,10 +9,10 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
-import { analytics } from "../analytics/analytics-ui"
-import { Category, OnboardingAction } from "../analytics/analytics"
+import { userEvent } from "../analytics/analytics"
 import { registered } from "../identity/identity"
 import { MainIpcListenChannels } from "../main/ipc"
+import { OnboardingAction } from "../analytics/actions"
 
 import { AppLocation, locations } from "./locations"
 
@@ -84,9 +84,6 @@ export class NavigationStore {
         if (this.root.router.location.pathname == locations.wallet.path) {
             return undefined
         }
-        if (this.root.router.location.pathname == locations.topup.path) {
-            return undefined
-        }
 
         if (!config.currentTermsAgreed() && this.welcome) {
             return locations.welcome
@@ -110,7 +107,7 @@ export class NavigationStore {
 
     @action
     dismissWelcome = (): void => {
-        analytics.event(Category.Onboarding, OnboardingAction.GetStarted)
+        userEvent(OnboardingAction.GetStarted)
         this.welcome = false
         this.root.router.push(locations.terms)
     }

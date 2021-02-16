@@ -6,17 +6,13 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { Supervisor } from "../supervisor/supervisor"
-// eslint-disable-next-line no-restricted-imports,@typescript-eslint/no-unused-vars
-import type { analytics } from "../analytics/analytics-main"
 
 declare global {
     namespace NodeJS {
         interface Global {
             os: Platform
             supervisor: Supervisor
-            analyticsSetUserId: typeof analytics.setUserId
-            analyticsEvent: typeof analytics.event
-            analyticsPageview: typeof analytics.pageview
+            machineId: string
         }
     }
 }

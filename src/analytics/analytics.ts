@@ -4,91 +4,72 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import MatomoTracker from "@datapunt/matomo-tracker-js"
+import { TrackEventParams } from "@datapunt/matomo-tracker-js/lib/types"
+import { TrackPageViewParams } from "@datapunt/matomo-tracker-js/es/types"
+import { ipcRenderer } from "electron"
 
-export interface Analytics {
-    setUserId(userId: string): void
-    event(category: Category, action: Action, label?: string, value?: number): void
-    pageview(path: string): void
+import * as packageJson from "../../package.json"
+import { isDevelopment } from "../utils/env"
+import { WebIpcListenChannels } from "../main/ipc"
+
+import { AppStateAction, Category, UserAction } from "./actions"
+
+const appVersion = packageJson.version
+const tracker = new MatomoTracker({
+    siteId: 1,
+    userId: global.machineId,
+    urlBase: packageJson.analyticsUrl,
+    disabled: isDevelopment(),
+    linkTracking: false,
+})
+
+export const initialize = (): void => {
+    ipcRenderer.on(
+        WebIpcListenChannels.AnalyticsAppStateEvent,
+        (evt, action: AppStateAction, name?: string, value?: number) => {
+            appStateEvent(action, name, value)
+        },
+    )
+    ipcRenderer.on(
+        WebIpcListenChannels.AnalyticsUserEvent,
+        (evt, action: UserAction, name?: string, value?: number) => {
+            userEvent(action, name, value)
+        },
+    )
 }
 
-export enum Category {
-    App = "App",
-    Tray = "Tray",
-    Onboarding = "Onboarding",
-    Identity = "Identity",
-    Proposal = "Proposal",
-    Connection = "Connection",
-    Wallet = "Wallet",
-    Notification = "Notification",
+// Record a page view
+export const pageview = (params: TrackPageViewParams): void => {
+    tracker.trackPageView({
+        ...params,
+        customDimensions: [{ id: 1, value: appVersion }],
+    })
 }
 
-export type Action =
-    | AppAction
-    | TrayAction
-    | OnboardingAction
-    | IdentityAction
-    | ProposalAction
-    | ConnectAction
-    | WalletAction
-    | NotificationAction
-
-export enum AppAction {
-    Quit = "Quit",
-    CloseWindow = "Close window",
-    RestoreWindow = "Restore window",
-    MinimizeWindow = "Minimize window",
-    InstallSupervisor = "Install supervisor",
-    ConnectedToSupervisor = "Connected to supervisor",
-    DaemonStatusChanged = "Daemon status changed",
+const event = (params: TrackEventParams): void => {
+    tracker.trackEvent({
+        ...params,
+        customDimensions: [{ id: 1, value: appVersion }],
+    })
 }
 
-export enum TrayAction {
-    DoubleClick = "Tray double click",
-    ShowWindow = "Show window",
-    CheckForUpdates = "Check for updates",
-    Quit = "Quit",
-    Repair = "Repair",
+// Record an application state event
+export const appStateEvent = (action: AppStateAction, name?: string, value?: number): void => {
+    event({
+        category: Category.AppState,
+        action,
+        name,
+        value,
+    })
 }
 
-export enum OnboardingAction {
-    GetStarted = "Get started",
-    ScrollTerms = "Scroll terms",
-    CheckBoxAgreeToTerms = "Check box agree to terms",
-    AcceptTerms = "Accept terms",
-}
-
-export enum IdentityAction {
-    CreateIdentity = "Create identity",
-    UnlockIdentity = "Unlock identity",
-    RegisterIdentity = "Register identity",
-    RegistrationStatusChanged = "Registration status changed",
-}
-
-export enum ProposalAction {
-    CustomFilter = "Custom filter",
-    TextFilter = "Text filter",
-    PriceFilterPerHour = "Price filter / hour",
-    PriceFilterPerGib = "Price filter / GiB",
-    QualityFilterLevel = "Quality filter level",
-    QualityFilterIncludeUnreachable = "Quality filter include unreachable",
-    IpTypeFilter = "IP type filter",
-    CountryFilter = "Country filter",
-    SelectProposal = "Select proposal",
-}
-
-export enum ConnectAction {
-    Connect = "Connect",
-    Disconnect = "Disconnect",
-    Cancel = "Cancel",
-    StatusChanged = "StatusChanged",
-}
-
-export enum WalletAction {
-    BalanceChanged = "Balance Changed",
-    Topup = "Wallet top-up",
-}
-
-export enum NotificationAction {
-    Shown = "Notification shown",
-    Clicked = "Notification clicked",
+// Record a user interaction event
+export const userEvent = (action: UserAction, name?: string, value?: number): void => {
+    event({
+        category: Category.UserAction,
+        action,
+        name,
+        value,
+    })
 }

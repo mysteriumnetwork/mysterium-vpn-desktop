@@ -10,6 +10,9 @@ import { QRCode } from "react-qr-svg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFont, faQrcode } from "@fortawesome/free-solid-svg-icons"
 
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../analytics/actions"
+
 const Container = styled.div`
     width: 100%;
     display: flex;
@@ -50,7 +53,11 @@ export const QR: React.FC<QRProps> = ({ text, height = 100 }) => {
         return <></>
     }
     const [imageView, setImageView] = useState(true)
-    const toggleView = () => setImageView(!imageView)
+    const toggleView = () => {
+        const newVal = !imageView
+        userEvent(OtherAction.ToggleQrView, String(newVal))
+        setImageView(newVal)
+    }
     const icon = imageView ? <FontAwesomeIcon icon={faFont} size="1x" /> : <FontAwesomeIcon icon={faQrcode} size="1x" />
     const content = imageView ? (
         <Image>
