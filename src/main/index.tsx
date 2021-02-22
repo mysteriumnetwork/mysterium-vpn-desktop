@@ -151,12 +151,14 @@ app.on("window-all-closed", () => {
     }
 })
 
-app.on("activate", async () => {
-    // on macOS it is common to re-create a window even after all windows have been closed
-    if (mainWindow == null) {
-        mainWindow = await createMainWindow()
-    }
-    mainWindow.show()
+app.whenReady().then(() => {
+    app.on("activate", async () => {
+        // on macOS it is common to re-create a window even after all windows have been closed
+        if (mainWindow == null) {
+            mainWindow = await createMainWindow()
+        }
+        mainWindow.show()
+    })
 })
 
 app.on("before-quit", () => (app.quitting = true))
