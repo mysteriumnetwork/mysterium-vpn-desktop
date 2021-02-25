@@ -12,12 +12,11 @@ import { ChildProcess, spawn } from "child_process"
 import semver from "semver"
 import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
 
+import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
-import { appStateEvent } from "../analytics/analytics"
 import { log } from "../log/log"
 import { sudoExec } from "../utils/sudo"
 import { uid } from "../utils/user"
-import { isDevelopment } from "../utils/env"
 import { webAnalyticsAppStateEvent } from "../analytics/analytics-main"
 import { AppStateAction } from "../analytics/actions"
 
@@ -52,28 +51,6 @@ export class Supervisor {
                 .on("error", function (data) {
                     return reject(data)
                 })
-        })
-    }
-
-    async bundledVersion(): Promise<string> {
-        const supervisor = spawn(this.supervisorBin(), ["-version"])
-        let stdout = ""
-        supervisor.stdout.on("data", (data) => {
-            log.debug("Supervisor stdout:", data.toString())
-            stdout = data.toString()
-        })
-        supervisor.stderr.on("data", (data) => {
-            log.error("Supervisor stderr:", data.toString())
-        })
-        return new Promise((resolve, reject) => {
-            supervisor.on("error", reject)
-            supervisor.on("exit", (code) => {
-                if (code === 0) {
-                    resolve(stdout)
-                } else {
-                    reject(new Error(`exit code: ${code}`))
-                }
-            })
         })
     }
 
@@ -117,40 +94,29 @@ export class Supervisor {
     }
 
     async upgrade(): Promise<void> {
-        let bundledVersion = ""
-        try {
-            bundledVersion = await this.bundledVersion()
-            log.info("Bundled supervisor version:", bundledVersion)
-        } catch (err) {
-            log.error("Error checking bundled version", err)
-        }
+        const bundledVersion = packageJson.dependencies["@mysteriumnetwork/node"]
 
         let runningVersion = ""
         try {
             runningVersion = await this.runningVersion()
-            log.info("Running supervisor version:", runningVersion)
         } catch (err) {
             log.error("Error checking running version", err)
         }
+
+        log.info("Supervisor version bundled:", bundledVersion, "running:", runningVersion)
 
         if (runningVersion == bundledVersion) {
             log.info("Running supervisor version matches, skipping the upgrade")
             return
         }
         if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
-            log.info(
-                "Exotic versions of supervisor found, proceeding to upgrade. In the development mode, upgrade manually if needed:\n" +
-                    "sudo myst_supervisor -install -uid ...",
-            )
-            if (isDevelopment()) {
-                return
-            }
+            log.info("Exotic versions of supervisor found, proceeding to upgrade")
         } else if (semver.gte(runningVersion, bundledVersion)) {
             log.info("Running supervisor version is compatible, skipping the upgrade")
             return
         }
         log.info(`Upgrading supervisor ${runningVersion} → ${bundledVersion}`)
-        return supervisor.install()
+        await supervisor.install()
     }
 
     supervisorBin(): string {
