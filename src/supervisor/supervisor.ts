@@ -128,7 +128,6 @@ export class Supervisor {
     }
 
     async install(): Promise<void> {
-        appStateEvent(AppStateAction.SupervisorInstall)
         return await new Promise((resolve) => {
             sudoExec(`"${this.supervisorBin()}" -install -uid ${uid()}`)
             const waitUntilConnected = (): void => {
