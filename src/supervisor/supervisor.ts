@@ -7,9 +7,10 @@
 import * as net from "net"
 import { Socket } from "net"
 import { platform } from "os"
-import { spawn } from "child_process"
+import { ChildProcess, spawn } from "child_process"
 
 import semver from "semver"
+import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
 
 import { staticAssetPath } from "../utils/paths"
 import { appStateEvent } from "../analytics/analytics"
@@ -31,6 +32,8 @@ function mystSockPath(): string {
 
 export class Supervisor {
     conn?: Socket
+    proc?: ChildProcess
+    port?: number
 
     async connect(): Promise<void> {
         log.info("Connecting to the supervisor...")
@@ -186,27 +189,20 @@ export class Supervisor {
 
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
-    startMyst(tequilApiPort: number): Promise<void> {
+    startMyst(port: number): Promise<void> {
         let mystBinaryName = "bin/myst"
         if (isWin) {
             mystBinaryName += ".exe"
         }
 
-        this.setSupervisorTequilapiPort(tequilApiPort)
+        this.setSupervisorTequilapiPort(port)
+        this.port = port
 
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
-            [
-                "--ui.enable=false",
-                "--testnet2",
-                "--usermode",
-                "--consumer",
-                `--tequilapi.port=${tequilApiPort}`,
-                "daemon",
-            ],
+            ["--ui.enable=false", "--testnet2", "--usermode", "--consumer", `--tequilapi.port=${port}`, "daemon"],
             {
-                detached: true, // Needed for unref to work correctly.
                 stdio: "ignore", // Needed for unref to work correctly.
             },
         )
@@ -215,16 +211,35 @@ export class Supervisor {
             log.info(d)
         })
 
-        // Unreference myst node process from main electron process which allow myst to run
-        // independenly event after app is force closed. This allows supervisor to finish
-        // node shutdown gracefully.
-        mystProcess.unref()
+        this.proc = mystProcess
 
         mystProcess.on("close", (code) => {
             log.info(`myst process exited with code ${code}`)
         })
 
         return Promise.resolve()
+    }
+
+    async stopMyst(): Promise<void> {
+        log.info("Stopping myst")
+        if (this.port) {
+            log.info("Shutting down node gracefully on port", this.port)
+            const api = new TequilapiClientFactory(`http://127.0.0.1:${this.port}`, 3_000).build()
+            try {
+                await api.stop()
+                return
+            } catch (err) {
+                log.error("Could not shutdown myst gracefully", err.message)
+            }
+        }
+        if (this.proc) {
+            log.info("Killing node process", this.proc.pid)
+            try {
+                this.proc.kill()
+            } catch (err) {
+                log.error("Could not kill node process", err.message)
+            }
+        }
     }
 }
 
