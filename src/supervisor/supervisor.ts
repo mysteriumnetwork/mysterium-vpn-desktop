@@ -187,6 +187,33 @@ export class Supervisor {
         this.conn.write("kill\n")
     }
 
+    async killGhost(port: number): Promise<void> {
+        const api = new TequilapiClientFactory(`http://127.0.0.1:${port}`, 3_000).build()
+        let hc: NodeHealthcheck | undefined
+        try {
+            hc = await api.healthCheck(100)
+        } catch (err) {
+            log.info("No ghosts found on port", port)
+        }
+        if (!hc?.process) {
+            return
+        }
+        log.info("Found a ghost node on port", port, "PID", hc.process)
+        log.info("Attempting to shutdown gracefully")
+        try {
+            await api.stop()
+            return
+        } catch (err) {
+            log.info("Could not stop node on", port, err.message)
+        }
+        log.info("Attempting to kill process", hc.process)
+        try {
+            process.kill(hc.process)
+        } catch (err) {
+            log.info("Could not kill process", hc.process, err)
+        }
+    }
+
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
     startMyst(port: number): Promise<void> {

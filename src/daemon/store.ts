@@ -98,6 +98,7 @@ export class DaemonStore {
         }
 
         await supervisor.upgrade()
+        await Promise.all([supervisor.killGhost(4050), supervisor.killGhost(44050)])
         await supervisor.startMyst(TEQUILAPI_PORT)
         this.setStarting(false)
     }
