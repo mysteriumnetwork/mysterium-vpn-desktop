@@ -87,7 +87,7 @@ export class Supervisor {
             this.conn?.write(command + "\n")
             const responseHandler = (data: Buffer) => {
                 clearTimeout(timer)
-                const message = data.toString()
+                const message = data.toString().trim()
 
                 if (!message.startsWith("ok")) {
                     reject(new Error(message.replace("error: ", "")))
