@@ -15,8 +15,8 @@ import spinnerFile from "./Dual Ring-1s-100px.svg"
 import spinnerDarkFile from "./Dual Ring-1s-100px-dark.svg"
 
 const Img = styled.img`
-    width: 50;
-    height: 50;
+    width: 75px;
+    height: 75px;
 `
 
 export interface SpinnerProps {

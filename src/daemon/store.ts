@@ -6,13 +6,14 @@
  */
 
 import { action, observable, reaction, when } from "mobx"
-import { remote } from "electron"
+import { ipcRenderer, remote } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
-import { TEQUILAPI_PORT, tequilapi } from "../tequilapi"
+import { tequilapi, TEQUILAPI_PORT } from "../tequilapi"
+import { MainIpcListenChannels, WebIpcListenChannels } from "../main/ipc"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -21,11 +22,24 @@ export enum DaemonStatusType {
     Down = "DOWN",
 }
 
+export enum StartupStatus {
+    CheckingForUpdates = "Checking for updates",
+    UpdateAvailable = "Update available",
+    UpdateNotAvailable = "No update available",
+    Downloading = "Downloading update",
+    DownloadingComplete = "Download complete. Restarting...",
+    KillingGhosts = "Killing ghosts",
+    StartingDaemon = "Starting daemon",
+}
+
 export class DaemonStore {
     @observable
     statusLoading = false
     @observable
     status = DaemonStatusType.Down
+
+    @observable
+    startupStatus = StartupStatus.CheckingForUpdates
 
     @observable
     starting = false
@@ -43,9 +57,8 @@ export class DaemonStore {
 
     setupReactions(): void {
         when(
-            () => this.status == DaemonStatusType.Down,
+            () => this.startupStatus == StartupStatus.UpdateNotAvailable,
             async () => {
-                this.root.navigation.showLoading()
                 await this.start()
             },
         )
@@ -54,12 +67,16 @@ export class DaemonStore {
             async (status) => {
                 if (status == DaemonStatusType.Up) {
                     this.eventSource = sseConnect()
-                } else {
-                    this.root.navigation.showLoading()
-                    await this.start()
                 }
             },
         )
+        this.root.navigation.showLoading()
+        this.update()
+    }
+
+    @action
+    setStartupStatus(status: StartupStatus): void {
+        this.startupStatus = status
     }
 
     @action
@@ -84,6 +101,35 @@ export class DaemonStore {
     }
 
     @action
+    async update(): Promise<void> {
+        ipcRenderer.send(MainIpcListenChannels.Update)
+        ipcRenderer.on(WebIpcListenChannels.UpdateAvailable, () => {
+            log.info("Update available", this.startupStatus)
+            if (this.startupStatus == StartupStatus.CheckingForUpdates) {
+                this.setStartupStatus(StartupStatus.UpdateAvailable)
+            }
+        })
+        ipcRenderer.on(WebIpcListenChannels.UpdateNotAvailable, () => {
+            log.info("Update not available", this.startupStatus)
+            if (this.startupStatus == StartupStatus.CheckingForUpdates) {
+                this.setStartupStatus(StartupStatus.UpdateNotAvailable)
+            }
+        })
+        ipcRenderer.on(WebIpcListenChannels.UpdateDownloading, () => {
+            this.setStartupStatus(StartupStatus.Downloading)
+        })
+        ipcRenderer.on(WebIpcListenChannels.UpdateDownloadComplete, () => {
+            this.setStartupStatus(StartupStatus.DownloadingComplete)
+        })
+        setTimeout(() => {
+            if (this.startupStatus == StartupStatus.CheckingForUpdates) {
+                log.info("Update timeout", this.startupStatus)
+                this.setStartupStatus(StartupStatus.UpdateNotAvailable)
+            }
+        }, 5_000)
+    }
+
+    @action
     async start(): Promise<void> {
         if (this.starting) {
             log.info("Already starting")
@@ -98,6 +144,9 @@ export class DaemonStore {
         }
 
         await supervisor.upgrade()
+        this.setStartupStatus(StartupStatus.KillingGhosts)
+        await Promise.all([supervisor.killGhost(4050), supervisor.killGhost(44050)])
+        this.setStartupStatus(StartupStatus.StartingDaemon)
         await supervisor.startMyst(TEQUILAPI_PORT)
         this.setStarting(false)
     }

@@ -139,7 +139,6 @@ if (!appInstanceLock) {
     app.on("ready", async () => {
         mainWindow = await createMainWindow()
         tray = createTray(app, mainWindow)
-        autoUpdater.checkForUpdatesAndNotify()
     })
 }
 
@@ -161,11 +160,10 @@ app.whenReady().then(() => {
     })
 })
 
-app.on("before-quit", () => (app.quitting = true))
-
-app.on("will-quit", async () => {
+app.on("before-quit", async () => {
+    app.quitting = true
     await supervisor.connect()
-    supervisor.killMyst()
+    await supervisor.stopMyst()
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
@@ -180,6 +178,28 @@ ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: 
     } else {
         mainWindow?.setContentSize(winSize.width, winSize.height, true)
     }
+})
+ipcMain.on(MainIpcListenChannels.Update, () => {
+    autoUpdater.checkForUpdates()
+})
+
+autoUpdater.on("download-progress", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloading)
+})
+
+autoUpdater.on("update-available", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateAvailable)
+})
+
+autoUpdater.on("update-not-available", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateNotAvailable)
+})
+
+autoUpdater.on("update-downloaded", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloadComplete)
+    setTimeout(() => {
+        autoUpdater.quitAndInstall(false, true)
+    }, 1_000)
 })
 
 export const ipcWebDisconnect = (): void => {

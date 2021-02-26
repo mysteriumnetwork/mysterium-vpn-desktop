@@ -24,7 +24,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "@mysteriumnetwork/node": "0.42.1",
+    "@mysteriumnetwork/node": "0.42.6",
     "@mysteriumnetwork/terms": "^0.0.27",
     "@sentry/electron": "^2.0.1",
     "async-retry": "^1.3.1",
@@ -133,8 +133,7 @@
       "icon": "static/logo.ico"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
       "perMachine": true,
       "allowElevation": true,
       "runAfterFinish": true,

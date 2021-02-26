@@ -7,16 +7,16 @@
 import * as net from "net"
 import { Socket } from "net"
 import { platform } from "os"
-import { spawn } from "child_process"
+import { ChildProcess, spawn } from "child_process"
 
 import semver from "semver"
+import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
 
+import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
-import { appStateEvent } from "../analytics/analytics"
 import { log } from "../log/log"
 import { sudoExec } from "../utils/sudo"
 import { uid } from "../utils/user"
-import { isDevelopment } from "../utils/env"
 import { webAnalyticsAppStateEvent } from "../analytics/analytics-main"
 import { AppStateAction } from "../analytics/actions"
 
@@ -31,6 +31,8 @@ function mystSockPath(): string {
 
 export class Supervisor {
     conn?: Socket
+    proc?: ChildProcess
+    port?: number
 
     async connect(): Promise<void> {
         log.info("Connecting to the supervisor...")
@@ -52,28 +54,6 @@ export class Supervisor {
         })
     }
 
-    async bundledVersion(): Promise<string> {
-        const supervisor = spawn(this.supervisorBin(), ["-version"])
-        let stdout = ""
-        supervisor.stdout.on("data", (data) => {
-            log.debug("Supervisor stdout:", data.toString())
-            stdout = data.toString()
-        })
-        supervisor.stderr.on("data", (data) => {
-            log.error("Supervisor stderr:", data.toString())
-        })
-        return new Promise((resolve, reject) => {
-            supervisor.on("error", reject)
-            supervisor.on("exit", (code) => {
-                if (code === 0) {
-                    resolve(stdout)
-                } else {
-                    reject(new Error(`exit code: ${code}`))
-                }
-            })
-        })
-    }
-
     /**
      * Sends command to the supervisor and returns the response.
      */
@@ -84,7 +64,7 @@ export class Supervisor {
             this.conn?.write(command + "\n")
             const responseHandler = (data: Buffer) => {
                 clearTimeout(timer)
-                const message = data.toString()
+                const message = data.toString().trim()
 
                 if (!message.startsWith("ok")) {
                     reject(new Error(message.replace("error: ", "")))
@@ -114,40 +94,29 @@ export class Supervisor {
     }
 
     async upgrade(): Promise<void> {
-        let bundledVersion = ""
-        try {
-            bundledVersion = await this.bundledVersion()
-            log.info("Bundled supervisor version:", bundledVersion)
-        } catch (err) {
-            log.error("Error checking bundled version", err)
-        }
+        const bundledVersion = packageJson.dependencies["@mysteriumnetwork/node"]
 
         let runningVersion = ""
         try {
             runningVersion = await this.runningVersion()
-            log.info("Running supervisor version:", runningVersion)
         } catch (err) {
             log.error("Error checking running version", err)
         }
+
+        log.info("Supervisor version bundled:", bundledVersion, "running:", runningVersion)
 
         if (runningVersion == bundledVersion) {
             log.info("Running supervisor version matches, skipping the upgrade")
             return
         }
         if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
-            log.info(
-                "Exotic versions of supervisor found, proceeding to upgrade. In the development mode, upgrade manually if needed:\n" +
-                    "sudo myst_supervisor -install -uid ...",
-            )
-            if (isDevelopment()) {
-                return
-            }
+            log.info("Exotic versions of supervisor found, proceeding to upgrade")
         } else if (semver.gte(runningVersion, bundledVersion)) {
             log.info("Running supervisor version is compatible, skipping the upgrade")
             return
         }
         log.info(`Upgrading supervisor ${runningVersion} → ${bundledVersion}`)
-        return supervisor.install()
+        await supervisor.install()
     }
 
     supervisorBin(): string {
@@ -159,7 +128,6 @@ export class Supervisor {
     }
 
     async install(): Promise<void> {
-        appStateEvent(AppStateAction.SupervisorInstall)
         return await new Promise((resolve) => {
             sudoExec(`"${this.supervisorBin()}" -install -uid ${uid()}`)
             const waitUntilConnected = (): void => {
@@ -184,29 +152,49 @@ export class Supervisor {
         this.conn.write("kill\n")
     }
 
+    async killGhost(port: number): Promise<void> {
+        const api = new TequilapiClientFactory(`http://127.0.0.1:${port}`, 3_000).build()
+        let hc: NodeHealthcheck | undefined
+        try {
+            hc = await api.healthCheck(100)
+        } catch (err) {
+            log.info("No ghosts found on port", port)
+        }
+        if (!hc?.process) {
+            return
+        }
+        log.info("Found a ghost node on port", port, "PID", hc.process)
+        log.info("Attempting to shutdown gracefully")
+        try {
+            await api.stop()
+            return
+        } catch (err) {
+            log.info("Could not stop node on", port, err.message)
+        }
+        log.info("Attempting to kill process", hc.process)
+        try {
+            process.kill(hc.process)
+        } catch (err) {
+            log.info("Could not kill process", hc.process, err)
+        }
+    }
+
     // Myst process is not started from supervisor as supervisor runs as root user
     // which complicates starting myst process as non root user.
-    startMyst(tequilApiPort: number): Promise<void> {
+    startMyst(port: number): Promise<void> {
         let mystBinaryName = "bin/myst"
         if (isWin) {
             mystBinaryName += ".exe"
         }
 
-        this.setSupervisorTequilapiPort(tequilApiPort)
+        this.setSupervisorTequilapiPort(port)
+        this.port = port
 
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
-            [
-                "--ui.enable=false",
-                "--testnet2",
-                "--usermode",
-                "--consumer",
-                `--tequilapi.port=${tequilApiPort}`,
-                "daemon",
-            ],
+            ["--ui.enable=false", "--testnet2", "--usermode", "--consumer", `--tequilapi.port=${port}`, "daemon"],
             {
-                detached: true, // Needed for unref to work correctly.
                 stdio: "ignore", // Needed for unref to work correctly.
             },
         )
@@ -215,16 +203,35 @@ export class Supervisor {
             log.info(d)
         })
 
-        // Unreference myst node process from main electron process which allow myst to run
-        // independenly event after app is force closed. This allows supervisor to finish
-        // node shutdown gracefully.
-        mystProcess.unref()
+        this.proc = mystProcess
 
         mystProcess.on("close", (code) => {
             log.info(`myst process exited with code ${code}`)
         })
 
         return Promise.resolve()
+    }
+
+    async stopMyst(): Promise<void> {
+        log.info("Stopping myst")
+        if (this.port) {
+            log.info("Shutting down node gracefully on port", this.port)
+            const api = new TequilapiClientFactory(`http://127.0.0.1:${this.port}`, 3_000).build()
+            try {
+                await api.stop()
+                return
+            } catch (err) {
+                log.error("Could not shutdown myst gracefully", err.message)
+            }
+        }
+        if (this.proc) {
+            log.info("Killing node process", this.proc.pid)
+            try {
+                this.proc.kill()
+            } catch (err) {
+                log.error("Could not kill node process", err.message)
+            }
+        }
     }
 }
 
