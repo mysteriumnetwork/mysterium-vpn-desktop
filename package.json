@@ -133,8 +133,7 @@
       "icon": "static/logo.ico"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
       "perMachine": true,
       "allowElevation": true,
       "runAfterFinish": true,
