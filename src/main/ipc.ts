@@ -8,9 +8,14 @@ export enum WebIpcListenChannels {
     AnalyticsUserEvent = "analytics-user-event",
     AnalyticsAppStateEvent = "analytics-appstate-event",
     Disconnect = "disconnect",
+    UpdateAvailable = "update-available",
+    UpdateNotAvailable = "update-not-available",
+    UpdateDownloading = "update-downloading",
+    UpdateDownloadComplete = "update-download-complete",
 }
 
 export enum MainIpcListenChannels {
+    Update = "update",
     ConnectionStatus = "connection-status",
     ToggleSupportChat = "open-support-chat",
 }

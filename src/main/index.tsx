@@ -139,7 +139,6 @@ if (!appInstanceLock) {
     app.on("ready", async () => {
         mainWindow = await createMainWindow()
         tray = createTray(app, mainWindow)
-        autoUpdater.checkForUpdatesAndNotify()
     })
 }
 
@@ -179,6 +178,28 @@ ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: 
     } else {
         mainWindow?.setContentSize(winSize.width, winSize.height, true)
     }
+})
+ipcMain.on(MainIpcListenChannels.Update, () => {
+    autoUpdater.checkForUpdates()
+})
+
+autoUpdater.on("download-progress", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloading)
+})
+
+autoUpdater.on("update-available", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateAvailable)
+})
+
+autoUpdater.on("update-not-available", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateNotAvailable)
+})
+
+autoUpdater.on("update-downloaded", () => {
+    mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloadComplete)
+    setTimeout(() => {
+        autoUpdater.quitAndInstall(false, true)
+    }, 1_000)
 })
 
 export const ipcWebDisconnect = (): void => {
