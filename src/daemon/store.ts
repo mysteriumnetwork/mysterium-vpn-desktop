@@ -14,6 +14,7 @@ import { Supervisor } from "../supervisor/supervisor"
 import { log } from "../log/log"
 import { tequilapi, TEQUILAPI_PORT } from "../tequilapi"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../main/ipc"
+import { isProduction } from "../utils/env"
 
 const supervisor: Supervisor = remote.getGlobal("supervisor")
 
@@ -145,7 +146,9 @@ export class DaemonStore {
 
         await supervisor.upgrade()
         this.setStartupStatus(StartupStatus.KillingGhosts)
-        await Promise.all([supervisor.killGhost(4050), supervisor.killGhost(44050)])
+        if (isProduction()) {
+            await Promise.all([supervisor.killGhost(4050), supervisor.killGhost(44050)])
+        }
         this.setStartupStatus(StartupStatus.StartingDaemon)
         await supervisor.startMyst(TEQUILAPI_PORT)
         this.setStarting(false)
