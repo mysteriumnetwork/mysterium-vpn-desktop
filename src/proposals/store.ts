@@ -9,7 +9,7 @@ import {
     ConnectionStatus,
     pricePerGiB,
     pricePerHour,
-    ProposalMetrics,
+    ProposalQuality,
     QualityCalculator,
     QualityLevel,
 } from "mysterium-vpn-js"
@@ -28,12 +28,11 @@ import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } 
 
 const qc = new QualityCalculator()
 
-const qualityLevel = (metrics?: ProposalMetrics): QualityLevel | undefined => {
-    if (!metrics) {
+const qualityLevel = (quality?: ProposalQuality): QualityLevel | undefined => {
+    if (!quality) {
         return QualityLevel.UNKNOWN
     }
-    const qualityValue = qc.calculateValue(metrics)
-    return qc.calculateLevel(qualityValue)
+    return qc.calculateLevel(quality.quality)
 }
 
 const supportedServiceType = "wireguard"
@@ -51,7 +50,7 @@ export class ProposalStore {
     @observable
     proposals: UIProposal[] = []
     @observable
-    metrics: Map<ProposalKey, ProposalMetrics> = new Map<ProposalKey, ProposalMetrics>()
+    quality: Map<ProposalKey, ProposalQuality> = new Map<ProposalKey, ProposalQuality>()
 
     @observable
     active?: UIProposal
@@ -82,7 +81,7 @@ export class ProposalStore {
                 return
             }
             await this.fetchProposals()
-            await this.fetchMetrics()
+            await this.fetchQuality()
         }, proposalRefreshRate)
     }
 
@@ -109,30 +108,30 @@ export class ProposalStore {
     }
 
     @action
-    async fetchMetrics(): Promise<void> {
+    async fetchQuality(): Promise<void> {
         if (this.loading) {
             return
         }
         this.setLoading(true)
         try {
-            const metrics = await tequilapi.proposalsQuality()
-            if (metrics.length) {
-                this.setMetrics(metrics)
+            const quality = await tequilapi.proposalsQuality()
+            if (quality.length) {
+                this.setQuality(quality)
             }
         } catch (err) {
-            log.error("Could not get metrics", err.message)
+            log.error("Could not get proposal quality", err.message)
         }
         this.setLoading(false)
     }
 
     @computed
-    get proposalsWithMetrics(): UIProposal[] {
+    get proposalsWithQuality(): UIProposal[] {
         return this.proposals.map((proposal) => {
-            const proposalMetrics = this.metrics.get(proposal.key)
+            const proposalQuality = this.quality.get(proposal.key)
             return {
                 ...proposal,
-                metrics: proposalMetrics,
-                ...{ qualityLevel: qualityLevel(proposalMetrics) },
+                quality: proposalQuality,
+                ...{ qualityLevel: qualityLevel(proposalQuality) },
             }
         })
     }
@@ -143,7 +142,7 @@ export class ProposalStore {
 
     @computed
     get accessPolicyFiltered(): UIProposal[] {
-        const input = this.proposalsWithMetrics
+        const input = this.proposalsWithQuality
         if (!this.filters.other?.["no-access-policy"]) {
             return input
         }
@@ -270,7 +269,7 @@ export class ProposalStore {
             if (filterQuality != null && p.qualityLevel != null && p.qualityLevel < filterQuality) {
                 return false
             }
-            if (!filterIncludeFailed && p.metrics?.monitoringFailed) {
+            if (!filterIncludeFailed && p.quality?.monitoringFailed) {
                 return false
             }
             return true
@@ -375,9 +374,9 @@ export class ProposalStore {
     }
 
     @action
-    setMetrics = (metrics: ProposalMetrics[]): void => {
-        for (const metric of metrics) {
-            this.metrics.set(proposalKey(metric), metric)
+    setQuality = (quality: ProposalQuality[]): void => {
+        for (const q of quality) {
+            this.quality.set(proposalKey(q), q)
         }
     }
 }
