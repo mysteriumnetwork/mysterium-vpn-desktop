@@ -76,7 +76,7 @@ export class Filters {
                 pergib: ceil ? ceil.perGibMax / 2 : undefined,
             },
             quality: {
-                level: QualityLevel.HIGH,
+                level: QualityLevel.MEDIUM,
                 "include-failed": false,
             },
             other: {
