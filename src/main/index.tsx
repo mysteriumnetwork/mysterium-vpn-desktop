@@ -71,6 +71,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         maximizable: false,
         backgroundColor: "#882f61",
         webPreferences: {
+            contextIsolation: false,
             nodeIntegration: true,
             enableRemoteModule: true,
         },
