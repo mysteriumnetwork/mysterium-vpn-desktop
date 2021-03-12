@@ -43,7 +43,7 @@ export const newUIProposal = (proposal: Proposal): UIProposal => {
         nodeType: proposal.serviceDefinition?.locationOriginate?.nodeType ?? "unknown",
         shortId: shortId(proposal.providerId),
         serviceType4: serviceType4(proposal.serviceType),
-        qualityLevel: QualityLevel.UNKNOWN,
+        qualityLevel: undefined,
     }
 }
 

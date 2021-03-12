@@ -13,7 +13,7 @@ import mediumQ from "./medium.png"
 import lowQ from "./low.png"
 import unknownQ from "./unknown.png"
 
-const levelToImage = (level: QualityLevel): string => {
+const levelToImage = (level: QualityLevel | undefined): string => {
     switch (level) {
         case QualityLevel.HIGH:
             return highQ
@@ -35,6 +35,6 @@ export interface QualityProps {
     level?: QualityLevel
 }
 
-export const ProposalQuality: React.FC<QualityProps> = ({ level = QualityLevel.UNKNOWN }) => {
+export const ProposalQuality: React.FC<QualityProps> = ({ level }) => {
     return <QualityImage src={levelToImage(level)} />
 }

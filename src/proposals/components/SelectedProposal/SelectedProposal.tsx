@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { QualityLevel } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import styled, { keyframes } from "styled-components"
 
@@ -72,7 +71,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 <ProviderId>{proposal.shortId}</ProviderId>
                 <p>{pricingText}</p>
             </ServiceInfo>
-            <ProposalQuality level={proposal.qualityLevel ?? QualityLevel.UNKNOWN} />
+            <ProposalQuality level={proposal.qualityLevel} />
             <ConnectWrapper>
                 <ConnectDisconnectButton />
             </ConnectWrapper>

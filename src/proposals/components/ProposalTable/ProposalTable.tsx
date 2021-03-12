@@ -194,8 +194,8 @@ export const ProposalTable: React.FC = observer(() => {
 
     const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
         () => (rowA, rowB) => {
-            const q1 = rowA.original.qualityLevel ?? QualityLevel.UNKNOWN
-            const q2 = rowB.original.qualityLevel ?? QualityLevel.UNKNOWN
+            const q1 = rowA.original.qualityLevel ?? -1
+            const q2 = rowB.original.qualityLevel ?? -1
             if (q1 == q2) {
                 return 0
             }

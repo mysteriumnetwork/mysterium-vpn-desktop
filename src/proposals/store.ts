@@ -10,7 +10,7 @@ import {
     pricePerGiB,
     pricePerHour,
     ProposalQuality,
-    QualityCalculator,
+    qualityLevel,
     QualityLevel,
 } from "mysterium-vpn-js"
 import * as _ from "lodash"
@@ -25,15 +25,6 @@ import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../analytics/actions"
 
 import { compareProposal, newUIProposal, ProposalKey, proposalKey, UIProposal } from "./ui-proposal-type"
-
-const qc = new QualityCalculator()
-
-const qualityLevel = (quality?: ProposalQuality): QualityLevel | undefined => {
-    if (!quality) {
-        return QualityLevel.UNKNOWN
-    }
-    return qc.calculateLevel(quality.quality)
-}
 
 const supportedServiceType = "wireguard"
 
