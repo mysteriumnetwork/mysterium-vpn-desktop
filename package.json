@@ -130,7 +130,18 @@
       "target": [
         "nsis"
       ],
-      "icon": "static/logo.ico"
+      "icon": "static/logo.icns"
+    },
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "icon": "static/logo.icns",
+      "packageCategory": "Networking",
+      "desktop": {
+        "Name": "MysteriumVPN",
+        "Categories": "Networking"
+      }
     },
     "nsis": {
       "oneClick": true,
