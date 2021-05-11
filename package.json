@@ -33,7 +33,7 @@
     "electron-log": "^4.2.4",
     "electron-updater": "^4.3.5",
     "history": "^4.10.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "mkdirp": "^1.0.4",
     "mobx": "^5.15.6",
     "mobx-logger": "^0.7.1",
