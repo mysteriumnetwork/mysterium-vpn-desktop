@@ -60,8 +60,8 @@ export const SelectedProposal: React.FC = observer(() => {
     if (!proposal) {
         return <></>
     }
-    const timeRate = perHour(proposal.paymentMethod)
-    const trafficRate = perGiB(proposal.paymentMethod)
+    const timeRate = perHour(proposal.price)
+    const trafficRate = perGiB(proposal.price)
     const pricingText = `${timeRate}/h ${trafficRate}/GiB`
 
     return (
@@ -71,7 +71,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 <ProviderId>{proposal.shortId}</ProviderId>
                 <p>{pricingText}</p>
             </ServiceInfo>
-            <ProposalQuality level={proposal.qualityLevel} />
+            <ProposalQuality level={proposal.quality?.quality} />
             <ConnectWrapper>
                 <ConnectDisconnectButton />
             </ConnectWrapper>

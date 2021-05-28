@@ -193,7 +193,15 @@ export class Supervisor {
         const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
             mystPath,
-            ["--ui.enable=false", "--testnet2", "--usermode", "--consumer", `--tequilapi.port=${port}`, "daemon"],
+            [
+                "--ui.enable=false",
+                "--testnet2",
+                "--usermode",
+                "--consumer",
+                `--tequilapi.port=${port}`,
+                "--discovery.type=api",
+                "daemon",
+            ],
             {
                 stdio: "ignore", // Needed for unref to work correctly.
             },

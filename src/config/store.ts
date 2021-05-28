@@ -18,8 +18,8 @@ export interface Config {
     desktop: DesktopConfig
     payments?: {
         consumer?: {
-            "price-pergib-max"?: number
-            "price-perminute-max"?: number
+            "price-gib-max"?: number
+            "price-hour-max"?: number
         }
     }
 }
@@ -58,6 +58,8 @@ export class ConfigStore {
     @observable
     config: Config = { desktop: {} }
     @observable
+    loaded = false
+    @observable
     defaultConfig: Config = { desktop: {} }
 
     root: RootStore
@@ -94,6 +96,9 @@ export class ConfigStore {
                 ...defaultConfig.data,
             }
             log.info("Default node config:", JSON.stringify(this.defaultConfig))
+        })
+        runInAction(() => {
+            this.loaded = true
         })
     }
 

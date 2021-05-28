@@ -10,7 +10,7 @@ import { observer } from "mobx-react-lite"
 import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { QualityLevel } from "mysterium-vpn-js"
+import { Quality } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { UIProposal } from "../../ui-proposal-type"
@@ -194,8 +194,8 @@ export const ProposalTable: React.FC = observer(() => {
 
     const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
         () => (rowA, rowB) => {
-            const q1 = rowA.original.qualityLevel ?? -1
-            const q2 = rowB.original.qualityLevel ?? -1
+            const q1 = rowA.original.quality?.quality ?? -1
+            const q2 = rowB.original.quality?.quality ?? -1
             if (q1 == q2) {
                 return 0
             }
@@ -219,27 +219,27 @@ export const ProposalTable: React.FC = observer(() => {
             { Header: "ID", accessor: "shortId", width: 132 },
             {
                 Header: "Price/h",
-                accessor: (p): string => perHour(p.paymentMethod),
+                accessor: (p): string => perHour(p.price),
                 width: 70,
                 sortType: "basic",
             },
             {
                 Header: "Price/GiB",
-                accessor: (p): string => perGiB(p.paymentMethod),
+                accessor: (p): string => perGiB(p.price),
                 width: 62,
                 sortType: "basic",
             },
             {
                 Header: "Quality",
-                accessor: "qualityLevel",
+                accessor: "quality",
                 width: 52,
                 sortDescFirst: true,
                 sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
-                Cell: (props): Renderer<CellProps<UIProposal, QualityLevel | undefined>> => {
+                Cell: (props): Renderer<CellProps<UIProposal, Quality | undefined>> => {
                     return (
                         <CellCenter>
-                            <ProposalQuality level={props.value} />
+                            <ProposalQuality level={props.value?.quality} />
                         </CellCenter>
                     )
                 },

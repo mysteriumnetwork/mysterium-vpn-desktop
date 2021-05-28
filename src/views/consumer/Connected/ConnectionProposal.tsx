@@ -32,9 +32,9 @@ const Val = styled.span`
 
 export const ConnectionProposal: React.FC = observer(() => {
     const {
-        connection: { proposal: { paymentMethod, providerId } = {} },
+        connection: { proposal: { price, providerId } = {} },
     } = useStores()
-    const price = paymentMethod ? `${perHour(paymentMethod)}/hour ＋ ${perGiB(paymentMethod)}/GiB` : ""
+    const priceText = `${perHour(price)}/hour ＋ ${perGiB(price)}/GiB`
     return (
         <Container>
             <Row>
@@ -43,7 +43,7 @@ export const ConnectionProposal: React.FC = observer(() => {
             </Row>
             <Row>
                 <Label>Price</Label>
-                {price}
+                {priceText}
             </Row>
         </Container>
     )

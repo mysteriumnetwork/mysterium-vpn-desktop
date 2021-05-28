@@ -35,11 +35,8 @@ const Range = styled.input`
 `
 
 const displayFilterPrice = (amount?: number): string => {
-    if (amount == null) {
+    if (!amount) {
         return "unlimited"
-    }
-    if (amount == 0) {
-        return "free"
     }
     const priceDisplay = fmtMoney({
         amount: amount ?? 0,

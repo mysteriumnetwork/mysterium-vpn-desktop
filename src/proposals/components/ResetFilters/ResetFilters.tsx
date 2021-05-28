@@ -20,18 +20,16 @@ const Container = styled.div`
 `
 
 export const ResetFilters = observer(() => {
-    const { filters } = useStores()
+    const { filters, proposals } = useStores()
 
+    const handleReset = async () => {
+        userEvent(ProposalViewAction.FilterReset)
+        await filters.reset()
+        await proposals.fetchProposals()
+    }
     return (
         <Container>
-            <Anchor
-                onClick={() => {
-                    userEvent(ProposalViewAction.FilterReset)
-                    filters.reset()
-                }}
-            >
-                Reset all filters
-            </Anchor>
+            <Anchor onClick={handleReset}>Reset all filters</Anchor>
         </Container>
     )
 })

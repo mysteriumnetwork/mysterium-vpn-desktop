@@ -11,7 +11,6 @@ import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
-import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 
 const Container = styled.div`
     flex: 1;
@@ -32,16 +31,6 @@ const Label = styled.div`
 
 const Range = styled.input`
     width: 100%;
-`
-
-const IncludeFailed = styled.div`
-    ${textSmall}
-    height: 32px;
-    line-height: 32px;
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
 `
 
 const displayQuality = (q?: QualityLevel): string => {
@@ -70,18 +59,12 @@ export const QualityFilter = observer(() => {
         proposals.setQualityFilter(val)
         setRange({ ...range, quality: val })
     }
-    const includeFailed = filters.config.quality?.["include-failed"]
     return (
         <Container>
             <RangeContainer>
                 <Label>{qualityText}</Label>
                 <Range type="range" min={0} max={2} value={range.quality} onChange={onChange} />
             </RangeContainer>
-            <IncludeFailed>
-                <Checkbox checked={includeFailed} onChange={(): void => proposals.setIncludeFailed(!includeFailed)}>
-                    Include unreachable
-                </Checkbox>
-            </IncludeFailed>
         </Container>
     )
 })
