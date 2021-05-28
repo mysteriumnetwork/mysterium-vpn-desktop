@@ -14,16 +14,16 @@ import lowQ from "./low.png"
 import unknownQ from "./unknown.png"
 
 const levelToImage = (level: QualityLevel | undefined): string => {
-    switch (level) {
-        case QualityLevel.HIGH:
-            return highQ
-        case QualityLevel.MEDIUM:
-            return mediumQ
-        case QualityLevel.LOW:
-            return lowQ
-        default:
-            return unknownQ
+    if (level == null) {
+        return unknownQ
     }
+    if (level >= QualityLevel.HIGH) {
+        return highQ
+    }
+    if (level >= QualityLevel.MEDIUM) {
+        return mediumQ
+    }
+    return lowQ
 }
 
 const QualityImage = styled.img`

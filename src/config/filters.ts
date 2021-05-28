@@ -43,12 +43,12 @@ export class Filters {
     @computed
     get priceCeiling(): PriceCeiling | undefined {
         const consumerConfig = this.root.config.defaultConfig.payments?.consumer
-        if (!consumerConfig || !consumerConfig["price-perminute-max"] || !consumerConfig["price-pergib-max"]) {
+        if (!consumerConfig || !consumerConfig["price-hour-max"] || !consumerConfig["price-gib-max"]) {
             return undefined
         }
         return {
-            perHourMax: consumerConfig["price-perminute-max"] * 60,
-            perGibMax: consumerConfig["price-pergib-max"],
+            perHourMax: consumerConfig["price-hour-max"] * 60,
+            perGibMax: consumerConfig["price-gib-max"],
         }
     }
 
@@ -81,6 +81,7 @@ export class Filters {
             },
             other: {
                 "no-access-policy": true,
+                "ip-type": "residential",
             },
         }
     }
