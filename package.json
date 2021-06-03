@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.3.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-brands-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@mysteriumnetwork/node": "0.47.0-rc5",
     "@mysteriumnetwork/terms": "^0.0.27",
