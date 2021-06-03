@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, reaction } from "mobx"
+import { action, computed, makeObservable, reaction } from "mobx"
 import { QualityLevel } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
@@ -16,6 +16,14 @@ export class Filters {
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            priceCeiling: computed,
+            config: computed,
+            setPartial: action,
+            initialized: computed,
+            defaults: computed,
+            reset: action,
+        })
         this.root = root
     }
 
@@ -40,7 +48,6 @@ export class Filters {
         }
     }
 
-    @computed
     get priceCeiling(): PriceCeiling | undefined {
         const consumerConfig = this.root.config.defaultConfig.payments?.consumer
         if (!consumerConfig || !consumerConfig["price-hour-max"] || !consumerConfig["price-gib-max"]) {
@@ -52,22 +59,18 @@ export class Filters {
         }
     }
 
-    @computed
     get config(): ProposalFilters {
         return this.root.config.config.desktop?.filters || {}
     }
 
-    @action
     setPartial = (filters: ProposalFilters): Promise<void> => {
         return this.root.config.setPartial({ filters })
     }
 
-    @computed
     get initialized(): boolean {
         return this.config.price?.perhour != null
     }
 
-    @computed
     get defaults(): ProposalFilters {
         const ceil = this.priceCeiling
         return {
@@ -86,7 +89,6 @@ export class Filters {
         }
     }
 
-    @action
     reset = (): Promise<void> => {
         return this.setPartial(this.defaults)
     }

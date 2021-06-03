@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, observable, observe } from "mobx"
+import { action, makeObservable, observable, observe } from "mobx"
 import { History, Location, LocationListener, UnregisterCallback } from "history"
 
 import { pageview } from "../analytics/analytics"
@@ -12,7 +12,6 @@ import { pageview } from "../analytics/analytics"
 import { AppLocation } from "./locations"
 
 export class RouterStore {
-    @observable
     location: Location = {
         pathname: "",
         search: "",
@@ -22,7 +21,13 @@ export class RouterStore {
 
     history: SynchronizedHistory | undefined
 
-    @action
+    constructor() {
+        makeObservable(this, {
+            location: observable,
+            updateLocation: action,
+        })
+    }
+
     updateLocation = (newLocation: Location): void => {
         this.location = newLocation
     }

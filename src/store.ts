@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { action, configure, observable } from "mobx"
+import { action, configure, makeObservable, observable } from "mobx"
 import { ipcRenderer } from "electron"
 // import { enableLogging } from "mobx-logger"
 
@@ -36,10 +36,13 @@ export class RootStore {
     feedback: FeedbackStore
     referral: ReferralStore
 
-    @observable
     showGrid = false
 
     constructor() {
+        makeObservable(this, {
+            showGrid: observable,
+            toggleGrid: action,
+        })
         this.navigation = new NavigationStore(this)
         this.router = new RouterStore()
         this.daemon = new DaemonStore(this)
@@ -70,7 +73,6 @@ export class RootStore {
         })
     }
 
-    @action
     toggleGrid = (): void => {
         if (isDevelopment()) {
             this.showGrid = !this.showGrid

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, observable, observe, reaction } from "mobx"
+import { action, computed, makeObservable, observable, observe, reaction } from "mobx"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
@@ -21,16 +21,25 @@ const connectionInProgress = (status: ConnectionStatus): boolean => {
 }
 
 export class NavigationStore {
-    @observable
     welcome = true
-    @observable
     menu = false
-    @observable
     chat = false
 
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            welcome: observable,
+            menu: observable,
+            chat: observable,
+            showLoading: action,
+            goHome: action,
+            determineRoute: action,
+            showWelcome: action,
+            dismissWelcome: action,
+            showMenu: action,
+            openChat: action,
+        })
         this.root = root
     }
 
@@ -57,12 +66,10 @@ export class NavigationStore {
         )
     }
 
-    @action
     showLoading = (): void => {
         this.root.router.push(locations.loading)
     }
 
-    @action
     goHome = (): void => {
         if (connectionInProgress(this.root.connection.status)) {
             this.root.router.push(locations.connection)
@@ -71,7 +78,6 @@ export class NavigationStore {
         }
     }
 
-    @action
     determineRoute = (): void => {
         const newLocation = this.determineLocation()
         if (newLocation) {
@@ -100,24 +106,20 @@ export class NavigationStore {
         return locations.proposals
     }
 
-    @action
     showWelcome = (): void => {
         this.welcome = true
     }
 
-    @action
     dismissWelcome = (): void => {
         userEvent(OnboardingAction.GetStarted)
         this.welcome = false
         this.root.router.push(locations.terms)
     }
 
-    @action
     showMenu = (show = true): void => {
         this.menu = show
     }
 
-    @action
     openChat = (open = true): void => {
         this.chat = open
     }

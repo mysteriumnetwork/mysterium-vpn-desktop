@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, observable, reaction, runInAction, when } from "mobx"
+import { action, computed, makeObservable, observable, reaction, runInAction, when } from "mobx"
 import { Currency, Fees, Money, PaymentOrderOptionsResponse, PaymentOrderResponse } from "mysterium-vpn-js"
 import retry from "async-retry"
 
@@ -27,26 +27,43 @@ export enum OrderStatus {
 export class PaymentStore {
     root: RootStore
 
-    @observable
     fees?: Fees
-    @observable
     mystToUsdRate?: Money
-    @observable
     registrationTopupAmount?: number
-    @observable
     topupAmount?: number
-    @observable
     currencies: string[] = []
-    @observable
     orderOptions?: PaymentOrderOptionsResponse
-    @observable
     paymentCurrency?: string
-    @observable
     lightningNetwork = false
-    @observable
     order?: PaymentOrderResponse
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            fees: observable,
+            mystToUsdRate: observable,
+            registrationTopupAmount: observable,
+            topupAmount: observable,
+            currencies: observable,
+            orderOptions: observable,
+            paymentCurrency: observable,
+            lightningNetwork: observable,
+            order: observable,
+            fetchTransactorFees: action,
+            fetchMystToUsdRate: action,
+            fetchCurrencies: action,
+            registrationFee: computed,
+            fetchPaymentOptions: action,
+            orderOptionsValid: computed,
+            orderMinimumAmount: computed,
+            createOrder: action,
+            orderStatus: computed,
+            clearOrder: action,
+            topupTotal: computed,
+            setRegistrationTopupAmount: action,
+            setPaymentCurrency: action,
+            setLightningNetwork: action,
+            setTopupAmount: action,
+        })
         this.root = root
     }
 
@@ -61,7 +78,6 @@ export class PaymentStore {
         )
     }
 
-    @action
     async fetchTransactorFees(): Promise<void> {
         const fees = await tequilapi.transactorFees()
         runInAction(() => {
@@ -69,7 +85,6 @@ export class PaymentStore {
         })
     }
 
-    @action
     async fetchMystToUsdRate(): Promise<void> {
         const res = await tequilapi.exchangeRate("usd")
         runInAction(() => {
@@ -77,7 +92,6 @@ export class PaymentStore {
         })
     }
 
-    @action
     async fetchCurrencies(): Promise<void> {
         const currencies = await tequilapi.getPaymentOrderCurrencies()
         runInAction(() => {
@@ -89,7 +103,6 @@ export class PaymentStore {
         })
     }
 
-    @computed
     get registrationFee(): number | undefined {
         if (!this.fees) {
             return undefined
@@ -97,14 +110,13 @@ export class PaymentStore {
         return Number(fmtMoney({ amount: this.fees.registration, currency: Currency.MYSTTestToken }))
     }
 
-    @action
     async fetchPaymentOptions(): Promise<void> {
         const options = await tequilapi.getPaymentOrderOptions()
         runInAction(() => {
             this.orderOptions = options
         })
     }
-    @computed
+
     get orderOptionsValid(): boolean {
         let valid = !!this.root.identity.identity?.id && !!this.topupAmount && !!this.paymentCurrency
         if (this.orderOptions?.minimum && this.topupAmount) {
@@ -112,7 +124,7 @@ export class PaymentStore {
         }
         return valid
     }
-    @computed
+
     get orderMinimumAmount(): number {
         const min = this.orderOptions?.minimum
         if (!min) {
@@ -121,7 +133,6 @@ export class PaymentStore {
         return Math.round(min) + 1
     }
 
-    @action
     async createOrder(): Promise<void> {
         const id = this.root.identity.identity?.id
         if (!id) {
@@ -172,7 +183,6 @@ export class PaymentStore {
         )
     }
 
-    @computed
     get orderStatus(): OrderStatus {
         if (!this.order) {
             return OrderStatus.PENDING
@@ -186,7 +196,6 @@ export class PaymentStore {
         }
     }
 
-    @action
     clearOrder(): void {
         this.order = undefined
         this.setPaymentCurrency(this.currencies[0])
@@ -194,7 +203,6 @@ export class PaymentStore {
         this.setTopupAmount(undefined)
     }
 
-    @computed
     get topupTotal(): number | undefined {
         const reg = this.registrationFee
         if (!reg) {
@@ -203,23 +211,19 @@ export class PaymentStore {
         return reg + (this.registrationTopupAmount ?? 0)
     }
 
-    @action
     setRegistrationTopupAmount = (amount?: number): void => {
         this.registrationTopupAmount = amount
     }
 
-    @action
     setPaymentCurrency = (currency?: string): void => {
         this.paymentCurrency = currency
         this.lightningNetwork = isLightningAvailable(currency)
     }
 
-    @action
     setLightningNetwork = (use: boolean): void => {
         this.lightningNetwork = use
     }
 
-    @action
     setTopupAmount = (amount?: number): void => {
         this.topupAmount = amount
     }

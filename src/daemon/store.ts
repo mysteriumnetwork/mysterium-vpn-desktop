@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { action, observable, reaction, when } from "mobx"
+import { action, makeObservable, observable, reaction, when } from "mobx"
 import { ipcRenderer, remote } from "electron"
 
 import { sseConnect } from "../tequila-sse"
@@ -34,15 +34,9 @@ export enum StartupStatus {
 }
 
 export class DaemonStore {
-    @observable
     statusLoading = false
-    @observable
     status = DaemonStatusType.Down
-
-    @observable
     startupStatus = StartupStatus.CheckingForUpdates
-
-    @observable
     starting = false
 
     eventSource?: EventSource
@@ -50,6 +44,20 @@ export class DaemonStore {
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            statusLoading: observable,
+            status: observable,
+            startupStatus: observable,
+            starting: observable,
+            setStartupStatus: action,
+            healthcheck: action,
+            update: action,
+            start: action,
+            supervisorInstall: action,
+            setStatus: action,
+            setStarting: action,
+            setStatusLoading: action,
+        })
         this.root = root
         setInterval(async () => {
             await this.healthcheck()
@@ -75,12 +83,10 @@ export class DaemonStore {
         this.update()
     }
 
-    @action
     setStartupStatus(status: StartupStatus): void {
         this.startupStatus = status
     }
 
-    @action
     async healthcheck(): Promise<void> {
         if (this.starting) {
             log.info("Daemon is starting, skipping healthcheck")
@@ -101,7 +107,6 @@ export class DaemonStore {
         this.setStatusLoading(false)
     }
 
-    @action
     async update(): Promise<void> {
         ipcRenderer.send(MainIpcListenChannels.Update)
         ipcRenderer.on(WebIpcListenChannels.UpdateAvailable, () => {
@@ -130,7 +135,6 @@ export class DaemonStore {
         }, 5_000)
     }
 
-    @action
     async start(): Promise<void> {
         if (this.starting) {
             log.info("Already starting")
@@ -154,7 +158,6 @@ export class DaemonStore {
         this.setStarting(false)
     }
 
-    @action
     async supervisorInstall(): Promise<void> {
         try {
             return await supervisor.install()
@@ -163,17 +166,14 @@ export class DaemonStore {
         }
     }
 
-    @action
     setStatus = (s: DaemonStatusType): void => {
         this.status = s
     }
 
-    @action
     setStarting = (s: boolean): void => {
         this.starting = s
     }
 
-    @action
     setStatusLoading = (s: boolean): void => {
         this.statusLoading = s
     }
