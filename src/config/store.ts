@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, observable, reaction, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 import { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
@@ -55,17 +55,25 @@ export interface PriceCeiling {
 }
 
 export class ConfigStore {
-    @observable
     config: Config = { desktop: {} }
-    @observable
     loaded = false
-    @observable
     defaultConfig: Config = { desktop: {} }
 
     root: RootStore
 
     constructor(root: RootStore) {
         this.root = root
+        makeObservable(this, {
+            config: observable,
+            loaded: observable,
+            defaultConfig: observable,
+            fetchConfig: action,
+            agreeToTerms: action,
+            setDnsOption: action,
+            dnsOption: computed,
+            persistConfig: action,
+            setPartial: action,
+        })
     }
 
     setupReactions(): void {
@@ -80,7 +88,6 @@ export class ConfigStore {
         )
     }
 
-    @action
     fetchConfig = async (): Promise<void> => {
         const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
         runInAction(() => {
@@ -102,7 +109,6 @@ export class ConfigStore {
         })
     }
 
-    @action
     agreeToTerms = async (): Promise<void> => {
         const data: Config = {
             ...this.config,
@@ -124,7 +130,6 @@ export class ConfigStore {
         return !!version && !!at && version == termsPackageJson.version
     }
 
-    @action
     setDnsOption = async (value: string): Promise<void> => {
         await tequilapi.updateUserConfig({
             data: { "desktop.dns": value },
@@ -132,12 +137,10 @@ export class ConfigStore {
         await this.fetchConfig()
     }
 
-    @computed
     get dnsOption(): DNSOption {
         return this.config.desktop?.dns ?? "1.1.1.1"
     }
 
-    @action
     persistConfig = _.debounce(async () => {
         const cfg = this.config
         log.info("Persisting user configuration:", JSON.stringify(cfg))
@@ -147,7 +150,6 @@ export class ConfigStore {
         await this.fetchConfig()
     }, 3_000)
 
-    @action
     setPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
         this.config.desktop = _.merge({}, this.config.desktop, desktopConfig)
         this.persistConfig()

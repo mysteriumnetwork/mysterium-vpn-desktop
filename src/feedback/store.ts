@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { action, observable } from "mobx"
+import { action, makeObservable, observable } from "mobx"
 import { Issue } from "mysterium-vpn-js/lib/feedback/issue"
 
 import { RootStore } from "../store"
@@ -14,14 +14,17 @@ import { tequilapi } from "../tequilapi"
 export class FeedbackStore {
     root: RootStore
 
-    @observable
     loading = false
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            loading: observable,
+            setLoading: action,
+            reportIssue: action,
+        })
         this.root = root
     }
 
-    @action
     async reportIssue(issue: Issue): Promise<string> {
         this.setLoading(true)
         try {
@@ -32,7 +35,6 @@ export class FeedbackStore {
         }
     }
 
-    @action
     setLoading = (b: boolean): void => {
         this.loading = b
     }

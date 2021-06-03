@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, observable, reaction, runInAction } from "mobx"
+import { action, makeObservable, observable, reaction, runInAction } from "mobx"
 import { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
@@ -20,24 +20,39 @@ import { tequilapi } from "../tequilapi"
 import { AppStateAction, ConnectionAction } from "../analytics/actions"
 
 export class ConnectionStore {
-    @observable
     connectInProgress = false
-    @observable
     gracePeriod = false
-    @observable
     status = ConnectionStatus.NOT_CONNECTED
-    @observable
     statistics?: ConnectionStatistics
-    @observable
     proposal?: UIProposal
-    @observable
     location?: Location
-    @observable
     originalLocation?: Location
 
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            connectInProgress: observable,
+            gracePeriod: observable,
+            status: observable,
+            statistics: observable,
+            proposal: observable,
+            location: observable,
+            originalLocation: observable,
+            connect: action,
+            statusCheck: action,
+            disconnect: action,
+            resolveOriginalLocation: action,
+            resetLocation: action,
+            resolveLocation: action,
+            setConnectInProgress: action,
+            setGracePeriod: action,
+            setStatus: action,
+            setProposal: action,
+            setLocation: action,
+            setOriginalLocation: action,
+            setStatistics: action,
+        })
         this.root = root
     }
 
@@ -81,7 +96,6 @@ export class ConnectionStore {
         )
     }
 
-    @action
     async connect(): Promise<void> {
         if (!this.root.identity.identity || !this.root.proposals.active) {
             return
@@ -109,7 +123,6 @@ export class ConnectionStore {
         }
     }
 
-    @action
     async statusCheck(): Promise<void> {
         try {
             if (this.connectInProgress) {
@@ -126,7 +139,6 @@ export class ConnectionStore {
         }
     }
 
-    @action
     async disconnect(): Promise<void> {
         userEvent(ConnectionAction.Disconnect, this.root.connection.location?.country)
         this.setGracePeriod()
@@ -137,7 +149,6 @@ export class ConnectionStore {
         }
     }
 
-    @action
     async resolveOriginalLocation(): Promise<void> {
         try {
             const location = await tequilapi.location()
@@ -147,7 +158,6 @@ export class ConnectionStore {
         }
     }
 
-    @action
     resetLocation(): void {
         this.setLocation({
             country: "unknown",
@@ -160,7 +170,6 @@ export class ConnectionStore {
         })
     }
 
-    @action
     async resolveLocation(): Promise<void> {
         let location: Location = {
             country: "unknown",
@@ -183,12 +192,10 @@ export class ConnectionStore {
         this.setLocation(location)
     }
 
-    @action
     setConnectInProgress = (b: boolean): void => {
         this.connectInProgress = b
     }
 
-    @action
     setGracePeriod = (): void => {
         this.gracePeriod = true
         setTimeout(() => {
@@ -198,27 +205,22 @@ export class ConnectionStore {
         }, 5000)
     }
 
-    @action
     setStatus = (s: ConnectionStatus): void => {
         this.status = s
     }
 
-    @action
     setProposal = (p?: UIProposal): void => {
         this.proposal = p
     }
 
-    @action
     setLocation = (l: Location): void => {
         this.location = l
     }
 
-    @action
     setOriginalLocation = (l: Location): void => {
         this.originalLocation = l
     }
 
-    @action
     setStatistics = (s?: ConnectionStatistics): void => {
         this.statistics = s
     }

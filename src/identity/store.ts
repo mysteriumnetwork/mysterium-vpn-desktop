@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
-import { action, observable, reaction, runInAction } from "mobx"
+import { action, makeObservable, observable, reaction, runInAction } from "mobx"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
@@ -16,18 +16,28 @@ import { AppStateAction } from "../analytics/actions"
 import { eligibleForRegistration, registered } from "./identity"
 
 export class IdentityStore {
-    @observable
     loading = false
-    @observable
     identity?: Identity
-    @observable
     unlocked = false
-    @observable
     identities: Identity[] = []
 
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            loading: observable,
+            identity: observable,
+            unlocked: observable,
+            identities: observable,
+            refreshIdentity: action,
+            create: action,
+            unlock: action,
+            register: action,
+            registerWithReferralToken: action,
+            setLoading: action,
+            setIdentity: action,
+            setIdentities: action,
+        })
         this.root = root
     }
 
@@ -97,7 +107,6 @@ export class IdentityStore {
         )
     }
 
-    @action
     refreshIdentity = (identities: Identity[]): void => {
         if (!this.identity) {
             return
@@ -107,13 +116,11 @@ export class IdentityStore {
         this.setIdentity(matchingId)
     }
 
-    @action
     async create(): Promise<void> {
         appStateEvent(AppStateAction.IdentityCreate)
         await tequilapi.identityCreate("")
     }
 
-    @action
     async unlock(): Promise<void> {
         if (!this.identity) {
             return
@@ -126,14 +133,12 @@ export class IdentityStore {
         })
     }
 
-    @action
     async register(id: Identity): Promise<void> {
         await this.root.payment.fetchTransactorFees()
         appStateEvent(AppStateAction.IdentityRegister)
         return tequilapi.identityRegister(id.id, { stake: 0 })
     }
 
-    @action
     async registerWithReferralToken(token: string): Promise<void> {
         if (!this.identity) {
             return
@@ -148,17 +153,14 @@ export class IdentityStore {
         }
     }
 
-    @action
     setLoading = (b: boolean): void => {
         this.loading = b
     }
 
-    @action
     setIdentity = (identity?: Identity): void => {
         this.identity = identity
     }
 
-    @action
     setIdentities = (identities: Identity[]): void => {
         this.identities = identities
     }

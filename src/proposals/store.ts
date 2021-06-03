@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, observable, reaction, when } from "mobx"
+import { action, computed, makeObservable, observable, reaction, when } from "mobx"
 import { ConnectionStatus, QualityLevel } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
@@ -28,20 +28,41 @@ export type TransientFilter = {
 }
 
 export class ProposalStore {
-    @observable
     loading = false
-    @observable
     proposals: UIProposal[] = []
-
-    @observable
     active?: UIProposal
-
-    @observable
     filter: TransientFilter = {}
 
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            loading: observable,
+            proposals: observable,
+            active: observable,
+            filter: observable,
+            filters: computed,
+            fetchProposals: action,
+            setTextFilter: action,
+            textFiltered: computed,
+            setPricePerHourMaxFilter: action,
+            setPricePerHourMaxFilterDebounced: action,
+            setPricePerGibMaxFilter: action,
+            setPricePerGibMaxFilterDebounced: action,
+            setQualityFilter: action,
+            setIncludeFailed: action,
+            ipTypeCounts: computed,
+            setIpTypeFilter: action,
+            toggleIpTypeFilter: action,
+            countryCounts: computed,
+            setCountryFilter: action,
+            toggleCountryFilter: action,
+            countryFiltered: computed,
+            filteredProposals: computed,
+            toggleActiveProposal: action,
+            setLoading: action,
+            setProposals: action,
+        })
         this.root = root
     }
 
@@ -68,12 +89,10 @@ export class ProposalStore {
         }, proposalRefreshRate)
     }
 
-    @computed
     get filters(): ProposalFilters {
         return this.root.filters.config
     }
 
-    @action
     async fetchProposals(): Promise<void> {
         if (this.loading) {
             return
@@ -99,14 +118,12 @@ export class ProposalStore {
     // Text filter
     // #####################
 
-    @action
     setTextFilter(text?: string): void {
         this.filter.text = text
         this.setCountryFilter(undefined)
         userEvent(ProposalViewAction.FilterText, text)
     }
 
-    @computed
     get textFiltered(): UIProposal[] {
         const input = this.proposals
         const filterText = this.filter.text
@@ -120,7 +137,6 @@ export class ProposalStore {
     // Price filter
     // #####################
 
-    @action
     async setPricePerHourMaxFilter(pricePerHourMax: number): Promise<void> {
         await this.root.filters.setPartial({
             price: {
@@ -131,10 +147,8 @@ export class ProposalStore {
         userEvent(ProposalViewAction.FilterPriceTime, String(pricePerHourMax))
     }
 
-    @action
     setPricePerHourMaxFilterDebounced = _.debounce(this.setPricePerHourMaxFilter, 800)
 
-    @action
     async setPricePerGibMaxFilter(pricePerGibMax: number): Promise<void> {
         await this.root.filters.setPartial({
             price: {
@@ -145,14 +159,12 @@ export class ProposalStore {
         userEvent(ProposalViewAction.FilterPriceData, String(pricePerGibMax))
     }
 
-    @action
     setPricePerGibMaxFilterDebounced = _.debounce(this.setPricePerGibMaxFilter, 800)
 
     // #####################
     // Quality filter
     // #####################
 
-    @action
     async setQualityFilter(level: QualityLevel): Promise<void> {
         await this.root.filters.setPartial({
             quality: { level },
@@ -161,7 +173,6 @@ export class ProposalStore {
         userEvent(ProposalViewAction.FilterQuality, level ? QualityLevel[level] : undefined)
     }
 
-    @action
     setIncludeFailed(includeFailed: boolean): void {
         this.root.filters.setPartial({
             quality: {
@@ -174,15 +185,12 @@ export class ProposalStore {
     // #####################
     // IP type filter
     // #####################
-
-    @computed
     get ipTypeCounts(): { [type: string]: number } {
         const input = this.proposals
         const result = _.groupBy(input, (p) => p.ipType)
         return _.mapValues(result, (ps) => ps.length)
     }
 
-    @action
     async setIpTypeFilter(ipType?: string): Promise<void> {
         await this.root.filters.setPartial({
             other: {
@@ -192,7 +200,6 @@ export class ProposalStore {
         await this.fetchProposals()
     }
 
-    @action
     toggleIpTypeFilter(ipType?: string): void {
         this.setIpTypeFilter(this.filters.other?.["ip-type"] !== ipType ? ipType : "")
         userEvent(ProposalViewAction.FilterIpType, ipType)
@@ -202,26 +209,22 @@ export class ProposalStore {
     // Country filter
     // #####################
 
-    @computed
     get countryCounts(): { [code: string]: number } {
         const input = this.textFiltered
         const result = _.groupBy(input, (p) => p.country)
         return _.mapValues(result, (ps) => ps.length)
     }
 
-    @action
     async setCountryFilter(countryCode?: string): Promise<void> {
         this.filter.country = countryCode
     }
 
-    @action
     toggleCountryFilter(countryCode?: string): void {
         this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
         userEvent(ProposalViewAction.FilterCountry, countryCode)
     }
 
-    @computed
     get countryFiltered(): UIProposal[] {
         const input = this.textFiltered
         if (!this.filter.country) {
@@ -234,7 +237,6 @@ export class ProposalStore {
     // Resulting list of proposals
     // #####################
 
-    @computed
     get filteredProposals(): UIProposal[] {
         return this.countryFiltered.slice().sort(compareProposal)
     }
@@ -243,18 +245,15 @@ export class ProposalStore {
     // End of filters
     // #####################
 
-    @action
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
         userEvent(ProposalViewAction.SelectProposal, proposal?.country)
     }
 
-    @action
     setLoading = (b: boolean): void => {
         this.loading = b
     }
 
-    @action
     setProposals = (proposals: UIProposal[]): void => {
         this.proposals = proposals
     }

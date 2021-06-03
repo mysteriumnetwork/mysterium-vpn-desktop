@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { action, observable } from "mobx"
+import { action, makeObservable, observable } from "mobx"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
@@ -14,18 +14,22 @@ import { parseError } from "../errors/parse"
 import { tequilapi } from "../tequilapi"
 
 export class ReferralStore {
-    @observable
     token?: string
-
-    @observable
     message?: string
-
-    @observable
     loading = false
 
     root: RootStore
 
     constructor(root: RootStore) {
+        makeObservable(this, {
+            token: observable,
+            message: observable,
+            loading: observable,
+            generateToken: action,
+            setToken: action,
+            setMessage: action,
+            setLoading: action,
+        })
         this.root = root
     }
 
@@ -33,14 +37,13 @@ export class ReferralStore {
         log.debug("reserved")
     }
 
-    @action
     async generateToken(): Promise<void> {
         const id = this.root.identity.identity?.id
         if (!id) {
             return
         }
         return _.throttle(async () => {
-            this.setIsLoading(true)
+            this.setLoading(true)
             try {
                 const tokenResponse = await tequilapi.getReferralToken(id)
                 this.setToken(tokenResponse.token)
@@ -48,25 +51,22 @@ export class ReferralStore {
                 this.setMessage(parseError(err))
                 log.error("Referral token generation failed", err)
             } finally {
-                this.setIsLoading(false)
+                this.setLoading(false)
             }
         }, 60_000)()
     }
 
-    @action
     setToken(token: string): void {
         this.token = token
         this.message = undefined
     }
 
-    @action
     setMessage(message?: string): void {
         this.token = undefined
         this.message = message
     }
 
-    @action
-    setIsLoading(b: boolean): void {
+    setLoading(b: boolean): void {
         this.loading = b
     }
 }
