@@ -96,7 +96,7 @@
     "shx": "^0.3.2",
     "typescript": "^4.3.2",
     "url-loader": "^4.1.0",
-    "webpack": "^4.44.2"
+    "webpack": "^4.46.0"
   },
   "resolutions": {
     "@types/react": "^17.0.0"
