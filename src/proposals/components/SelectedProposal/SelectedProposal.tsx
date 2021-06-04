@@ -21,24 +21,38 @@ const slideIn = keyframes`
         transform: none;
     }
 `
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
 
 const Container = styled.div`
     box-sizing: border-box;
     height: 60px;
     padding: 17px;
     padding-left: 24px;
-    display: flex;
-    align-items: center;
+
     box-shadow: 0px 0px 20px rgba(109, 60, 121, 0.3);
     border-radius: 10px;
     animation: ${slideIn} 150ms ease-in-out;
+`
+
+const Inner = styled.div`
+    display: flex;
+    align-items: center;
+    opacity: 1;
+    animation: ${fadeIn} 250ms ease-in-out;
 `
 
 const ProposalFlag = styled(Flag)`
     padding-right: 7px;
 `
 
-const ProviderId = styled.p`
+const ProviderId = styled.div`
     user-select: text;
     font-weight: bold;
     padding-right: 7px;
@@ -63,12 +77,14 @@ export const SelectedProposal: React.FC = observer(() => {
 
     return (
         <Container>
-            <ProposalFlag countryCode={proposal.country} />
-            <ProviderId>{proposal.shortId}</ProviderId>
-            <Pricing>{pricingText}</Pricing>
-            <ConnectWrapper>
-                <ConnectDisconnectButton />
-            </ConnectWrapper>
+            <Inner>
+                <ProposalFlag countryCode={proposal.country} />
+                <ProviderId>{proposal.shortId}</ProviderId>
+                <Pricing>{pricingText}</Pricing>
+                <ConnectWrapper>
+                    <ConnectDisconnectButton />
+                </ConnectWrapper>
+            </Inner>
         </Container>
     )
 })
