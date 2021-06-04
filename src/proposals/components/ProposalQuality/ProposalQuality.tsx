@@ -5,36 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import styled from "styled-components"
 import { QualityLevel } from "mysterium-vpn-js"
-
-import highQ from "./high.png"
-import mediumQ from "./medium.png"
-import lowQ from "./low.png"
-import unknownQ from "./unknown.png"
-
-const levelToImage = (level: QualityLevel | undefined): string => {
-    if (level == null) {
-        return unknownQ
-    }
-    if (level >= QualityLevel.HIGH) {
-        return highQ
-    }
-    if (level >= QualityLevel.MEDIUM) {
-        return mediumQ
-    }
-    return lowQ
-}
-
-const QualityImage = styled.img`
-    width: 16px;
-    height: 16px;
-`
 
 export interface QualityProps {
     level?: QualityLevel
 }
 
 export const ProposalQuality: React.FC<QualityProps> = ({ level }) => {
-    return <QualityImage src={levelToImage(level)} />
+    return (
+        <svg width="13" height="11" viewBox="0 0 13 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect y="6" width="3" height="5" rx="1.5" fill="#ed5bac" opacity={level && level > 0 ? 1 : 0.2} />
+            <rect x="5" y="3" width="3" height="8" rx="1.5" fill="#ed5bac" opacity={level && level > 1 ? 1 : 0.2} />
+            <rect x="10" width="3" height="11" rx="1.5" fill="#ed5bac" opacity={level && level > 2 ? 1 : 0.2} />
+        </svg>
+    )
 }
