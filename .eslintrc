@@ -22,7 +22,7 @@
     "react/prop-types": "off",
     "header/header": [2, "block", [
       "*",
-      {"pattern": " * Copyright \\(c\\) \\d{4} BlockDev AG", "template": " * Copyright (c) 2020 BlockDev AG"},
+      {"pattern": " * Copyright \\(c\\) \\d{4} BlockDev AG", "template": " * Copyright (c) 2021 BlockDev AG"},
       " *",
       " * This source code is licensed under the MIT license found in the",
       " * LICENSE file in the root directory of this source tree.",
