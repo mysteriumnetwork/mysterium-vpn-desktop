@@ -7,18 +7,20 @@
 import React from "react"
 import styled from "styled-components"
 
+import { brandNew } from "../../colors"
+
 import { NavToggle, ToggleProps } from "./NavToggle"
 
 export const Toggle = styled(NavToggle)`
-    height: 32px;
-    min-height: 32px;
+    height: 25px;
+    min-height: 25px;
+    line-height: 25px;
     width: calc(100%);
-    border-radius: 4px;
+    border-radius: 5px;
     justify-content: flex-start;
-    background: ${(props: ToggleProps): string =>
-        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "transparent"};
+    background: ${(props: ToggleProps): string => (props.active ? brandNew : "transparent")};
     &:hover {
-        background: ${(props: ToggleProps): string =>
-            props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#e6e6e6"};
+        background: ${(props: ToggleProps): string => (props.active ? brandNew : `${brandNew}1A`)};
     }
+    box-shadow: ${(props: ToggleProps): string => (props.active ? "0px 5px 10px rgba(214, 31, 133, 0.2)" : "none")};
 ` as React.FC<ToggleProps>
