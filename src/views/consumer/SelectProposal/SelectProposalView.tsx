@@ -7,50 +7,62 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import * as _ from "lodash"
 
 import { CountryFilter } from "../../../proposals/components/CountryFilter/CountryFilter"
-import { OriginalLocation } from "../../../location/components/OriginalLocation/OriginalLocation"
-import { Search } from "../../../ui-kit/form-components/Search"
-import { useStores } from "../../../store"
 import { ProposalTable } from "../../../proposals/components/ProposalTable/ProposalTable"
 import { SelectedProposal } from "../../../proposals/components/SelectedProposal/SelectedProposal"
+import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
+    flex-direction: column;
     overflow: hidden;
+    background: linear-gradient(180deg, #562160 0%, #7b2061 48.96%, #64205d 100%);
+    padding: 15px;
+    color: #3c3857;
+`
+
+const Split = styled.div`
+    display: flex;
+    height: 486px;
+`
+
+const Top = styled.div`
+    height: 28px;
+    padding-bottom: 14px;
+    display: flex;
+    align-items: center;
 `
 
 const Sidebar = styled.div`
     height: 100%;
-    width: 240px;
-    min-width: 240px;
+    width: 222px;
+    min-width: 222px;
+    margin-right: 10px;
     display: flex;
     flex-direction: column;
+    background: #fff;
+    border-radius: 10px;
 `
 
 const Main = styled.div`
-    flex: 1;
+    width: 378px;
     height: 100%;
     display: flex;
     flex-direction: column;
+    background: #fff;
+    border-radius: 10px;
 `
 
 const Filters = styled.div`
     flex: 1;
     min-height: 0;
-    padding: 0 0 0 8px;
     display: flex;
     flex-direction: column;
 `
 
-const SearchDiv = styled.div`
-    padding: 16px 16px 0 16px;
-`
-
 const ScrollArea = styled.div`
-    padding: 0 8px 8px 0;
     flex: 1;
     overflow-y: scroll;
 `
@@ -60,29 +72,26 @@ const MainBottom = styled.div`
 `
 
 export const SelectProposalView: React.FC = observer(() => {
-    const { proposals } = useStores()
-    const searchDebounced = _.debounce((text): void => {
-        proposals.setTextFilter(text)
-    }, 500)
     return (
         <Container>
-            <Sidebar>
-                <Filters>
-                    <ScrollArea>
-                        <SearchDiv>
-                            <Search onChange={searchDebounced} />
-                        </SearchDiv>
-                        <CountryFilter />
-                    </ScrollArea>
-                </Filters>
-                <OriginalLocation />
-            </Sidebar>
-            <Main>
-                <ProposalTable />
-                <MainBottom>
-                    <SelectedProposal />
-                </MainBottom>
-            </Main>
+            <Top>
+                <LogoTitle />
+            </Top>
+            <Split>
+                <Sidebar>
+                    <Filters>
+                        <ScrollArea>
+                            <CountryFilter />
+                        </ScrollArea>
+                    </Filters>
+                </Sidebar>
+                <Main>
+                    <ProposalTable />
+                    <MainBottom>
+                        <SelectedProposal />
+                    </MainBottom>
+                </Main>
+            </Split>
         </Container>
     )
 })

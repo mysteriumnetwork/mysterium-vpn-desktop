@@ -11,7 +11,6 @@ import styled, { keyframes } from "styled-components"
 import { useStores } from "../../../store"
 import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { perGiB, perHour } from "../../../payment/rate"
 
 const slideIn = keyframes`
@@ -25,30 +24,28 @@ const slideIn = keyframes`
 
 const Container = styled.div`
     box-sizing: border-box;
-    height: 72px;
-    padding: 8px 16px;
+    height: 60px;
+    padding: 17px;
+    padding-left: 24px;
     display: flex;
     align-items: center;
-    border-left: 1px solid #e6e6e6;
-    box-shadow: inset 0 1px 1px #e6e6e6;
+    box-shadow: 0px 0px 20px rgba(109, 60, 121, 0.3);
+    border-radius: 10px;
     animation: ${slideIn} 150ms ease-in-out;
 `
 
 const ProposalFlag = styled(Flag)`
-    padding-right: 16px;
+    padding-right: 7px;
 `
 
 const ProviderId = styled.p`
     user-select: text;
     font-weight: bold;
+    padding-right: 7px;
 `
 
-const ServiceInfo = styled.div`
-    p {
-        margin: 0;
-        margin-right: 16px;
-        line-height: 20px;
-    }
+const Pricing = styled.div`
+    font-size: 11px;
 `
 
 const ConnectWrapper = styled.div`
@@ -67,11 +64,8 @@ export const SelectedProposal: React.FC = observer(() => {
     return (
         <Container>
             <ProposalFlag countryCode={proposal.country} />
-            <ServiceInfo>
-                <ProviderId>{proposal.shortId}</ProviderId>
-                <p>{pricingText}</p>
-            </ServiceInfo>
-            <ProposalQuality level={proposal.quality?.quality} />
+            <ProviderId>{proposal.shortId}</ProviderId>
+            <Pricing>{pricingText}</Pricing>
             <ConnectWrapper>
                 <ConnectDisconnectButton />
             </ConnectWrapper>

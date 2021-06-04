@@ -4,20 +4,23 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { Quality } from "mysterium-vpn-js"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 
 import { useStores } from "../../../store"
 import { UIProposal } from "../../ui-proposal-type"
-import { Flag } from "../../../location/components/Flag/Flag"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { brand } from "../../../ui-kit/colors"
 import { perGiB, perHour } from "../../../payment/rate"
+import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier/IconPriceTier"
+import { countryName } from "../../../location/countries"
 
 const Styles = styled.div`
     flex: 1;
@@ -34,9 +37,11 @@ const Styles = styled.div`
 
     .td,
     .th {
-        height: 32px;
-        line-height: 32px;
+        height: 25px;
+        line-height: 25px;
         padding: 0 8px;
+        white-space: nowrap;
+        overflow: hidden;
 
         &.sorted-asc {
             box-shadow: inset 1px -4px 0px -2px ${brand};
@@ -45,28 +50,35 @@ const Styles = styled.div`
             box-shadow: inset 1px 4px 0px -2px ${brand};
         }
     }
+    .th {
+        color: #5a597d;
+        opacity: 0.5;
+        &:last-child {
+            padding: 0;
+        }
+    }
 
     .thead {
         .tr {
             box-sizing: border-box;
             padding: 0 8px;
-            font-size: 12px;
-            box-shadow: inset 0 -1px 1px #e6e6e6;
+            font-size: 11px;
+            border-bottom: 1px dashed #dfdff3;
         }
     }
     .tbody {
         flex: 1;
 
         .tr {
-        }
-
-        .tr:first-child {
-            margin-top: 8px;
-        }
-        .tr:last-child {
-            margin-bottom: 8px;
+            margin-top: 3px;
         }
     }
+`
+
+const TableRow = styled.div`
+    height: 30px;
+    padding-top: 3px;
+    border-bottom: 1px dashed #dfdff3;
 `
 
 interface ToggleProps {
@@ -76,13 +88,11 @@ interface ToggleProps {
 }
 
 const TableToggle = styled.div`
-    border-radius: 4px;
-    color: ${(props: ToggleProps): string => (props.active ? "#fff" : "#404040")};
-    background: ${(props: ToggleProps): string =>
-        props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "transparent"};
+    border-radius: 5px;
+    color: ${(props: ToggleProps): string => (props.active ? "#fff" : "inherit")};
+    background: ${(props: ToggleProps): string => (props.active ? "#5a597d" : "transparent")};
     &:hover {
-        background: ${(props: ToggleProps): string =>
-            props.active ? "linear-gradient(180deg, #873a72 0%, #673a72 100%)" : "#e6e6e6"};
+        background: ${(props: ToggleProps): string => (props.active ? "#5a597d" : "#f4f4fc")};
     }
 ` as React.FC<ToggleProps>
 
@@ -91,7 +101,7 @@ const CellCenter = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 `
 
 type TableProps = {
@@ -107,7 +117,7 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
         }),
         [],
     )
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<UIProposal>(
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setHiddenColumns } = useTable<UIProposal>(
         {
             columns,
             data,
@@ -115,11 +125,19 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             autoResetSortBy: false,
             initialState: {
                 sortBy: [{ id: "country" }],
+                hiddenColumns: ["priceHour", "priceGib"],
             },
         },
         useBlockLayout,
         useSortBy,
     )
+    useEffect(() => {
+        if (proposals.filter.country == null) {
+            setHiddenColumns(["priceHour", "priceGib"])
+        } else {
+            setHiddenColumns(["country"])
+        }
+    }, [proposals.filter.country])
     const activeKey = proposals.active?.key
     const renderRow = React.useCallback(
         ({ index, style }): JSX.Element => {
@@ -131,22 +149,25 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
                 <div
                     style={{
                         ...style,
+                        boxSizing: "border-box",
                         width: "calc(100% - 16px)",
                         left: 8,
                     }}
                 >
-                    <TableToggle key={row.original.key} active={active} onClick={onClick}>
-                        <div className="tr" {...row.getRowProps()}>
-                            {row.cells.map((cell) => {
-                                return (
-                                    // eslint-disable-next-line react/jsx-key
-                                    <div className="td" {...cell.getCellProps()}>
-                                        {cell.render("Cell")}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </TableToggle>
+                    <TableRow>
+                        <TableToggle key={row.original.key} active={active} onClick={onClick}>
+                            <div className="tr" {...row.getRowProps()}>
+                                {row.cells.map((cell) => {
+                                    return (
+                                        // eslint-disable-next-line react/jsx-key
+                                        <div className="td" {...cell.getCellProps()}>
+                                            {cell.render("Cell")}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </TableToggle>
+                    </TableRow>
                 </div>
             )
         },
@@ -178,7 +199,7 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             <div className="tbody" {...getTableBodyProps()}>
                 <AutoSizer>
                     {({ width, height }): JSX.Element => (
-                        <FixedSizeList itemCount={data.length} itemSize={32} width={width} height={height}>
+                        <FixedSizeList itemCount={data.length} itemSize={30} width={width} height={height}>
                             {renderRow}
                         </FixedSizeList>
                     )}
@@ -206,33 +227,55 @@ export const ProposalTable: React.FC = observer(() => {
     const columns = React.useMemo<Column<UIProposal>[]>(
         () => [
             {
+                Header: "",
+                accessor: "ipType",
+                width: 25,
+                Cell: (props) => {
+                    if (props.value === "residential") {
+                        return (
+                            <span style={{ fontSize: 15 }}>
+                                <FontAwesomeIcon icon={faRegistered} />
+                            </span>
+                        )
+                    }
+                    return ""
+                },
+                disableSortBy: true,
+            },
+            { Header: "Node", accessor: "shortId", width: 120 },
+
+            {
                 Header: "Country",
                 accessor: "country",
-                width: 60,
+                width: 124,
                 // eslint-disable-next-line react/display-name
-                Cell: (props): Renderer<CellProps<UIProposal, string>> => (
-                    <CellCenter>
-                        <Flag countryCode={props.value} />
-                    </CellCenter>
-                ),
+                Cell: (props): Renderer<CellProps<UIProposal, string>> => <span>{countryName(props.value)}</span>,
             },
-            { Header: "ID", accessor: "shortId", width: 132 },
             {
                 Header: "Price/h",
+                id: "priceHour",
                 accessor: (p): string => perHour(p.price),
-                width: 70,
+                width: 62,
                 sortType: "basic",
             },
             {
                 Header: "Price/GiB",
+                id: "priceGib",
                 accessor: (p): string => perGiB(p.price),
                 width: 62,
                 sortType: "basic",
             },
             {
+                Header: "Price",
+                accessor: () => 2,
+                width: 44,
+                // eslint-disable-next-line react/display-name
+                Cell: () => <IconPriceTier tier={2} />,
+            },
+            {
                 Header: "Quality",
                 accessor: "quality",
-                width: 52,
+                width: 42,
                 sortDescFirst: true,
                 sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
