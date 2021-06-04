@@ -21,6 +21,7 @@ import { brand } from "../../../ui-kit/colors"
 import { perGiB, perHour } from "../../../payment/rate"
 import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier/IconPriceTier"
 import { countryName } from "../../../location/countries"
+import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 
 const Styles = styled.div`
     flex: 1;
@@ -39,7 +40,6 @@ const Styles = styled.div`
     .th {
         height: 25px;
         line-height: 25px;
-        padding: 0 8px;
         white-space: nowrap;
         overflow: hidden;
 
@@ -61,40 +61,26 @@ const Styles = styled.div`
     .thead {
         .tr {
             box-sizing: border-box;
-            padding: 0 8px;
+            padding-left: 12px;
             font-size: 11px;
             border-bottom: 1px dashed #dfdff3;
         }
     }
     .tbody {
         flex: 1;
-
-        .tr {
-            margin-top: 3px;
-        }
     }
 `
 
 const TableRow = styled.div`
-    height: 30px;
-    padding-top: 3px;
     border-bottom: 1px dashed #dfdff3;
 `
 
-interface ToggleProps {
-    children: React.ReactNode
-    active: boolean
-    onClick: () => void
-}
-
-const TableToggle = styled.div`
-    border-radius: 5px;
-    color: ${(props: ToggleProps): string => (props.active ? "#fff" : "inherit")};
-    background: ${(props: ToggleProps): string => (props.active ? "#5a597d" : "transparent")};
-    &:hover {
-        background: ${(props: ToggleProps): string => (props.active ? "#5a597d" : "#f4f4fc")};
-    }
-` as React.FC<ToggleProps>
+const TableToggle = styled(Toggle).attrs({
+    activeColor: "#5a597d",
+    hoverColor: "#f4f4fc",
+    textColor: "#3c3857",
+    paddingX: "6px",
+})``
 
 const CellCenter = styled.div`
     width: 100%;
@@ -145,13 +131,14 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             prepareRow(row)
             const active = activeKey == row.original.key
             const onClick = (): void => proposals.toggleActiveProposal(row.original)
+            const rowMarginX = 6
             return (
                 <div
                     style={{
                         ...style,
                         boxSizing: "border-box",
-                        width: "calc(100% - 16px)",
-                        left: 8,
+                        width: `calc(100% - ${rowMarginX * 2}px)`,
+                        left: rowMarginX,
                     }}
                 >
                     <TableRow>

@@ -22,10 +22,9 @@ const Container = styled.div`
     padding: 12px;
 `
 
-const CountryToggle = styled(Toggle)`
-    padding: 0 16px;
-    margin-bottom: 5px;
-`
+const CountryToggle = styled(Toggle).attrs({
+    activeShadowColor: "0px 5px 10px rgba(214, 31, 133, 0.2)",
+})``
 
 const CountryName = styled.div`
     margin-left: 10px;
