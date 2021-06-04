@@ -9,23 +9,22 @@ import React from "react"
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
+import { brandNew } from "../../colors"
+
 import { ButtonProps } from "./ButtonProps"
 
 const Button = styled.button`
-    box-sizing: border-box;
-    height: 40px;
-    min-height: 40px;
-    padding: 0 16px;
+    height: 25px;
+    min-height: 25px;
+    padding: 0 24px;
     border: none;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1px;
-    border-radius: 4px;
+    font-size: 12px;
+    line-height: 26px;
+    border-radius: 100px;
     outline: none;
+    box-shadow: 0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5);
 
-    background: ${(props: ButtonProps): string =>
-        !props.disabled ? "linear-gradient(180deg, #7c2463 0%, #552462 100%)" : "#ccc"};
+    background: ${(props: ButtonProps): string => (!props.disabled ? brandNew : "#ccc")};
     color: #fff;
 
     transition: transform 0.2s;

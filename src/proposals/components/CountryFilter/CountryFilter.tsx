@@ -12,30 +12,26 @@ import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { countryName, isUnknownCountry } from "../../../location/countries"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTitle"
+import { IconGlobe } from "../../../ui-kit/icons/IconGlobe/IconGlobe"
+import { brandNew } from "../../../ui-kit/colors"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 12px;
+`
+
+const CountryToggle = styled(Toggle).attrs({
+    activeShadowColor: "0px 5px 10px rgba(214, 31, 133, 0.2)",
+})``
+
+const CountryName = styled.div`
+    margin-left: 10px;
 `
 
 const Count = styled.span`
     margin-left: auto;
-`
-
-const FilterFlag = styled(Flag)`
-    margin-right: 8px;
-`
-
-const SidebarTitle = styled(SectionTitle)`
-    height: 32px;
-    margin-left: 8px;
-`
-
-const CountryToggle = styled(Toggle)`
-    padding: 0 16px;
-    line-height: 32px;
 `
 
 export const CountryFilter = observer(() => {
@@ -44,32 +40,39 @@ export const CountryFilter = observer(() => {
     if (!Object.keys(countryCounts).length) {
         return <></>
     }
+    const sortedCountries = Object.keys(countryCounts).sort((self, other) => {
+        if (isUnknownCountry(self)) {
+            return 1
+        }
+        return countryName(self).localeCompare(countryName(other))
+    })
     return (
         <Container>
-            <SidebarTitle>Country</SidebarTitle>
-            {Object.keys(countryCounts)
-                .sort((self, other) => {
-                    if (isUnknownCountry(self)) {
-                        return 1
-                    }
-                    return countryName(self).localeCompare(countryName(other))
-                })
-                .map((countryCode) => {
-                    const toggleAction = (): void => {
-                        proposals.toggleCountryFilter(countryCode)
-                    }
-                    return (
-                        <CountryToggle
-                            key={countryCode}
-                            onClick={toggleAction}
-                            active={proposals.filter.country == countryCode}
-                        >
-                            <FilterFlag countryCode={countryCode} />
-                            <p>{countryName(countryCode)}</p>
-                            <Count>{countryCounts[countryCode]}</Count>
-                        </CountryToggle>
-                    )
-                })}
+            <CountryToggle
+                key="all"
+                onClick={() => proposals.setCountryFilter(undefined)}
+                active={proposals.filter.country == null}
+            >
+                <IconGlobe color={proposals.filter.country == null ? "#fff" : brandNew} />
+                <CountryName>All countries</CountryName>
+                <Count>{proposals.textFiltered.length}</Count>
+            </CountryToggle>
+            {sortedCountries.map((countryCode) => {
+                const toggleAction = (): void => {
+                    proposals.toggleCountryFilter(countryCode)
+                }
+                return (
+                    <CountryToggle
+                        key={countryCode}
+                        onClick={toggleAction}
+                        active={proposals.filter.country == countryCode}
+                    >
+                        <Flag countryCode={countryCode} />
+                        <CountryName>{countryName(countryCode)}</CountryName>
+                        <Count>{countryCounts[countryCode]}</Count>
+                    </CountryToggle>
+                )
+            })}
         </Container>
     )
 })

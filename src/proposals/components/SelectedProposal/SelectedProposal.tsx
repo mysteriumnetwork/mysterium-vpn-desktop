@@ -11,7 +11,6 @@ import styled, { keyframes } from "styled-components"
 import { useStores } from "../../../store"
 import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { perGiB, perHour } from "../../../payment/rate"
 
 const slideIn = keyframes`
@@ -22,33 +21,45 @@ const slideIn = keyframes`
         transform: none;
     }
 `
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
 
 const Container = styled.div`
     box-sizing: border-box;
-    height: 72px;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    border-left: 1px solid #e6e6e6;
-    box-shadow: inset 0 1px 1px #e6e6e6;
+    height: 60px;
+    padding: 17px;
+    padding-left: 24px;
+
+    box-shadow: 0px 0px 20px rgba(109, 60, 121, 0.3);
+    border-radius: 10px;
     animation: ${slideIn} 150ms ease-in-out;
 `
 
-const ProposalFlag = styled(Flag)`
-    padding-right: 16px;
+const Inner = styled.div`
+    display: flex;
+    align-items: center;
+    opacity: 1;
+    animation: ${fadeIn} 250ms ease-in-out;
 `
 
-const ProviderId = styled.p`
+const ProposalFlag = styled(Flag)`
+    padding-right: 7px;
+`
+
+const ProviderId = styled.div`
     user-select: text;
     font-weight: bold;
+    padding-right: 7px;
 `
 
-const ServiceInfo = styled.div`
-    p {
-        margin: 0;
-        margin-right: 16px;
-        line-height: 20px;
-    }
+const Pricing = styled.div`
+    font-size: 11px;
 `
 
 const ConnectWrapper = styled.div`
@@ -66,15 +77,14 @@ export const SelectedProposal: React.FC = observer(() => {
 
     return (
         <Container>
-            <ProposalFlag countryCode={proposal.country} />
-            <ServiceInfo>
+            <Inner>
+                <ProposalFlag countryCode={proposal.country} />
                 <ProviderId>{proposal.shortId}</ProviderId>
-                <p>{pricingText}</p>
-            </ServiceInfo>
-            <ProposalQuality level={proposal.quality?.quality} />
-            <ConnectWrapper>
-                <ConnectDisconnectButton />
-            </ConnectWrapper>
+                <Pricing>{pricingText}</Pricing>
+                <ConnectWrapper>
+                    <ConnectDisconnectButton />
+                </ConnectWrapper>
+            </Inner>
         </Container>
     )
 })
