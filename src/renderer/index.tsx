@@ -37,7 +37,7 @@ switch (platform()) {
     case "darwin":
         globalFontStyle = `
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 300;
+            font-weight: 400;
         `
         break
     default:
@@ -66,7 +66,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         padding: 0;
         width: 100%;
         height: 100%;
-        font-size: 14px;
+        font-size: 12px;
         ${globalFontStyle}
     }
     #app {
