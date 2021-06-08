@@ -1090,19 +1090,19 @@
   dependencies:
     cross-spawn "^7.0.1"
 
-"@mysteriumnetwork/node@0.47.0-rc5":
-  version "0.47.0-rc5"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.47.0-rc5.tgz#482b2fb96292ca956911ecdeb3c20e92261aa0f0"
-  integrity sha512-mk6sbzyXszvVxEaf0kb4Kwcj0G5RUcXZm/3bqNrXR5KwZEFHPKiOQH6u9KVYjGey9hdpN7koxNTgc6NkVRLDig==
+"@mysteriumnetwork/node@0.47.0":
+  version "0.47.0"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.47.0.tgz#114651dc81e723e3163034d0515eefd76075f05f"
+  integrity sha512-wI0nUs6TkDfOe4cYw/jB6e2a6WzJK+LNYQKVnvXsZV7sdbzaVq8fApjc/E3vTHZ/Oq48ebmuXIGUzygm/8jC5g==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
     targz "^1.0.1"
 
-"@mysteriumnetwork/terms@^0.0.27":
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.27.tgz#235d9f1a74d564d4611b14bf8df4e547bdd4836e"
-  integrity sha512-b72gadNlCCwWR1pQqnthUCFJSr4P/YuV0hskXgmgeBzYLJBbSvEGzxBpmFTm3296CA7KyMoCVIgauSvBW5bGUA==
+"@mysteriumnetwork/terms@0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.33.tgz#47cb43a7978c955e7c2420117ad30e27181260ac"
+  integrity sha512-JrIY+LaND3dJfFNX/2G86/H1z3LdRJw99S6EcBPHy5GEkvx4DB7oBZ0cbMo8e8lGO3xPRTJauzCqJNbokI8gpA==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
