@@ -19,7 +19,7 @@ import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
 import { useStores } from "../../../store"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
-import { NavBar } from "../NavBar/NavBar"
+import { TitleBar } from "../TitleBar/TitleBar"
 import { locations } from "../../locations"
 import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
@@ -67,7 +67,7 @@ export const Routes: React.FC = observer(() => {
                             <ActivateAccountTopup />
                         </Route>
                         <Route path={locations.proposals.path}>
-                            <NavBar />
+                            <TitleBar />
                             <SelectProposalView />
                         </Route>
                         <Route path={locations.consumer.path} exact>
@@ -81,27 +81,27 @@ export const Routes: React.FC = observer(() => {
                             />
                         </Route>
                         <Route path={locations.connection.path}>
-                            <NavBar />
+                            <TitleBar />
                             <ConnectedView />
                         </Route>
                         <Route path={locations.preferences.path} exact>
-                            <NavBar />
+                            <TitleBar />
                             <Preferences />
                         </Route>
                         <Route path={locations.preferencesFilters.path} exact>
-                            <NavBar />
+                            <TitleBar />
                             <FiltersView />
                         </Route>
                         <Route path={locations.referrals.path}>
-                            <NavBar />
+                            <TitleBar />
                             <ReferralView />
                         </Route>
                         <Route path={locations.wallet.path}>
-                            <NavBar />
+                            <TitleBar />
                             <WalletView />
                         </Route>
                         <Route path={locations.reportIssue.path}>
-                            <NavBar />
+                            <TitleBar />
                             <ReportIssueView />
                         </Route>
                         <Route path={locations.loading.path}>

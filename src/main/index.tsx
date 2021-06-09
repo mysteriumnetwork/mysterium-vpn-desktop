@@ -65,7 +65,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         height: winSize.height,
         frame: os.platform() == "darwin" ? false : true,
         titleBarStyle: "hidden",
-        trafficLightPosition: { x: 20, y: 18 },
+        trafficLightPosition: { x: 12, y: 11 },
         useContentSize: true,
         resizable: false,
         fullscreen: false,
