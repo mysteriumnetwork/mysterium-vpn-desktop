@@ -10,6 +10,7 @@ import { Currency } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { remote } from "electron"
 
 import { useStores } from "../../../store"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
@@ -19,13 +20,20 @@ import { titleBarSize } from "../../../config"
 import { ProtectionStatus } from "../../../location/components/ProtectionStatus/ProtectionStatus"
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
 
+import { WindowButtonsWindows } from "./WindowButtonsWindows"
+
 const Container = styled.div`
     box-sizing: border-box;
     height: ${titleBarSize.height}px;
-    padding: 8px 16px;
-    .darwin & {
-        padding-left: 80px;
+
+    padding: 0 15px;
+    .win32 & {
+        padding: 0;
     }
+    .darwin & {
+        padding-left: 0 80px 0 15px;
+    }
+
     color: #3c3857;
     background: #fcfcfc;
     display: flex;
@@ -37,26 +45,34 @@ const Container = styled.div`
 
 const NavigationButton = styled.div`
     -webkit-app-region: no-drag;
-    height: 20px;
+
+    height: 28px;
+    border-radius: 4px;
+    .win32 & {
+        height: 100%;
+        border-radius: 0;
+    }
+    .darwin & {
+        height: 20px;
+        border-radius: 18px;
+    }
+
     line-height: 12px;
     padding: 0 16px;
-    border-radius: 18px;
+
     &:hover {
         background: #aeaedb33;
     }
     display: flex;
     justify-content: center;
     align-items: center;
-    svg {
-        display: block;
-    }
 `
 
 const WalletButton = styled(NavigationButton)`
-    background: #aeaedb33;
     box-sizing: border-box;
     min-width: 114px;
     margin-left: auto;
+    margin-right: 16px;
     overflow: hidden;
     white-space: nowrap;
 `
@@ -79,7 +95,6 @@ const Money = styled.div`
         padding-left: 6px;
     }
 `
-
 export const TitleBar: React.FC = observer(() => {
     const { navigation, router, identity } = useStores()
     // const clickReferrals = () => {
@@ -98,6 +113,7 @@ export const TitleBar: React.FC = observer(() => {
             removeInsignificantZeros: true,
         },
     )
+    const isWindows = remote.getGlobal("os") === "win32"
     return (
         <Container>
             {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
@@ -123,6 +139,7 @@ export const TitleBar: React.FC = observer(() => {
                     </span>
                 </Money>
             </WalletButton>
+            {isWindows && <WindowButtonsWindows />}
         </Container>
     )
 })

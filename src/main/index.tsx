@@ -63,7 +63,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         title: packageJson.productName,
         width: winSize.width,
         height: winSize.height,
-        frame: os.platform() == "darwin" ? false : true,
+        frame: false,
         titleBarStyle: "hidden",
         trafficLightPosition: { x: 12, y: 11 },
         useContentSize: true,
@@ -184,6 +184,12 @@ ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: 
 })
 ipcMain.on(MainIpcListenChannels.Update, () => {
     autoUpdater.checkForUpdates()
+})
+ipcMain.on(MainIpcListenChannels.MinimizeWindow, () => {
+    mainWindow?.minimize()
+})
+ipcMain.on(MainIpcListenChannels.CloseWindow, () => {
+    mainWindow?.close()
 })
 
 autoUpdater.on("download-progress", () => {
