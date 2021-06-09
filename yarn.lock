@@ -1090,10 +1090,10 @@
   dependencies:
     cross-spawn "^7.0.1"
 
-"@mysteriumnetwork/node@0.47.0":
-  version "0.47.0"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.47.0.tgz#114651dc81e723e3163034d0515eefd76075f05f"
-  integrity sha512-wI0nUs6TkDfOe4cYw/jB6e2a6WzJK+LNYQKVnvXsZV7sdbzaVq8fApjc/E3vTHZ/Oq48ebmuXIGUzygm/8jC5g==
+"@mysteriumnetwork/node@0.47.1":
+  version "0.47.1"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.47.1.tgz#e48171842a2e916fbb083cfeebd916c298c99539"
+  integrity sha512-jKnRdvka5XH3awHBIkJHWd83K5tYgdYuodBu113uC3kDeA7pmn6tf1mnHhYLnxIdiUbDUtesmP7SYqs8YLh8lw==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
