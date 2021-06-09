@@ -13,6 +13,7 @@ import { textHuge } from "../../../ui-kit/typography"
 import { useStores } from "../../../store"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../analytics/actions"
+import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 
 const Container = styled.div`
     flex: 1;
@@ -22,8 +23,7 @@ const Container = styled.div`
 `
 
 const Title = styled.div`
-    padding-top: 12px;
-    padding-bottom: 48px;
+    padding: 12px 0;
     ${textHuge};
     text-align: center;
 `
@@ -51,8 +51,10 @@ export const Preferences: React.FC = observer(() => {
     }
     return (
         <Container>
+            <Title>Filters</Title>
+            <FiltersView />
             <Content>
-                <Title>Preferences</Title>
+                <Title>Settings</Title>
                 <FormSectionTitle>Connection</FormSectionTitle>
                 <FormLabel htmlFor="dns">DNS</FormLabel>
                 <select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>

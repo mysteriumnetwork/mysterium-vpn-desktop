@@ -17,7 +17,7 @@ import { SectionTitle } from "../../../ui-kit/components/SectionTitle/SectionTit
 import { ResetFilters } from "../../../proposals/components/ResetFilters/ResetFilters"
 
 const Container = styled.div`
-    flex: 1;
+    flex: 0;
     display: flex;
     flex-direction: column;
     padding: 16px;
