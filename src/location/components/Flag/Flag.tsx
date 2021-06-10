@@ -15,5 +15,12 @@ export interface FlagProps {
 const size = 15
 
 export const Flag: React.FC<FlagProps> = ({ className, countryCode = "unknown" }) => {
-    return <CircleFlag className={className} countryCode={countryCode?.toLowerCase() ?? "unknown"} height={size} />
+    return (
+        <CircleFlag
+            className={className}
+            countryCode={countryCode?.toLowerCase() ?? "unknown"}
+            width={size}
+            height={size}
+        />
+    )
 }

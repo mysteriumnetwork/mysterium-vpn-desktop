@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, makeObservable, observable, reaction, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 import { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
@@ -45,6 +45,7 @@ export class ConnectionStore {
             resolveOriginalLocation: action,
             resetLocation: action,
             resolveLocation: action,
+            currentIp: computed,
             setConnectInProgress: action,
             setGracePeriod: action,
             setStatus: action,
@@ -190,6 +191,13 @@ export class ConnectionStore {
             },
         )
         this.setLocation(location)
+    }
+
+    get currentIp(): string {
+        if (this.status === ConnectionStatus.CONNECTED) {
+            return this.location?.ip ?? ""
+        }
+        return this.originalLocation?.ip ?? ""
     }
 
     setConnectInProgress = (b: boolean): void => {

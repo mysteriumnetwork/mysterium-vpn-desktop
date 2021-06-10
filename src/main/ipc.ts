@@ -18,4 +18,6 @@ export enum MainIpcListenChannels {
     Update = "update",
     ConnectionStatus = "connection-status",
     ToggleSupportChat = "open-support-chat",
+    MinimizeWindow = "minimize-window",
+    CloseWindow = "close-window",
 }
