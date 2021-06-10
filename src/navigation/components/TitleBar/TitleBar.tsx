@@ -26,6 +26,7 @@ import { WindowButtonsLinux } from "./WindowButtonsLinux"
 export const Container = styled.div`
     box-sizing: border-box;
     height: ${titleBarSize.height}px;
+    flex-shrink: 0;
 
     padding: 0 15px;
     .win32 & {
