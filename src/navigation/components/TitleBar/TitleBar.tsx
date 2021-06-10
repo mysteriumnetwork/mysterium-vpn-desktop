@@ -23,7 +23,7 @@ import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
 import { WindowButtonsLinux } from "./WindowButtonsLinux"
 
-const Container = styled.div`
+export const Container = styled.div`
     box-sizing: border-box;
     height: ${titleBarSize.height}px;
 

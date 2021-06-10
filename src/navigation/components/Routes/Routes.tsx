@@ -27,6 +27,7 @@ import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueVie
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 import ReferralView from "../../../views/consumer/Referral/ReferralView"
+import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -55,12 +56,15 @@ export const Routes: React.FC = observer(() => {
                             <Redirect to={locations.loading.path} />
                         </Route>
                         <Route path={locations.welcome.path}>
+                            <NakedTitleBar />
                             <WelcomeView />
                         </Route>
                         <Route path={locations.terms.path}>
+                            <NakedTitleBar />
                             <AcceptTermsView />
                         </Route>
                         <Route path={locations.activate.path}>
+                            <NakedTitleBar />
                             <ActivateAccount />
                         </Route>
                         <Route path={locations.activateTopup.path}>
@@ -105,6 +109,7 @@ export const Routes: React.FC = observer(() => {
                             <ReportIssueView />
                         </Route>
                         <Route path={locations.loading.path}>
+                            <NakedTitleBar />
                             <LoadingView />
                         </Route>
                     </Switch>
