@@ -21,6 +21,7 @@ import { ProtectionStatus } from "../../../location/components/ProtectionStatus/
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
+import { WindowButtonsLinux } from "./WindowButtonsLinux"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -114,6 +115,7 @@ export const TitleBar: React.FC = observer(() => {
         },
     )
     const isWindows = remote.getGlobal("os") === "win32"
+    const isLinux = remote.getGlobal("os") !== "darwin" && !isWindows
     return (
         <Container>
             {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
@@ -140,6 +142,7 @@ export const TitleBar: React.FC = observer(() => {
                 </Money>
             </WalletButton>
             {isWindows && <WindowButtonsWindows />}
+            {isLinux && <WindowButtonsLinux />}
         </Container>
     )
 })
