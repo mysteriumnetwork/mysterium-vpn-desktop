@@ -33,7 +33,7 @@ export const Container = styled.div`
         padding: 0;
     }
     .darwin & {
-        padding-left: 0 80px 0 15px;
+        padding-left: 80px;
     }
 
     color: #3c3857;
@@ -73,8 +73,10 @@ const NavigationButton = styled.div`
 const WalletButton = styled(NavigationButton)`
     box-sizing: border-box;
     min-width: 114px;
-    margin-left: auto;
-    margin-right: 16px;
+    margin: 0 16px 0 auto;
+    .darwin & {
+        margin-right: 0;
+    }
     overflow: hidden;
     white-space: nowrap;
 `
