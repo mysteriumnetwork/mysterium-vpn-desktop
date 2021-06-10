@@ -19,6 +19,7 @@ import { locations } from "../../locations"
 import { titleBarSize } from "../../../config"
 import { ProtectionStatus } from "../../../location/components/ProtectionStatus/ProtectionStatus"
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
+import { activeItem } from "../../../ui-kit/colors"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
 import { WindowButtonsLinux } from "./WindowButtonsLinux"
@@ -45,7 +46,7 @@ export const Container = styled.div`
     -webkit-app-region: drag;
 `
 
-const NavigationButton = styled.div`
+const NavigationButton = styled.div<{ active: boolean }>`
     -webkit-app-region: no-drag;
 
     height: 28px;
@@ -63,8 +64,12 @@ const NavigationButton = styled.div`
     padding: 0 16px;
 
     &:hover {
-        background: #aeaedb33;
+        background: ${(props) => (props.active ? activeItem : "#aeaedb33")};
+        color: ${(props) => (props.active ? "#fff" : "inherit")};
     }
+    background: ${(props) => (props.active ? activeItem : "inherit")};
+    color: ${(props) => (props.active ? "#fff" : "inherit")};
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -127,18 +132,25 @@ export const TitleBar: React.FC = observer(() => {
              <span style={{ marginLeft: 5 }}>Refer a friend</span>
              </NavigationButton>*/}
 
-            <NavigationButton onClick={() => navigation.goHome()}>
+            <NavigationButton active={navigation.isHomeActive} onClick={() => navigation.goHome()}>
                 <FontAwesomeIcon icon={faHome} />
             </NavigationButton>
-            <NavigationButton onClick={() => router.push(locations.preferences)}>Settings</NavigationButton>
-            <NavigationButton onClick={() => router.push(locations.reportIssue)}>Help</NavigationButton>
+            <NavigationButton
+                active={navigation.isPreferencesActive}
+                onClick={() => router.push(locations.preferences)}
+            >
+                Settings
+            </NavigationButton>
+            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.reportIssue)}>
+                Help
+            </NavigationButton>
             <Location>
                 <IP />
                 <ProtectionStatus />
             </Location>
-            <WalletButton onClick={() => router.push(locations.wallet)}>
+            <WalletButton active={navigation.isWalletActive} onClick={() => router.push(locations.wallet)}>
                 <Money>
-                    <IconMystToken />
+                    <IconMystToken color={navigation.isWalletActive ? "#fff" : activeItem} />
                     <span>
                         {balance} {Currency.MYSTTestToken}
                     </span>

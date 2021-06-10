@@ -39,6 +39,10 @@ export class NavigationStore {
             dismissWelcome: action,
             showMenu: action,
             openChat: action,
+            isHomeActive: computed,
+            isPreferencesActive: computed,
+            isHelpActive: computed,
+            isWalletActive: computed,
         })
         this.root = root
     }
@@ -122,5 +126,21 @@ export class NavigationStore {
 
     openChat = (open = true): void => {
         this.chat = open
+    }
+
+    get isHomeActive(): boolean {
+        return this.root.router.location.pathname.includes(locations.consumer.path)
+    }
+
+    get isPreferencesActive(): boolean {
+        return this.root.router.location.pathname.includes(locations.preferences.path)
+    }
+
+    get isHelpActive(): boolean {
+        return this.root.router.location.pathname.includes(locations.reportIssue.path)
+    }
+
+    get isWalletActive(): boolean {
+        return this.root.router.location.pathname.includes(locations.wallet.path)
     }
 }
