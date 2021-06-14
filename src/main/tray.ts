@@ -26,7 +26,7 @@ const trayIconPath = (connectionStatus: ConnectionStatus): string => {
         case "win32":
             return staticAssetPath(`tray/windows/${connected ? "logo-active" : "logo"}.ico`)
     }
-    return staticAssetPath("tray/macOS/PassiveTemplate.png")
+    return staticAssetPath(`tray/linux/${connected ? "logo-active" : "logo"}.png`)
 }
 
 export const refreshTrayIcon = (tray: Tray, status: ConnectionStatus): void => {
