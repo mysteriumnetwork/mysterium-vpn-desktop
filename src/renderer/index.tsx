@@ -23,6 +23,7 @@ import { rootStore, StoreContext, useStores } from "../store"
 import { synchronizedHistory } from "../navigation/routerStore"
 import { initialize as initializeAnalytics, userEvent } from "../analytics/analytics"
 import { OtherAction } from "../analytics/actions"
+import { activeItem } from "../ui-kit/colors"
 
 initializeSentry()
 
@@ -88,8 +89,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         background: rgba(0, 0, 0, 0.05); 
     }
     ::-webkit-scrollbar-thumb {
-        border-radius: 4px;
-        background: #c1c1c1; 
+        background: ${activeItem}; 
     }
     .react-toast-notifications__container {
         left: 262px !important;
