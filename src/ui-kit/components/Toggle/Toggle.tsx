@@ -72,7 +72,7 @@ export const Toggle: React.FC<ToggleProps> = ({
 }: ToggleProps) => {
     const styles = { textColor, hoverColor, activeColor, activeTextColor, activeShadowColor, paddingX }
     return (
-        <Container active={active} onClick={onClick} {...styles}>
+        <Container className={active ? "active" : ""} active={active} onClick={onClick} {...styles}>
             <Highlight active={active} {...styles}>
                 {children}
             </Highlight>
