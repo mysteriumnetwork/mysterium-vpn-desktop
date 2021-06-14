@@ -7,7 +7,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import { brandNew } from "../../colors"
+import { brand } from "../../colors"
 
 export interface ToggleProps {
     children: React.ReactNode
@@ -23,8 +23,8 @@ export interface ToggleProps {
 
 const defaultProps = {
     textColor: "#3c3857",
-    hoverColor: `${brandNew}1A`,
-    activeColor: brandNew,
+    hoverColor: `${brand}1A`,
+    activeColor: brand,
     activeTextColor: "#fff",
     activeShadowColor: "none",
     paddingX: "12px",

@@ -13,7 +13,7 @@ import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { countryName, isUnknownCountry } from "../../../location/countries"
 import { Flag } from "../../../location/components/Flag/Flag"
 import { IconGlobe } from "../../../ui-kit/icons/IconGlobe/IconGlobe"
-import { brandNew } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 
 const Container = styled.div`
     flex: 1;
@@ -53,7 +53,7 @@ export const CountryFilter = observer(() => {
                 onClick={() => proposals.setCountryFilter(undefined)}
                 active={proposals.filter.country == null}
             >
-                <IconGlobe color={proposals.filter.country == null ? "#fff" : brandNew} />
+                <IconGlobe color={proposals.filter.country == null ? "#fff" : brand} />
                 <CountryName>All countries</CountryName>
                 <Count>{proposals.textFiltered.length}</Count>
             </CountryToggle>

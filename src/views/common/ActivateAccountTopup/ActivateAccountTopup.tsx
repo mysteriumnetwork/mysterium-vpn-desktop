@@ -11,7 +11,7 @@ import { faCircleNotch, faShieldAlt } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { useStores } from "../../../store"
-import { brandDarker } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 import { displayMYST } from "../../../payment/display"
 import { QR } from "../../../ui-kit/components/QR/QR"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -40,7 +40,7 @@ const Title = styled.h1`
     margin: 0;
     margin-bottom: 16px;
     letter-spacing: 1px;
-    color: ${brandDarker};
+    color: ${brand};
 `
 
 const InstructionsDiv = styled.div`

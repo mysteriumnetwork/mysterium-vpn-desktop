@@ -12,7 +12,7 @@ import { faShieldAlt } from "@fortawesome/free-solid-svg-icons"
 import { Currency } from "mysterium-vpn-js"
 import { useToasts } from "react-toast-notifications"
 
-import { brandDarker } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import {
     ControlledMystInputWithFlatEstimate,
@@ -55,7 +55,7 @@ const Title = styled.h1`
     margin: 0;
     margin-bottom: 16px;
     letter-spacing: 1px;
-    color: ${brandDarker};
+    color: ${brand};
 `
 
 const ExplainActivation = styled.p`

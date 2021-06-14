@@ -13,7 +13,7 @@ import { remote, shell } from "electron"
 
 import { useStores } from "../../../store"
 import { textSmall } from "../../../ui-kit/typography"
-import { brandDarker } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 import { locations } from "../../locations"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../analytics/actions"
@@ -169,7 +169,7 @@ const SocialLinks = styled.div`
 const SocialIcon = styled(FontAwesomeIcon)`
     font-size: 1.7rem;
     &:hover {
-        color: ${brandDarker};
+        color: ${brand};
     }
 `
 

@@ -6,10 +6,10 @@
  */
 import styled from "styled-components"
 
-import { brandDarker } from "../colors"
+import { brandLighter } from "../colors"
 
 export const Anchor = styled.a`
     cursor: pointer;
     text-decoration: underline;
-    color: ${brandDarker};
+    color: ${brandLighter};
 `

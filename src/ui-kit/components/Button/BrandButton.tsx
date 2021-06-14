@@ -9,7 +9,7 @@ import React from "react"
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-import { brandNew } from "../../colors"
+import { brand } from "../../colors"
 
 import { ButtonProps } from "./ButtonProps"
 
@@ -24,7 +24,7 @@ const Button = styled.button`
     outline: none;
     box-shadow: 0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5);
 
-    background: ${(props: ButtonProps): string => (!props.disabled ? brandNew : "#ccc")};
+    background: ${(props: ButtonProps): string => (!props.disabled ? brand : "#ccc")};
     color: #fff;
 
     transition: transform 0.2s;

@@ -10,7 +10,7 @@ import React from "react"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
-import { brandNew } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 
 const Status = styled.div<{ isProtected: boolean }>`
     box-sizing: border-box;
@@ -20,7 +20,7 @@ const Status = styled.div<{ isProtected: boolean }>`
     text-align: center;
     border-radius: 18px;
     padding: 0 7px;
-    color: ${(props) => (props.isProtected ? "#fff" : brandNew)};
+    color: ${(props) => (props.isProtected ? "#fff" : brand)};
     background: ${(props) => (props.isProtected ? "#58c800" : "inherit")};
 `
 
