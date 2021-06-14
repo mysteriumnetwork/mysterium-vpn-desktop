@@ -48,6 +48,7 @@ const Sidebar = styled.div`
     flex-direction: column;
     background: #fff;
     border-radius: 10px;
+    overflow: hidden;
 `
 
 const Main = styled.div`
@@ -57,6 +58,7 @@ const Main = styled.div`
     flex-direction: column;
     background: #fff;
     border-radius: 10px;
+    overflow: hidden;
 `
 
 const Filters = styled.div`

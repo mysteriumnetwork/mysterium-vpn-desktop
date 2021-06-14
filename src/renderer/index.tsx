@@ -42,7 +42,7 @@ switch (platform()) {
         break
     default:
         globalFontStyle = `
-            font-family: sans-serif;
+            font-family: Ubuntu, sans-serif;
             font-weight: normal;
         `
 }
@@ -67,6 +67,9 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         width: 100%;
         height: 100%;
         font-size: 12px;
+        ${globalFontStyle}
+    }
+    input, button {
         ${globalFontStyle}
     }
     #app {
