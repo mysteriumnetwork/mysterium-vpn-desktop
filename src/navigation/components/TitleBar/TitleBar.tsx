@@ -51,9 +51,11 @@ const NavigationButton = styled.div<{ active: boolean }>`
 
     height: 28px;
     border-radius: 4px;
+    margin-right: 8px;
     .win32 & {
         height: 100%;
         border-radius: 0;
+        margin-right: 0;
     }
     .darwin & {
         height: 20px;
