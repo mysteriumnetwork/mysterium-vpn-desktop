@@ -12,12 +12,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { brand } from "../../colors"
 
 export type BrandButtonProps = {
-    loading?: boolean
     background?: string
+    disabledBackground?: string
+    color?: string
+    loading?: boolean
     className?: string
 } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-const Button = styled.button<BrandButtonProps>`
+const defaultProps = {
+    background: brand,
+    color: "#fff",
+    disabledBackground: "#ccc",
+}
+
+const Button = styled.button<BrandButtonProps & typeof defaultProps>`
     height: 35px;
     min-height: 35px;
     padding: 0 24px;
@@ -26,15 +34,15 @@ const Button = styled.button<BrandButtonProps>`
     line-height: 26px;
     border-radius: 100px;
     outline: none;
-    box-shadow: ${(props): string => {
+    box-shadow: ${(props) => {
         if (!props.disabled) {
             return "0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5)"
         }
         return "none"
     }};
 
-    background: ${(props): string => (!props.disabled ? props.background ?? brand : "#ccc")};
-    color: #fff;
+    background: ${(props) => (!props.disabled ? props.background : props.disabledBackground)};
+    color: ${(props) => props.color};
 
     transition: transform 0.2s;
 
@@ -52,15 +60,23 @@ const Icon = styled(FontAwesomeIcon)`
 `
 
 export const BrandButton: React.FC<BrandButtonProps> = ({
-    background = brand,
+    background = defaultProps.background,
+    disabledBackground = defaultProps.disabledBackground,
+    color = defaultProps.color,
     loading = false,
     children,
     className = "",
     ...rest
 }) => {
-    const indicator = loading ? <Icon icon={faCircleNotch} color="#fff" spin /> : null
+    const indicator = loading ? <Icon icon={faCircleNotch} color={color} spin /> : null
     return (
-        <Button background={background} className={className} {...rest}>
+        <Button
+            background={background}
+            color={color}
+            disabledBackground={disabledBackground}
+            className={className}
+            {...rest}
+        >
             {children}
             {indicator}
         </Button>

@@ -7,9 +7,8 @@
 import styled from "styled-components"
 
 import { BrandButton } from "./BrandButton"
-import { ButtonProps } from "./ButtonProps"
 
-export const CancelButton = styled(BrandButton)`
-    background: ${(props: ButtonProps): string => (props.disabled ? "#ccc" : "#fefefe")};
-    color: ${(props: ButtonProps): string => (props.disabled ? "#fff" : "#d93c3c")};
-`
+export const CancelButton = styled(BrandButton).attrs({
+    background: "#fefefe",
+    color: "#d93c3c",
+})``

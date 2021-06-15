@@ -7,11 +7,12 @@
 import styled from "styled-components"
 
 import { BrandButton } from "./BrandButton"
-import { ButtonProps } from "./ButtonProps"
 
-export const LightButton = styled(BrandButton)`
-    background: ${(props: ButtonProps): string => (props.disabled ? "#ccc" : "#fefefe")};
-    color: ${(props: ButtonProps): string => (props.disabled ? "#fff" : "#333")};
+export const LightButton = styled(BrandButton).attrs({
+    background: "#fefefe",
+    color: "#333",
+})`
+    box-shadow: none;
     display: inline-flex;
     align-items: center;
 `

@@ -8,13 +8,15 @@ import styled from "styled-components"
 
 import { BrandButton } from "./BrandButton"
 
-export const GhostButton = styled(BrandButton)`
-    background: none;
+export const GhostButton = styled(BrandButton).attrs({
+    background: "transparent",
+    color: "#fff",
+})`
+    box-shadow: none;
     &:hover {
         background: rgba(255, 255, 255, 0.2);
     }
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
     display: inline-flex;
     align-items: center;
 `
