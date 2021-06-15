@@ -33,7 +33,7 @@ const fadeIn = keyframes`
 const Container = styled.div`
     box-sizing: border-box;
     height: 60px;
-    padding: 0 24px;
+    padding: 0 15px;
     width: 100%;
 
     box-shadow: 0px 0px 20px rgba(109, 60, 121, 0.3);
