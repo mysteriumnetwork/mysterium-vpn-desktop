@@ -26,9 +26,14 @@ const Button = styled.button<BrandButtonProps>`
     line-height: 26px;
     border-radius: 100px;
     outline: none;
-    box-shadow: 0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5);
+    box-shadow: ${(props): string => {
+        if (!props.disabled) {
+            return "0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5)"
+        }
+        return "none"
+    }};
 
-    background: ${(props: BrandButtonProps): string => (!props.disabled ? props.background ?? brand : "#ccc")};
+    background: ${(props): string => (!props.disabled ? props.background ?? brand : "#ccc")};
     color: #fff;
 
     transition: transform 0.2s;
