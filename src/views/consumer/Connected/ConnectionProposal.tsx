@@ -11,40 +11,35 @@ import styled from "styled-components"
 import { useStores } from "../../../store"
 import { perGiB, perHour } from "../../../payment/rate"
 
-const Container = styled.div`
-    color: #c0b3c9;
-    margin: 32px auto 48px 100px;
-`
-
-const Row = styled.div`
-    margin-bottom: 14px;
+const MetadataRow = styled.div`
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
 `
 
-const Label = styled.span`
-    width: 120px;
-`
-
-const Val = styled.span`
+const Metadata = styled.div`
+    margin-bottom: 20px;
     user-select: text;
 `
 
 export const ConnectionProposal: React.FC = observer(() => {
     const {
-        connection: { proposal: { price, providerId } = {} },
+        connection: { proposal },
     } = useStores()
-    const priceText = `${perHour(price)}/hour ＋ ${perGiB(price)}/GiB`
     return (
-        <Container>
-            <Row>
-                <Label>Provider ID</Label>
-                <Val>{providerId ?? ""}</Val>
-            </Row>
-            <Row>
-                <Label>Price</Label>
-                {priceText}
-            </Row>
-        </Container>
+        <>
+            <MetadataRow>
+                <Metadata>Node</Metadata>
+                <Metadata>{proposal?.shortId}</Metadata>
+            </MetadataRow>
+            <MetadataRow>
+                <Metadata>Price</Metadata>
+                <Metadata>{perHour(proposal?.price)}/h</Metadata>
+                <Metadata>{perGiB(proposal?.price)}/GiB</Metadata>
+            </MetadataRow>
+            <MetadataRow>
+                <Metadata>Type</Metadata>
+                <Metadata>{proposal?.ipType}</Metadata>
+            </MetadataRow>
+        </>
     )
 })
