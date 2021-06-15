@@ -9,11 +9,14 @@ import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
 import * as _ from "lodash"
 import { Currency } from "mysterium-vpn-js"
+import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { fmtMoney } from "../../../payment/display"
-
-import { Metric } from "./Metric"
+import { IconDuration } from "../../../ui-kit/icons/IconDuration"
+import { IconReceived } from "../../../ui-kit/icons/IconReceived"
+import { IconSent } from "../../../ui-kit/icons/IconSent"
+import { IconPaid } from "../../../ui-kit/icons/IconPaid"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
@@ -21,6 +24,44 @@ const toClock = (duration: number): string => {
     const hours = Math.floor(duration / (60 * 60))
     return [hours, mins, secs].map((n) => _.padStart(String(n), 2, "0")).join(":")
 }
+
+const Metrics = styled.div`
+    border-radius: 10px;
+    box-sizing: border-box;
+    height: 238px;
+    overflow: hidden;
+    color: #8387a4;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+`
+
+const Metric = styled.div`
+    width: 88px;
+    height: 115px;
+    background: #f8f8fd;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+`
+
+const MetricIcon = styled.div`
+    margin: 12px auto;
+`
+
+const MetricLabel = styled.div`
+    margin: 6px auto;
+`
+
+const MetricSeparator = () => (
+    <div>
+        <svg width="19" height="2" viewBox="0 0 19 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect opacity="0.2" width="19" height="2" rx="1" fill="#8386A4" />
+        </svg>
+    </div>
+)
 
 export const ConnectionStatistics: React.FC = observer(() => {
     const {
@@ -40,11 +81,39 @@ export const ConnectionStatistics: React.FC = observer(() => {
         },
     )
     return (
-        <React.Fragment>
-            <Metric name="Duration" value={clock} />
-            <Metric name="Downloaded" value={down} />
-            <Metric name="Uploaded" value={up} />
-            <Metric name="Paid" value={paid} />
-        </React.Fragment>
+        <Metrics>
+            <Metric>
+                <MetricIcon>
+                    <IconReceived />
+                </MetricIcon>
+                <MetricLabel>Received</MetricLabel>
+                <MetricSeparator />
+                <MetricLabel>{down}</MetricLabel>
+            </Metric>
+            <Metric>
+                <MetricIcon>
+                    <IconSent />
+                </MetricIcon>
+                <MetricLabel>Sent</MetricLabel>
+                <MetricSeparator />
+                <MetricLabel>{up}</MetricLabel>
+            </Metric>
+            <Metric>
+                <MetricIcon>
+                    <IconDuration />
+                </MetricIcon>
+                <MetricLabel>Duration</MetricLabel>
+                <MetricSeparator />
+                <MetricLabel>{clock}</MetricLabel>
+            </Metric>
+            <Metric>
+                <MetricIcon>
+                    <IconPaid />
+                </MetricIcon>
+                <MetricLabel>Paid</MetricLabel>
+                <MetricSeparator />
+                <MetricLabel>{paid}</MetricLabel>
+            </Metric>
+        </Metrics>
     )
 })

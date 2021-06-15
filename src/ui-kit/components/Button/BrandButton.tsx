@@ -11,21 +11,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { brand } from "../../colors"
 
-import { ButtonProps } from "./ButtonProps"
+export type BrandButtonProps = {
+    background?: string
+    disabledBackground?: string
+    color?: string
+    loading?: boolean
+    className?: string
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
 
-const Button = styled.button`
-    height: 25px;
-    min-height: 25px;
+const defaultProps = {
+    background: brand,
+    color: "#fff",
+    disabledBackground: "#ccc",
+}
+
+const Button = styled.button<BrandButtonProps & typeof defaultProps>`
+    height: 35px;
+    min-height: 35px;
     padding: 0 24px;
     border: none;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 26px;
     border-radius: 100px;
     outline: none;
-    box-shadow: 0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5);
+    box-shadow: ${(props) => {
+        if (!props.disabled) {
+            return "0px 10px 40px rgba(214, 31, 133, 0.4), inset 0px 0px 10px rgba(255, 98, 185, 0.5)"
+        }
+        return "none"
+    }};
 
-    background: ${(props: ButtonProps): string => (!props.disabled ? brand : "#ccc")};
-    color: #fff;
+    background: ${(props) => (!props.disabled ? props.background : props.disabledBackground)};
+    color: ${(props) => props.color};
 
     transition: transform 0.2s;
 
@@ -35,18 +52,31 @@ const Button = styled.button`
     &:active {
         transform: scale(0.95);
     }
-` as React.FC<ButtonProps>
+`
 
 const Icon = styled(FontAwesomeIcon)`
     margin-left: 8px;
     animation: fa-spin 0.7s infinite linear;
 `
 
-export const BrandButton: React.FC<React.PropsWithChildren<ButtonProps>> = (props) => {
-    const { loading = false, children, ...rest } = props
-    const indicator = loading ? <Icon icon={faCircleNotch} color="#fff" spin /> : null
+export const BrandButton: React.FC<BrandButtonProps> = ({
+    background = defaultProps.background,
+    disabledBackground = defaultProps.disabledBackground,
+    color = defaultProps.color,
+    loading = false,
+    children,
+    className = "",
+    ...rest
+}) => {
+    const indicator = loading ? <Icon icon={faCircleNotch} color={color} spin /> : null
     return (
-        <Button {...rest}>
+        <Button
+            background={background}
+            color={color}
+            disabledBackground={disabledBackground}
+            className={className}
+            {...rest}
+        >
             {children}
             {indicator}
         </Button>

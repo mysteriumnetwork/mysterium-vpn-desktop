@@ -55,7 +55,7 @@ const Container = styled.div<ToggleProps & typeof defaultProps>`
     padding: 3px 0 0 2px;
 
     &:hover ${Highlight} {
-        background: ${(props): string => (props.active ? props.activeColor : props.hoverColor)};
+        background: ${(props) => (props.active ? props.activeColor : props.hoverColor)};
     }
 `
 

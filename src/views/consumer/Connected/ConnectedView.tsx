@@ -4,85 +4,152 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import styled from "styled-components"
+import Lottie from "react-lottie-player"
 
 import { useStores } from "../../../store"
-import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
-import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
+import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
+import { DisconnectButton } from "../../../connection/components/DisconnectButton/DisconnectButton"
+import { countryName } from "../../../location/countries"
 
-import logoWhiteConnected from "./logo-white-connected.png"
-import { ConnectionProposal } from "./ConnectionProposal"
+import animationConnectingStart from "./animation_connecting_start.json"
+import animationConnectingLoop from "./animation_connecting_loop.json"
+import animationConnectedLoop from "./animation_connected_loop.json"
 import { ConnectionStatistics } from "./ConnectionStatistics"
+import { ConnectionProposal } from "./ConnectionProposal"
 
 const Container = styled.div`
     flex: 1;
-    min-height: 0;
-    background: url(${mosaicBg});
-    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    color: #fff;
+    overflow: hidden;
+    background: linear-gradient(180deg, #562160 0%, #7b2061 48.96%, #64205d 100%);
+    padding: 15px;
+    color: #3c3857;
 `
 
-const Main = styled.div`
-    flex: 1;
+const Top = styled.div`
+    height: 28px;
+    padding-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+const Split = styled.div`
+    display: flex;
+    height: 486px;
+`
+
+const Sidebar = styled.div`
+    height: 100%;
+    width: 222px;
+    min-width: 222px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #f8f8fd;
+    border-radius: 10px;
     overflow: hidden;
 `
 
-const Status = styled.h1`
-    margin: 0;
-    margin-top: 32px;
-    text-align: center;
-    font-weight: 300;
-    font-size: 24px;
+const Main = styled.div`
+    width: 378px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff12;
+    border-radius: 10px;
+    overflow: hidden;
 `
 
-const LocationVisual = styled.div`
-    box-sizing: border-box;
-    width: 464px;
-    height: 108px;
-    margin: 64px auto 0;
+const SideTop = styled.div`
+    height: 156px;
+    padding: 17px 37px;
+    overflow: hidden;
+`
 
-    background: url(${logoWhiteConnected});
-    background-repeat: no-repeat;
+const Status = styled.div`
+    text-align: center;
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: 500;
+    margin-bottom: 18px;
+`
+
+const SideBot = styled.div`
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(11, 0, 75, 0.1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 330px;
+    flex: 1 0 auto;
+
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
 `
 
-const LocationFlag = styled(Flag)`
-    padding: 16px;
+const Action = styled.div`
+    display: flex;
+    button {
+        flex: 1;
+    }
 `
 
-const ConnectionIP = styled.div`
+const Animation = styled.div``
+const LocationVisual = styled.div`
+    position: absolute;
+    z-index: 1;
+    width: 378px;
+    color: #fff;
+`
+
+const LocationFlag = styled(Flag).attrs({
+    size: 35,
+})``
+
+const LocationCountry = styled.div`
+    margin-top: 20px;
     text-align: center;
-    width: 130px;
-    margin: -15px 50px 0px auto;
+    font-size: 18px;
+    height: 30px;
 `
 
-const ActionButtons = styled.div`
-    display: flex;
-    justify-content: center;
+const LocationIP = styled.div`
+    color: #ffffff88;
+    text-align: center;
+    height: 20px;
 `
 
-const BottomBar = styled.div`
-    margin-top: auto;
-    box-sizing: border-box;
-    height: 64px;
-    padding: 8px;
-    background: rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+const ConnectionLocation = styled.div`
+    width: 100%;
+`
+
+const ConnectionLocationFlag = styled.div`
+    position: absolute;
+    top: 88px;
+    left: 171px;
+`
+const OriginalLocationFlag = styled.div`
+    position: absolute;
+    top: 360px;
+    left: 171px;
+`
+
+const OriginalLocation = styled.div`
+    position: absolute;
+    width: 100%;
+    top: 400px;
 `
 
 export const ConnectedView: React.FC = observer(() => {
     const {
-        connection: { location, originalLocation, status },
+        connection: { location, originalLocation, status, proposal },
     } = useStores()
     let statusText: string
     switch (status) {
@@ -90,35 +157,84 @@ export const ConnectedView: React.FC = observer(() => {
             statusText = "Connecting..."
             break
         case ConnectionStatus.CONNECTED:
-            statusText = "Your connection is secure"
+            statusText = "Connected"
             break
         case ConnectionStatus.DISCONNECTING:
             statusText = "Disconnecting..."
             break
         case ConnectionStatus.NOT_CONNECTED:
-            statusText = "Your connection is unprotected"
+            statusText = "Disconnected"
             break
         default:
             statusText = "Working on it..."
     }
+    const [anim, setAnim] = useState<{ src: unknown; loop: boolean; onComplete?: () => void }>({
+        src: animationConnectingStart,
+        loop: false,
+        onComplete: () => {
+            setAnim({
+                src: animationConnectingLoop,
+                loop: true,
+            })
+        },
+    })
+    useEffect(() => {
+        if (status === ConnectionStatus.CONNECTED) {
+            setAnim({
+                src: animationConnectedLoop,
+                loop: true,
+            })
+        }
+    }, [status])
 
     return (
         <Container>
-            <Main>
-                <Status>{statusText}</Status>
-                <LocationVisual>
-                    <LocationFlag countryCode={originalLocation?.country} />
-                    <LocationFlag countryCode={location?.country} />
-                </LocationVisual>
-                <ConnectionIP>{location?.ip}</ConnectionIP>
-                <ConnectionProposal />
-                <ActionButtons>
-                    <ConnectDisconnectButton />
-                </ActionButtons>
-            </Main>
-            <BottomBar>
-                <ConnectionStatistics />
-            </BottomBar>
+            <Top>
+                <LogoTitle />
+            </Top>
+            <Split>
+                <Sidebar>
+                    <SideTop>
+                        <Status>{statusText}</Status>
+                        <ConnectionProposal />
+                    </SideTop>
+                    <SideBot>
+                        <ConnectionStatistics />
+                        <Action>
+                            <DisconnectButton />
+                        </Action>
+                    </SideBot>
+                </Sidebar>
+                <Main>
+                    <Animation>
+                        <Lottie
+                            play
+                            loop={anim.loop}
+                            animationData={anim.src}
+                            onComplete={anim.onComplete}
+                            style={{ width: 378, height: 486 }}
+                            renderer="svg"
+                        />
+                    </Animation>
+
+                    <LocationVisual>
+                        <ConnectionLocation>
+                            <LocationCountry>{countryName(proposal?.country)}</LocationCountry>
+                            <LocationIP>{location?.ip}</LocationIP>
+                        </ConnectionLocation>
+                        <ConnectionLocationFlag>
+                            <LocationFlag countryCode={proposal?.country} />
+                        </ConnectionLocationFlag>
+                        <OriginalLocationFlag>
+                            <LocationFlag countryCode={originalLocation?.country} />
+                        </OriginalLocationFlag>
+                        <OriginalLocation>
+                            <LocationCountry>{countryName(originalLocation?.country)}</LocationCountry>
+                            <LocationIP>{originalLocation?.ip}</LocationIP>
+                        </OriginalLocation>
+                    </LocationVisual>
+                </Main>
+            </Split>
         </Container>
     )
 })

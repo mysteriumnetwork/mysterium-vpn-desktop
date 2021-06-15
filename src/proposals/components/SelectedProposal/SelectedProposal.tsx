@@ -33,8 +33,8 @@ const fadeIn = keyframes`
 const Container = styled.div`
     box-sizing: border-box;
     height: 60px;
-    padding: 17px;
-    padding-left: 24px;
+    padding: 0 15px;
+    width: 100%;
 
     box-shadow: 0px 0px 20px rgba(109, 60, 121, 0.3);
     border-radius: 10px;
@@ -43,7 +43,9 @@ const Container = styled.div`
 
 const Inner = styled.div`
     display: flex;
+    height: 60px;
     align-items: center;
+    justify-content: space-between;
     opacity: 1;
     animation: ${fadeIn} 250ms ease-in-out;
 `

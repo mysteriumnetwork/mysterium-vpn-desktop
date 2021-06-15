@@ -10,11 +10,10 @@ import { CircleFlag } from "react-circle-flags"
 export interface FlagProps {
     className?: string
     countryCode?: string
+    size?: number
 }
 
-const size = 15
-
-export const Flag: React.FC<FlagProps> = ({ className, countryCode = "unknown" }) => {
+export const Flag: React.FC<FlagProps> = ({ className, countryCode = "unknown", size = 15 }) => {
     return (
         <CircleFlag
             className={className}
