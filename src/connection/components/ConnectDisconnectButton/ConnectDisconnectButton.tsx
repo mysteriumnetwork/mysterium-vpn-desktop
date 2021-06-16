@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { ConnectionStatus } from "mysterium-vpn-js"
-import React, { ButtonHTMLAttributes } from "react"
+import React from "react"
 import { observer } from "mobx-react-lite"
 import { useToasts } from "react-toast-notifications"
 
 import { useStores } from "../../../store"
-import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
+import { BrandButton, BrandButtonProps } from "../../../ui-kit/components/Button/BrandButton"
 import { CancelButton } from "../../../ui-kit/components/Button/CancelButton"
 
 export type ConnectDisconnectButtonProps = {
@@ -56,7 +56,7 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
         return await connection.disconnect()
     }
     const isCancel = connection.status !== ConnectionStatus.NOT_CONNECTED
-    const buttonProps: ButtonHTMLAttributes<HTMLButtonElement> = {
+    const buttonProps: BrandButtonProps = {
         disabled: connection.gracePeriod,
         onClick,
     }

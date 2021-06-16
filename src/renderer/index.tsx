@@ -94,6 +94,10 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
             background: ${brandLighter};
         }
     }
+    :focus {
+        outline: 2px solid ${brandLighter};
+        outline-offset: 2px;
+    }
     .react-toast-notifications__container {
         left: 262px !important;
     }

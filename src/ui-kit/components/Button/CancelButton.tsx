@@ -6,9 +6,9 @@
  */
 import styled from "styled-components"
 
-import { BrandButton } from "./BrandButton"
+import { BrandButton, BrandButtonProps } from "./BrandButton"
 
-export const CancelButton = styled(BrandButton).attrs({
+export const CancelButton = styled(BrandButton).attrs<BrandButtonProps>({
     background: "#fefefe",
     color: "#d93c3c",
 })``
