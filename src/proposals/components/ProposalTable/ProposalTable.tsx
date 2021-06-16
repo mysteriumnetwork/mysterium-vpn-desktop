@@ -254,10 +254,12 @@ export const ProposalTable: React.FC = observer(() => {
             },
             {
                 Header: "Price",
-                accessor: () => 2,
+                accessor: (p): number => proposals.priceTier(p),
                 width: 44,
                 // eslint-disable-next-line react/display-name
-                Cell: () => <IconPriceTier tier={2} />,
+                Cell: (props: { value: number }): Renderer<CellProps<UIProposal, string>> => (
+                    <IconPriceTier tier={props.value} />
+                ),
             },
             {
                 Header: "Quality",

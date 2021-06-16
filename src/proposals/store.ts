@@ -241,6 +241,21 @@ export class ProposalStore {
         return this.countryFiltered.slice().sort(compareProposal)
     }
 
+    priceTier = (p: UIProposal): number => {
+        const perGibMax = this.root.filters.priceCeiling?.perGibMax ?? 0
+        console.log(perGibMax)
+        if (p.price.perGib > perGibMax * 0.75) {
+            return 3
+        }
+        if (p.price.perGib > perGibMax * 0.25) {
+            return 2
+        }
+        if (p.price.perGib > 0) {
+            return 1
+        }
+        return 0
+    }
+
     // #####################
     // End of filters
     // #####################
