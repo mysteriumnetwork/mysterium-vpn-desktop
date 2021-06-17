@@ -7,76 +7,90 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { Currency } from "mysterium-vpn-js"
-import { faDownload, faUpload } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Currency, DECIMAL_PART } from "mysterium-vpn-js"
 
-import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
-import { fontMono, textHuge } from "../../../ui-kit/typography"
-import { fmtMoney } from "../../../payment/display"
-import { LightButton } from "../../../ui-kit/components/Button/LightButton"
+import { Heading1, Paragraph } from "../../../ui-kit/typography"
+import { displayUSD, fmtMoney } from "../../../payment/display"
 import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { TopupView } from "../Topup/TopupView"
-import { GhostButton } from "../../../ui-kit/components/Button/GhostButton"
 import { ReceiveTokens } from "../ReceiveTokens/ReceiveTokens"
 import { userEvent } from "../../../analytics/analytics"
 import { WalletAction } from "../../../analytics/actions"
+import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
+import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
+import { IconWallet } from "../../../ui-kit/icons/IconWallet"
+import { brandLight } from "../../../ui-kit/colors"
+import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
+import { IconIdentity } from "../../../ui-kit/icons/IconIdentity"
+import { TextInput } from "../../../ui-kit/form-components/TextInput"
 
-const Container = styled.div`
-    background-image: url(${mosaicBg});
-    background-position: 0 -5px;
-    flex: 1;
+const SideTop = styled.div`
+    height: 156px;
+    padding: 20px;
+    overflow: hidden;
+
+    text-align: center;
+`
+
+const SideBot = styled.div`
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(11, 0, 75, 0.1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 20px;
+    height: 330px;
+    flex: 1 0 auto;
+
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    justify-content: space-between;
 `
 
-const Top = styled.div`
+const Balance = styled(Heading1)`
+    margin-top: 17px;
+`
+
+const BalanceCurrency = styled(Paragraph)`
+    color: ${brandLight};
+`
+
+const BalanceFiatEquivalent = styled.div`
+    margin-top: 16px;
+    font-size: 11px;
+`
+
+const Content = styled(ViewContent)`
     color: #fff;
-    padding: 0 24px;
+    padding: 20px 26px;
 `
 
-const Identity = styled.div`
-    box-sizing: border-box;
-    height: 52px;
-    display: flex;
-    align-items: center;
-
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+const SectionTitle = styled(Paragraph)`
+    margin-top: 13px;
+    height: 28px;
 `
-
-const IdentityAddress = styled.div`
-    user-select: text;
+const Explanation = styled.div`
+    font-size: 12px;
     line-height: 14px;
-    ${fontMono}
-`
-
-const Balance = styled.div`
-    margin: 24px 0;
-`
-
-const Amount = styled.div`
-    ${textHuge}
-    font-weight: bold;
-`
-
-const WalletActions = styled.div`
-    margin: 24px 0;
-    display: flex;
+    opacity: 0.5;
+    margin-bottom: 15px;
 `
 
 export const WalletView: React.FC = observer(() => {
     const { identity, payment } = useStores()
     const [topupModal, setTopupModal] = useState(false)
     const [receiveTokensModal, setReceiveTokensModal] = useState(false)
+    const balance = identity.identity?.balance ?? 0
     const balanceDisplay = fmtMoney(
         {
-            amount: identity.identity?.balance ?? 0,
+            amount: balance,
             currency: Currency.MYSTTestToken,
         },
         {
-            showCurrency: true,
+            fractionDigits: 4,
             removeInsignificantZeros: false,
         },
     )
@@ -89,45 +103,51 @@ export const WalletView: React.FC = observer(() => {
         setTopupModal(false)
         payment.clearOrder()
     }
-    const openReceiveTokensModal = () => {
-        userEvent(WalletAction.ReceiveTokensOpen)
-        setReceiveTokensModal(true)
-    }
+    // const openReceiveTokensModal = () => {
+    //     userEvent(WalletAction.ReceiveTokensOpen)
+    //     setReceiveTokensModal(true)
+    // }
     const closeReceiveTokensModal = () => {
         userEvent(WalletAction.ReceiveTokensClose)
         setReceiveTokensModal(false)
     }
     return (
-        <Container>
+        <ViewContainer>
+            <ViewNavBar />
+
+            <ViewSplit>
+                <ViewSidebar>
+                    <SideTop>
+                        <IconWallet color={brandLight} />
+                        <Balance>{balanceDisplay}</Balance>
+                        <BalanceCurrency>{payment.appCurrency}</BalanceCurrency>
+                        <BalanceFiatEquivalent>
+                            {payment.appFiatCurrency} equivalent ≈{" "}
+                            {displayUSD(payment.fiatEquivalent(balance / DECIMAL_PART))}
+                        </BalanceFiatEquivalent>
+                    </SideTop>
+                    <SideBot>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={openTopupModal}>
+                            Top up
+                        </BrandButton>
+                    </SideBot>
+                </ViewSidebar>
+                <Content>
+                    <IconIdentity color={brandLight} />
+                    <SectionTitle>Identity: {identity.identity?.registrationStatus}</SectionTitle>
+                    <Explanation>
+                        Identity is your Mysterium internal user ID. Never send ether or any kind of ERC20 tokens there.
+                    </Explanation>
+                    <TextInput disabled value={identity.identity?.id} />
+                </Content>
+            </ViewSplit>
+
             <Modal title="Topup" visible={topupModal} onClose={closeTopupModal}>
                 <TopupView />
             </Modal>
             <Modal title="Receive MYSTT" visible={receiveTokensModal} onClose={closeReceiveTokensModal}>
                 <ReceiveTokens />
             </Modal>
-            <Top>
-                <Identity>
-                    Your Identity:&nbsp;
-                    <IdentityAddress title={identity.identity?.registrationStatus ?? ""}>
-                        {identity.identity?.id}
-                    </IdentityAddress>
-                </Identity>
-                <Balance>
-                    <p>Available balance</p>
-                    <Amount>{balanceDisplay}</Amount>
-                </Balance>
-                <WalletActions>
-                    <LightButton onClick={openTopupModal}>
-                        <FontAwesomeIcon icon={faDownload} size="1x" />
-                        &nbsp;Topup
-                    </LightButton>
-                    <div style={{ width: 12 }} />
-                    <GhostButton onClick={openReceiveTokensModal}>
-                        <FontAwesomeIcon icon={faUpload} size="1x" />
-                        &nbsp;Receive MYSTT
-                    </GhostButton>
-                </WalletActions>
-            </Top>
-        </Container>
+        </ViewContainer>
     )
 })
