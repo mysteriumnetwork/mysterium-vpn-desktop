@@ -139,11 +139,7 @@
         "deb"
       ],
       "icon": "static/logo.icns",
-      "packageCategory": "Networking",
-      "desktop": {
-        "Name": "MysteriumVPN",
-        "Categories": "Networking"
-      }
+      "category": "Network"
     },
     "nsis": {
       "oneClick": true,
