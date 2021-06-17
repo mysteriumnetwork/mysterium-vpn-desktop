@@ -8,7 +8,7 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import byteSize from "byte-size"
 import * as _ from "lodash"
-import { Currency } from "mysterium-vpn-js"
+import { ConnectionStatus, Currency } from "mysterium-vpn-js"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
@@ -17,6 +17,7 @@ import { IconDuration } from "../../../ui-kit/icons/IconDuration"
 import { IconReceived } from "../../../ui-kit/icons/IconReceived"
 import { IconSent } from "../../../ui-kit/icons/IconSent"
 import { IconPaid } from "../../../ui-kit/icons/IconPaid"
+import { brandLight, darkBlue, greyBlue1 } from "../../../ui-kit/colors"
 
 const toClock = (duration: number): string => {
     const secs = Math.floor(duration % 60)
@@ -51,11 +52,17 @@ const MetricIcon = styled.div`
     margin: 12px auto;
 `
 
+const MetricValue = styled.div`
+    color: ${darkBlue};
+    font-size: 15px;
+    font-weight: bold;
+`
+
 const MetricLabel = styled.div`
     margin: 6px auto;
 `
 
-const MetricSeparator = () => (
+const MetricPlaceholder = () => (
     <div>
         <svg width="19" height="2" viewBox="0 0 19 2" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect opacity="0.2" width="19" height="2" rx="1" fill="#8386A4" />
@@ -65,54 +72,55 @@ const MetricSeparator = () => (
 
 export const ConnectionStatistics: React.FC = observer(() => {
     const {
-        connection: { statistics: { duration, bytesReceived, bytesSent, tokensSpent } = {} },
+        connection: { statistics: { duration, bytesReceived, bytesSent, tokensSpent } = {}, status },
     } = useStores()
     const clock = duration ? toClock(duration) : ""
-    const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }).toString() : ""
-    const up = bytesSent ? byteSize(bytesSent, { units: "iec" }).toString() : ""
+    const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : undefined
+    const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : undefined
     const paid = fmtMoney(
         {
             amount: tokensSpent ?? 0,
             currency: Currency.MYSTTestToken,
         },
         {
-            showCurrency: true,
             fractionDigits: 3,
         },
     )
+    const connected = status == ConnectionStatus.CONNECTED
+    const iconColor = connected ? brandLight : greyBlue1
     return (
         <Metrics>
             <Metric>
                 <MetricIcon>
-                    <IconReceived />
+                    <IconReceived color={iconColor} />
                 </MetricIcon>
                 <MetricLabel>Received</MetricLabel>
-                <MetricSeparator />
-                <MetricLabel>{down}</MetricLabel>
+                <MetricValue>{connected ? down?.value : <MetricPlaceholder />}</MetricValue>
+                <MetricLabel>{down?.unit}</MetricLabel>
             </Metric>
             <Metric>
                 <MetricIcon>
-                    <IconSent />
+                    <IconSent color={iconColor} />
                 </MetricIcon>
                 <MetricLabel>Sent</MetricLabel>
-                <MetricSeparator />
-                <MetricLabel>{up}</MetricLabel>
+                <MetricValue>{connected ? up?.value : <MetricPlaceholder />}</MetricValue>
+                <MetricLabel>{up?.unit}</MetricLabel>
             </Metric>
             <Metric>
                 <MetricIcon>
-                    <IconDuration />
+                    <IconDuration color={iconColor} />
                 </MetricIcon>
                 <MetricLabel>Duration</MetricLabel>
-                <MetricSeparator />
-                <MetricLabel>{clock}</MetricLabel>
+                <MetricValue>{connected ? clock : <MetricPlaceholder />}</MetricValue>
+                <MetricLabel>HH:mm:SS</MetricLabel>
             </Metric>
             <Metric>
                 <MetricIcon>
-                    <IconPaid />
+                    <IconPaid color={iconColor} />
                 </MetricIcon>
                 <MetricLabel>Paid</MetricLabel>
-                <MetricSeparator />
-                <MetricLabel>{paid}</MetricLabel>
+                <MetricValue>{connected ? paid : <MetricPlaceholder />}</MetricValue>
+                <MetricLabel>{Currency.MYSTTestToken}</MetricLabel>
             </Metric>
         </Metrics>
     )

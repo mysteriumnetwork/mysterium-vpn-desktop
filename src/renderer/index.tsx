@@ -23,7 +23,7 @@ import { rootStore, StoreContext, useStores } from "../store"
 import { synchronizedHistory } from "../navigation/routerStore"
 import { initialize as initializeAnalytics, userEvent } from "../analytics/analytics"
 import { OtherAction } from "../analytics/actions"
-import { activeItem, brandLighter } from "../ui-kit/colors"
+import { greyBlue1, brandLight } from "../ui-kit/colors"
 
 initializeSentry()
 
@@ -89,13 +89,13 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         background: rgba(0, 0, 0, 0.05); 
     }
     ::-webkit-scrollbar-thumb {
-        background: ${activeItem};
+        background: ${greyBlue1};
         &:active {
-            background: ${brandLighter};
+            background: ${brandLight};
         }
     }
     :focus-visible {
-        outline: 2px solid ${brandLighter};
+        outline: 2px solid ${brandLight};
         outline-offset: 2px;
     }
     .react-toast-notifications__container {

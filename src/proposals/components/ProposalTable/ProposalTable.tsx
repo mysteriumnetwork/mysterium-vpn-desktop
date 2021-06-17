@@ -17,9 +17,9 @@ import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 import { useStores } from "../../../store"
 import { UIProposal } from "../../ui-proposal-type"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
-import { brand } from "../../../ui-kit/colors"
+import { brand, darkBlue, lightBlue } from "../../../ui-kit/colors"
 import { perGiB, perHour } from "../../../payment/rate"
-import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier/IconPriceTier"
+import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier"
 import { countryName } from "../../../location/countries"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 
@@ -77,8 +77,8 @@ const TableRow = styled.div`
 
 const TableToggle = styled(Toggle).attrs({
     activeColor: "#5a597d",
-    hoverColor: "#f4f4fc",
-    textColor: "#3c3857",
+    hoverColor: lightBlue,
+    textColor: darkBlue,
     paddingX: "6px",
 })``
 

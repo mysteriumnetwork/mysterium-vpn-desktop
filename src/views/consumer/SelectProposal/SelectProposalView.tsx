@@ -15,15 +15,16 @@ import { SelectedProposal } from "../../../proposals/components/SelectedProposal
 import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
 import { useStores } from "../../../store"
 import { Search } from "../../../ui-kit/form-components/Search"
+import { bg1, darkBlue } from "../../../ui-kit/colors"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: linear-gradient(180deg, #562160 0%, #7b2061 48.96%, #64205d 100%);
+    background: ${bg1};
     padding: 15px;
-    color: #3c3857;
+    color: ${darkBlue};
 `
 
 const Split = styled.div`

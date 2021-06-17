@@ -19,7 +19,7 @@ import { locations } from "../../locations"
 import { titleBarSize } from "../../../config"
 import { ProtectionStatus } from "../../../location/components/ProtectionStatus/ProtectionStatus"
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
-import { activeItem } from "../../../ui-kit/colors"
+import { darkBlue, greyBlue1 } from "../../../ui-kit/colors"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
 import { WindowButtonsLinux } from "./WindowButtonsLinux"
@@ -37,7 +37,7 @@ export const Container = styled.div`
         padding-left: 80px;
     }
 
-    color: #3c3857;
+    color: ${darkBlue};
     background: #fcfcfc;
     display: flex;
     align-items: center;
@@ -66,10 +66,10 @@ const NavigationButton = styled.div<{ active: boolean }>`
     padding: 0 16px;
 
     &:hover {
-        background: ${(props) => (props.active ? activeItem : "#aeaedb33")};
+        background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
         color: ${(props) => (props.active ? "#fff" : "inherit")};
     }
-    background: ${(props) => (props.active ? activeItem : "inherit")};
+    background: ${(props) => (props.active ? greyBlue1 : "inherit")};
     color: ${(props) => (props.active ? "#fff" : "inherit")};
 
     display: flex;
@@ -152,7 +152,7 @@ export const TitleBar: React.FC = observer(() => {
             </Location>
             <WalletButton active={navigation.isWalletActive} onClick={() => router.push(locations.wallet)}>
                 <Money>
-                    <IconMystToken color={navigation.isWalletActive ? "#fff" : activeItem} />
+                    <IconMystToken color={navigation.isWalletActive ? "#fff" : greyBlue1} />
                     <span>
                         {balance} {Currency.MYSTTestToken}
                     </span>

@@ -15,6 +15,7 @@ import { Flag } from "../../../location/components/Flag/Flag"
 import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
 import { DisconnectButton } from "../../../connection/components/DisconnectButton/DisconnectButton"
 import { countryName } from "../../../location/countries"
+import { bg1, darkBlue } from "../../../ui-kit/colors"
 
 import animationConnectingStart from "./animation_connecting_start.json"
 import animationConnectingLoop from "./animation_connecting_loop.json"
@@ -27,9 +28,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: linear-gradient(180deg, #562160 0%, #7b2061 48.96%, #64205d 100%);
+    background: ${bg1};
     padding: 15px;
-    color: #3c3857;
+    color: ${darkBlue};
 `
 
 const Top = styled.div`

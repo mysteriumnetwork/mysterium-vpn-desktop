@@ -12,7 +12,7 @@ import { useStores } from "../../../store"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { countryName, isUnknownCountry } from "../../../location/countries"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { IconGlobe } from "../../../ui-kit/icons/IconGlobe/IconGlobe"
+import { IconGlobe } from "../../../ui-kit/icons/IconGlobe"
 import { brand } from "../../../ui-kit/colors"
 
 const Container = styled.div`

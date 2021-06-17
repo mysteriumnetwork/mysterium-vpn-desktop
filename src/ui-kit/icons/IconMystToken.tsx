@@ -6,13 +6,13 @@
  */
 import React from "react"
 
-import { brand } from "../colors"
+import { IconProps } from "./Props"
 
 export interface MystTokenProps {
     color?: string
 }
 
-export const IconMystToken: React.FC<MystTokenProps> = ({ color = brand }) => {
+export const IconMystToken: React.FC<IconProps> = ({ color }) => {
     return (
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

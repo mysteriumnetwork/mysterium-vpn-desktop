@@ -6,10 +6,12 @@
  */
 import styled from "styled-components"
 
+import { darkBlue } from "../../colors"
+
 import { BrandButton } from "./BrandButton"
 
 export const SecondaryButton = styled(BrandButton).attrs({
-    background: "#3c3857",
+    background: darkBlue,
 })`
     box-shadow: none;
 `

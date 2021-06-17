@@ -10,12 +10,13 @@ import { observer } from "mobx-react-lite"
 import Lottie from "react-lottie-player"
 
 import { useStores } from "../../../store"
+import { bg1 } from "../../../ui-kit/colors"
 
 import animationLoadingStart from "./animation_loading_start.json"
 import animationLoadingLoop from "./animation_loading_loop.json"
 
 const Container = styled.div`
-    background: linear-gradient(180deg, #562160 0%, #7b2061 48.96%, #64205d 100%);
+    background: ${bg1};
     width: 100%;
     height: 100%;
     display: flex;

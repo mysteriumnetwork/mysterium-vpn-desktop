@@ -5,5 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 export const brand = "#d61f85"
-export const brandLighter = "#ed5bac"
-export const activeItem = "#9090bb"
+export const brandLight = "#ed5bac"
+export const lightBlue = "#f4f4fc"
+export const greyBlue1 = "#9090bb"
+export const greyBlue2 = "#5a597d"
+export const darkBlue = "#3c3857"
+
+export const bg1 = "linear-gradient(180deg, #562160 0%, #7B2061 48.96%, #64205D 100%)"
+export const bg2 = "linear-gradient(180deg, #2B2745 0%, #454565 46.88%, #212045 100%)"
