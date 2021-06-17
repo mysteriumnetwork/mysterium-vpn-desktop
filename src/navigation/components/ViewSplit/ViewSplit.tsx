@@ -1,0 +1,14 @@
+/**
+ * Copyright (c) 2021 BlockDev AG
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+import styled from "styled-components"
+
+export const ViewSplit = styled.div`
+    height: 486px;
+    margin: 0 15px;
+
+    display: flex;
+`

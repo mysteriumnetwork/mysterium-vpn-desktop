@@ -12,54 +12,20 @@ import _ from "lodash"
 import { CountryFilter } from "../../../proposals/components/CountryFilter/CountryFilter"
 import { ProposalTable } from "../../../proposals/components/ProposalTable/ProposalTable"
 import { SelectedProposal } from "../../../proposals/components/SelectedProposal/SelectedProposal"
-import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
 import { useStores } from "../../../store"
 import { Search } from "../../../ui-kit/form-components/Search"
-import { bg1, darkBlue } from "../../../ui-kit/colors"
+import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
+import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 
-const Container = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: ${bg1};
-    padding: 15px;
-    color: ${darkBlue};
-`
-
-const Split = styled.div`
-    display: flex;
-    height: 486px;
-`
-
-const Top = styled.div`
-    height: 28px;
-    padding-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-
-const Sidebar = styled.div`
-    height: 100%;
-    width: 222px;
-    min-width: 222px;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
+const Sidebar = styled(ViewSidebar)`
     background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
 `
 
-const Main = styled.div`
-    width: 378px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+const Content = styled(ViewContent)`
     background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
 `
 
 const Filters = styled.div`
@@ -89,14 +55,13 @@ export const SelectProposalView: React.FC = observer(() => {
         proposals.setTextFilter(text)
     }, 500)
     return (
-        <Container>
-            <Top>
-                <LogoTitle />
+        <ViewContainer>
+            <ViewNavBar>
                 <SearchNodeWrap>
                     <Search onChange={searchDebounced} />
                 </SearchNodeWrap>
-            </Top>
-            <Split>
+            </ViewNavBar>
+            <ViewSplit>
                 <Sidebar>
                     <Filters>
                         <ScrollArea>
@@ -104,13 +69,13 @@ export const SelectProposalView: React.FC = observer(() => {
                         </ScrollArea>
                     </Filters>
                 </Sidebar>
-                <Main>
+                <Content>
                     <ProposalTable />
                     <MainBottom>
                         <SelectedProposal />
                     </MainBottom>
-                </Main>
-            </Split>
-        </Container>
+                </Content>
+            </ViewSplit>
+        </ViewContainer>
     )
 })

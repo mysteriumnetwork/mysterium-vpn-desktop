@@ -12,60 +12,19 @@ import Lottie from "react-lottie-player"
 
 import { useStores } from "../../../store"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
 import { DisconnectButton } from "../../../connection/components/DisconnectButton/DisconnectButton"
 import { countryName } from "../../../location/countries"
-import { bg1, darkBlue } from "../../../ui-kit/colors"
+import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
+import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 
 import animationConnectingStart from "./animation_connecting_start.json"
 import animationConnectingLoop from "./animation_connecting_loop.json"
 import animationConnectedLoop from "./animation_connected_loop.json"
 import { ConnectionStatistics } from "./ConnectionStatistics"
 import { ConnectionProposal } from "./ConnectionProposal"
-
-const Container = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: ${bg1};
-    padding: 15px;
-    color: ${darkBlue};
-`
-
-const Top = styled.div`
-    height: 28px;
-    padding-bottom: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-const Split = styled.div`
-    display: flex;
-    height: 486px;
-`
-
-const Sidebar = styled.div`
-    height: 100%;
-    width: 222px;
-    min-width: 222px;
-    margin-right: 10px;
-    display: flex;
-    flex-direction: column;
-    background: #f8f8fd;
-    border-radius: 10px;
-    overflow: hidden;
-`
-
-const Main = styled.div`
-    width: 378px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: #ffffff12;
-    border-radius: 10px;
-    overflow: hidden;
-`
 
 const SideTop = styled.div`
     height: 156px;
@@ -189,12 +148,10 @@ export const ConnectedView: React.FC = observer(() => {
     }, [status])
 
     return (
-        <Container>
-            <Top>
-                <LogoTitle />
-            </Top>
-            <Split>
-                <Sidebar>
+        <ViewContainer>
+            <ViewNavBar />
+            <ViewSplit>
+                <ViewSidebar>
                     <SideTop>
                         <Status>{statusText}</Status>
                         <ConnectionProposal />
@@ -205,8 +162,8 @@ export const ConnectedView: React.FC = observer(() => {
                             <DisconnectButton />
                         </Action>
                     </SideBot>
-                </Sidebar>
-                <Main>
+                </ViewSidebar>
+                <ViewContent>
                     <Animation>
                         <Lottie
                             play
@@ -234,8 +191,8 @@ export const ConnectedView: React.FC = observer(() => {
                             <LocationIP>{originalLocation?.ip}</LocationIP>
                         </OriginalLocation>
                     </LocationVisual>
-                </Main>
-            </Split>
-        </Container>
+                </ViewContent>
+            </ViewSplit>
+        </ViewContainer>
     )
 })
