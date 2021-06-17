@@ -8,11 +8,11 @@ import styled from "styled-components"
 
 export const ViewContent = styled.div`
     width: 378px;
-    height: 100%;
     border-radius: 10px;
     overflow: hidden;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
     background: #ffffff12;
 `

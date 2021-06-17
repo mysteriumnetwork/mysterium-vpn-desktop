@@ -8,9 +8,9 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { Decimal } from "decimal.js-light"
 
 import { displayUSD } from "../../payment/display"
+import { mystToUSD } from "../../payment/rate"
 
 import { TextInput } from "./TextInput"
 import { NumberInput, NumberInputProps } from "./NumberInput"
@@ -53,19 +53,6 @@ export interface MoneyInputProps {
     suffix?: string
     onChange?: (val?: number) => void
     disabled?: boolean
-}
-
-const mystToUSD = (myst: number, rate?: number): number | undefined => {
-    if (!rate) {
-        return
-    }
-    let dec
-    try {
-        dec = new Decimal(myst)
-    } catch (err) {
-        dec = new Decimal(0)
-    }
-    return dec.times(rate).toNumber()
 }
 
 export const ControlledMystInputWithFlatEstimate: React.FC<MoneyInputProps> = ({

@@ -42,6 +42,7 @@ const ScrollArea = styled.div`
 
 const MainBottom = styled.div`
     margin-top: auto;
+    width: 100%;
 `
 
 const SearchNodeWrap = styled.div`

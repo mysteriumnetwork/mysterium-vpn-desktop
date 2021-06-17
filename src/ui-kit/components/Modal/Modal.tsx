@@ -10,13 +10,13 @@ import { CSSTransition } from "react-transition-group"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTimes } from "@fortawesome/free-solid-svg-icons"
 
-import { titleBarSize } from "../../../config"
+import { contentSize, titleBarSize } from "../../../config"
 
 const BackgroundBlur = styled.div`
     position: fixed;
     top: ${titleBarSize.height}px;
-    height: 511px;
-    width: 640px;
+    height: ${contentSize.height}px;
+    width: ${contentSize.width}px;
     overflow: hidden;
     z-index: -1;
 

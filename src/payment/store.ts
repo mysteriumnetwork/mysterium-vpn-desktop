@@ -17,6 +17,7 @@ import { AppStateAction } from "../analytics/actions"
 
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
+import { mystToUSD } from "./rate"
 
 export enum OrderStatus {
     PENDING,
@@ -26,6 +27,9 @@ export enum OrderStatus {
 
 export class PaymentStore {
     root: RootStore
+
+    appCurrency: Currency = Currency.MYSTTestToken
+    appFiatCurrency = "USD"
 
     fees?: Fees
     mystToUsdRate?: Money
@@ -39,6 +43,7 @@ export class PaymentStore {
 
     constructor(root: RootStore) {
         makeObservable(this, {
+            appCurrency: observable,
             fees: observable,
             mystToUsdRate: observable,
             registrationTopupAmount: observable,
@@ -108,6 +113,10 @@ export class PaymentStore {
             return undefined
         }
         return Number(fmtMoney({ amount: this.fees.registration, currency: Currency.MYSTTestToken }))
+    }
+
+    fiatEquivalent(amount: number): number {
+        return mystToUSD(amount, this.mystToUsdRate?.amount ?? 0) ?? 0
     }
 
     async fetchPaymentOptions(): Promise<void> {
