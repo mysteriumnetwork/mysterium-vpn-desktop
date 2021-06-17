@@ -94,7 +94,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
             background: ${brandLighter};
         }
     }
-    :focus {
+    :focus-visible {
         outline: 2px solid ${brandLighter};
         outline-offset: 2px;
     }
