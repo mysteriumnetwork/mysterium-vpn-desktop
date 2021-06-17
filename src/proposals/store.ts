@@ -243,7 +243,6 @@ export class ProposalStore {
 
     priceTier = (p: UIProposal): number => {
         const perGibMax = this.root.filters.priceCeiling?.perGibMax ?? 0
-        console.log(perGibMax)
         if (p.price.perGib > perGibMax * 0.75) {
             return 3
         }
