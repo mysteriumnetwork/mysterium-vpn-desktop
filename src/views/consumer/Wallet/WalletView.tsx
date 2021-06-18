@@ -64,7 +64,6 @@ const BalanceFiatEquivalent = styled.div`
 `
 
 const Content = styled(ViewContent)`
-    color: #fff;
     padding: 20px 26px;
 `
 

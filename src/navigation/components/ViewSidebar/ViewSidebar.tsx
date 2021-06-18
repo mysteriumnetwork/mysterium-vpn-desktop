@@ -6,6 +6,8 @@
  */
 import styled from "styled-components"
 
+import { darkBlue } from "../../../ui-kit/colors"
+
 export const ViewSidebar = styled.div`
     height: 100%;
     width: 222px;
@@ -17,4 +19,5 @@ export const ViewSidebar = styled.div`
     display: flex;
     flex-direction: column;
     background: #f8f8fd;
+    color: ${darkBlue};
 `
