@@ -13,6 +13,7 @@ export const textCaption = "font-size: 12px; text-transform: uppercase;"
 
 export const Heading1 = styled.div`
     font-size: 24px;
+    line-height: 28px;
     font-weight: 900;
     line-height: 28px;
 `
@@ -20,4 +21,9 @@ export const Heading1 = styled.div`
 export const Paragraph = styled.div`
     font-size: 14px;
     line-height: 20px;
+`
+
+export const Small = styled.div`
+    font-size: 12px;
+    line-height: 14px;
 `
