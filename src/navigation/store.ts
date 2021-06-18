@@ -137,7 +137,7 @@ export class NavigationStore {
     }
 
     get isHelpActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.reportIssue.path)
+        return this.root.router.location.pathname.includes(locations.help.path)
     }
 
     get isWalletActive(): boolean {

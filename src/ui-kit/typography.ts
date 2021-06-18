@@ -15,7 +15,12 @@ export const Heading1 = styled.div`
     font-size: 24px;
     line-height: 28px;
     font-weight: 900;
-    line-height: 28px;
+`
+
+export const Heading2 = styled.div`
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: bold;
 `
 
 export const Paragraph = styled.div`

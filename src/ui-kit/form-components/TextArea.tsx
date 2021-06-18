@@ -8,13 +8,19 @@ import styled from "styled-components"
 
 export const TextArea = styled.textarea`
     box-sizing: border-box;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     width: 100%;
 
-    padding: 2px;
-    border: 2px solid transparent;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #ffffff4c;
+    border-radius: 5px;
 
-    background: rgba(0, 0, 0, 0.08);
-    font-size: 13px;
+    background: #ffffff18;
+    color: #fff;
+    ::placeholder {
+        color: #fff;
+    }
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 14px;
 `

@@ -23,11 +23,11 @@ import { TitleBar } from "../TitleBar/TitleBar"
 import { locations } from "../../locations"
 import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
-import { ReportIssueView } from "../../../views/common/ReporIssue/ReportIssueView"
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 import ReferralView from "../../../views/consumer/Referral/ReferralView"
 import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
+import { HelpView } from "../../../views/common/Help/HelpView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -104,10 +104,12 @@ export const Routes: React.FC = observer(() => {
                             <TitleBar />
                             <WalletView />
                         </Route>
-                        <Route path={locations.reportIssue.path}>
+                        <Route path={locations.help.path}>
+                            <Redirect to={locations.helpBugReport.path} />
                             <TitleBar />
-                            <ReportIssueView />
+                            <HelpView />
                         </Route>
+
                         <Route path={locations.loading.path}>
                             <NakedTitleBar />
                             <LoadingView />

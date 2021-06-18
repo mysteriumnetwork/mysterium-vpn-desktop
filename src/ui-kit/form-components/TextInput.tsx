@@ -9,7 +9,7 @@ import styled from "styled-components"
 export const TextInput = styled.input`
     box-sizing: border-box;
     height: 35px;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
     width: 100%;
 
     padding: 12px;
@@ -18,9 +18,10 @@ export const TextInput = styled.input`
 
     background: #ffffff18;
     color: #fff;
-    font-size: 13px;
-
-    &:disabled {
+    ::placeholder {
+        color: #fff;
     }
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 14px;
 ` as React.FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>
-0x3701858fc8375a599c560d1c646900068ced3c76

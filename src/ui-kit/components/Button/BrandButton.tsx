@@ -32,6 +32,7 @@ const Button = styled.button<BrandButtonProps & typeof defaultProps>`
     border: none;
     font-size: 14px;
     line-height: 26px;
+    font-weight: 500;
     border-radius: 100px;
     outline: none;
     box-shadow: ${(props) => {
