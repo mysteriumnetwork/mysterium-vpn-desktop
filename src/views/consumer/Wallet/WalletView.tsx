@@ -10,7 +10,7 @@ import styled from "styled-components"
 import { Currency, DECIMAL_PART } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
-import { Heading1, Paragraph } from "../../../ui-kit/typography"
+import { Heading1, Paragraph, Small } from "../../../ui-kit/typography"
 import { displayUSD, fmtMoney } from "../../../payment/display"
 import { Modal } from "../../../ui-kit/components/Modal/Modal"
 import { TopupView } from "../Topup/TopupView"
@@ -64,7 +64,6 @@ const BalanceFiatEquivalent = styled.div`
 `
 
 const Content = styled(ViewContent)`
-    color: #fff;
     padding: 20px 26px;
 `
 
@@ -72,9 +71,7 @@ const SectionTitle = styled(Paragraph)`
     margin-top: 13px;
     height: 28px;
 `
-const Explanation = styled.div`
-    font-size: 12px;
-    line-height: 14px;
+const Explanation = styled(Small)`
     opacity: 0.5;
     margin-bottom: 15px;
 `

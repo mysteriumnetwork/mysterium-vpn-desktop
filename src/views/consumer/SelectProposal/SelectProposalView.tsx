@@ -19,6 +19,7 @@ import { ViewContainer } from "../../../navigation/components/ViewContainer/View
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
+import { darkBlue } from "../../../ui-kit/colors"
 
 const Sidebar = styled(ViewSidebar)`
     background: #fff;
@@ -26,6 +27,7 @@ const Sidebar = styled(ViewSidebar)`
 
 const Content = styled(ViewContent)`
     background: #fff;
+    color: ${darkBlue};
 `
 
 const Filters = styled.div`

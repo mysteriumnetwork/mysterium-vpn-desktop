@@ -6,12 +6,12 @@
  */
 import styled from "styled-components"
 
-import { bg1, darkBlue } from "../../../ui-kit/colors"
+import { bg1 } from "../../../ui-kit/colors"
 
 export const ViewContainer = styled.div`
     flex: 1;
     overflow: hidden;
 
     background: ${bg1};
-    color: ${darkBlue};
+    color: #fff;
 `
