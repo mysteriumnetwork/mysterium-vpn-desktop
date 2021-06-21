@@ -7,6 +7,7 @@
 import React from "react"
 import styled from "styled-components"
 import { Route } from "react-router-dom"
+import { observer } from "mobx-react-lite"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -14,9 +15,11 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconPerson } from "../../../ui-kit/icons/IconPerson"
-import { greyBlue1 } from "../../../ui-kit/colors"
+import { darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colors"
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
+import { SecondaryButton } from "../../../ui-kit/components/Button/SecondaryButton"
+import { useStores } from "../../../store"
 
 import { HelpContentReportIssue } from "./HelpContentReportIssue"
 
@@ -51,7 +54,9 @@ const Content = styled(ViewContent)`
     padding: 20px 26px;
 `
 
-export const HelpView: React.FC = () => {
+export const HelpView: React.FC = observer(() => {
+    const { navigation, router } = useStores()
+    const isBugReportActive = router.location.pathname.includes(locations.helpBugReport.path)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -62,7 +67,15 @@ export const HelpView: React.FC = () => {
                         <Title>Get help</Title>
                         <Small>Help using Mysterium VPN</Small>
                     </SideTop>
-                    <SideBot />
+                    <SideBot>
+                        <SecondaryButton
+                            color={isBugReportActive ? darkBlue : lightBlue}
+                            onClick={() => router.push(locations.helpBugReport)}
+                        >
+                            Bug report
+                        </SecondaryButton>
+                        <SecondaryButton onClick={() => navigation.openChat()}>Support chat</SecondaryButton>
+                    </SideBot>
                 </ViewSidebar>
                 <Content>
                     <Route path={locations.helpBugReport.path}>
@@ -72,4 +85,4 @@ export const HelpView: React.FC = () => {
             </ViewSplit>
         </ViewContainer>
     )
-}
+})

@@ -69,7 +69,7 @@ export const Hamburger: React.FC<HamburgerProps> = observer(({ buttonRef: button
             </MenuItem>
             <MenuItem
                 onClick={() => {
-                    userEvent(OtherAction.GetHelp)
+                    userEvent(OtherAction.SupportChat)
                     navigation.showMenu(false)
                     navigation.openChat()
                 }}

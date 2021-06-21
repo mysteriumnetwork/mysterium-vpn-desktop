@@ -56,8 +56,8 @@ export enum TrayAction {
 export enum OtherAction {
     PushNotificationClick = "Push notification: clicked",
     ToggleQrView = "Toggle QR view (image)",
-    GetHelp = "Get help",
-    GetHelpClose = "Get help: close",
+    SupportChat = "Support chat",
+    SupportChatClose = "Support chat: close",
     SocialFacebook = "Social: Facebook",
     SocialTwitter = "Social: Twitter",
     SocialMedium = "Social: Medium",

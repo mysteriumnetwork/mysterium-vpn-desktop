@@ -11,18 +11,15 @@ import ReactDOM from "react-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
 import { Router } from "react-router-dom"
 import { ToastProvider } from "react-toast-notifications"
-import { IntercomProvider } from "react-use-intercom"
 import { observer } from "mobx-react-lite"
 import { createHashHistory } from "history"
 import { remote } from "electron"
 
-import * as packageJson from "../../package.json"
 import { Routes } from "../navigation/components/Routes/Routes"
 import { initialize as initializeSentry } from "../errors/sentry"
 import { rootStore, StoreContext, useStores } from "../store"
 import { synchronizedHistory } from "../navigation/routerStore"
-import { initialize as initializeAnalytics, userEvent } from "../analytics/analytics"
-import { OtherAction } from "../analytics/actions"
+import { initialize as initializeAnalytics } from "../analytics/analytics"
 import { greyBlue1, brandLight } from "../ui-kit/colors"
 
 initializeSentry()
@@ -141,17 +138,9 @@ const App: React.FC = observer(() => {
             <GlobalStyle showGrid={root.showGrid} />
             <Router history={history}>
                 <ToastProvider placement="top-left">
-                    <IntercomProvider
-                        appId={packageJson.intercomAppId}
-                        onHide={() => {
-                            userEvent(OtherAction.GetHelpClose)
-                            root.navigation.openChat(false)
-                        }}
-                    >
-                        <StoreContext.Provider value={rootStore}>
-                            <Routes />
-                        </StoreContext.Provider>
-                    </IntercomProvider>
+                    <StoreContext.Provider value={rootStore}>
+                        <Routes />
+                    </StoreContext.Provider>
                 </ToastProvider>
             </Router>
             <div className="baseline" />
