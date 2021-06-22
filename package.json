@@ -53,7 +53,7 @@
     "react-table": "^7.7.0",
     "react-toast-notifications": "^2.4.4",
     "react-transition-group": "^4.4.1",
-    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "semver": "^7.3.2",
     "source-map-support": "^0.5.19",
