@@ -13,7 +13,7 @@ import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
 
 import * as packageJson from "../../package.json"
-import { winSize, winSizeExt } from "../config"
+import { winSize } from "../config"
 import { supervisor } from "../supervisor/supervisor"
 import { initialize as initializeAnalytics } from "../analytics/analytics-main"
 import { initialize as initializePushNotifications } from "../push/push"
@@ -37,6 +37,8 @@ global.os = os.platform()
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | null
+
+let chatWindow: BrowserWindow | null
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let tray: Tray | null
@@ -76,6 +78,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
             contextIsolation: false,
             nodeIntegration: true,
             enableRemoteModule: true,
+            nativeWindowOpen: true,
         },
     })
     window.setMenuBarVisibility(false)
@@ -127,6 +130,43 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
     return window
 }
 
+const createChatWindow = async (id: string): Promise<BrowserWindow> => {
+    chatWindow = new BrowserWindow({
+        frame: true,
+        fullscreen: false,
+        fullscreenable: false,
+        maximizable: false,
+        width: winSize.width,
+        height: winSize.height,
+        x: (mainWindow?.getBounds().x ?? 0) + 40,
+        y: mainWindow?.getBounds().y,
+    })
+    chatWindow.on("close", (event) => {
+        if (app.quitting) {
+            chatWindow = null
+        } else {
+            event.preventDefault()
+            chatWindow?.hide()
+        }
+    })
+    chatWindow.on("closed", () => {
+        chatWindow = null
+    })
+
+    const url = formatUrl({
+        pathname: path.join(__static, "support.html"),
+        query: {
+            app_id: packageJson.intercomAppId,
+            node_identity: id,
+            app_version: packageJson.version,
+        },
+        protocol: "file",
+        slashes: true,
+    })
+    await chatWindow.loadURL(url)
+    return chatWindow
+}
+
 if (!appInstanceLock) {
     app.quit()
 } else {
@@ -175,13 +215,13 @@ ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {
     }
     refreshTrayIcon(tray, status)
 })
-ipcMain.on(MainIpcListenChannels.ToggleSupportChat, (event: IpcMainEvent, open: boolean) => {
-    if (open) {
-        mainWindow?.setContentSize(winSizeExt.width, winSizeExt.height, true)
-    } else {
-        mainWindow?.setContentSize(winSize.width, winSize.height, true)
+ipcMain.on(MainIpcListenChannels.OpenSupportChat, async (event: IpcMainEvent, id: string) => {
+    if (chatWindow == null) {
+        chatWindow = await createChatWindow(id)
     }
+    chatWindow.show()
 })
+
 ipcMain.on(MainIpcListenChannels.Update, () => {
     autoUpdater.checkForUpdates()
 })

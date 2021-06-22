@@ -21,7 +21,6 @@ import { useStores } from "../../../store"
 import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { TitleBar } from "../TitleBar/TitleBar"
 import { locations } from "../../locations"
-import { Chat } from "../../../feedback/components/Chat/Chat"
 import { winSize } from "../../../config"
 import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
@@ -46,7 +45,7 @@ const Main = styled.div`
 `
 
 export const Routes: React.FC = observer(() => {
-    const { connection, navigation } = useStores()
+    const { connection } = useStores()
     return (
         <>
             <WinContents>
@@ -116,7 +115,6 @@ export const Routes: React.FC = observer(() => {
                         </Route>
                     </Switch>
                 </Main>
-                {navigation.chat && <Chat />}
             </WinContents>
         </>
     )

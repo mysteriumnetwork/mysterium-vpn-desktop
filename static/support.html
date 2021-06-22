@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mysterium VPN - Support chat</title>
+    <script>
+        const query = new URLSearchParams(window.location.search);
+        const APP_ID = query.get("app_id");
+        window.intercomSettings = {
+            hide_default_launcher: true,
+            app_id: APP_ID,
+            "node_identity": query.get("node_identity"),
+            "app_version": query.get("app_version"),
+        };
+        (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/' + APP_ID;var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s, x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+        window.Intercom('onHide', () => {
+            window.Intercom('show') // Close the window, but keep the Intercom running to avoid cold-boot next time it is opened.
+            window.close() // Close the window on intercom X click (onHide). Haven't found a way to delete that button.
+        })
+        window.Intercom('show')
+    </script>
+    <style>
+        .intercom-messenger-frame {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0 !important;
+        }
+    </style>
+</head>
+<body>
+</body>
+</html>

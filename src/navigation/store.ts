@@ -12,7 +12,7 @@ import { RootStore } from "../store"
 import { userEvent } from "../analytics/analytics"
 import { registered } from "../identity/identity"
 import { MainIpcListenChannels } from "../main/ipc"
-import { OnboardingAction } from "../analytics/actions"
+import { OnboardingAction, OtherAction } from "../analytics/actions"
 
 import { AppLocation, locations } from "./locations"
 
@@ -23,7 +23,6 @@ const connectionInProgress = (status: ConnectionStatus): boolean => {
 export class NavigationStore {
     welcome = true
     menu = false
-    chat = false
 
     root: RootStore
 
@@ -31,7 +30,6 @@ export class NavigationStore {
         makeObservable(this, {
             welcome: observable,
             menu: observable,
-            chat: observable,
             showLoading: action,
             goHome: action,
             determineRoute: action,
@@ -60,12 +58,6 @@ export class NavigationStore {
             () => this.root.connection.status,
             () => {
                 this.determineRoute()
-            },
-        )
-        reaction(
-            () => this.chat,
-            (chatOpen) => {
-                ipcRenderer.send(MainIpcListenChannels.ToggleSupportChat, chatOpen)
             },
         )
     }
@@ -124,8 +116,9 @@ export class NavigationStore {
         this.menu = show
     }
 
-    openChat = (open = true): void => {
-        this.chat = open
+    openChat = (): void => {
+        userEvent(OtherAction.SupportChat)
+        ipcRenderer.send(MainIpcListenChannels.OpenSupportChat, this.root.identity.identity?.id)
     }
 
     get isHomeActive(): boolean {

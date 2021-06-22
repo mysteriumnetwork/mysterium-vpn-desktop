@@ -63,6 +63,10 @@ export const locations: { [key: string]: AppLocation } = {
         path: "/help/bug-report",
         title: "Bug report",
     },
+    helpTermsAndConditions: {
+        path: "/help/terms-and-conditions",
+        title: "Terms & Conditions",
+    },
     preferences: {
         path: "/preferences",
         title: "Preferences",
