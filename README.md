@@ -4,13 +4,17 @@
 [![Downloads](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
 [![Lint](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/workflows/Lint/badge.svg?event=push)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/actions?query=workflow%3ALint)
 
-This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork/mysterium-vpn) with the following goals:
-- Improved performance
-- Improved UX
-- Simplified codebase
-- Integrated payments
+Mysterium VPN is a Desktop VPN client for Windows, macOS and Linux.
 
-## Logging
+It is the first Mysterium Network use case in action. Our dVPN is our flagship product and showcases the potential of our residential IP network. [Learn more](https://docs.mysterium.network/)
+
+## Usage
+
+You can download the latest version from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases) page. After installation, run MysteriumVPN to get started.
+
+## Logs
+
+Logs help to debug issues when something goes wrong. Make sure to attach all of them when submitting a bug report.
 
 ### Windows
 
@@ -43,17 +47,6 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
     ```
     yarn dev
     ```
-
-## Using a custom Mysterium Node version
-
-Instead of using prebuilt Node binary (specified by `@mysteriumnetwork/node` version in `package.json`), you may build [Node](https://github.com/mysteriumnetwork/node) from sources and start it in daemon mode with required permissions, e.g.:
-
-```
-git clone https://github.com/mysteriumnetwork/node
-cd node
-mage build
-mage daemon
-```
 
 App will try to connect to the existing instance instead of launching one of its own.
 
