@@ -19,6 +19,9 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
+**Logs**
+Attach logs (app, node, supervisor) to the issue. Where to find the logs: https://github.com/mysteriumnetwork/mysterium-vpn-desktop#logging
+
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
