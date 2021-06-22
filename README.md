@@ -36,7 +36,11 @@ Logs help to debug issues when something goes wrong. Make sure to attach all of 
 
 ** Note: In development mode, application logs are printed to the console
 
-## Getting started (development)
+## Development
+
+Pre-requisites:
+- Node 14 LTS
+- yarn
 
 1. Install and build the project
     ```
@@ -47,8 +51,6 @@ Logs help to debug issues when something goes wrong. Make sure to attach all of 
     ```
     yarn dev
     ```
-
-App will try to connect to the existing instance instead of launching one of its own.
 
 ## Packaging for distribution
 
