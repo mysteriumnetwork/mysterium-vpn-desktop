@@ -11,7 +11,7 @@ import { observer } from "mobx-react-lite"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDiscord, faFacebookSquare, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { shell } from "electron"
-import { faBook, faBug, faComments } from "@fortawesome/free-solid-svg-icons"
+import { faBook, faBug, faComments, faFileContract } from "@fortawesome/free-solid-svg-icons"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -157,8 +157,12 @@ export const HelpView: React.FC = observer(() => {
                             active={isTermsAndConditionsActive}
                             onClick={() => router.push(locations.helpTermsAndConditions)}
                         >
-                            <FontAwesomeIcon icon={faBook} />
+                            <FontAwesomeIcon icon={faFileContract} />
                             Terms & Conditions
+                        </NavButton>
+                        <NavButton active={false} onClick={() => shell.openExternal("https://docs.mysterium.network")}>
+                            <FontAwesomeIcon icon={faBook} />
+                            Documentation
                         </NavButton>
                         <SocialButtons>
                             <IconButton
