@@ -59,6 +59,7 @@ export enum OtherAction {
     SupportChat = "Support chat",
     SupportChatClose = "Support chat: close",
     SocialFacebook = "Social: Facebook",
+    SocialDiscord = "Social: Discord",
     SocialTwitter = "Social: Twitter",
     SocialMedium = "Social: Medium",
     SocialReddit = "Social: Reddit",

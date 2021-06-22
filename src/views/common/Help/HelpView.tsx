@@ -8,6 +8,9 @@ import React from "react"
 import styled from "styled-components"
 import { Route } from "react-router-dom"
 import { observer } from "mobx-react-lite"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faDiscord, faFacebookSquare, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { shell } from "electron"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -18,10 +21,13 @@ import { IconPerson } from "../../../ui-kit/icons/IconPerson"
 import { darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colors"
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
-import { SecondaryButton } from "../../../ui-kit/components/Button/SecondaryButton"
 import { useStores } from "../../../store"
+import * as packageJson from "../../../../package.json"
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../analytics/actions"
 
 import { HelpContentReportIssue } from "./HelpContentReportIssue"
+import { HelpContentTermsAndConditions } from "./HelpContentTermsAndConditions"
 
 const SideTop = styled.div`
     flex: 1 0 auto;
@@ -43,7 +49,6 @@ const SideBot = styled.div`
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 `
 
 const Title = styled(Heading2)`
@@ -54,9 +59,56 @@ const Content = styled(ViewContent)`
     padding: 20px 26px;
 `
 
+const SocialButtons = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+`
+
+const Explanation = styled(Small)`
+    opacity: 0.5;
+    text-align: center;
+    margin-top: auto;
+`
+
+interface NavButtonProps {
+    active: boolean
+}
+
+const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>>`
+    min-width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+
+    &:hover {
+        background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
+        color: ${(props) => (props.active ? "#fff" : "inherit")};
+    }
+    background: ${(props) => (props.active ? greyBlue1 : lightBlue)};
+    color: ${(props) => (props.active ? "#fff" : greyBlue1)};
+`
+
+const SupportChatButton = styled.button`
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: auto;
+
+    background: ${darkBlue};
+    color: #fff;
+
+    &:enabled:hover {
+        filter: brightness(115%);
+    }
+`
+
 export const HelpView: React.FC = observer(() => {
     const { navigation, router } = useStores()
     const isBugReportActive = router.location.pathname.includes(locations.helpBugReport.path)
+    const isTermsAndConditionsActive = router.location.pathname.includes(locations.helpTermsAndConditions.path)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -68,18 +120,73 @@ export const HelpView: React.FC = observer(() => {
                         <Small>Help using Mysterium VPN</Small>
                     </SideTop>
                     <SideBot>
-                        <SecondaryButton
-                            color={isBugReportActive ? darkBlue : lightBlue}
-                            onClick={() => router.push(locations.helpBugReport)}
-                        >
+                        <SupportChatButton onClick={() => navigation.openChat()}>Support chat</SupportChatButton>
+                        <NavButton active={isBugReportActive} onClick={() => router.push(locations.helpBugReport)}>
                             Bug report
-                        </SecondaryButton>
-                        <SecondaryButton onClick={() => navigation.openChat()}>Support chat</SecondaryButton>
+                        </NavButton>
+                        <NavButton
+                            active={isTermsAndConditionsActive}
+                            onClick={() => router.push(locations.helpTermsAndConditions)}
+                        >
+                            Terms & Conditions
+                        </NavButton>
+                        <SocialButtons>
+                            <NavButton
+                                active={false}
+                                onClick={() => {
+                                    userEvent(OtherAction.SocialDiscord)
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://discordapp.com/invite/n3vtSwc")
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faDiscord} size="2x" />
+                            </NavButton>
+                            <NavButton
+                                active={false}
+                                onClick={() => {
+                                    userEvent(OtherAction.SocialReddit)
+                                    navigation.showMenu(false)
+                                    shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faReddit} size="2x" />
+                            </NavButton>
+                            <NavButton active={false}>
+                                <FontAwesomeIcon
+                                    icon={faTwitter}
+                                    size="2x"
+                                    onClick={() => {
+                                        userEvent(OtherAction.SocialTwitter)
+                                        navigation.showMenu(false)
+                                        shell.openExternal("https://twitter.com/MysteriumNet")
+                                    }}
+                                />
+                            </NavButton>
+                            <NavButton active={false}>
+                                <FontAwesomeIcon
+                                    icon={faFacebookSquare}
+                                    size="2x"
+                                    onClick={() => {
+                                        userEvent(OtherAction.SocialFacebook)
+                                        navigation.showMenu(false)
+                                        shell.openExternal("https://www.facebook.com/MysteriumNet")
+                                    }}
+                                />
+                            </NavButton>
+                        </SocialButtons>
+                        <Explanation>
+                            App version:
+                            <br />
+                            {packageJson.version}
+                        </Explanation>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
                     <Route path={locations.helpBugReport.path}>
                         <HelpContentReportIssue />
+                    </Route>
+                    <Route path={locations.helpTermsAndConditions.path}>
+                        <HelpContentTermsAndConditions />
                     </Route>
                 </Content>
             </ViewSplit>
