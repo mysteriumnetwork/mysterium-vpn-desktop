@@ -12,23 +12,25 @@ This is a rewrite of [Mysterium VPN desktop](https://github.com/mysteriumnetwork
 
 ## Logging
 
-### App
+### Windows
 
-In development mode, application logs are printed to the console.  
-In a bundled application:
+- `%USERPROFILE%\AppData\Roaming\MysteriumVPN\logs` (app)
+- `%USERPROFILE%\.mysterium\logs\mysterium-node.log` (node)
+- `%PROGRAMDATA%\MystSupervisor\myst_supervisor.log` (supervisor)
 
-- Linux: `~/.config/MysteriumVPN/logs/*.log`
-- macOS: `~/Library/Logs/MysteriumVPN/*.log`
-- Windows: `%USERPROFILE%\AppData\Roaming\MysteriumVPN\logs\*.log`
+### macOS
 
-### Node
+- `~/Library/Logs/MysteriumVPN` (app)
+- `~/.mysterium/logs/mysterium-node.log` (node)
+- `/var/log/myst_supervisor.log` (supervisor)
 
-`~/.mysterium/logs/mysterium-node.log`
+### Linux
 
-### Supervisor
+- `~/.config/MysteriumVPN/logs` (app)
+- `~/.mysterium/logs/mysterium-node.log` (node)
+- `/var/log/myst_supervisor.log` (supervisor)
 
-- Linux/macOS: `/var/log/myst_supervisor.log`
-- Windows: `%PROGRAMDATA%\MystSupervisor\myst_supervisor.log`
+** Note: In development mode, application logs are printed to the console
 
 ## Getting started (development)
 
