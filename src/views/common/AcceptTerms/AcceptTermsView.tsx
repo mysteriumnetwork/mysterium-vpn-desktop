@@ -86,7 +86,7 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
             </Version>
             <Terms onScroll={scrollAnalyticsDebounced}>
-                <ReactMarkdown source={TermsEndUser} />
+                <ReactMarkdown>{TermsEndUser}</ReactMarkdown>
             </Terms>
             <BottomBar>
                 <Checkbox
