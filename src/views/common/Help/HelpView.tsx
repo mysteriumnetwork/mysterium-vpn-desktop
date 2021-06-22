@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDiscord, faFacebookSquare, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { shell } from "electron"
+import { faBook, faBug, faComments } from "@fortawesome/free-solid-svg-icons"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -30,9 +31,8 @@ import { HelpContentReportIssue } from "./HelpContentReportIssue"
 import { HelpContentTermsAndConditions } from "./HelpContentTermsAndConditions"
 
 const SideTop = styled.div`
-    flex: 1 0 auto;
     box-sizing: border-box;
-    height: 124px;
+    height: 136px;
     padding: 20px;
     overflow: hidden;
     text-align: center;
@@ -44,7 +44,6 @@ const SideBot = styled.div`
     border-radius: 10px;
     box-sizing: border-box;
     padding: 20px;
-    height: 330px;
     flex: 1 0 auto;
 
     display: flex;
@@ -88,6 +87,28 @@ const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTML
     }
     background: ${(props) => (props.active ? greyBlue1 : lightBlue)};
     color: ${(props) => (props.active ? "#fff" : greyBlue1)};
+
+    svg {
+        width: 40px !important;
+    }
+    text-align: left;
+    font-size: 13px;
+    line-height: 13px;
+`
+
+const IconButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>>`
+    min-width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+
+    &:hover {
+        background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
+        color: ${(props) => (props.active ? "#fff" : "inherit")};
+    }
+    background: ${(props) => (props.active ? greyBlue1 : lightBlue)};
+    color: ${(props) => (props.active ? "#fff" : greyBlue1)};
 `
 
 const SupportChatButton = styled.button`
@@ -103,6 +124,10 @@ const SupportChatButton = styled.button`
     &:enabled:hover {
         filter: brightness(115%);
     }
+    & svg {
+        width: 40px !important;
+    }
+    text-align: left;
 `
 
 export const HelpView: React.FC = observer(() => {
@@ -120,18 +145,23 @@ export const HelpView: React.FC = observer(() => {
                         <Small>Help using Mysterium VPN</Small>
                     </SideTop>
                     <SideBot>
-                        <SupportChatButton onClick={() => navigation.openChat()}>Support chat</SupportChatButton>
+                        <SupportChatButton onClick={() => navigation.openChat()}>
+                            <FontAwesomeIcon icon={faComments} />
+                            Support chat
+                        </SupportChatButton>
                         <NavButton active={isBugReportActive} onClick={() => router.push(locations.helpBugReport)}>
+                            <FontAwesomeIcon icon={faBug} />
                             Bug report
                         </NavButton>
                         <NavButton
                             active={isTermsAndConditionsActive}
                             onClick={() => router.push(locations.helpTermsAndConditions)}
                         >
+                            <FontAwesomeIcon icon={faBook} />
                             Terms & Conditions
                         </NavButton>
                         <SocialButtons>
-                            <NavButton
+                            <IconButton
                                 active={false}
                                 onClick={() => {
                                     userEvent(OtherAction.SocialDiscord)
@@ -140,8 +170,8 @@ export const HelpView: React.FC = observer(() => {
                                 }}
                             >
                                 <FontAwesomeIcon icon={faDiscord} size="2x" />
-                            </NavButton>
-                            <NavButton
+                            </IconButton>
+                            <IconButton
                                 active={false}
                                 onClick={() => {
                                     userEvent(OtherAction.SocialReddit)
@@ -150,8 +180,8 @@ export const HelpView: React.FC = observer(() => {
                                 }}
                             >
                                 <FontAwesomeIcon icon={faReddit} size="2x" />
-                            </NavButton>
-                            <NavButton active={false}>
+                            </IconButton>
+                            <IconButton active={false}>
                                 <FontAwesomeIcon
                                     icon={faTwitter}
                                     size="2x"
@@ -161,8 +191,8 @@ export const HelpView: React.FC = observer(() => {
                                         shell.openExternal("https://twitter.com/MysteriumNet")
                                     }}
                                 />
-                            </NavButton>
-                            <NavButton active={false}>
+                            </IconButton>
+                            <IconButton active={false}>
                                 <FontAwesomeIcon
                                     icon={faFacebookSquare}
                                     size="2x"
@@ -172,7 +202,7 @@ export const HelpView: React.FC = observer(() => {
                                         shell.openExternal("https://www.facebook.com/MysteriumNet")
                                     }}
                                 />
-                            </NavButton>
+                            </IconButton>
                         </SocialButtons>
                         <Explanation>
                             App version:
