@@ -25,7 +25,6 @@ const TermsMeta = styled.div`
 
 const Terms = styled.div`
     width: 325px;
-    // height: 288px;
     box-sizing: border-box;
     margin: 0 auto;
     padding: 0 6px;
@@ -51,7 +50,7 @@ export const HelpContentTermsAndConditions: React.FC = observer(() => {
             </TermsMeta>
             <Terms>
                 <Small>
-                    <ReactMarkdown source={TermsEndUser} />
+                    <ReactMarkdown>{TermsEndUser}</ReactMarkdown>
                 </Small>
             </Terms>
         </>
