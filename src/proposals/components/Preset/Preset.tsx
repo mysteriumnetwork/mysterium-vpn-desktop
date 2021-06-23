@@ -27,7 +27,7 @@ const PresetToggle = styled(Toggle).attrs({
     }
 `
 
-const PresetIcons: { [key: string]: React.FC<IconProps> | undefined} = {
+const PresetIcons: { [key: string]: React.FC<IconProps> | undefined } = {
     "Media Streaming": IconMedia,
     Browsing: IconBrowsing,
     Download: IconDownload,
