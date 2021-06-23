@@ -7,6 +7,7 @@
 import { action, computed, makeObservable, observable, reaction, when } from "mobx"
 import { ConnectionStatus, ProposalQuery, QualityLevel } from "mysterium-vpn-js"
 import * as _ from "lodash"
+import { FilterPreset } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
@@ -15,7 +16,6 @@ import { log } from "../log/log"
 import { ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../analytics/actions"
-import { FilterPreset } from "../../../mysterium-vpn-js/lib/proposal/filter-preset"
 
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 

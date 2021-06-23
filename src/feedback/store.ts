@@ -6,7 +6,7 @@
  */
 
 import { action, makeObservable, observable } from "mobx"
-import { Issue } from "mysterium-vpn-js/lib/feedback/issue"
+import { Issue } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { tequilapi } from "../tequilapi"
