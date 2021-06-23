@@ -20,26 +20,33 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { darkBlue } from "../../../ui-kit/colors"
-
-const Sidebar = styled(ViewSidebar)`
-    background: #fff;
-`
+import { Preset } from "../../../proposals/components/Preset/Preset"
 
 const Content = styled(ViewContent)`
     background: #fff;
     color: ${darkBlue};
 `
 
-const Filters = styled.div`
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+const SideTop = styled.div`
+    box-sizing: border-box;
+    height: 136px;
+    padding: 12px;
+    overflow: hidden;
+    text-align: center;
 `
 
-const ScrollArea = styled.div`
+const SideBot = styled.div`
+    background: #fff;
+    box-shadow: 0px 0px 30px rgba(11, 0, 75, 0.1);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding: 12px 0;
+
     flex: 1;
-    overflow-y: scroll;
+    height: 350px;
+
+    display: flex;
+    flex-direction: column;
 `
 
 const MainBottom = styled.div`
@@ -65,13 +72,14 @@ export const SelectProposalView: React.FC = observer(() => {
                 </SearchNodeWrap>
             </ViewNavBar>
             <ViewSplit>
-                <Sidebar>
-                    <Filters>
-                        <ScrollArea>
-                            <CountryFilter />
-                        </ScrollArea>
-                    </Filters>
-                </Sidebar>
+                <ViewSidebar>
+                    <SideTop>
+                        <Preset />
+                    </SideTop>
+                    <SideBot>
+                        <CountryFilter />
+                    </SideBot>
+                </ViewSidebar>
                 <Content>
                     <ProposalTable />
                     <MainBottom>

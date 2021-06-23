@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, makeObservable, observable, reaction, when } from "mobx"
-import { ConnectionStatus, QualityLevel } from "mysterium-vpn-js"
+import { ConnectionStatus, ProposalQuery, QualityLevel } from "mysterium-vpn-js"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
@@ -15,6 +15,7 @@ import { log } from "../log/log"
 import { ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../analytics/actions"
+import { FilterPreset } from "../../../mysterium-vpn-js/lib/proposal/filter-preset"
 
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 
@@ -30,6 +31,7 @@ export type TransientFilter = {
 export class ProposalStore {
     loading = false
     proposals: UIProposal[] = []
+    filterPresets: FilterPreset[] = []
     active?: UIProposal
     filter: TransientFilter = {}
 
@@ -39,6 +41,7 @@ export class ProposalStore {
         makeObservable(this, {
             loading: observable,
             proposals: observable,
+            filterPresets: observable,
             active: observable,
             filter: observable,
             filters: computed,
@@ -73,7 +76,10 @@ export class ProposalStore {
                 if (status == DaemonStatusType.Up && this.root.connection.status === ConnectionStatus.NOT_CONNECTED) {
                     when(
                         () => this.root.config.loaded,
-                        () => this.fetchProposals(),
+                        () => {
+                            this.fetchProposals()
+                            this.fetchProposalFilterPresets()
+                        },
                     )
                 }
             },
@@ -99,12 +105,19 @@ export class ProposalStore {
         }
         this.setLoading(true)
         try {
-            const query = {
+            const query: ProposalQuery = {
                 serviceType: supportedServiceType,
-                ipType: this.root.filters.config.other?.["ip-type"],
-                qualityMin: this.root.filters.config.quality?.level,
-                priceGibMax: this.root.filters.config.price?.pergib,
-                priceHourMax: this.root.filters.config.price?.perhour,
+            }
+            if (this.filters.preset?.id) {
+                query.presetId = this.filters.preset.id
+                query.qualityMin = this.filters.quality?.level
+                query.priceGibMax = this.filters.price?.pergib
+                query.priceHourMax = this.filters.price?.perhour
+            } else {
+                query.ipType = this.filters.other?.["ip-type"]
+                query.qualityMin = this.filters.quality?.level
+                query.priceGibMax = this.filters.price?.pergib
+                query.priceHourMax = this.filters.price?.perhour
             }
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
@@ -112,6 +125,19 @@ export class ProposalStore {
             log.error("Could not get proposals", err.message)
         }
         this.setLoading(false)
+    }
+
+    async fetchProposalFilterPresets(): Promise<void> {
+        const systemPresets = await tequilapi.proposalFilterPresets().then((res) => res.items)
+        this.filterPresets = systemPresets.concat([{ id: 0, name: "No preset" }])
+    }
+
+    async toggleFilterPreset(id: number | null): Promise<void> {
+        if (this.filters.preset?.id == id) {
+            id = null
+        }
+        await this.root.filters.setPartial({ preset: { id } })
+        await this.fetchProposals()
     }
 
     // #####################
