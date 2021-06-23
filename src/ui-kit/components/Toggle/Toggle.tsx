@@ -19,6 +19,7 @@ export interface ToggleProps {
     activeShadowColor?: string
     paddingX?: string
     onClick?: () => void
+    className?: string
 }
 
 const defaultProps = {
@@ -69,10 +70,11 @@ export const Toggle: React.FC<ToggleProps> = ({
     activeTextColor = defaultProps.activeTextColor,
     activeShadowColor = defaultProps.activeShadowColor,
     paddingX = defaultProps.paddingX,
+    className,
 }: ToggleProps) => {
     const styles = { textColor, hoverColor, activeColor, activeTextColor, activeShadowColor, paddingX }
     return (
-        <Container className={active ? "active" : ""} active={active} onClick={onClick} {...styles}>
+        <Container className={`${className} ${active ? "active" : ""}`} active={active} onClick={onClick} {...styles}>
             <Highlight active={active} {...styles}>
                 {children}
             </Highlight>

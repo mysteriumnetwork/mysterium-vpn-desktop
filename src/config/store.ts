@@ -34,6 +34,9 @@ export interface DesktopConfig {
 }
 
 export interface ProposalFilters {
+    preset?: {
+        id?: number | null
+    }
     price?: {
         pergib?: number
         perhour?: number
