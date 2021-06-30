@@ -85,6 +85,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
     if (!isDevelopment()) {
         Menu.setApplicationMenu(createMenu())
     }
+    initializeAnalytics(window)
 
     if (isDevelopment()) {
         window.webContents.once("dom-ready", () => {
@@ -125,7 +126,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
     window.webContents.on("did-finish-load", () => {
         initializePushNotifications()
     })
-    initializeAnalytics(window)
 
     return window
 }

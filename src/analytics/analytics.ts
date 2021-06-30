@@ -7,7 +7,7 @@
 import MatomoTracker from "@datapunt/matomo-tracker-js"
 import { TrackEventParams } from "@datapunt/matomo-tracker-js/lib/types"
 import { TrackPageViewParams } from "@datapunt/matomo-tracker-js/es/types"
-import { ipcRenderer } from "electron"
+import { ipcRenderer, remote } from "electron"
 
 import * as packageJson from "../../package.json"
 import { isDevelopment } from "../utils/env"
@@ -18,7 +18,7 @@ import { AppStateAction, Category, UserAction } from "./actions"
 const appVersion = packageJson.version
 const tracker = new MatomoTracker({
     siteId: 1,
-    userId: global.machineId,
+    userId: remote.getGlobal("machineId"),
     urlBase: packageJson.analyticsUrl,
     disabled: isDevelopment(),
     linkTracking: false,
@@ -41,14 +41,14 @@ export const initialize = (): void => {
 
 // Record a page view
 export const pageview = (params: TrackPageViewParams): void => {
-    tracker.trackPageView({
+    tracker?.trackPageView({
         ...params,
         customDimensions: [{ id: 1, value: appVersion }],
     })
 }
 
 const event = (params: TrackEventParams): void => {
-    tracker.trackEvent({
+    tracker?.trackEvent({
         ...params,
         customDimensions: [{ id: 1, value: appVersion }],
     })
