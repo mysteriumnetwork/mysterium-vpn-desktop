@@ -128,7 +128,8 @@ export const ConnectedView: React.FC = observer(() => {
         default:
             statusText = "Working on it..."
     }
-    const [anim, setAnim] = useState<{ src: unknown; loop: boolean; onComplete?: () => void }>({
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const [anim, setAnim] = useState<{ src: object; loop: boolean; onComplete?: () => void }>({
         src: animationConnectingStart,
         loop: false,
         onComplete: () => {

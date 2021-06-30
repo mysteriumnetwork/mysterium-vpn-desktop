@@ -32,7 +32,8 @@ const StartupStatus = styled.div`
 
 export const LoadingView: React.FC = observer(() => {
     const { daemon } = useStores()
-    const [anim, setAnim] = useState<{ src: unknown; loop: boolean; onComplete?: () => void }>({
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const [anim, setAnim] = useState<{ src: object; loop: boolean; onComplete?: () => void }>({
         src: animationLoadingStart,
         loop: false,
         onComplete: () => {
