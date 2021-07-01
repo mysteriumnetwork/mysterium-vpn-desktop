@@ -67,13 +67,13 @@ export const locations: { [key: string]: AppLocation } = {
         path: "/help/terms-and-conditions",
         title: "Terms & Conditions",
     },
-    preferences: {
-        path: "/preferences",
-        title: "Preferences",
+    settings: {
+        path: "/settings",
+        title: "Settings",
     },
-    preferencesFilters: {
-        path: "/preferences/filters",
-        title: "Filters",
+    settingsFilters: {
+        path: "/settings/filters",
+        title: "Settings/Filters",
     },
 }
 

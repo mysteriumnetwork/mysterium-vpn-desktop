@@ -38,7 +38,7 @@ export class NavigationStore {
             showMenu: action,
             openChat: action,
             isHomeActive: computed,
-            isPreferencesActive: computed,
+            isSettingsActive: computed,
             isHelpActive: computed,
             isWalletActive: computed,
         })
@@ -125,8 +125,8 @@ export class NavigationStore {
         return this.root.router.location.pathname.includes(locations.consumer.path)
     }
 
-    get isPreferencesActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.preferences.path)
+    get isSettingsActive(): boolean {
+        return this.root.router.location.pathname.includes(locations.settings.path)
     }
 
     get isHelpActive(): boolean {
