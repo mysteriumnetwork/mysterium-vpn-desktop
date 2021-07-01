@@ -8,6 +8,7 @@ import styled from "styled-components"
 
 export const ViewContent = styled.div`
     width: 378px;
+    box-sizing: border-box;
     border-radius: 10px;
     overflow: hidden;
 

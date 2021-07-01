@@ -23,9 +23,9 @@ import { darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colors"
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
 import { useStores } from "../../../store"
-import * as packageJson from "../../../../package.json"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../analytics/actions"
+import { AppVersion } from "../../../daemon/components/AppVersion"
 
 import { HelpContentReportIssue } from "./HelpContentReportIssue"
 import { HelpContentTermsAndConditions } from "./HelpContentTermsAndConditions"
@@ -64,9 +64,7 @@ const SocialButtons = styled.div`
     margin-top: auto;
 `
 
-const Explanation = styled(Small)`
-    opacity: 0.5;
-    text-align: center;
+const Version = styled(AppVersion)`
     margin-top: auto;
 `
 
@@ -208,11 +206,7 @@ export const HelpView: React.FC = observer(() => {
                                 />
                             </IconButton>
                         </SocialButtons>
-                        <Explanation>
-                            App version:
-                            <br />
-                            {packageJson.version}
-                        </Explanation>
+                        <Version />
                     </SideBot>
                 </ViewSidebar>
                 <Content>

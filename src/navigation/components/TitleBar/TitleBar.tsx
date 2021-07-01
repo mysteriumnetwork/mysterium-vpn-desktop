@@ -138,12 +138,12 @@ export const TitleBar: React.FC = observer(() => {
                 <FontAwesomeIcon icon={faHome} />
             </NavigationButton>
             <NavigationButton
-                active={navigation.isPreferencesActive}
-                onClick={() => router.push(locations.preferences)}
+                active={navigation.isSettingsActive}
+                onClick={() => router.push(locations.settingsFilters)}
             >
                 Settings
             </NavigationButton>
-            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.help)}>
+            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.helpBugReport)}>
                 Help
             </NavigationButton>
             <Location>

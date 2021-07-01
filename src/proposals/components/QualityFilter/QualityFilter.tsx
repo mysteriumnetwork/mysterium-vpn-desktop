@@ -10,9 +10,10 @@ import styled from "styled-components"
 import { QualityLevel } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
-import { textSmall } from "../../../ui-kit/typography"
+import { Small } from "../../../ui-kit/typography"
 
 const Container = styled.div`
+    width: 300px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -23,14 +24,13 @@ const RangeContainer = styled.div`
     margin-bottom: 16px;
 `
 
-const Label = styled.div`
-    ${textSmall}
-    color: #404040;
-    line-height: 16px;
+const Label = styled(Small)`
+    opacity: 0.7;
 `
 
 const Range = styled.input`
     width: 100%;
+    margin: 10px 0;
 `
 
 const displayQuality = (q?: QualityLevel): string => {

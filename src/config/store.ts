@@ -141,7 +141,7 @@ export class ConfigStore {
     }
 
     get dnsOption(): DNSOption {
-        return this.config.desktop?.dns ?? "1.1.1.1"
+        return this.config.desktop?.dns ?? "provider"
     }
 
     persistConfig = _.debounce(async () => {

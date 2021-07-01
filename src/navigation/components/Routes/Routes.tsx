@@ -18,15 +18,14 @@ import { SelectProposalView } from "../../../views/consumer/SelectProposal/Selec
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
 import { useStores } from "../../../store"
-import { FiltersView } from "../../../views/consumer/Filters/FiltersView"
 import { TitleBar } from "../TitleBar/TitleBar"
 import { locations } from "../../locations"
 import { winSize } from "../../../config"
-import { Preferences } from "../../../preferences/components/Preferences/Preferences"
 import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 import ReferralView from "../../../views/consumer/Referral/ReferralView"
 import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
 import { HelpView } from "../../../views/common/Help/HelpView"
+import { SettingsView } from "../../../views/common/Settings/SettingsView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -87,13 +86,10 @@ export const Routes: React.FC = observer(() => {
                             <TitleBar />
                             <ConnectedView />
                         </Route>
-                        <Route path={locations.preferences.path} exact>
+                        <Route path={locations.settings.path}>
+                            <Redirect to={locations.settingsFilters.path} />
                             <TitleBar />
-                            <Preferences />
-                        </Route>
-                        <Route path={locations.preferencesFilters.path} exact>
-                            <TitleBar />
-                            <FiltersView />
+                            <SettingsView />
                         </Route>
                         <Route path={locations.referrals.path}>
                             <TitleBar />

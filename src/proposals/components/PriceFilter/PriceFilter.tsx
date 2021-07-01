@@ -10,10 +10,11 @@ import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
-import { textSmall } from "../../../ui-kit/typography"
+import { Small } from "../../../ui-kit/typography"
 import { fmtMoney } from "../../../payment/display"
 
 const Container = styled.div`
+    width: 300px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -24,14 +25,13 @@ const RangeContainer = styled.div`
     margin-bottom: 16px;
 `
 
-const Label = styled.div`
-    ${textSmall}
-    color: #404040;
-    line-height: 16px;
+const Label = styled(Small)`
+    opacity: 0.7;
 `
 
 const Range = styled.input`
     width: 100%;
+    margin: 10px 0;
 `
 
 const displayFilterPrice = (amount?: number): string => {
@@ -56,6 +56,16 @@ export const PriceFilter = observer(() => {
         setPrice({ ...price, perHour: filters.config.price?.perhour, perGib: filters.config.price?.pergib })
     }, [filters.config.price])
 
+    const onPricePerHourChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
+        const pricePerHour = event.target.valueAsNumber
+        setPrice({ ...price, perHour: pricePerHour })
+        await proposals.setPricePerHourMaxFilterDebounced(pricePerHour)
+    }
+    const onPricePerGiBChange = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
+        const valueAsNumber = event.target.valueAsNumber
+        setPrice({ ...price, perGib: valueAsNumber })
+        await proposals.setPricePerGibMaxFilterDebounced(valueAsNumber)
+    }
     return (
         <Container>
             <RangeContainer>
@@ -66,11 +76,7 @@ export const PriceFilter = observer(() => {
                     max={filters.priceCeiling?.perHourMax}
                     value={price.perHour}
                     step={1000}
-                    onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                        const pricePerHour = event.target.valueAsNumber
-                        setPrice({ ...price, perHour: pricePerHour })
-                        proposals.setPricePerHourMaxFilterDebounced(pricePerHour)
-                    }}
+                    onChange={onPricePerHourChange}
                 />
             </RangeContainer>
             <RangeContainer>
@@ -81,11 +87,7 @@ export const PriceFilter = observer(() => {
                     max={filters.priceCeiling?.perGibMax}
                     value={price.perGib}
                     step={1000}
-                    onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                        const valueAsNumber = event.target.valueAsNumber
-                        setPrice({ ...price, perGib: valueAsNumber })
-                        proposals.setPricePerGibMaxFilterDebounced(valueAsNumber)
-                    }}
+                    onChange={onPricePerGiBChange}
                 />
             </RangeContainer>
         </Container>
