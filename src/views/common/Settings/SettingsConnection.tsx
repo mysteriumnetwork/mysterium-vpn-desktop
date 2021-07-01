@@ -15,6 +15,7 @@ import { ViewContent } from "../../../navigation/components/ViewContent/ViewCont
 import { useStores } from "../../../store"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../analytics/actions"
+import { Select } from "../../../ui-kit/form-components/Select"
 
 const Title = styled(Heading2)`
     margin-bottom: 15px;
@@ -50,12 +51,12 @@ export const SettingsConnection: React.FC = observer(() => {
                     Domain Name System (DNS) is used to resolve internet addresses. You will need to re-connect for the
                     change to apply.
                 </Explanation>
-                <select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>
+                <Select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>
                     <option value="1.1.1.1">Cloudflare</option>
                     <option value="auto">Automatic</option>
                     <option value="provider">Provider</option>
                     <option value="system">System</option>
-                </select>
+                </Select>
             </Section>
         </>
     )
