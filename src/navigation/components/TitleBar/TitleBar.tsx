@@ -143,7 +143,7 @@ export const TitleBar: React.FC = observer(() => {
             >
                 Settings
             </NavigationButton>
-            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.help)}>
+            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.helpBugReport)}>
                 Help
             </NavigationButton>
             <Location>
