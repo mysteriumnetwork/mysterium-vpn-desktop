@@ -75,6 +75,10 @@ export const locations: { [key: string]: AppLocation } = {
         path: "/settings/filters",
         title: "Settings/Filters",
     },
+    settingsConnection: {
+        path: "/settings/connection",
+        title: "Settings/Connection",
+    },
 }
 
 export const locationByPath = (path: string): AppLocation | undefined =>

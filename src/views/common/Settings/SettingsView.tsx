@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { Route } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBug, faFileContract } from "@fortawesome/free-solid-svg-icons"
+import { faGlobe, faSlidersH } from "@fortawesome/free-solid-svg-icons"
 
 import { Heading2 } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
@@ -23,6 +23,7 @@ import { IconSettings } from "../../../ui-kit/icons/IconSettings"
 import { useStores } from "../../../store"
 
 import { SettingsFilters } from "./SettingsFilters"
+import { SettingsConnection } from "./SettingsConnection"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -76,12 +77,14 @@ const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTML
     text-align: left;
     font-size: 13px;
     line-height: 13px;
+    display: flex;
+    align-items: center;
 `
 
 export const SettingsView: React.FC = observer(() => {
     const { router } = useStores()
-    const isFiltersActive = router.location.pathname.includes(locations.settingsFilters.path)
-    const isTermsAndConditionsActive = router.location.pathname.includes(locations.helpTermsAndConditions.path)
+    const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters.path)
+    const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection.path)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -92,29 +95,25 @@ export const SettingsView: React.FC = observer(() => {
                         <Title>Settings</Title>
                     </SideTop>
                     <SideBot>
-                        <NavButton active={isFiltersActive} onClick={() => router.push(locations.settingsFilters)}>
-                            <FontAwesomeIcon icon={faBug} />
+                        <NavButton active={isFilterTabActive} onClick={() => router.push(locations.settingsFilters)}>
+                            <FontAwesomeIcon icon={faSlidersH} />
                             Default filters
                         </NavButton>
                         <NavButton
-                            active={isTermsAndConditionsActive}
-                            onClick={() => router.push(locations.helpTermsAndConditions)}
+                            active={isConnectionTabActive}
+                            onClick={() => router.push(locations.settingsConnection)}
                         >
-                            <FontAwesomeIcon icon={faFileContract} />
+                            <FontAwesomeIcon icon={faGlobe} />
                             Connection
-                        </NavButton>
-                        <NavButton
-                            active={isTermsAndConditionsActive}
-                            onClick={() => router.push(locations.helpTermsAndConditions)}
-                        >
-                            <FontAwesomeIcon icon={faFileContract} />
-                            Payment
                         </NavButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
                     <Route path={locations.settingsFilters.path}>
                         <SettingsFilters />
+                    </Route>
+                    <Route path={locations.settingsConnection.path}>
+                        <SettingsConnection />
                     </Route>
                 </Content>
             </ViewSplit>

@@ -17,7 +17,7 @@ import { QualityFilter } from "../../../proposals/components/QualityFilter/Quali
 import { ProposalQuality } from "../../../proposals/components/ProposalQuality/ProposalQuality"
 
 const Title = styled(Heading2)`
-    margin: 15px 0;
+    margin-bottom: 15px;
 `
 
 const Section = styled(ViewContent)`
@@ -25,16 +25,26 @@ const Section = styled(ViewContent)`
     margin-bottom: 10px;
 `
 
+const SectionIcon = styled(FontAwesomeIcon)`
+    margin-bottom: 15px;
+`
+
+const SectionIconWrap = styled.div`
+    margin-bottom: 15px;
+`
+
 export const SettingsFilters: React.FC = observer(() => {
     return (
         <>
             <Section>
-                <FontAwesomeIcon icon={faDollarSign} color="#ffffff88" size="2x" />
+                <SectionIcon icon={faDollarSign} color="#ffffff88" size="2x" />
                 <Title>Price limit</Title>
                 <PriceFilter />
             </Section>
             <Section>
-                <ProposalQuality level={2} color="#ffffff88" />
+                <SectionIconWrap>
+                    <ProposalQuality level={2} color="#ffffff88" />
+                </SectionIconWrap>
                 <Title>Quality</Title>
                 <QualityFilter />
             </Section>
