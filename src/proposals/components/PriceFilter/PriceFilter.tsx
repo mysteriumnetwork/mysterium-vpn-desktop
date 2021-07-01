@@ -31,6 +31,7 @@ const Label = styled(Small)`
 
 const Range = styled.input`
     width: 100%;
+    margin: 10px 0;
 `
 
 const displayFilterPrice = (amount?: number): string => {

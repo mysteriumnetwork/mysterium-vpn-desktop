@@ -20,7 +20,7 @@ import { initialize as initializeSentry } from "../errors/sentry"
 import { rootStore, StoreContext, useStores } from "../store"
 import { synchronizedHistory } from "../navigation/routerStore"
 import { initialize as initializeAnalytics } from "../analytics/analytics"
-import { greyBlue1, brandLight } from "../ui-kit/colors"
+import { greyBlue1, brandLight, brand } from "../ui-kit/colors"
 
 initializeSentry()
 
@@ -90,6 +90,26 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         &:active {
             background: ${brandLight};
         }
+    }
+    input[type=range] {
+        -webkit-appearance: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50px;
+        background: ${brandLight};
+        top: -6px;
+        position: relative;
+        &:active {
+            background: ${brand};
+        }
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+        -webkit-appearance: none;
+        height: 10px;
+        background: #5a2058;
     }
     :focus-visible {
         outline: 2px solid ${brandLight};
