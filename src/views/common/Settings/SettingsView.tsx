@@ -21,6 +21,7 @@ import { ViewContainer } from "../../../navigation/components/ViewContainer/View
 import { locations } from "../../../navigation/locations"
 import { IconSettings } from "../../../ui-kit/icons/IconSettings"
 import { useStores } from "../../../store"
+import { AppVersion } from "../../../daemon/components/AppVersion"
 
 import { SettingsFilters } from "./SettingsFilters"
 import { SettingsConnection } from "./SettingsConnection"
@@ -51,6 +52,10 @@ const Title = styled(Heading2)`
 
 const Content = styled(ViewContent)`
     background: none;
+`
+
+const Version = styled(AppVersion)`
+    margin-top: auto;
 `
 
 interface NavButtonProps {
@@ -106,6 +111,7 @@ export const SettingsView: React.FC = observer(() => {
                             <FontAwesomeIcon icon={faGlobe} />
                             Connection
                         </NavButton>
+                        <Version />
                     </SideBot>
                 </ViewSidebar>
                 <Content>
