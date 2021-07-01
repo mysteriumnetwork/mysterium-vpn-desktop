@@ -54,9 +54,6 @@ export class ProposalStore {
             setPricePerGibMaxFilterDebounced: action,
             setQualityFilter: action,
             setIncludeFailed: action,
-            ipTypeCounts: computed,
-            setIpTypeFilter: action,
-            toggleIpTypeFilter: action,
             countryCounts: computed,
             setCountryFilter: action,
             toggleCountryFilter: action,
@@ -108,17 +105,10 @@ export class ProposalStore {
             const query: ProposalQuery = {
                 serviceType: supportedServiceType,
             }
-            if (this.filters.preset?.id) {
-                query.presetId = this.filters.preset.id
-                query.qualityMin = this.filters.quality?.level
-                query.priceGibMax = this.filters.price?.pergib
-                query.priceHourMax = this.filters.price?.perhour
-            } else {
-                query.ipType = this.filters.other?.["ip-type"]
-                query.qualityMin = this.filters.quality?.level
-                query.priceGibMax = this.filters.price?.pergib
-                query.priceHourMax = this.filters.price?.perhour
-            }
+            query.presetId = this.filters.preset?.id ?? undefined
+            query.qualityMin = this.filters.quality?.level
+            query.priceGibMax = this.filters.price?.pergib
+            query.priceHourMax = this.filters.price?.perhour
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
@@ -206,29 +196,6 @@ export class ProposalStore {
             },
         })
         userEvent(ProposalViewAction.FilterIncludeFailed, String(includeFailed))
-    }
-
-    // #####################
-    // IP type filter
-    // #####################
-    get ipTypeCounts(): { [type: string]: number } {
-        const input = this.proposals
-        const result = _.groupBy(input, (p) => p.ipType)
-        return _.mapValues(result, (ps) => ps.length)
-    }
-
-    async setIpTypeFilter(ipType?: string): Promise<void> {
-        await this.root.filters.setPartial({
-            other: {
-                "ip-type": ipType,
-            },
-        })
-        await this.fetchProposals()
-    }
-
-    toggleIpTypeFilter(ipType?: string): void {
-        this.setIpTypeFilter(this.filters.other?.["ip-type"] !== ipType ? ipType : "")
-        userEvent(ProposalViewAction.FilterIpType, ipType)
     }
 
     // #####################

@@ -82,10 +82,6 @@ export class Filters {
                 level: QualityLevel.MEDIUM,
                 "include-failed": false,
             },
-            other: {
-                "no-access-policy": true,
-                "ip-type": "residential",
-            },
         }
     }
 

@@ -47,8 +47,6 @@ export interface ProposalFilters {
     }
     other?: {
         country?: string
-        "no-access-policy"?: boolean
-        "ip-type"?: string
     }
 }
 
