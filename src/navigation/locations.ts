@@ -39,6 +39,14 @@ export const locations: { [key: string]: AppLocation } = {
         path: "/wallet",
         title: "Wallet",
     },
+    walletIdentity: {
+        path: "/wallet/identity",
+        title: "Wallet/Identity",
+    },
+    walletTopup: {
+        path: "/wallet/topup",
+        title: "Wallet/Topup",
+    },
     consumer: {
         path: "/consumer",
         title: "Consumer",

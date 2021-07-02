@@ -25,6 +25,11 @@ import { OrderStatus } from "../../../payment/store"
 import { Spinner } from "../../../ui-kit/components/Spinner/Spinner"
 import { userEvent } from "../../../analytics/analytics"
 import { WalletAction } from "../../../analytics/actions"
+import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
+import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 
 const Container = styled.div`
     flex: 1;
@@ -170,47 +175,60 @@ export const TopupView: React.FC = observer(() => {
         payment.setLightningNetwork(val)
     }
     return (
-        <Container>
-            <FormRow>
-                <SectionTitle>Amount (min: {payment.orderMinimumAmount})</SectionTitle>
-                <UncontrolledMystInputWithFlatEstimate
-                    disabled={progress != Progress.NONE}
-                    rate={payment.mystToUsdRate?.amount}
-                    defaultValue={payment.topupAmount}
-                    onChange={onTopupAmountChange}
-                    suffix={Currency.MYSTTestToken}
-                />
-            </FormRow>
-            <FormRow>
-                <SectionTitle>Currency</SectionTitle>
-                <Currencies>
-                    <Select disabled={progress != Progress.NONE} onChange={onCurrencyChange}>
-                        {payment.currencies.map((cur) => (
-                            <option key={cur} value={cur}>
-                                {cur}
-                            </option>
-                        ))}
-                    </Select>
-                </Currencies>
-            </FormRow>
-            {isLightningAvailable(payment.paymentCurrency) && (
-                <FormRow>
-                    <LightningCheckbox
-                        disabled={progress != Progress.NONE}
-                        checked={payment.lightningNetwork}
-                        onChange={onLightningChange}
-                    >
-                        Use lightning network
-                    </LightningCheckbox>
-                </FormRow>
-            )}
-            <Actions>
-                {progress == Progress.NONE && (
-                    <BrandButton disabled={!payment.orderOptionsValid} onClick={onCreatePaymentClick}>
-                        Start payment
-                    </BrandButton>
-                )}
-            </Actions>
-        </Container>
+        <ViewContainer>
+            <ViewNavBar />
+            <ViewSplit>
+                <ViewSidebar>
+                    sidebar
+                </ViewSidebar>
+                <ViewContent>
+                    content
+                </ViewContent>
+            </ViewSplit>
+        </ViewContainer>
     )
+    // return (
+    //     <Container>
+    //         <FormRow>
+    //             <SectionTitle>Amount (min: {payment.orderMinimumAmount})</SectionTitle>
+    //             <UncontrolledMystInputWithFlatEstimate
+    //                 disabled={progress != Progress.NONE}
+    //                 rate={payment.mystToUsdRate?.amount}
+    //                 defaultValue={payment.topupAmount}
+    //                 onChange={onTopupAmountChange}
+    //                 suffix={Currency.MYSTTestToken}
+    //             />
+    //         </FormRow>
+    //         <FormRow>
+    //             <SectionTitle>Currency</SectionTitle>
+    //             <Currencies>
+    //                 <Select disabled={progress != Progress.NONE} onChange={onCurrencyChange}>
+    //                     {payment.currencies.map((cur) => (
+    //                         <option key={cur} value={cur}>
+    //                             {cur}
+    //                         </option>
+    //                     ))}
+    //                 </Select>
+    //             </Currencies>
+    //         </FormRow>
+    //         {isLightningAvailable(payment.paymentCurrency) && (
+    //             <FormRow>
+    //                 <LightningCheckbox
+    //                     disabled={progress != Progress.NONE}
+    //                     checked={payment.lightningNetwork}
+    //                     onChange={onLightningChange}
+    //                 >
+    //                     Use lightning network
+    //                 </LightningCheckbox>
+    //             </FormRow>
+    //         )}
+    //         <Actions>
+    //             {progress == Progress.NONE && (
+    //                 <BrandButton disabled={!payment.orderOptionsValid} onClick={onCreatePaymentClick}>
+    //                     Start payment
+    //                 </BrandButton>
+    //             )}
+    //         </Actions>
+    //     </Container>
+    // )
 })
