@@ -12,9 +12,12 @@ import { brand, darkBlue } from "../../colors"
 export interface ToggleProps {
     children: React.ReactNode
     active: boolean
+    height?: string
+    justify?: string
     textColor?: string
     hoverColor?: string
     activeColor?: string
+    inactiveColor?: string
     activeTextColor?: string
     activeShadowColor?: string
     paddingX?: string
@@ -23,9 +26,12 @@ export interface ToggleProps {
 }
 
 const defaultProps = {
+    height: "25px",
+    justify: "flex-start",
     textColor: darkBlue,
     hoverColor: `${brand}1A`,
     activeColor: brand,
+    inactiveColor: "transparent",
     activeTextColor: "#fff",
     activeShadowColor: "none",
     paddingX: "12px",
@@ -33,18 +39,18 @@ const defaultProps = {
 
 const Highlight = styled.div<ToggleProps & typeof defaultProps>`
     padding: 0 ${(props) => props.paddingX};
-    height: 25px;
+    height: ${(props) => props.height};
     min-height: 25px;
     line-height: 25px;
     border-radius: 5px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: ${(props) => props.justify};
     overflow: hidden;
 
     color: ${(props) => (props.active ? props.activeTextColor : props.textColor)};
-    background: ${(props) => (props.active ? props.activeColor : "transparent")};
+    background: ${(props) => (props.active ? props.activeColor : props.inactiveColor)};
     box-shadow: ${(props) => (props.active ? props.activeShadowColor : "none")};
 `
 
@@ -64,15 +70,28 @@ export const Toggle: React.FC<ToggleProps> = ({
     onClick,
     children,
     active,
+    height = defaultProps.height,
+    justify = defaultProps.justify,
     textColor = defaultProps.textColor,
     hoverColor = defaultProps.hoverColor,
     activeColor = defaultProps.activeColor,
+    inactiveColor = defaultProps.inactiveColor,
     activeTextColor = defaultProps.activeTextColor,
     activeShadowColor = defaultProps.activeShadowColor,
     paddingX = defaultProps.paddingX,
     className,
 }: ToggleProps) => {
-    const styles = { textColor, hoverColor, activeColor, activeTextColor, activeShadowColor, paddingX }
+    const styles = {
+        height,
+        justify,
+        textColor,
+        hoverColor,
+        activeColor,
+        inactiveColor,
+        activeTextColor,
+        activeShadowColor,
+        paddingX,
+    }
     return (
         <Container className={`${className} ${active ? "active" : ""}`} active={active} onClick={onClick} {...styles}>
             <Highlight active={active} {...styles}>
