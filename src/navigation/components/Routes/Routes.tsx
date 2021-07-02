@@ -87,7 +87,6 @@ export const Routes: React.FC = observer(() => {
                             <ConnectedView />
                         </Route>
                         <Route path={locations.settings.path}>
-                            <Redirect to={locations.settingsFilters.path} />
                             <TitleBar />
                             <SettingsView />
                         </Route>
@@ -100,7 +99,6 @@ export const Routes: React.FC = observer(() => {
                             <WalletView />
                         </Route>
                         <Route path={locations.help.path}>
-                            <Redirect to={locations.helpBugReport.path} />
                             <TitleBar />
                             <HelpView />
                         </Route>

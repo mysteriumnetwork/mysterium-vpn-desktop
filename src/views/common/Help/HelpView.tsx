@@ -6,7 +6,7 @@
  */
 import React from "react"
 import styled from "styled-components"
-import { Route } from "react-router-dom"
+import { Redirect, Route, Switch } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDiscord, faFacebookSquare, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
@@ -210,12 +210,15 @@ export const HelpView: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <Route path={locations.helpBugReport.path}>
-                        <HelpContentReportIssue />
-                    </Route>
-                    <Route path={locations.helpTermsAndConditions.path}>
-                        <HelpContentTermsAndConditions />
-                    </Route>
+                    <Switch>
+                        <Route exact path={locations.helpBugReport.path}>
+                            <HelpContentReportIssue />
+                        </Route>
+                        <Route exact path={locations.helpTermsAndConditions.path}>
+                            <HelpContentTermsAndConditions />
+                        </Route>
+                        <Redirect to={locations.helpBugReport.path} />
+                    </Switch>
                 </Content>
             </ViewSplit>
         </ViewContainer>
