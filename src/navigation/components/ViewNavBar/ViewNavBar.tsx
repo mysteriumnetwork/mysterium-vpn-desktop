@@ -7,8 +7,11 @@
 
 import React from "react"
 import styled from "styled-components"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons"
 
 import { LogoTitle } from "../../../ui-kit/components/LogoTitle/LogoTitle"
+import { Heading2 } from "../../../ui-kit/typography"
 
 const Container = styled.div`
     box-sizing: border-box;
@@ -20,9 +23,33 @@ const Container = styled.div`
     justify-content: space-between;
 `
 
-export const ViewNavBar: React.FC = ({ children }) => (
+const BackContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #ffffffcc;
+    &:hover {
+        color: #fff;
+    }
+`
+
+const BackIcon = styled(FontAwesomeIcon)`
+    margin-right: 10px;
+`
+
+export interface ViewNavBarProps {
+    onBack?: () => void
+}
+
+export const ViewNavBar: React.FC<ViewNavBarProps> = ({ onBack, children }) => (
     <Container>
-        <LogoTitle />
+        {onBack && (
+            <BackContainer onClick={onBack}>
+                <BackIcon icon={faArrowCircleLeft} size="2x" />
+                <Heading2>Back</Heading2>
+            </BackContainer>
+        )}
+        {!onBack && <LogoTitle />}
         {children}
     </Container>
 )

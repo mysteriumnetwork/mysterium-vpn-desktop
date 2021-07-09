@@ -123,7 +123,7 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
     }, [payment.orderStatus])
     return (
         <ViewContainer>
-            <ViewNavBar>
+            <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <TopupProgressBar step={2} />
                 </div>

@@ -92,7 +92,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
     const currency = "MYSTT"
     return (
         <ViewContainer>
-            <ViewNavBar>
+            <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <TopupProgressBar step={0} />
                 </div>
