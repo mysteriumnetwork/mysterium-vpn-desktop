@@ -119,7 +119,7 @@ export class ProposalStore {
 
     async fetchProposalFilterPresets(): Promise<void> {
         const systemPresets = await tequilapi.proposalFilterPresets().then((res) => res.items)
-        this.filterPresets = systemPresets.concat([{ id: 0, name: "No preset" }])
+        this.filterPresets = systemPresets.concat([{ id: 0, name: "All nodes" }])
     }
 
     async toggleFilterPreset(id: number | null): Promise<void> {
