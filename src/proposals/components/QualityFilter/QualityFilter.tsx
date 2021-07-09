@@ -13,7 +13,7 @@ import { useStores } from "../../../store"
 import { Small } from "../../../ui-kit/typography"
 
 const Container = styled.div`
-    width: 300px;
+    width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;

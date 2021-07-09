@@ -21,7 +21,7 @@ const Title = styled(Heading2)`
 `
 
 const Section = styled(ViewContent)`
-    padding: 20px;
+    padding: 20px 26px;
     margin-bottom: 10px;
 `
 
