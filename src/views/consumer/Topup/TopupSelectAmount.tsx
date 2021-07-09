@@ -76,6 +76,7 @@ const FiatEquivalent = styled.div`
 
 export const TopupSelectAmount: React.FC = observer(() => {
     const { payment, router } = useStores()
+
     const isOptionActive = (amt: number) => {
         return payment.topupAmount == amt
     }
@@ -86,7 +87,6 @@ export const TopupSelectAmount: React.FC = observer(() => {
     const handleNextClick = () => {
         router.push(locations.walletTopupSelectCurrency)
     }
-    const options = [5, 10, 20, 25, 50, 100]
     const currency = "MYSTT"
     return (
         <ViewContainer>
@@ -102,7 +102,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
                     </SideTop>
                     <SideBot>
                         <AmountSelect>
-                            {options.map((opt) => (
+                            {payment.orderOptions.map((opt) => (
                                 <AmountToggle
                                     key={opt}
                                     active={isOptionActive(opt)}
@@ -122,7 +122,11 @@ export const TopupSelectAmount: React.FC = observer(() => {
                             {payment.appFiatCurrency} equivalent ≈{" "}
                             {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
                         </FiatEquivalent>
-                        <BrandButton style={{ marginTop: "15px" }} onClick={handleNextClick}>
+                        <BrandButton
+                            style={{ marginTop: "15px" }}
+                            onClick={handleNextClick}
+                            disabled={!payment.topupAmount}
+                        >
                             Next
                         </BrandButton>
                     </SideBot>

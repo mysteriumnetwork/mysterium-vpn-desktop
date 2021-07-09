@@ -55,6 +55,18 @@ export const locations: { [key: string]: AppLocation } = {
         path: "/wallet/topup/select-currency",
         title: "Wallet / Topup / Select Currency",
     },
+    walletTopupWaitingForPayment: {
+        path: "/wallet/topup/waiting-for-payment",
+        title: "Wallet / Topup / Waiting For Payment",
+    },
+    walletTopupSuccess: {
+        path: "/wallet/topup/success",
+        title: "Wallet / Topup / Success",
+    },
+    walletTopupFailed: {
+        path: "/wallet/topup/failed",
+        title: "Wallet / Topup / Failed",
+    },
     consumer: {
         path: "/consumer",
         title: "Consumer",

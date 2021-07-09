@@ -12,6 +12,9 @@ import { locations } from "../../../navigation/locations"
 
 import { TopupSelectAmount } from "./TopupSelectAmount"
 import { TopupSelectCurrency } from "./TopupSelectCurrency"
+import { TopupWaitingForPayment } from "./TopupWaitingForPayment"
+import { TopupSuccess } from "./TopupSuccess"
+import { TopupFailed } from "./TopupFailed"
 
 export const TopupView: React.FC = observer(() => {
     return (
@@ -22,6 +25,15 @@ export const TopupView: React.FC = observer(() => {
                 </Route>
                 <Route exact path={locations.walletTopupSelectCurrency.path}>
                     <TopupSelectCurrency />
+                </Route>
+                <Route exact path={locations.walletTopupWaitingForPayment.path}>
+                    <TopupWaitingForPayment />
+                </Route>
+                <Route exact path={locations.walletTopupSuccess.path}>
+                    <TopupSuccess />
+                </Route>
+                <Route exact path={locations.walletTopupFailed.path}>
+                    <TopupFailed />
                 </Route>
                 <Redirect to={locations.walletTopupSelectAmount.path} />
             </Switch>

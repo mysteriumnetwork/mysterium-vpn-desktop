@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, makeObservable, observable, reaction, runInAction, when } from "mobx"
-import { Currency, Fees, Money, PaymentOrderOptionsResponse, PaymentOrderResponse } from "mysterium-vpn-js"
+import { Currency, Fees, Money, PaymentOrderResponse } from "mysterium-vpn-js"
 import retry from "async-retry"
 
 import { RootStore } from "../store"
@@ -18,6 +18,9 @@ import { AppStateAction } from "../analytics/actions"
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
 import { mystToUSD } from "./rate"
+
+const _20minutes = 20 * 60 * 1000
+const orderExpirationPeriod = _20minutes
 
 export enum OrderStatus {
     PENDING,
@@ -36,10 +39,11 @@ export class PaymentStore {
     registrationTopupAmount?: number
     topupAmount?: number
     currencies: string[] = []
-    orderOptions?: PaymentOrderOptionsResponse
+    orderOptions: number[] = []
     paymentCurrency?: string
     lightningNetwork = false
     order?: PaymentOrderResponse
+    orderExpiresAt?: Date
 
     constructor(root: RootStore) {
         makeObservable(this, {
@@ -58,8 +62,6 @@ export class PaymentStore {
             fetchCurrencies: action,
             registrationFee: computed,
             fetchPaymentOptions: action,
-            orderOptionsValid: computed,
-            orderMinimumAmount: computed,
             createOrder: action,
             orderStatus: computed,
             clearOrder: action,
@@ -120,26 +122,11 @@ export class PaymentStore {
     }
 
     async fetchPaymentOptions(): Promise<void> {
-        const options = await tequilapi.getPaymentOrderOptions()
+        const optionsResponse = await tequilapi.getPaymentOrderOptions()
         runInAction(() => {
-            this.orderOptions = options
+            const min = Math.max(Math.round(optionsResponse.minimum ?? 10), 10)
+            this.orderOptions = [min, min * 2, min * 3, min * 5, min * 8, min * 10]
         })
-    }
-
-    get orderOptionsValid(): boolean {
-        let valid = !!this.root.identity.identity?.id && !!this.topupAmount && !!this.paymentCurrency
-        if (this.orderOptions?.minimum && this.topupAmount) {
-            valid &&= this.topupAmount >= this.orderMinimumAmount
-        }
-        return valid
-    }
-
-    get orderMinimumAmount(): number {
-        const min = this.orderOptions?.minimum
-        if (!min) {
-            return 0
-        }
-        return Math.round(min) + 1
     }
 
     async createOrder(): Promise<void> {
@@ -161,6 +148,7 @@ export class PaymentStore {
         log.info("Payment order created", order)
         runInAction(() => {
             this.order = order
+            this.orderExpiresAt = new Date(Date.now() + orderExpirationPeriod)
         })
 
         retry(
@@ -207,6 +195,7 @@ export class PaymentStore {
 
     clearOrder(): void {
         this.order = undefined
+        this.orderExpiresAt = undefined
         this.setPaymentCurrency(this.currencies[0])
         this.setLightningNetwork(isLightningAvailable(this.currencies[0]))
         this.setTopupAmount(undefined)

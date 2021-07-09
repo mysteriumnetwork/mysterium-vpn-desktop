@@ -4,9 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
+import { useToasts } from "react-toast-notifications"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -24,6 +25,8 @@ import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { isLightningAvailable } from "../../../payment/currency"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
+import { locations } from "../../../navigation/locations"
+import { log } from "../../../log/log"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -74,7 +77,10 @@ const FiatEquivalent = styled.div`
 const LightningCheckbox = styled(Checkbox)``
 
 export const TopupSelectCurrency: React.FC = observer(() => {
-    const { payment } = useStores()
+    const { payment, router } = useStores()
+    const { addToast } = useToasts()
+    const [loading, setLoading] = useState(false)
+
     const isOptionActive = (cur: string) => {
         return payment.paymentCurrency == cur
     }
@@ -87,7 +93,30 @@ export const TopupSelectCurrency: React.FC = observer(() => {
         userEvent(WalletAction.UseLightningNetwork, String(val))
         payment.setLightningNetwork(val)
     }
-    const options = ["MYST", "BTC", "ETH", "LTC", "DAI", "T", "DOGE"]
+
+    const handleNextClick = async () => {
+        userEvent(WalletAction.CreatePayment)
+        setLoading(() => true)
+        try {
+            await payment.createOrder()
+            setLoading(() => false)
+            router.push(locations.walletTopupWaitingForPayment)
+        } catch (err) {
+            setLoading(() => false)
+            log.error("Could not create a payment order", err.message)
+            let userMessage = "Could not inititate the payment. Please try again later or contact us via chat!"
+            // We can remove this hack later; this is a special message for ids registered during 'offchain' period.
+            if ((err.message as string).indexOf("identity is offchain") != -1) {
+                userMessage =
+                    "There seems to be a problem with your account. Please create a new identity to continue using MysteriumVPN."
+            }
+            addToast(userMessage, {
+                appearance: "error",
+                autoDismiss: true,
+            })
+        }
+    }
+    const options = payment.currencies
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -124,7 +153,14 @@ export const TopupSelectCurrency: React.FC = observer(() => {
                             {payment.appFiatCurrency} equivalent ≈{" "}
                             {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
                         </FiatEquivalent>
-                        <BrandButton style={{ marginTop: "15px" }}>Next</BrandButton>
+                        <BrandButton
+                            style={{ marginTop: "15px" }}
+                            onClick={handleNextClick}
+                            loading={loading}
+                            disabled={loading || !payment.paymentCurrency}
+                        >
+                            Next
+                        </BrandButton>
                     </SideBot>
                 </ViewSidebar>
                 <ViewContent>{/* TODO: entertainment estimates here */}</ViewContent>
