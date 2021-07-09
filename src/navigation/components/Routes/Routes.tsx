@@ -26,6 +26,7 @@ import ReferralView from "../../../views/consumer/Referral/ReferralView"
 import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
 import { HelpView } from "../../../views/common/Help/HelpView"
 import { SettingsView } from "../../../views/common/Settings/SettingsView"
+import { TopupView } from "../../../views/consumer/Topup/TopupView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -87,7 +88,6 @@ export const Routes: React.FC = observer(() => {
                             <ConnectedView />
                         </Route>
                         <Route path={locations.settings.path}>
-                            <Redirect to={locations.settingsFilters.path} />
                             <TitleBar />
                             <SettingsView />
                         </Route>
@@ -95,12 +95,15 @@ export const Routes: React.FC = observer(() => {
                             <TitleBar />
                             <ReferralView />
                         </Route>
+                        <Route path={locations.walletTopup.path}>
+                            <TitleBar />
+                            <TopupView />
+                        </Route>
                         <Route path={locations.wallet.path}>
                             <TitleBar />
                             <WalletView />
                         </Route>
                         <Route path={locations.help.path}>
-                            <Redirect to={locations.helpBugReport.path} />
                             <TitleBar />
                             <HelpView />
                         </Route>

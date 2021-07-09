@@ -14,7 +14,7 @@ import { Small } from "../../../ui-kit/typography"
 import { fmtMoney } from "../../../payment/display"
 
 const Container = styled.div`
-    width: 300px;
+    width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;

@@ -31,7 +31,7 @@ const PresetIcons: { [key: string]: React.FC<IconProps> | undefined } = {
     "Media Streaming": IconMedia,
     Browsing: IconBrowsing,
     Download: IconDownload,
-    "No preset": IconNoPreset,
+    "All nodes": IconNoPreset,
 }
 
 export const Preset: React.FC = observer(() => {

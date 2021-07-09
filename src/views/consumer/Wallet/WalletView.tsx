@@ -4,19 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { useState } from "react"
+import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency, DECIMAL_PART } from "mysterium-vpn-js"
+import { Redirect, Route, Switch } from "react-router-dom"
 
 import { useStores } from "../../../store"
-import { Heading1, Paragraph, Small } from "../../../ui-kit/typography"
+import { Heading1, Paragraph } from "../../../ui-kit/typography"
 import { displayUSD, fmtMoney } from "../../../payment/display"
-import { Modal } from "../../../ui-kit/components/Modal/Modal"
-import { TopupView } from "../Topup/TopupView"
-import { ReceiveTokens } from "../ReceiveTokens/ReceiveTokens"
-import { userEvent } from "../../../analytics/analytics"
-import { WalletAction } from "../../../analytics/actions"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -25,8 +21,9 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { IconWallet } from "../../../ui-kit/icons/IconWallet"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { IconIdentity } from "../../../ui-kit/icons/IconIdentity"
-import { TextInput } from "../../../ui-kit/form-components/TextInput"
+import { locations } from "../../../navigation/locations"
+
+import { WalletIdentity } from "./WalletIdentity"
 
 const SideTop = styled.div`
     height: 156px;
@@ -64,22 +61,11 @@ const BalanceFiatEquivalent = styled.div`
 `
 
 const Content = styled(ViewContent)`
-    padding: 20px 26px;
-`
-
-const SectionTitle = styled(Paragraph)`
-    margin-top: 13px;
-    height: 28px;
-`
-const Explanation = styled(Small)`
-    opacity: 0.5;
-    margin-bottom: 15px;
+    background: none;
 `
 
 export const WalletView: React.FC = observer(() => {
-    const { identity, payment } = useStores()
-    const [topupModal, setTopupModal] = useState(false)
-    const [receiveTokensModal, setReceiveTokensModal] = useState(false)
+    const { identity, payment, router } = useStores()
     const balance = identity.identity?.balance ?? 0
     const balanceDisplay = fmtMoney(
         {
@@ -91,22 +77,8 @@ export const WalletView: React.FC = observer(() => {
             removeInsignificantZeros: false,
         },
     )
-    const openTopupModal = () => {
-        userEvent(WalletAction.TopupModalOpen)
-        setTopupModal(true)
-    }
-    const closeTopupModal = () => {
-        userEvent(WalletAction.TopupModalClose)
-        setTopupModal(false)
-        payment.clearOrder()
-    }
-    // const openReceiveTokensModal = () => {
-    //     userEvent(WalletAction.ReceiveTokensOpen)
-    //     setReceiveTokensModal(true)
-    // }
-    const closeReceiveTokensModal = () => {
-        userEvent(WalletAction.ReceiveTokensClose)
-        setReceiveTokensModal(false)
+    const handleTopupClick = () => {
+        router.push(locations.walletTopup)
     }
     return (
         <ViewContainer>
@@ -124,27 +96,20 @@ export const WalletView: React.FC = observer(() => {
                         </BalanceFiatEquivalent>
                     </SideTop>
                     <SideBot>
-                        <BrandButton style={{ marginTop: "auto" }} onClick={openTopupModal}>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleTopupClick}>
                             Top up
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <IconIdentity color={brandLight} />
-                    <SectionTitle>Identity: {identity.identity?.registrationStatus}</SectionTitle>
-                    <Explanation>
-                        Identity is your Mysterium internal user ID. Never send ether or any kind of ERC20 tokens there.
-                    </Explanation>
-                    <TextInput disabled value={identity.identity?.id} />
+                    <Switch>
+                        <Route exact path={locations.walletIdentity.path}>
+                            <WalletIdentity />
+                        </Route>
+                        <Redirect to={locations.walletIdentity.path} />
+                    </Switch>
                 </Content>
             </ViewSplit>
-
-            <Modal title="Topup" visible={topupModal} onClose={closeTopupModal}>
-                <TopupView />
-            </Modal>
-            <Modal title="Receive MYSTT" visible={receiveTokensModal} onClose={closeReceiveTokensModal}>
-                <ReceiveTokens />
-            </Modal>
         </ViewContainer>
     )
 })

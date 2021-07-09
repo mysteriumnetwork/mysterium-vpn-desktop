@@ -7,7 +7,7 @@
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { Route } from "react-router-dom"
+import { Redirect, Route, Switch } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGlobe, faSlidersH } from "@fortawesome/free-solid-svg-icons"
 
@@ -115,12 +115,15 @@ export const SettingsView: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <Route path={locations.settingsFilters.path}>
-                        <SettingsFilters />
-                    </Route>
-                    <Route path={locations.settingsConnection.path}>
-                        <SettingsConnection />
-                    </Route>
+                    <Switch>
+                        <Route exact path={locations.settingsFilters.path}>
+                            <SettingsFilters />
+                        </Route>
+                        <Route exact path={locations.settingsConnection.path}>
+                            <SettingsConnection />
+                        </Route>
+                        <Redirect to={locations.settingsFilters.path} />
+                    </Switch>
                 </Content>
             </ViewSplit>
         </ViewContainer>

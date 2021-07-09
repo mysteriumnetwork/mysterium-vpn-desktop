@@ -34,10 +34,6 @@ export enum ConnectionAction {
 }
 
 export enum WalletAction {
-    TopupModalOpen = "Topup modal open",
-    TopupModalClose = "Topup modal close",
-    ReceiveTokensOpen = "Receive tokens open",
-    ReceiveTokensClose = "Receive tokens close",
     ChangeTopupAmount = "Change topup amount",
     ChangeTopupCurrency = "Change topup currency",
     UseLightningNetwork = "Use lightning network",
