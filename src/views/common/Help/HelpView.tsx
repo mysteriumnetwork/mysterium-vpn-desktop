@@ -114,7 +114,6 @@ const SupportChatButton = styled.button`
     margin-bottom: 10px;
     border-radius: 5px;
     border: none;
-    margin-bottom: auto;
 
     background: ${darkBlue};
     color: #fff;
