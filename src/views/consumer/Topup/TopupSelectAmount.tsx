@@ -24,6 +24,8 @@ import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { locations } from "../../../navigation/locations"
 
+import { TopupProgressBar } from "./TopupProgressBar"
+
 const SideTop = styled.div`
     box-sizing: border-box;
     height: 136px;
@@ -90,7 +92,11 @@ export const TopupSelectAmount: React.FC = observer(() => {
     const currency = "MYSTT"
     return (
         <ViewContainer>
-            <ViewNavBar />
+            <ViewNavBar>
+                <div style={{ width: 375, textAlign: "center" }}>
+                    <TopupProgressBar step={0} />
+                </div>
+            </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>
                     <SideTop>

@@ -28,6 +28,8 @@ import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 import { locations } from "../../../navigation/locations"
 import { log } from "../../../log/log"
 
+import { TopupProgressBar } from "./TopupProgressBar"
+
 const SideTop = styled.div`
     box-sizing: border-box;
     height: 136px;
@@ -119,7 +121,11 @@ export const TopupSelectCurrency: React.FC = observer(() => {
     const options = payment.currencies
     return (
         <ViewContainer>
-            <ViewNavBar />
+            <ViewNavBar>
+                <div style={{ width: 375, textAlign: "center" }}>
+                    <TopupProgressBar step={1} />
+                </div>
+            </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>
                     <SideTop>
