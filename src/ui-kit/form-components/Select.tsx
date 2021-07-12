@@ -16,7 +16,7 @@ export const Select = styled.select`
     border: 1px solid #ffffff4c;
     border-radius: 5px;
 
-    background: #ffffff18;
+    background: #5a2058;
     color: #fff;
     ::placeholder {
         color: #fff;
