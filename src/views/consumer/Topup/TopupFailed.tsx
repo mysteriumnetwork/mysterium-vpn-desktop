@@ -21,9 +21,9 @@ import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { locations } from "../../../navigation/locations"
+import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 import { LogoCoingate } from "./LogoCoingate"
-import { TopupProgressBar } from "./TopupProgressBar"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -68,7 +68,7 @@ export const TopupFailed: React.FC = observer(() => {
         <ViewContainer>
             <ViewNavBar>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <TopupProgressBar step={2} />
+                    <StepProgressBar step={2} />
                 </div>
             </ViewNavBar>
             <ViewSplit>

@@ -26,9 +26,9 @@ import { Anchor } from "../../../ui-kit/components/Anchor"
 import { QR } from "../../../ui-kit/components/QR/QR"
 import { OrderStatus } from "../../../payment/store"
 import { locations } from "../../../navigation/locations"
+import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 import { LogoCoingate } from "./LogoCoingate"
-import { TopupProgressBar } from "./TopupProgressBar"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -125,7 +125,7 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <TopupProgressBar step={2} />
+                    <StepProgressBar step={2} />
                 </div>
             </ViewNavBar>
             <ViewSplit>

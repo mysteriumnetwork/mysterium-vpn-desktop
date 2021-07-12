@@ -23,8 +23,7 @@ import { brandLight, lightBlue } from "../../../ui-kit/colors"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { locations } from "../../../navigation/locations"
-
-import { TopupProgressBar } from "./TopupProgressBar"
+import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -94,7 +93,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <TopupProgressBar step={0} />
+                    <StepProgressBar step={0} />
                 </div>
             </ViewNavBar>
             <ViewSplit>

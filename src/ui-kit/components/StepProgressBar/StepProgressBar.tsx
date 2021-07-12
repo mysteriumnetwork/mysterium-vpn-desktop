@@ -6,9 +6,9 @@
  */
 import React from "react"
 
-import { brand } from "../../../ui-kit/colors"
+import { brand } from "../../colors"
 
-export const TopupProgressBar: React.FC<{ step: number }> = ({ step }) => {
+export const StepProgressBar: React.FC<{ step: number }> = ({ step }) => {
     let barWidth = 36
     if (step > 2) {
         barWidth = 212
@@ -34,24 +34,6 @@ export const TopupProgressBar: React.FC<{ step: number }> = ({ step }) => {
             <circle cx="139" cy="7" r="3" fill={step > 1 ? "#fff" : "transparent"} />
             <circle cx="205" cy="7" r="7" fill={step > 2 ? brand : "transparent"} />
             <circle cx="205" cy="7" r="3" fill={step > 2 ? "#fff" : "transparent"} />
-            {/*<circle cx="73" cy="7" r="7" fill="#D61F85" />*/}
         </svg>
-        // <svg width="212" height="14" viewBox="0 0 212 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        // <g opacity="0.2">
-        // <rect x="7" y="6" width="199" height="2" fill="white"/>
-        // <circle cx="73" cy="7" r="7" fill="white"/>
-        // <circle cx="205" cy="7" r="7" fill="white"/>
-        // </g>
-        // <rect x="4" y="6" width="172" height="2" fill="#D61F85"/>
-        // <circle cx="7" cy="7" r="7" fill="#D61F85"/>
-        // <circle cx="7" cy="7" r="3" fill="white"/>
-        // <circle cx="73" cy="7" r="3" fill="#642465"/>
-        // <circle cx="139" cy="7" r="3" fill="#642465"/>
-        // <circle cx="205" cy="7" r="3" fill="#642465"/>
-        // <circle cx="73" cy="7" r="7" fill="#D61F85"/>
-        // <circle cx="139" cy="7" r="7" fill="#D61F85"/>
-        // <circle cx="73" cy="7" r="3" fill="white"/>
-        // <circle cx="139" cy="7" r="3" fill="white"/>
-        // </svg>
     )
 }

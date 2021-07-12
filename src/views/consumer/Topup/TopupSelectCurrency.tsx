@@ -27,8 +27,7 @@ import { isLightningAvailable } from "../../../payment/currency"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 import { locations } from "../../../navigation/locations"
 import { log } from "../../../log/log"
-
-import { TopupProgressBar } from "./TopupProgressBar"
+import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -123,7 +122,7 @@ export const TopupSelectCurrency: React.FC = observer(() => {
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <TopupProgressBar step={1} />
+                    <StepProgressBar step={1} />
                 </div>
             </ViewNavBar>
             <ViewSplit>
