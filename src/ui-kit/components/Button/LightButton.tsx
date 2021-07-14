@@ -9,10 +9,11 @@ import styled from "styled-components"
 import { BrandButton } from "./BrandButton"
 
 export const LightButton = styled(BrandButton).attrs({
-    background: "#fefefe",
-    color: "#333",
+    background: "#ffffff44",
+    color: "#fff",
 })`
     box-shadow: none;
-    display: inline-flex;
-    align-items: center;
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 `

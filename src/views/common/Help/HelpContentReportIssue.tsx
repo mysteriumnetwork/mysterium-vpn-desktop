@@ -18,7 +18,7 @@ import { useStores } from "../../../store"
 import { log } from "../../../log/log"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../analytics/actions"
-import { GhostButton } from "../../../ui-kit/components/Button/GhostButton"
+import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 
 const Title = styled(Heading2)`
     margin: 15px 0;
@@ -34,7 +34,7 @@ const DescriptionTextArea = styled(TextArea)`
     resize: none;
 `
 
-const SendButton = styled(GhostButton)`
+const SendButton = styled(LightButton)`
     margin-top: auto;
     width: 120px;
 `
