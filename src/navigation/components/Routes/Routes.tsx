@@ -12,7 +12,7 @@ import styled from "styled-components"
 
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
-import { WelcomeView } from "../../../views/common/Welcome/WelcomeView"
+import { OnboardingView } from "../../../views/common/Onboarding/OnboardingView"
 import { ActivateAccountTopup } from "../../../views/common/ActivateAccountTopup/ActivateAccountTopup"
 import { SelectProposalView } from "../../../views/consumer/SelectProposal/SelectProposalView"
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
@@ -54,9 +54,9 @@ export const Routes: React.FC = observer(() => {
                         <Route exact path="/">
                             <Redirect to={locations.loading.path} />
                         </Route>
-                        <Route path={locations.welcome.path}>
+                        <Route path={locations.onboarding.path}>
                             <NakedTitleBar />
-                            <WelcomeView />
+                            <OnboardingView />
                         </Route>
                         <Route path={locations.terms.path}>
                             <NakedTitleBar />

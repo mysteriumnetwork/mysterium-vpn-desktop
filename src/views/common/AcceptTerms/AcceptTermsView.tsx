@@ -17,60 +17,71 @@ import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 import { userEvent } from "../../../analytics/analytics"
 import { OnboardingAction } from "../../../analytics/actions"
-
-import termsBg from "./terms-bg.png"
+import { Heading1 } from "../../../ui-kit/typography"
+import { bg1, brand } from "../../../ui-kit/colors"
 
 const Container = styled.div`
-    background: url(${termsBg}) no-repeat, #fff;
+    background: ${bg1};
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     -webkit-app-region: drag;
+    padding-top: 72px;
+    color: #fff;
+    text-align: center;
 `
 
-const Title = styled.h1`
-    margin-top: 0;
-    padding-top: 32px;
-    text-align: center;
-    font-weight: 300;
-    font-size: 24px;
-    color: #632462;
+const Title = styled(Heading1)`
+    margin-bottom: 6px;
 `
 
-const Version = styled.p`
-    text-align: center;
-    font-size: 12px;
-    color: #999999;
+const TermsMeta = styled.div`
+    color: ${brand};
+    margin-bottom: 10px;
 `
 
 const Terms = styled.div`
-    width: 300px;
-    height: 288px;
+    width: 500px;
+    height: 250px;
     margin: 0 auto;
-    padding: 15px;
+    padding: 12px;
     word-wrap: break-word;
     overflow-y: scroll;
     font-size: 13px;
-    border: 1px solid #e9e9e9;
-    background-color: #fff;
     user-select: text;
     -webkit-app-region: no-drag;
 
     > ul {
         padding-inline-start: 20px;
     }
+
+    color: #fff;
+    opacity: 0.7;
+    text-align: left;
+    border: 1px solid #ffffff4c;
+    border-radius: 5px;
 `
 
-const BottomBar = styled.div`
-    height: 72px;
+const TermsAgree = styled.div`
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 15px;
+    input {
+        margin-left: auto;
+    }
+    label {
+        margin-right: auto;
+    }
+`
+
+const Actions = styled.div`
     margin-top: auto;
-    margin-right: 24px;
-    padding-left: 208px;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    -webkit-app-region: no-drag;
+    justify-content: center;
+    margin-bottom: 57px;
 `
 
 export const AcceptTermsView: React.FC = observer(({}) => {
@@ -82,13 +93,13 @@ export const AcceptTermsView: React.FC = observer(({}) => {
     return (
         <Container>
             <Title>Terms and Conditions</Title>
-            <Version>
+            <TermsMeta>
                 Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
-            </Version>
+            </TermsMeta>
             <Terms onScroll={scrollAnalyticsDebounced}>
                 <ReactMarkdown>{TermsEndUser}</ReactMarkdown>
             </Terms>
-            <BottomBar>
+            <TermsAgree>
                 <Checkbox
                     checked={agree}
                     onChange={(): void => {
@@ -98,6 +109,8 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 >
                     I agree to all Terms of Service
                 </Checkbox>
+            </TermsAgree>
+            <Actions>
                 <BrandButton
                     disabled={!agree}
                     onClick={(): void => {
@@ -107,7 +120,7 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 >
                     Continue
                 </BrandButton>
-            </BottomBar>
+            </Actions>
         </Container>
     )
 })

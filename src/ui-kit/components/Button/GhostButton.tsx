@@ -9,7 +9,7 @@ import styled from "styled-components"
 import { BrandButton } from "./BrandButton"
 
 export const GhostButton = styled(BrandButton).attrs({
-    background: "#ffffff44",
+    background: "transparent",
     color: "#fff",
 })`
     box-shadow: none;

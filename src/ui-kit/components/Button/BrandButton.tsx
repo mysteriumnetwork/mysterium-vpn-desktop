@@ -53,6 +53,9 @@ const Button = styled.button<BrandButtonProps & typeof defaultProps>`
     &:active {
         transform: scale(0.95);
     }
+
+    -webkit-app-region: no-drag;
+    user-select: none;
 `
 
 const Icon = styled(FontAwesomeIcon)`

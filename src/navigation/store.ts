@@ -35,6 +35,8 @@ export class NavigationStore {
             determineRoute: action,
             showWelcome: action,
             dismissWelcome: action,
+            skipOnboarding: action,
+            onboardingFinished: action,
             showMenu: action,
             openChat: action,
             isHomeActive: computed,
@@ -86,11 +88,10 @@ export class NavigationStore {
         if (this.root.router.location.pathname == locations.wallet.path) {
             return undefined
         }
-
-        if (!config.currentTermsAgreed() && this.welcome) {
-            return locations.welcome
+        if (!config.onboarded) {
+            return locations.onboarding
         }
-        if (!config.currentTermsAgreed()) {
+        if (!config.currentTermsAgreed) {
             return locations.terms
         }
         if (!identity.identity || !registered(identity.identity)) {
@@ -104,6 +105,15 @@ export class NavigationStore {
 
     showWelcome = (): void => {
         this.welcome = true
+    }
+
+    skipOnboarding = async (): Promise<void> => {
+        return this.onboardingFinished()
+    }
+
+    onboardingFinished = async (): Promise<void> => {
+        await this.root.config.setOnboarded()
+        this.goHome() // TODO go to account setup
     }
 
     dismissWelcome = (): void => {
