@@ -13,6 +13,7 @@ import { RootStore } from "../store"
 import { log } from "../log/log"
 import { DaemonStatusType } from "../daemon/store"
 import { tequilapi } from "../tequilapi"
+import { locations } from "../navigation/locations"
 
 export interface Config {
     desktop: DesktopConfig
@@ -29,6 +30,7 @@ export interface DesktopConfig {
         at?: string
         version?: string
     }
+    onboarded?: boolean
     dns?: DNSOption
     filters?: ProposalFilters
 }
@@ -69,11 +71,16 @@ export class ConfigStore {
             loaded: observable,
             defaultConfig: observable,
             fetchConfig: action,
-            agreeToTerms: action,
-            setDnsOption: action,
-            dnsOption: computed,
+            updateConfigPartial: action,
             persistConfig: action,
-            setPartial: action,
+            persistConfigDebounced: action,
+
+            currentTermsAgreed: computed,
+            agreeToTerms: action,
+            dnsOption: computed,
+            setDnsOption: action,
+            onboarded: computed,
+            setOnboarded: action,
         })
     }
 
@@ -110,49 +117,54 @@ export class ConfigStore {
         })
     }
 
-    agreeToTerms = async (): Promise<void> => {
-        const data: Config = {
-            ...this.config,
-            desktop: {
-                "terms-agreed": {
-                    version: termsPackageJson.version,
-                    at: new Date().toISOString(),
-                },
-            },
-        }
-        await tequilapi.updateUserConfig({ data })
-        await this.fetchConfig()
-        this.root.navigation.goHome()
+    updateConfigPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
+        this.config.desktop = _.merge({}, this.config.desktop, desktopConfig)
+        return this.persistConfigDebounced()
     }
 
-    currentTermsAgreed = (): boolean => {
+    persistConfig = async (): Promise<void> => {
+        const cfg = this.config
+        log.info("Persisting user configuration:", JSON.stringify(cfg))
+        await tequilapi.updateUserConfig({
+            data: cfg,
+        })
+    }
+
+    persistConfigDebounced = _.debounce(this.persistConfig, 3_000)
+
+    get currentTermsAgreed(): boolean {
         const version = this.config.desktop?.["terms-agreed"]?.version
         const at = this.config.desktop?.["terms-agreed"]?.at
         return !!version && !!at && version == termsPackageJson.version
     }
 
-    setDnsOption = async (value: string): Promise<void> => {
-        await tequilapi.updateUserConfig({
-            data: { "desktop.dns": value },
+    agreeToTerms = async (): Promise<void> => {
+        await this.updateConfigPartial({
+            "terms-agreed": {
+                version: termsPackageJson.version,
+                at: new Date().toISOString(),
+            },
         })
-        await this.fetchConfig()
+        if (this.onboarded) {
+            this.root.navigation.goHome()
+        } else {
+            this.root.router.push(locations.onboarding1)
+        }
+    }
+
+    get onboarded(): boolean {
+        return this.config.desktop?.onboarded ?? false
+    }
+
+    setOnboarded = async (): Promise<void> => {
+        return this.updateConfigPartial({ onboarded: true })
     }
 
     get dnsOption(): DNSOption {
         return this.config.desktop?.dns ?? "provider"
     }
 
-    persistConfig = _.debounce(async () => {
-        const cfg = this.config
-        log.info("Persisting user configuration:", JSON.stringify(cfg))
-        await tequilapi.updateUserConfig({
-            data: cfg,
-        })
-        await this.fetchConfig()
-    }, 3_000)
-
-    setPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
-        this.config.desktop = _.merge({}, this.config.desktop, desktopConfig)
-        this.persistConfig()
+    setDnsOption = async (dns: string): Promise<void> => {
+        return this.updateConfigPartial({ dns })
     }
 }

@@ -11,6 +11,7 @@ import styled, { keyframes } from "styled-components"
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
+import { locations } from "../../../navigation/locations"
 
 const Container = styled.div`
     background: url(${welcomeBg}) no-repeat, #8e3061;
@@ -42,7 +43,7 @@ const Title = styled.h1`
 `
 
 const Description = styled.p`
-    width: 300px;
+    width: 310px;
     margin: 16px auto 28px auto;
     text-align: center;
     font-size: 16px;
@@ -52,26 +53,35 @@ const Description = styled.p`
     animation: ${fadeIn} 0.4s ease-in-out;
 `
 
-const GetStartedButton = styled(BrandButton)`
-    min-width: 134px;
-    margin: 0 auto;
-    box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
-    -webkit-app-region: no-drag;
+const Actions = styled.div`
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 57px;
 `
 
-export const WelcomeView: React.FC = observer(() => {
-    const { navigation } = useStores()
+const GetStartedButton = styled(BrandButton)`
+    min-width: 134px;
+    box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
+`
+
+export const OnboardingWelcome: React.FC = observer(() => {
+    const { router } = useStores()
     return (
         <Container>
             <Title>Welcome to Mysterium Network</Title>
             <Description>Connect to everything, everywhere via the Worldߴs first decentralized VPN.</Description>
-            <GetStartedButton
-                onClick={(): void => {
-                    navigation.dismissWelcome()
-                }}
-            >
-                Get Started
-            </GetStartedButton>
+            <Actions>
+                <GetStartedButton
+                    onClick={() => {
+                        router.push(locations.terms)
+                    }}
+                >
+                    Get Started
+                </GetStartedButton>
+            </Actions>
         </Container>
     )
 })

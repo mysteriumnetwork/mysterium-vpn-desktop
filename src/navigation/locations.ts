@@ -11,9 +11,33 @@ export interface AppLocation {
 }
 
 export const locations = {
-    welcome: {
-        path: "/welcome",
-        title: "Welcome",
+    onboarding: {
+        path: "/onboarding",
+        title: "Onboarding",
+    },
+    onboardingWelcome: {
+        path: "/onboarding/welcome",
+        title: "Onboarding / Welcome",
+    },
+    onboarding1: {
+        path: "/onboarding/1",
+        title: "Onboarding / 1",
+    },
+    onboarding2: {
+        path: "/onboarding/2",
+        title: "Onboarding / 2",
+    },
+    onboarding3: {
+        path: "/onboarding/3",
+        title: "Onboarding / 3",
+    },
+    onboarding4: {
+        path: "/onboarding/4",
+        title: "Onboarding / 4",
+    },
+    onboardingComplete: {
+        path: "/onboarding/complete",
+        title: "Onboarding / Complete",
     },
     terms: {
         path: "/terms",

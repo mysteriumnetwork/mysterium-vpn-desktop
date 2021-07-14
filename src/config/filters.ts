@@ -64,7 +64,7 @@ export class Filters {
     }
 
     setPartial = (filters: ProposalFilters): Promise<void> => {
-        return this.root.config.setPartial({ filters })
+        return this.root.config.updateConfigPartial({ filters })
     }
 
     get initialized(): boolean {
