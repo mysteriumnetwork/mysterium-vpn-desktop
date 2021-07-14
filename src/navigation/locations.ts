@@ -10,7 +10,7 @@ export interface AppLocation {
     title: string
 }
 
-export const locations: { [key: string]: AppLocation } = {
+export const locations = {
     welcome: {
         path: "/welcome",
         title: "Welcome",
