@@ -130,7 +130,7 @@ export class ConfigStore {
         })
     }
 
-    persistConfigDebounced = _.debounce(this.persistConfig, 3_000)
+    persistConfigDebounced = _.debounce(this.persistConfig, 2_000)
 
     get currentTermsAgreed(): boolean {
         const version = this.config.desktop?.["terms-agreed"]?.version
