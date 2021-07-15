@@ -78,14 +78,13 @@ const PaymentAmount = styled.div`
     color: #fff;
     padding: 5px 10px;
     border-radius: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 `
 
 const PaymentQR = styled.div`
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
+    padding: 5px;
+    margin-bottom: 15px;
 `
 
 const PaymentAddress = styled.div`
@@ -168,7 +167,7 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
                         {/*<Heading2>0.000245 BTC</Heading2>*/}
                     </PaymentAmount>
                     <PaymentQR>
-                        <QR height={160} text={payment.order?.paymentAddress} />
+                        <QR size={192} text={payment.order?.paymentAddress} />
                     </PaymentQR>
                     <PaymentAddress>
                         {/*lnbc105160n1pswwncgpp5pk2pvvwulw2a7fv30matjqttdvypq7jh4ggqf8hu68yqld4zygaqdp9gdhkjmj8v96x2gz0wfjx2u3qyvursdpkxqungcqzpgxqrp9wsp58rygp0pxd2cljmwmn3lqfent0epz77muztfedhezg7lphsluzc4q9qyyssq4t8r67g9xh80qg2nrgxrvx45frjdque327tc8jpznumy73gjdhw5spfs4y8296zc45mpldhd2kr8xkg5eusjj6v2dms3n44p6nwu42gqqm7hqm*/}
