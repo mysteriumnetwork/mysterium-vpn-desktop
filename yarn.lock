@@ -2629,10 +2629,10 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-byte-size@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-7.0.1.tgz#b1daf3386de7ab9d706b941a748dbfc71130dee3"
-  integrity sha512-crQdqyCwhokxwV1UyDzLZanhkugAgft7vt0qbbdt60C6Zf3CAiGmtUCylbtYwrU6loOUw3euGrNtW1J651ot1A==
+byte-size@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/byte-size/-/byte-size-8.0.0.tgz#2b3a1679b26326a15918a64c59bc35e56439cabd"
+  integrity sha512-W9nozFNCma06nuwM+s/r3gP3sX3++QQm8qNQf3Gch2In1vZpDNpT3lEg73i18H1E9d0750/HXP52n/gbg8DNZw==
 
 bytes@3.0.0:
   version "3.0.0"
