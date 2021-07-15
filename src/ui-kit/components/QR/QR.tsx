@@ -5,39 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import styled from "styled-components"
-import { QRCode } from "react-qr-svg"
-
-const Container = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`
-
-const Image = styled.div`
-    margin: 0 auto;
-`
-
-const Content = styled.div`
-    margin: 0 auto;
-`
+import QRCode from "qrcode.react"
 
 export interface QRProps {
     text?: string
-    height?: number
+    size?: number
 }
 
-export const QR: React.FC<QRProps> = ({ text, height = 100 }) => {
+export const QR: React.FC<QRProps> = ({ text, size = 128 }) => {
     if (!text) {
         return <></>
     }
     return (
-        <Container>
-            <Content style={{ height }}>
-                <Image>
-                    <QRCode value={text} style={{ height }} />
-                </Image>
-            </Content>
-        </Container>
+        <div style={{ width: size, height: size }}>
+            <QRCode value={text} size={size} renderAs="svg" />
+        </div>
     )
 }
