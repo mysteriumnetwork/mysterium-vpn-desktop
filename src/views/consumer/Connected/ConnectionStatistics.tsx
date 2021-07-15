@@ -112,7 +112,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Duration</MetricLabel>
                 <MetricValue>{connected ? clock : <MetricPlaceholder />}</MetricValue>
-                <MetricLabel>HH:mm:SS</MetricLabel>
+                <MetricLabel>hh:mm:ss</MetricLabel>
             </Metric>
             <Metric>
                 <MetricIcon>
