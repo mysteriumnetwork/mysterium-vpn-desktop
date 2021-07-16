@@ -195,7 +195,6 @@ export class Supervisor {
             mystPath,
             [
                 "--ui.enable=false",
-                "--testnet2",
                 "--usermode",
                 "--consumer",
                 `--tequilapi.port=${port}`,
