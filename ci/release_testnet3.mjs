@@ -9,6 +9,8 @@ import { execSync } from "child_process";
 import { platform } from "os";
 import * as fs from "fs";
 import { Octokit } from "@octokit/rest"
+import glob from "glob";
+import { basename } from "path";
 
 const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN
@@ -44,28 +46,35 @@ execSync(`yarn version --no-git-tag-version --new-version ${newVersion}`, { stdi
 // Bundle
 execSync(`yarn bundle --publish=never`, { stdio: "inherit" })
 
-let binaryFilename;
+let binarySearchPath;
 switch (platform()) {
     case "win32":
-        binaryFilename = `mysterium-vpn-desktop_${newVersion}_amd64.exe`
+        binarySearchPath = "./dist/*.exe"
         break
     case "linux":
-        binaryFilename = `mysterium-vpn-desktop_${newVersion}_amd64.deb`
+        binarySearchPath = "./dist/*.deb"
         break
     case "darwin":
-        binaryFilename = `mysterium-vpn-desktop_${newVersion}_amd64.dmg`
+        binarySearchPath = "./dist/*.dmg"
         break
     default:
         throw new Error("Platform is not supported: " + platform())
 }
 
+const matches = glob.sync(binarySearchPath)
+if (!matches.length) {
+    throw new Error("Binary not found")
+}
+const binaryPath = matches[0]
+const binaryBasename = basename(binaryPath)
+
 // Upload to nightly releases
-const data = fs.readFileSync(`dist/${binaryFilename}`)
+const data = fs.readFileSync(binaryPath)
 await octokit.repos.uploadReleaseAsset({
     owner: "mysteriumnetwork",
     repo: "nightly",
     release_id: nightlyReleaseId,
-    name: binaryFilename,
+    name: binaryBasename,
     mediaType: {
         format: "application/octet-stream",
     },
