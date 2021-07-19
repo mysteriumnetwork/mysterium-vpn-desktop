@@ -10,9 +10,11 @@ import { observer } from "mobx-react-lite"
 import { TermsEndUser } from "@mysteriumnetwork/terms"
 import ReactMarkdown from "react-markdown"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
+import { shell } from "electron"
 
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { brand } from "../../../ui-kit/colors"
+import { Anchor } from "../../../ui-kit/components/Anchor"
 
 const Title = styled(Heading2)`
     margin-bottom: 6px;
@@ -50,7 +52,18 @@ export const HelpContentTermsAndConditions: React.FC = observer(() => {
             </TermsMeta>
             <Terms>
                 <Small>
-                    <ReactMarkdown>{TermsEndUser}</ReactMarkdown>
+                    <ReactMarkdown
+                        components={{
+                            // eslint-disable-next-line react/display-name,@typescript-eslint/no-unused-vars
+                            a: ({ node, ...props }) => (
+                                <Anchor onClick={() => shell.openExternal(props.href as string)}>
+                                    {props.href as string}
+                                </Anchor>
+                            ),
+                        }}
+                    >
+                        {TermsEndUser}
+                    </ReactMarkdown>
                 </Small>
             </Terms>
         </>

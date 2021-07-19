@@ -11,6 +11,7 @@ import { TermsEndUser } from "@mysteriumnetwork/terms"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import styled from "styled-components"
 import * as _ from "lodash"
+import { shell } from "electron"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -19,6 +20,7 @@ import { userEvent } from "../../../analytics/analytics"
 import { OnboardingAction } from "../../../analytics/actions"
 import { Heading1 } from "../../../ui-kit/typography"
 import { bg1, brand } from "../../../ui-kit/colors"
+import { Anchor } from "../../../ui-kit/components/Anchor"
 
 const Container = styled.div`
     background: ${bg1};
@@ -97,7 +99,18 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                 Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
             </TermsMeta>
             <Terms onScroll={scrollAnalyticsDebounced}>
-                <ReactMarkdown>{TermsEndUser}</ReactMarkdown>
+                <ReactMarkdown
+                    components={{
+                        // eslint-disable-next-line react/display-name,@typescript-eslint/no-unused-vars
+                        a: ({ node, ...props }) => (
+                            <Anchor onClick={() => shell.openExternal(props.href as string)}>
+                                {props.href as string}
+                            </Anchor>
+                        ),
+                    }}
+                >
+                    {TermsEndUser}
+                </ReactMarkdown>
             </Terms>
             <TermsAgree>
                 <Checkbox
