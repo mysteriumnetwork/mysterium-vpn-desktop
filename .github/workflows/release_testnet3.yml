@@ -22,7 +22,7 @@ jobs:
       - run: yarn
       - run: node ./ci/release_testnet3.mjs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           MAC_CERTS: ${{ secrets.MAC_CERTS }}
           MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
           WINDOWS_CERTS: ${{ secrets.WINDOWS_CERTS }}
