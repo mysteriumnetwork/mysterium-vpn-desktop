@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { Redirect, Route, Switch } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGlobe, faSlidersH } from "@fortawesome/free-solid-svg-icons"
+import { faGlobe, faSlidersH, faUserAlt } from "@fortawesome/free-solid-svg-icons"
 
 import { Heading2 } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
@@ -25,6 +25,7 @@ import { AppVersion } from "../../../daemon/components/AppVersion"
 
 import { SettingsFilters } from "./SettingsFilters"
 import { SettingsConnection } from "./SettingsConnection"
+import { SettingsAccount } from "./SettingsAccount"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -90,6 +91,7 @@ export const SettingsView: React.FC = observer(() => {
     const { router } = useStores()
     const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters.path)
     const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection.path)
+    const isAccountTabActive = router.location.pathname.includes(locations.settingsAccount.path)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -111,6 +113,10 @@ export const SettingsView: React.FC = observer(() => {
                             <FontAwesomeIcon icon={faGlobe} />
                             Connection
                         </NavButton>
+                        <NavButton active={isAccountTabActive} onClick={() => router.push(locations.settingsAccount)}>
+                            <FontAwesomeIcon icon={faUserAlt} />
+                            Account
+                        </NavButton>
                         <Version />
                     </SideBot>
                 </ViewSidebar>
@@ -121,6 +127,9 @@ export const SettingsView: React.FC = observer(() => {
                         </Route>
                         <Route exact path={locations.settingsConnection.path}>
                             <SettingsConnection />
+                        </Route>
+                        <Route exact path={locations.settingsAccount.path}>
+                            <SettingsAccount />
                         </Route>
                         <Redirect to={locations.settingsFilters.path} />
                     </Switch>

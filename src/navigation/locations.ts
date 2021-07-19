@@ -131,6 +131,10 @@ export const locations = {
         path: "/settings/connection",
         title: "Settings/Connection",
     },
+    settingsAccount: {
+        path: "/settings/account",
+        title: "Settings/Account",
+    },
 }
 
 export const locationByPath = (path: string): AppLocation | undefined =>
