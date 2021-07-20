@@ -5,7 +5,7 @@
   "rules": {
     "no-restricted-imports": ["error", {
       "patterns": [
-        "renderer"
+        "main"
       ]
     }]
   }

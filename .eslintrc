@@ -30,11 +30,6 @@
     ]],
     "import/order": ["error", {
       "newlines-between": "always"
-    }],
-    "no-restricted-imports": ["error", {
-      "patterns": [
-        "*-main"
-      ]
     }]
   },
   "settings": {

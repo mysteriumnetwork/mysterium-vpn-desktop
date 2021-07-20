@@ -112,6 +112,8 @@
   "sentryDsn": "https://5c3208e8d6124f2db303a2d12c7f48b8@o136129.ingest.sentry.io/5222592",
   "electronWebpack": {
     "renderer": {
+      "sourceDirectory": "src/app",
+      "template": "src/app/index.html",
       "webpackConfig": "webpack.renderer.additions.js"
     }
   },

@@ -12,9 +12,10 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
-import { supervisor } from "../supervisor/supervisor"
-import { webAnalyticsUserEvent } from "../analytics/analytics-main"
-import { TrayAction } from "../analytics/actions"
+import { TrayAction } from "../shared/analytics/actions"
+
+import { supervisor } from "./supervisor/supervisor"
+import { webAnalyticsUserEvent } from "./analytics-main"
 
 import { ipcWebDisconnect } from "./index"
 

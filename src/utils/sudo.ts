@@ -11,7 +11,7 @@ import { exec } from "sudo-prompt"
 import semver from "semver"
 
 import * as packageJson from "../../package.json"
-import { log } from "../log/log"
+import { log } from "../shared/log/log"
 
 import { staticAssetPath } from "./paths"
 

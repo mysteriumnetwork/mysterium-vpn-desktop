@@ -14,15 +14,16 @@ import { autoUpdater } from "electron-updater"
 
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
-import { supervisor } from "../supervisor/supervisor"
-import { initialize as initializeAnalytics } from "../analytics/analytics-main"
-import { initialize as initializePushNotifications } from "../push/push"
-import { initialize as initializeSentry } from "../errors/sentry"
-import { log } from "../log/log"
+import { initialize as initializeSentry } from "../shared/errors/sentry"
+import { log } from "../shared/log/log"
 import { isDevelopment } from "../utils/env"
+import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
+import { handleProcessExit } from "../utils/handle-process-exit"
 
+import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
-import { MainIpcListenChannels, WebIpcListenChannels } from "./ipc"
+import { initialize as initializeAnalytics } from "./analytics-main"
+import { supervisor } from "./supervisor/supervisor"
 import { createMenu } from "./menu"
 
 initializeSentry()
@@ -254,3 +255,5 @@ autoUpdater.on("update-downloaded", () => {
 export const ipcWebDisconnect = (): void => {
     mainWindow?.webContents.send(WebIpcListenChannels.Disconnect)
 }
+
+handleProcessExit()
