@@ -6,12 +6,14 @@
  */
 import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
 import { action, makeObservable, observable, reaction, runInAction } from "mobx"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { appStateEvent } from "../analytics/analytics"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
+import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -37,6 +39,8 @@ export class IdentityStore {
             setLoading: action,
             setIdentity: action,
             setIdentities: action,
+            exportIdentity: action,
+            importIdentity: action,
         })
         this.root = root
     }
@@ -164,4 +168,10 @@ export class IdentityStore {
     setIdentities = (identities: Identity[]): void => {
         this.identities = identities
     }
+
+    exportIdentity({ id, passphrase }: { id: string; passphrase: string }): Promise<IpcResponse> {
+        return ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
+    }
+
+    async importIdentity(): Promise<void> {}
 }

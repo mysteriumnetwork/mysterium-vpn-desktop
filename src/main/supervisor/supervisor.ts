@@ -20,6 +20,8 @@ import { uid } from "../../utils/user"
 import { webAnalyticsAppStateEvent } from "../analytics-main"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { SupervisorInterface } from "../../shared/supervisor"
+import { TEQUILAPI_PORT } from "../../app/tequilapi"
+import { IpcResponse } from "../../shared/ipc"
 
 const isWin = platform() === "win32"
 
@@ -180,20 +182,22 @@ export class Supervisor implements SupervisorInterface {
         }
     }
 
-    // Myst process is not started from supervisor as supervisor runs as root user
-    // which complicates starting myst process as non root user.
-    startMyst(port: number): Promise<void> {
+    mystBin(): string {
         let mystBinaryName = "bin/myst"
         if (isWin) {
             mystBinaryName += ".exe"
         }
+        return staticAssetPath(mystBinaryName)
+    }
 
+    // Myst process is not started from supervisor as supervisor runs as root user
+    // which complicates starting myst process as non root user.
+    startMyst(port: number): Promise<void> {
         this.setSupervisorTequilapiPort(port)
         this.port = port
 
-        const mystPath = staticAssetPath(mystBinaryName)
         const mystProcess = spawn(
-            mystPath,
+            this.mystBin(),
             [
                 "--ui.enable=false",
                 "--testnet2",
@@ -219,6 +223,44 @@ export class Supervisor implements SupervisorInterface {
         })
 
         return Promise.resolve()
+    }
+
+    exportIdentity({
+        id,
+        filename,
+        passphrase,
+    }: {
+        id: string
+        filename: string
+        passphrase: string
+    }): Promise<IpcResponse> {
+        return new Promise((resolve, reject) => {
+            const cli = spawn(
+                this.mystBin(),
+                [
+                    "cli",
+                    "--agreed-terms-and-conditions",
+                    `--tequilapi.port=${TEQUILAPI_PORT}`,
+                    "identities",
+                    "export",
+                    id,
+                    passphrase,
+                    filename,
+                ],
+                { stdio: "inherit" },
+            )
+            cli.on("exit", (code) => {
+                if (code == 0) {
+                    return resolve({
+                        result: filename,
+                    })
+                } else {
+                    return reject({
+                        error: "Failed with status: " + code,
+                    })
+                }
+            })
+        })
     }
 
     async stopMyst(): Promise<void> {
