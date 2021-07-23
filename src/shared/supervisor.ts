@@ -13,3 +13,8 @@ export interface SupervisorInterface {
     upgrade(): Promise<void>
     killGhost(port: number): Promise<void>
 }
+
+export interface ImportIdentityOpts {
+    filename: string
+    passphrase: string
+}

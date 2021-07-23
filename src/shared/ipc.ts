@@ -20,4 +20,12 @@ export enum MainIpcListenChannels {
     OpenSupportChat = "open-support-chat",
     MinimizeWindow = "minimize-window",
     CloseWindow = "close-window",
+    ExportIdentity = "export-identity",
+    ImportIdentityChooseFile = "import-identity-choose-file",
+    ImportIdentity = "import-identity",
+}
+
+export interface IpcResponse {
+    result?: unknown
+    error?: string
 }

@@ -6,12 +6,17 @@
  */
 import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
 import { action, makeObservable, observable, reaction, runInAction } from "mobx"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { appStateEvent } from "../analytics/analytics"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
+import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
+import { ImportIdentityOpts } from "../../shared/supervisor"
+import { DaemonStatusType } from "../daemon/store"
+import { log } from "../../shared/log/log"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -37,11 +42,23 @@ export class IdentityStore {
             setLoading: action,
             setIdentity: action,
             setIdentities: action,
+            exportIdentity: action,
+            importIdentityChooseFile: action,
+            importIdentity: action,
         })
         this.root = root
     }
 
     setupReactions(): void {
+        reaction(
+            () => this.root.daemon.status,
+            async (status) => {
+                appStateEvent(AppStateAction.DaemonStatus, status)
+                if (status == DaemonStatusType.Up) {
+                    await this.fetchIdentity()
+                }
+            },
+        )
         eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             this.setIdentities(state.identities ?? [])
         })
@@ -49,16 +66,8 @@ export class IdentityStore {
             () => this.identities,
             async (identities) => {
                 this.refreshIdentity(identities)
-                if (!this.identity) {
-                    const id = identities.find((id) => registered(id) || eligibleForRegistration(id))
-                    if (id) {
-                        this.setIdentity(id)
-                    } else {
-                        await this.create()
-                    }
-                }
             },
-            { name: "Get/create an identity from the list" },
+            { name: "Refresh identity from node state" },
         )
         reaction(
             () => this.identity,
@@ -105,6 +114,17 @@ export class IdentityStore {
                 appStateEvent(AppStateAction.BalanceChanged, String(balance))
             },
         )
+    }
+
+    async fetchIdentity(): Promise<void> {
+        try {
+            const idRef = await tequilapi.identityCurrent({ passphrase: "" })
+            const identity = await tequilapi.identity(idRef.id)
+            this.setIdentity(identity)
+            log.info("Selected identity: ", JSON.stringify(identity))
+        } catch (err) {
+            log.error("Failed to get identity", err.message)
+        }
     }
 
     refreshIdentity = (identities: Identity[]): void => {
@@ -163,5 +183,21 @@ export class IdentityStore {
 
     setIdentities = (identities: Identity[]): void => {
         this.identities = identities
+    }
+
+    exportIdentity({ id, passphrase }: { id: string; passphrase: string }): Promise<IpcResponse> {
+        return ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
+    }
+
+    importIdentityChooseFile(): Promise<string> {
+        return ipcRenderer
+            .invoke(MainIpcListenChannels.ImportIdentityChooseFile)
+            .then((result: IpcResponse) => result.result as string)
+    }
+
+    async importIdentity(opts: ImportIdentityOpts): Promise<IpcResponse> {
+        const importResult = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
+        await this.fetchIdentity()
+        return importResult
     }
 }
