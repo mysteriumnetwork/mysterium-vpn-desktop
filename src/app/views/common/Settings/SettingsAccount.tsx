@@ -9,7 +9,6 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileExport, faIdBadge } from "@fortawesome/free-solid-svg-icons"
-import { useForm } from "react-hook-form"
 import { useToasts } from "react-toast-notifications"
 
 import { Heading2, Small } from "../../../ui-kit/typography"
@@ -17,8 +16,9 @@ import { ViewContent } from "../../../navigation/components/ViewContent/ViewCont
 import { useStores } from "../../../store"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
-import { darkBlue, greyBlue1 } from "../../../ui-kit/colors"
-import { Prompt } from "../../../ui-kit/components/Prompt/Prompt"
+
+import { ExportIdentityPrompt } from "./ExportIdentityPrompt"
+import { ImportIdentityPrompt } from "./ImportIdentityPrompt"
 
 const Title = styled(Heading2)`
     margin-bottom: 15px;
@@ -38,26 +38,6 @@ const Explanation = styled(Small)`
     margin-bottom: 15px;
 `
 
-const PromptExplanation = styled(Small)`
-    opacity: 0.7;
-    margin-bottom: 15px;
-`
-const PromptInput = styled(TextInput)`
-    border: 1px solid ${greyBlue1};
-    color: ${darkBlue};
-    ::placeholder {
-        opacity: 0.7;
-        color: ${darkBlue};
-    }
-    margin-bottom: 0;
-`
-
-const PromptValidation = styled(Small)`
-    margin: 5px 0 10px;
-    color: red;
-    height: 15px;
-`
-
 const ToastWrap = styled.span`
     word-wrap: break-word;
     overflow-wrap: anywhere;
@@ -65,34 +45,56 @@ const ToastWrap = styled.span`
 
 export const SettingsAccount: React.FC = observer(() => {
     const { payment, identity } = useStores()
-    const {
-        register,
-        handleSubmit,
-        getValues,
-        reset,
-        formState: { errors },
-    } = useForm({ shouldUseNativeValidation: false })
     const { addToast } = useToasts()
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onRestoreIdentity = () => {}
-    const [prompt, setPrompt] = useState(false)
-    const handleBackupClick = () => {
-        setPrompt(true)
-        reset()
+
+    // Export
+    const [exportPrompt, setExportPrompt] = useState(false)
+    const handleExportInitiate = () => {
+        setExportPrompt(true)
     }
-    const handlePassphraseSubmit = async ({ passphrase }: { passphrase: string }) => {
-        setPrompt(false)
-        reset()
+    const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {
+        setExportPrompt(false)
         const res = await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
         if (res.result) {
-            addToast(<ToastWrap>Identity exported to {res.result}</ToastWrap>, { appearance: "success" })
+            addToast(<ToastWrap>Identity backed up to {res.result}</ToastWrap>, { appearance: "success" })
         } else if (res.error) {
-            addToast(<ToastWrap>Identity export failed. Error: {res.error}</ToastWrap>, {
+            addToast(<ToastWrap>Identity backup failed. Error: {res.error}</ToastWrap>, {
                 appearance: "error",
                 autoDismiss: true,
             })
         }
     }
+    const handleExportCancel = () => {
+        setExportPrompt(false)
+    }
+
+    // Import
+    const [importPrompt, setImportPrompt] = useState(false)
+    const [importFilename, setImportFilename] = useState("")
+    const handleImportInitiate = async () => {
+        const filename = await identity.importIdentityChooseFile()
+        if (!filename) {
+            return
+        }
+        setImportFilename(filename)
+        setImportPrompt(true)
+    }
+    const handleImportSubmit = async ({ passphrase }: { passphrase: string }) => {
+        setImportPrompt(false)
+        const res = await identity.importIdentity({ filename: importFilename, passphrase })
+        if (res.result) {
+            addToast(<ToastWrap>Identity restored.</ToastWrap>, { appearance: "success" })
+        } else if (res.error) {
+            addToast(<ToastWrap>Identity restoration failed. Error: {res.error}</ToastWrap>, {
+                appearance: "error",
+                autoDismiss: true,
+            })
+        }
+    }
+    const handleImportCancel = () => {
+        setImportPrompt(false)
+    }
+
     return (
         <>
             <Section>
@@ -111,52 +113,14 @@ export const SettingsAccount: React.FC = observer(() => {
                     {payment.appCurrency}s safe.
                 </Explanation>
                 <div>
-                    <LightButton style={{ marginRight: 20 }} onClick={handleBackupClick}>
+                    <LightButton style={{ marginRight: 20 }} onClick={handleExportInitiate}>
                         Backup
                     </LightButton>
-                    <LightButton onClick={onRestoreIdentity}>Restore from backup</LightButton>
+                    <LightButton onClick={handleImportInitiate}>Restore from backup</LightButton>
                 </div>
             </Section>
-            <Prompt
-                title="Choose a passphrase"
-                visible={prompt}
-                onOK={handleSubmit(handlePassphraseSubmit)}
-                onCancel={() => setPrompt(false)}
-            >
-                <form onSubmit={handleSubmit(handlePassphraseSubmit)}>
-                    <PromptExplanation>Used to encrypt the exported file. Min. length: 12</PromptExplanation>
-                    <PromptInput
-                        placeholder="Passphrase"
-                        type="password"
-                        {...register("passphrase", {
-                            required: "This is required",
-                            minLength: {
-                                value: 12,
-                                message: "Should be at least 12 characters",
-                            },
-                        })}
-                    />
-                    <PromptValidation>{errors.passphrase?.message}</PromptValidation>
-                    <PromptInput
-                        placeholder="Confirm passphrase"
-                        type="password"
-                        {...register("confirmPassphrase", {
-                            required: "This is required",
-                            minLength: {
-                                value: 12,
-                                message: "Should be at least 12 characters",
-                            },
-                            validate: {
-                                matchesPassphrase: (value) => {
-                                    const { passphrase } = getValues()
-                                    return value === passphrase || "Passphrases do not match!"
-                                },
-                            },
-                        })}
-                    />
-                    <PromptValidation>{errors.confirmPassphrase?.message}</PromptValidation>
-                </form>
-            </Prompt>
+            <ExportIdentityPrompt visible={exportPrompt} onSubmit={handleExportSubmit} onCancel={handleExportCancel} />
+            <ImportIdentityPrompt visible={importPrompt} onSubmit={handleImportSubmit} onCancel={handleImportCancel} />
         </>
     )
 })

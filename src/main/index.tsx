@@ -19,6 +19,7 @@ import { log } from "../shared/log/log"
 import { isDevelopment } from "../utils/env"
 import { IpcResponse, MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { handleProcessExit } from "../utils/handle-process-exit"
+import { ImportIdentityOpts } from "../shared/supervisor"
 
 import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
@@ -232,7 +233,6 @@ ipcMain.on(MainIpcListenChannels.MinimizeWindow, () => {
 ipcMain.on(MainIpcListenChannels.CloseWindow, () => {
     mainWindow?.close()
 })
-ipcMain.on(MainIpcListenChannels.ImportIdentity, () => {})
 ipcMain.handle(
     MainIpcListenChannels.ExportIdentity,
     async (event: IpcMainInvokeEvent, id: string, passphrase: string): Promise<IpcResponse> => {
@@ -247,6 +247,22 @@ ipcMain.handle(
             return {}
         }
         return await supervisor.exportIdentity({ id, filename, passphrase })
+    },
+)
+ipcMain.handle(MainIpcListenChannels.ImportIdentityChooseFile, async (): Promise<IpcResponse> => {
+    if (!mainWindow) {
+        return {}
+    }
+    const filename = dialog.showOpenDialogSync(mainWindow, {
+        filters: [{ extensions: ["json"], name: "keystore" }],
+    })
+    return Promise.resolve({ result: filename })
+})
+
+ipcMain.handle(
+    MainIpcListenChannels.ImportIdentity,
+    async (event: IpcMainInvokeEvent, opts: ImportIdentityOpts): Promise<IpcResponse> => {
+        return supervisor.importIdentity(opts)
     },
 )
 

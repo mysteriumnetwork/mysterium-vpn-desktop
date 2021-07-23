@@ -19,7 +19,7 @@ import { sudoExec } from "../../utils/sudo"
 import { uid } from "../../utils/user"
 import { webAnalyticsAppStateEvent } from "../analytics-main"
 import { AppStateAction } from "../../shared/analytics/actions"
-import { SupervisorInterface } from "../../shared/supervisor"
+import { ImportIdentityOpts, SupervisorInterface } from "../../shared/supervisor"
 import { TEQUILAPI_PORT } from "../../app/tequilapi"
 import { IpcResponse } from "../../shared/ipc"
 
@@ -244,6 +244,35 @@ export class Supervisor implements SupervisorInterface {
                     "identities",
                     "export",
                     id,
+                    passphrase,
+                    filename,
+                ],
+                { stdio: "inherit" },
+            )
+            cli.on("exit", (code) => {
+                if (code == 0) {
+                    return resolve({
+                        result: filename,
+                    })
+                } else {
+                    return reject({
+                        error: "Failed with status: " + code,
+                    })
+                }
+            })
+        })
+    }
+
+    importIdentity({ filename, passphrase }: ImportIdentityOpts): Promise<IpcResponse> {
+        return new Promise((resolve, reject) => {
+            const cli = spawn(
+                this.mystBin(),
+                [
+                    "cli",
+                    "--agreed-terms-and-conditions",
+                    `--tequilapi.port=${TEQUILAPI_PORT}`,
+                    "identities",
+                    "import",
                     passphrase,
                     filename,
                 ],

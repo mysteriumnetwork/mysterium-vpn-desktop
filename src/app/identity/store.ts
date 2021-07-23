@@ -14,6 +14,9 @@ import { appStateEvent } from "../analytics/analytics"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
+import { ImportIdentityOpts } from "../../shared/supervisor"
+import { DaemonStatusType } from "../daemon/store"
+import { log } from "../../shared/log/log"
 
 import { eligibleForRegistration, registered } from "./identity"
 
@@ -40,6 +43,7 @@ export class IdentityStore {
             setIdentity: action,
             setIdentities: action,
             exportIdentity: action,
+            importIdentityChooseFile: action,
             importIdentity: action,
         })
         this.root = root
@@ -185,5 +189,15 @@ export class IdentityStore {
         return ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
     }
 
-    async importIdentity(): Promise<void> {}
+    importIdentityChooseFile(): Promise<string> {
+        return ipcRenderer
+            .invoke(MainIpcListenChannels.ImportIdentityChooseFile)
+            .then((result: IpcResponse) => result.result as string)
+    }
+
+    async importIdentity(opts: ImportIdentityOpts): Promise<IpcResponse> {
+        const importResult = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
+        await this.fetchIdentity()
+        return importResult
+    }
 }
