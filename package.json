@@ -142,7 +142,8 @@
     },
     "linux": {
       "target": [
-        "deb"
+        "deb",
+        "rpm"
       ],
       "icon": "static/logo.icns",
       "category": "Network"
