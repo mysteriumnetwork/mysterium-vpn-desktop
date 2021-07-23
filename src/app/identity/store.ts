@@ -46,6 +46,15 @@ export class IdentityStore {
     }
 
     setupReactions(): void {
+        reaction(
+            () => this.root.daemon.status,
+            async (status) => {
+                appStateEvent(AppStateAction.DaemonStatus, status)
+                if (status == DaemonStatusType.Up) {
+                    await this.fetchIdentity()
+                }
+            },
+        )
         eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             this.setIdentities(state.identities ?? [])
         })
@@ -53,16 +62,8 @@ export class IdentityStore {
             () => this.identities,
             async (identities) => {
                 this.refreshIdentity(identities)
-                if (!this.identity) {
-                    const id = identities.find((id) => registered(id) || eligibleForRegistration(id))
-                    if (id) {
-                        this.setIdentity(id)
-                    } else {
-                        await this.create()
-                    }
-                }
             },
-            { name: "Get/create an identity from the list" },
+            { name: "Refresh identity from node state" },
         )
         reaction(
             () => this.identity,
@@ -109,6 +110,17 @@ export class IdentityStore {
                 appStateEvent(AppStateAction.BalanceChanged, String(balance))
             },
         )
+    }
+
+    async fetchIdentity(): Promise<void> {
+        try {
+            const idRef = await tequilapi.identityCurrent({ passphrase: "" })
+            const identity = await tequilapi.identity(idRef.id)
+            this.setIdentity(identity)
+            log.info("Selected identity: ", JSON.stringify(identity))
+        } catch (err) {
+            log.error("Failed to get identity", err.message)
+        }
     }
 
     refreshIdentity = (identities: Identity[]): void => {
