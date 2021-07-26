@@ -23,6 +23,10 @@ jobs:
         id: get_version
       - name: Replace version
         run: yarn version --no-git-tag-version --new-version ${{ steps.get_version.outputs.version }}
+      - name: Install rpmbuild
+        run: sudo apt install -y rpm
+        # Only install rpmbuild on Ubuntu
+        if: startsWith(matrix.os, 'ubuntu')
       - name: Bundle & release
         uses: samuelmeuli/action-electron-builder@v1
         with:
