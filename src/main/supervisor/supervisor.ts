@@ -255,7 +255,7 @@ export class Supervisor implements SupervisorInterface {
                         result: filename,
                     })
                 } else {
-                    return reject({
+                    return resolve({
                         error: "Failed with status: " + code,
                     })
                 }
