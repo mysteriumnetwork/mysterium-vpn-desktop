@@ -23,6 +23,7 @@ import { FeedbackStore } from "./feedback/store"
 import { RouterStore } from "./navigation/routerStore"
 import { ReferralStore } from "./referral/store"
 import { Filters } from "./config/filters"
+import { OnboardingStore } from "./onboarding/store"
 
 export class RootStore {
     navigation: NavigationStore
@@ -31,6 +32,7 @@ export class RootStore {
     config: ConfigStore
     filters: Filters
     identity: IdentityStore
+    onboarding: OnboardingStore
     proposals: ProposalStore
     connection: ConnectionStore
     payment: PaymentStore
@@ -50,6 +52,7 @@ export class RootStore {
         this.config = new ConfigStore(this)
         this.filters = new Filters(this)
         this.identity = new IdentityStore(this)
+        this.onboarding = new OnboardingStore(this)
         this.proposals = new ProposalStore(this)
         this.connection = new ConnectionStore(this)
         this.payment = new PaymentStore(this)

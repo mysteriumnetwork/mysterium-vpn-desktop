@@ -4,13 +4,48 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
-import { observer } from "mobx-react-lite"
 import { Redirect, Route, Switch } from "react-router-dom"
+import Lottie from "react-lottie-player"
+import React from "react"
+import styled, { keyframes } from "styled-components"
+import { observer } from "mobx-react-lite"
 
 import { locations } from "../../../navigation/locations"
-import { IntroductionSteps } from "../../../onboarding/components/IntroductionSteps/IntroductionSteps"
-import { Welcome } from "../../../onboarding/components/Welcome/Welcome"
+import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { GhostButton } from "../../../ui-kit/components/Button/GhostButton"
+import { bg1 } from "../../../ui-kit/colors"
+import { Heading2, Small } from "../../../ui-kit/typography"
+import { LightButton } from "../../../ui-kit/components/Button/LightButton"
+import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
+import { useStores } from "../../../store"
+
+import animationPayAsYouGo from "./animation_payasyougo.json"
+import animationNetwork from "./animation_network.json"
+
+const Container = styled.div`
+    background: ${bg1};
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    -webkit-app-region: drag;
+`
+
+const Steps = styled.div`
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`
 
 const Title = styled.h1`
     margin: 0;
@@ -73,21 +108,16 @@ const SkipContainer = styled.div`
     align-items: center;
     justify-content: center;
 `
-
-export const OnboardingView: React.FC = observer(() => {
-    const { router, navigation } = useStores()
-    const handleSkip = () => navigation.skipOnboarding()
-    const handleFinish = () => navigation.onboardingFinished()
+export const IntroductionSteps: React.FC = observer(() => {
+    const { router, onboarding } = useStores()
+    const handleSetupMyAccountClick = () => {
+        onboarding.setupMyId()
+    }
+    const handleSkip = handleSetupMyAccountClick
     return (
         <>
             <Switch>
-                <Route exact path={locations.onboardingWelcome.path}>
-                    <Welcome />
-                </Route>
-                <Route path={locations.onboardingIntro.path}>
-                    <IntroductionSteps />
-                </Route>
-                <Route exact path={locations.onboarding1.path}>
+                <Route exact path={locations.onboardingIntro1.path}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={0} />
@@ -110,7 +140,7 @@ export const OnboardingView: React.FC = observer(() => {
                         <Actions>
                             <NextButton
                                 onClick={(): void => {
-                                    router.push(locations.onboarding2)
+                                    router.push(locations.onboardingIntro2)
                                 }}
                             >
                                 Next
@@ -121,7 +151,7 @@ export const OnboardingView: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboarding2.path}>
+                <Route exact path={locations.onboardingIntro2.path}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={1} />
@@ -136,7 +166,7 @@ export const OnboardingView: React.FC = observer(() => {
                             <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
                             <NextButton
                                 onClick={(): void => {
-                                    router.push(locations.onboarding3)
+                                    router.push(locations.onboardingIntro3)
                                 }}
                             >
                                 Next
@@ -147,7 +177,7 @@ export const OnboardingView: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboarding3.path}>
+                <Route exact path={locations.onboardingIntro3.path}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={2} />
@@ -173,7 +203,7 @@ export const OnboardingView: React.FC = observer(() => {
                             <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
                             <NextButton
                                 onClick={(): void => {
-                                    router.push(locations.onboarding4)
+                                    router.push(locations.onboardingIntro4)
                                 }}
                             >
                                 Next
@@ -184,7 +214,7 @@ export const OnboardingView: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboarding4.path}>
+                <Route exact path={locations.onboardingIntro4.path}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={3} />
@@ -205,12 +235,12 @@ export const OnboardingView: React.FC = observer(() => {
                         </Description>
                         <Actions>
                             <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
-                            <NextButton onClick={handleFinish}>Setup my account</NextButton>
+                            <NextButton onClick={handleSetupMyAccountClick}>Setup my account</NextButton>
                         </Actions>
                         <SkipContainer />
                     </Container>
                 </Route>
-                <Redirect to={locations.onboardingWelcome.path} />
+                <Redirect to={locations.onboardingIntro1.path} />
             </Switch>
         </>
     )

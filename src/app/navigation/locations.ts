@@ -19,21 +19,25 @@ export const locations = {
         path: "/onboarding/welcome",
         title: "Onboarding / Welcome",
     },
-    onboarding1: {
-        path: "/onboarding/1",
-        title: "Onboarding / 1",
+    onboardingIntro: {
+        path: "/onboarding/intro",
+        title: "Onboarding / Intro",
     },
-    onboarding2: {
-        path: "/onboarding/2",
-        title: "Onboarding / 2",
+    onboardingIntro1: {
+        path: "/onboarding/intro/1",
+        title: "Onboarding / Intro / 1",
     },
-    onboarding3: {
-        path: "/onboarding/3",
-        title: "Onboarding / 3",
+    onboardingIntro2: {
+        path: "/onboarding/intro/2",
+        title: "Onboarding / Intro / 2",
     },
-    onboarding4: {
-        path: "/onboarding/4",
-        title: "Onboarding / 4",
+    onboardingIntro3: {
+        path: "/onboarding/intro/3",
+        title: "Onboarding / Intro / 3",
+    },
+    onboardingIntro4: {
+        path: "/onboarding/intro/4",
+        title: "Onboarding / Intro / 4",
     },
     onboardingComplete: {
         path: "/onboarding/complete",

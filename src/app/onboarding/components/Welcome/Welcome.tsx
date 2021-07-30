@@ -11,7 +11,6 @@ import styled, { keyframes } from "styled-components"
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
-import { locations } from "../../../navigation/locations"
 
 const Container = styled.div`
     background: url(${welcomeBg}) no-repeat, #8e3061;
@@ -67,20 +66,14 @@ const GetStartedButton = styled(BrandButton)`
     box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
 `
 
-export const OnboardingWelcome: React.FC = observer(() => {
-    const { router } = useStores()
+export const Welcome: React.FC = observer(() => {
+    const { onboarding } = useStores()
     return (
         <Container>
             <Title>Welcome to Mysterium Network</Title>
             <Description>Connect to everything, everywhere via the Worldߴs first decentralized VPN.</Description>
             <Actions>
-                <GetStartedButton
-                    onClick={() => {
-                        router.push(locations.terms)
-                    }}
-                >
-                    Get Started
-                </GetStartedButton>
+                <GetStartedButton onClick={onboarding.getStarted}>Get Started</GetStartedButton>
             </Actions>
         </Container>
     )
