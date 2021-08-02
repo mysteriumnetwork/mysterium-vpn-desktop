@@ -11,73 +11,10 @@ import { Redirect, Route, Switch } from "react-router-dom"
 import { locations } from "../../../navigation/locations"
 import { IntroductionSteps } from "../../../onboarding/components/IntroductionSteps/IntroductionSteps"
 import { Welcome } from "../../../onboarding/components/Welcome/Welcome"
-
-const Title = styled.h1`
-    margin: 0;
-    text-align: center;
-    font-weight: bold;
-    font-size: 24px;
-    letter-spacing: 1px;
-    color: #fff;
-    animation: ${fadeIn} 0.4s ease-in-out;
-`
-
-const Animation = styled.div`
-    background: #f4f4fc11;
-    border-radius: 50%;
-    width: 256px;
-    height: 256px;
-    margin: 0 auto;
-    margin-top: 17px;
-`
-
-const Subtitle = styled(Heading2)`
-    margin-top: 18px;
-    text-align: center;
-    color: #fff;
-    animation: ${fadeIn} 0.4s ease-in-out;
-`
-
-const Description = styled(Small)`
-    height: 56px;
-    color: #fff;
-    opacity: 0.7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 50px;
-`
-
-const Actions = styled.div`
-    height: 35px;
-    margin-top: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`
-
-const BackButton = styled(LightButton)`
-    margin-right: 20px;
-`
-
-const NextButton = styled(BrandButton)`
-    min-width: 134px;
-    box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
-`
-
-const SkipContainer = styled.div`
-    height: 57px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-`
+import { IdentitySetup } from "../../../onboarding/components/IdentitySetup/IdentitySetup"
+import { IdentityBackup } from "../../../onboarding/components/IdentityBackup/IdentityBackup"
 
 export const OnboardingView: React.FC = observer(() => {
-    const { router, navigation } = useStores()
-    const handleSkip = () => navigation.skipOnboarding()
-    const handleFinish = () => navigation.onboardingFinished()
     return (
         <>
             <Switch>
@@ -87,65 +24,8 @@ export const OnboardingView: React.FC = observer(() => {
                 <Route path={locations.onboardingIntro.path}>
                     <IntroductionSteps />
                 </Route>
-                <Route exact path={locations.onboarding1.path}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={0} />
-                        </Steps>
-                        <Title>Decentralized global node network</Title>
-                        <Animation>
-                            <Lottie
-                                play
-                                loop
-                                animationData={animationNetwork}
-                                style={{ width: 256, height: 256 }}
-                                renderer="svg"
-                            />
-                        </Animation>
-                        <Subtitle>Run by people, for people</Subtitle>
-                        <Description>
-                            Our network is blind to borders. Select any IP you like from our global list and get
-                            unlimited access to worldwide content.
-                        </Description>
-                        <Actions>
-                            <NextButton
-                                onClick={(): void => {
-                                    router.push(locations.onboarding2)
-                                }}
-                            >
-                                Next
-                            </NextButton>
-                        </Actions>
-                        <SkipContainer>
-                            <GhostButton onClick={handleSkip}>Skip</GhostButton>
-                        </SkipContainer>
-                    </Container>
-                </Route>
-                <Route exact path={locations.onboarding2.path}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={1} />
-                        </Steps>
-                        <Title>Privacy first</Title>
-                        <Animation />
-                        <Subtitle>Distributed infrastructure, decentralised logs</Subtitle>
-                        <Description>
-                            Now everyone says no logs, but do they mean no logs? Don&apos;t trust. Verify.
-                        </Description>
-                        <Actions>
-                            <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
-                            <NextButton
-                                onClick={(): void => {
-                                    router.push(locations.onboarding3)
-                                }}
-                            >
-                                Next
-                            </NextButton>
-                        </Actions>
-                        <SkipContainer>
-                            <GhostButton onClick={handleSkip}>Skip</GhostButton>
-                        </SkipContainer>
-                    </Container>
+                <Route exact path={locations.onboardingIdentitySetup.path}>
+                    <IdentitySetup />
                 </Route>
                 <Route exact path={locations.onboarding3.path}>
                     <Container>

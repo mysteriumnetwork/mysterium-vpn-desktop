@@ -39,6 +39,14 @@ export const locations = {
         path: "/onboarding/intro/4",
         title: "Onboarding / Intro / 4",
     },
+    onboardingIdentitySetup: {
+        path: "/onboarding/identity/setup",
+        title: "Onboarding / Identity / Create",
+    },
+    onboardingIdentityBackup: {
+        path: "/onboarding/identity/backup",
+        title: "Onboarding / Identity / Backup",
+    },
     onboardingComplete: {
         path: "/onboarding/complete",
         title: "Onboarding / Complete",

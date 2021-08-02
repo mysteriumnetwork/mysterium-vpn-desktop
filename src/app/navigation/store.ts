@@ -35,8 +35,6 @@ export class NavigationStore {
             determineRoute: action,
             showWelcome: action,
             dismissWelcome: action,
-            skipOnboarding: action,
-            onboardingFinished: action,
             showMenu: action,
             openChat: action,
             isHomeActive: computed,
@@ -88,10 +86,6 @@ export class NavigationStore {
 
     showWelcome = (): void => {
         this.welcome = true
-    }
-
-    skipOnboarding = async (): Promise<void> => {
-        return this.onboardingFinished()
     }
 
     onboardingFinished = async (): Promise<void> => {
