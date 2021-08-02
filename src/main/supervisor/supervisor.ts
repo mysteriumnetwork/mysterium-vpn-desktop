@@ -234,7 +234,7 @@ export class Supervisor implements SupervisorInterface {
         filename: string
         passphrase: string
     }): Promise<IpcResponse> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const cli = spawn(
                 this.mystBin(),
                 [
@@ -264,7 +264,7 @@ export class Supervisor implements SupervisorInterface {
     }
 
     importIdentity({ filename, passphrase }: ImportIdentityOpts): Promise<IpcResponse> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const cli = spawn(
                 this.mystBin(),
                 [
@@ -284,7 +284,7 @@ export class Supervisor implements SupervisorInterface {
                         result: filename,
                     })
                 } else {
-                    return reject({
+                    return resolve({
                         error: "Failed with status: " + code,
                     })
                 }
