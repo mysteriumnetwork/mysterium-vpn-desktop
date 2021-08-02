@@ -56,6 +56,7 @@ export const ImportIdentityPrompt: React.FC<ImportIdentityPromptProps> = ({ visi
             <form>
                 <PromptExplanation>Used to decrypt the selected file.</PromptExplanation>
                 <PromptInput
+                    autoFocus
                     placeholder="Passphrase"
                     type="password"
                     {...register("passphrase", {

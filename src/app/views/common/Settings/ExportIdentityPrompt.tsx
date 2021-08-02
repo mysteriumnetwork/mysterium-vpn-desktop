@@ -57,6 +57,7 @@ export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visi
             <form>
                 <PromptExplanation>Used to encrypt the exported file. Min. length: 12</PromptExplanation>
                 <PromptInput
+                    autoFocus
                     placeholder="Passphrase"
                     type="password"
                     {...register("passphrase", {

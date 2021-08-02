@@ -234,59 +234,71 @@ export class Supervisor implements SupervisorInterface {
         filename: string
         passphrase: string
     }): Promise<IpcResponse> {
-        return new Promise((resolve, reject) => {
-            const cli = spawn(
-                this.mystBin(),
-                [
-                    "cli",
-                    "--agreed-terms-and-conditions",
-                    `--tequilapi.port=${TEQUILAPI_PORT}`,
-                    "identities",
-                    "export",
-                    id,
-                    passphrase,
-                    filename,
-                ],
-                { stdio: "inherit" },
-            )
+        return new Promise((resolve) => {
+            const cli = spawn(this.mystBin(), [
+                "cli",
+                "--agreed-terms-and-conditions",
+                `--tequilapi.port=${TEQUILAPI_PORT}`,
+                "identities",
+                "export",
+                id,
+                passphrase,
+                filename,
+            ])
+            let err = ""
+            cli.stdout?.on("data", (data) => {
+                const message = data.toString()
+                const idx = message.indexOf("Possible error: ")
+                if (idx != -1) {
+                    err = message.substr(idx)
+                }
+            })
             cli.on("exit", (code) => {
                 if (code == 0) {
                     return resolve({
                         result: filename,
                     })
                 } else {
-                    return resolve({
-                        error: "Failed with status: " + code,
-                    })
+                    if (err) {
+                        return resolve({ error: err })
+                    } else {
+                        return resolve({ error: "Failed with status: " + code })
+                    }
                 }
             })
         })
     }
 
     importIdentity({ filename, passphrase }: ImportIdentityOpts): Promise<IpcResponse> {
-        return new Promise((resolve, reject) => {
-            const cli = spawn(
-                this.mystBin(),
-                [
-                    "cli",
-                    "--agreed-terms-and-conditions",
-                    `--tequilapi.port=${TEQUILAPI_PORT}`,
-                    "identities",
-                    "import",
-                    passphrase,
-                    filename,
-                ],
-                { stdio: "inherit" },
-            )
+        return new Promise((resolve) => {
+            const cli = spawn(this.mystBin(), [
+                "cli",
+                "--agreed-terms-and-conditions",
+                `--tequilapi.port=${TEQUILAPI_PORT}`,
+                "identities",
+                "import",
+                passphrase,
+                filename,
+            ])
+            let err = ""
+            cli.stdout?.on("data", (data) => {
+                const message = data.toString()
+                const idx = message.indexOf("Possible error: ")
+                if (idx != -1) {
+                    err = message.substr(idx)
+                }
+            })
             cli.on("exit", (code) => {
                 if (code == 0) {
                     return resolve({
                         result: filename,
                     })
                 } else {
-                    return reject({
-                        error: "Failed with status: " + code,
-                    })
+                    if (err) {
+                        return resolve({ error: err })
+                    } else {
+                        return resolve({ error: "Failed with status: " + code })
+                    }
                 }
             })
         })

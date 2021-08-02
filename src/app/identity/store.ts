@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
-import { action, makeObservable, observable, reaction, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
@@ -15,10 +15,6 @@ import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { ImportIdentityOpts } from "../../shared/supervisor"
-import { DaemonStatusType } from "../daemon/store"
-import { log } from "../../shared/log/log"
-
-import { eligibleForRegistration, registered } from "./identity"
 
 export class IdentityStore {
     loading = false
@@ -36,6 +32,10 @@ export class IdentityStore {
             identities: observable,
             refreshIdentity: action,
             create: action,
+            loadIdentity: action,
+            identityExists: computed,
+            fetchIdentity: action,
+            hasIdentities: action,
             unlock: action,
             register: action,
             registerWithReferralToken: action,
@@ -50,15 +50,6 @@ export class IdentityStore {
     }
 
     setupReactions(): void {
-        reaction(
-            () => this.root.daemon.status,
-            async (status) => {
-                appStateEvent(AppStateAction.DaemonStatus, status)
-                if (status == DaemonStatusType.Up) {
-                    await this.fetchIdentity()
-                }
-            },
-        )
         eventBus.on(SSEEventType.AppStateChange, (state: AppState) => {
             this.setIdentities(state.identities ?? [])
         })
@@ -68,38 +59,6 @@ export class IdentityStore {
                 this.refreshIdentity(identities)
             },
             { name: "Refresh identity from node state" },
-        )
-        reaction(
-            () => this.identity,
-            async (identity) => {
-                if (!identity) {
-                    return
-                }
-                if (!this.unlocked) {
-                    await this.unlock()
-                }
-                if (!registered(identity)) {
-                    await this.root.payment.fetchTransactorFees()
-                }
-                if (eligibleForRegistration(identity)) {
-                    await this.register(identity)
-                }
-            },
-            { name: "Unlock/register current identity" },
-        )
-        reaction(
-            () => this.identity?.balance,
-            async () => {
-                if (!this.identity) {
-                    return
-                }
-                if (!this.identity.balance) {
-                    await this.unlock()
-                }
-                if (!registered(this.identity)) {
-                    await this.register(this.identity)
-                }
-            },
         )
         // analytics
         reaction(
@@ -116,15 +75,32 @@ export class IdentityStore {
         )
     }
 
-    async fetchIdentity(): Promise<void> {
-        try {
-            const idRef = await tequilapi.identityCurrent({ passphrase: "" })
-            const identity = await tequilapi.identity(idRef.id)
-            this.setIdentity(identity)
-            log.info("Selected identity: ", JSON.stringify(identity))
-        } catch (err) {
-            log.error("Failed to get identity", err.message)
+    async hasIdentities(): Promise<boolean> {
+        const ids = await tequilapi.identityList()
+        return ids.length > 0
+    }
+
+    async loadIdentity(): Promise<void> {
+        const identity = await this.fetchIdentity()
+        this.setIdentity(identity)
+        return await this.unlock()
+    }
+
+    get identityExists(): boolean {
+        return this.identity?.id != null
+    }
+
+    async fetchIdentity(): Promise<Identity | undefined> {
+        const ids = await tequilapi.identityList()
+        if (ids.length < 1) {
+            return undefined
         }
+        const current = await tequilapi.identityCurrent({ passphrase: "" }).catch((reason) => {
+            throw Error("Could not get current identity ref: " + reason)
+        })
+        return await tequilapi.identity(current.id).catch((reason) => {
+            throw Error("Could not get identity: " + reason)
+        })
     }
 
     refreshIdentity = (identities: Identity[]): void => {
@@ -142,6 +118,9 @@ export class IdentityStore {
     }
 
     async unlock(): Promise<void> {
+        if (this.unlocked) {
+            return
+        }
         if (!this.identity) {
             return
         }
@@ -197,7 +176,7 @@ export class IdentityStore {
 
     async importIdentity(opts: ImportIdentityOpts): Promise<IpcResponse> {
         const importResult = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
-        await this.fetchIdentity()
+        await this.loadIdentity()
         return importResult
     }
 }
