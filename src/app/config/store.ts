@@ -4,14 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, runInAction } from "mobx"
 import { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
 import { log } from "../../shared/log/log"
-import { DaemonStatusType } from "../daemon/store"
 import { tequilapi } from "../tequilapi"
 import { locations } from "../navigation/locations"
 
@@ -70,7 +69,7 @@ export class ConfigStore {
             config: observable,
             loaded: observable,
             defaultConfig: observable,
-            fetchConfig: action,
+            loadConfig: action,
             updateConfigPartial: action,
             persistConfig: action,
             persistConfigDebounced: action,
@@ -84,19 +83,7 @@ export class ConfigStore {
         })
     }
 
-    setupReactions(): void {
-        reaction(
-            () => this.root.daemon.status,
-            async (status) => {
-                if (status == DaemonStatusType.Up) {
-                    await this.fetchConfig()
-                    this.root.navigation.determineRoute()
-                }
-            },
-        )
-    }
-
-    fetchConfig = async (): Promise<void> => {
+    loadConfig = async (): Promise<void> => {
         const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
         runInAction(() => {
             this.config = {

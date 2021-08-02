@@ -4,15 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, makeObservable, observable, observe, reaction } from "mobx"
+import { action, computed, makeObservable, observable } from "mobx"
 import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { userEvent } from "../analytics/analytics"
-import { registered } from "../identity/identity"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { OnboardingAction, OtherAction } from "../../shared/analytics/actions"
+import { registered } from "../identity/identity"
 
 import { AppLocation, locations } from "./locations"
 
@@ -47,23 +47,6 @@ export class NavigationStore {
         this.root = root
     }
 
-    setupReactions(): void {
-        observe(
-            computed(() => this.root.identity.identity?.registrationStatus),
-            ({ oldValue, newValue }) => {
-                if (oldValue != newValue) {
-                    this.determineRoute()
-                }
-            },
-        )
-        reaction(
-            () => this.root.connection.status,
-            () => {
-                this.determineRoute()
-            },
-        )
-    }
-
     showLoading = (): void => {
         this.root.router.push(locations.loading)
     }
@@ -95,7 +78,7 @@ export class NavigationStore {
             return locations.terms
         }
         if (!identity.identity || !registered(identity.identity)) {
-            return locations.loading
+            return locations.onboardingIdentitySetup
         }
         if (connectionInProgress(connection.status)) {
             return locations.connection

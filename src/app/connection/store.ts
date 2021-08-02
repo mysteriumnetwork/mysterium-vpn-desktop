@@ -72,14 +72,13 @@ export class ConnectionStore {
         reaction(
             () => this.root.daemon.status,
             async (status) => {
-                appStateEvent(AppStateAction.DaemonStatus, status)
                 if (status == DaemonStatusType.Up) {
                     await this.resolveOriginalLocation()
                 }
             },
         )
         reaction(
-            () => this.root.connection.status,
+            () => this.status,
             async (status) => {
                 appStateEvent(AppStateAction.ConnectionStatus, status)
                 this.resetLocation()
@@ -89,11 +88,17 @@ export class ConnectionStore {
             },
         )
         reaction(
-            () => this.root.connection.status,
+            () => this.status,
             (status) => {
                 ipcRenderer.send(MainIpcListenChannels.ConnectionStatus, status)
             },
             { name: "Notify tray with new connection status" },
+        )
+        reaction(
+            () => this.root.connection.status,
+            () => {
+                this.root.navigation.determineRoute()
+            },
         )
     }
 
