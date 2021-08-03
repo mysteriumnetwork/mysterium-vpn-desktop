@@ -6,9 +6,9 @@
  */
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { Redirect, Route, Switch } from "react-router-dom"
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom"
 
-import { locations } from "../../../navigation/locations"
+import { topupSteps } from "../../../navigation/locations"
 
 import { TopupSelectAmount } from "./TopupSelectAmount"
 import { TopupSelectCurrency } from "./TopupSelectCurrency"
@@ -17,25 +17,26 @@ import { TopupSuccess } from "./TopupSuccess"
 import { TopupFailed } from "./TopupFailed"
 
 export const TopupView: React.FC = observer(() => {
+    const { url } = useRouteMatch()
     return (
         <>
             <Switch>
-                <Route exact path={locations.walletTopupSelectAmount.path}>
+                <Route path={"*/" + topupSteps.selectAmount}>
                     <TopupSelectAmount />
                 </Route>
-                <Route exact path={locations.walletTopupSelectCurrency.path}>
+                <Route path={"*/" + topupSteps.selectCurrency}>
                     <TopupSelectCurrency />
                 </Route>
-                <Route exact path={locations.walletTopupWaitingForPayment.path}>
+                <Route path={"*/" + topupSteps.waitingForPayment}>
                     <TopupWaitingForPayment />
                 </Route>
-                <Route exact path={locations.walletTopupSuccess.path}>
+                <Route path={"*/" + topupSteps.success}>
                     <TopupSuccess />
                 </Route>
-                <Route exact path={locations.walletTopupFailed.path}>
+                <Route path={"*/" + topupSteps.failed}>
                     <TopupFailed />
                 </Route>
-                <Redirect to={locations.walletTopupSelectAmount.path} />
+                <Redirect to={`${url}/select-amount`} />
             </Switch>
         </>
     )

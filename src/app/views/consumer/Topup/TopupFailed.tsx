@@ -20,7 +20,6 @@ import { IconWallet } from "../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { locations } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 import { LogoCoingate } from "./LogoCoingate"
@@ -61,8 +60,8 @@ const Content = styled(ViewContent)`
 
 export const TopupFailed: React.FC = observer(() => {
     const { router } = useStores()
-    const handleTryAgain = () => {
-        router.push(locations.walletTopup)
+    const handleStartOver = () => {
+        router.history?.go(-3)
     }
     return (
         <ViewContainer>
@@ -87,8 +86,8 @@ export const TopupFailed: React.FC = observer(() => {
                             </Paragraph>
                             <LogoCoingate />
                         </div>
-                        <BrandButton style={{ marginTop: "15px" }} onClick={handleTryAgain}>
-                            Try again
+                        <BrandButton style={{ marginTop: "15px" }} onClick={handleStartOver}>
+                            Start over
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>

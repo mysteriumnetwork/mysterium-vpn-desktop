@@ -25,7 +25,7 @@ import { WalletAction } from "../../../../shared/analytics/actions"
 import { Anchor } from "../../../ui-kit/components/Anchor"
 import { QR } from "../../../ui-kit/components/QR/QR"
 import { OrderStatus } from "../../../payment/store"
-import { locations } from "../../../navigation/locations"
+import { topupSteps } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 import { LogoCoingate } from "./LogoCoingate"
@@ -113,10 +113,10 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
     useEffect(() => {
         switch (payment.orderStatus) {
             case OrderStatus.SUCCESS:
-                router.push(locations.walletTopupSuccess)
+                router.pushRelative(topupSteps.success)
                 break
             case OrderStatus.FAILED:
-                router.push(locations.walletTopupFailed)
+                router.pushRelative(topupSteps.failed)
                 break
         }
     }, [payment.orderStatus])

@@ -5,12 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { observer } from "mobx-react-lite"
-import React, { useState } from "react"
-import { faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
+import React from "react"
+import { faClock, faWallet } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
-import { useToasts } from "react-toast-notifications"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -25,10 +24,9 @@ import {
     SecondarySidebarActionButton,
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
-import { ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
 
-import animationIdentityKeys from "./animation_identity_keys.json"
+import animationOnboardingTopup from "./animation_onboarding_topup.json"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -39,7 +37,7 @@ const SideTop = styled.div`
 `
 
 const SectionIcon = styled(FontAwesomeIcon)`
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 20px;
     color: ${brandLight};
 `
@@ -65,38 +63,13 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
-const ToastWrap = styled.span`
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-`
-
-export const IdentityBackup: React.FC = observer(() => {
-    const { onboarding, identity } = useStores()
-    const { addToast } = useToasts()
-
-    const nextStep = () => {
-        onboarding.finishIdSetup()
+export const InitialTopup: React.FC = observer(() => {
+    const { onboarding } = useStores()
+    const handleTopupNow = () => {
+        onboarding.topupNow()
     }
-    const handleBackupLater = nextStep
-
-    const [exportPrompt, setExportPrompt] = useState(false)
-    const handleBackupNow = () => {
-        setExportPrompt(true)
-    }
-    const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {
-        setExportPrompt(false)
-        const res = await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
-        if (res.result) {
-            nextStep()
-        } else if (res.error) {
-            addToast(<ToastWrap>Identity backup failed. Error: {res.error}</ToastWrap>, {
-                appearance: "error",
-                autoDismiss: true,
-            })
-        }
-    }
-    const handleExportCancel = () => {
-        setExportPrompt(false)
+    const handleTopupLater = () => {
+        onboarding.skipTopup()
     }
     return (
         <ViewContainer>
@@ -104,25 +77,27 @@ export const IdentityBackup: React.FC = observer(() => {
             <ViewSplit>
                 <ViewSidebar>
                     <SideTop>
-                        <SectionIcon icon={faFileExport} />
-                        <Title>Create backup</Title>
-                        <Small>We don&apos;t store any account data. Back up to keep your tokens safe.</Small>
+                        <SectionIcon icon={faWallet} />
+                        <Title>Your Wallet</Title>
+                        <Small>
+                            Top up your wallet now or do it later and use limited functionality and free nodes
+                        </Small>
                     </SideTop>
                     <SideBot>
-                        <PrimarySidebarActionButton onClick={handleBackupNow}>
+                        <PrimarySidebarActionButton onClick={handleTopupNow}>
                             <ButtonContent>
                                 <ButtonIcon>
-                                    <FontAwesomeIcon icon={faFileExport} />
+                                    <FontAwesomeIcon icon={faWallet} />
                                 </ButtonIcon>
-                                Backup Private Key
+                                Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleBackupLater}>
+                        <SecondarySidebarActionButton onClick={handleTopupLater}>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faClock} />
                                 </ButtonIcon>
-                                Backup later
+                                Top up later
                             </ButtonContent>
                         </SecondarySidebarActionButton>
                     </SideBot>
@@ -131,13 +106,12 @@ export const IdentityBackup: React.FC = observer(() => {
                     <Lottie
                         play
                         loop={false}
-                        animationData={animationIdentityKeys}
+                        animationData={animationOnboardingTopup}
                         style={{ width: 256, height: 256 }}
                         renderer="svg"
                     />
                 </Content>
             </ViewSplit>
-            <ExportIdentityPrompt visible={exportPrompt} onSubmit={handleExportSubmit} onCancel={handleExportCancel} />
         </ViewContainer>
     )
 })

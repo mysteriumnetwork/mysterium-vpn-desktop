@@ -32,6 +32,8 @@ export class OnboardingStore {
             setIdentityProgress: action,
             finishIdSetup: action,
             complete: action,
+            topupNow: action,
+            skipTopup: action,
         })
         this.root = root
     }
@@ -70,10 +72,19 @@ export class OnboardingStore {
     }
 
     finishIdSetup = (): void => {
-        this.root.router.push(locations.proposals)
+        this.complete()
+        this.root.router.push(locations.onboardingTopupPrompt)
     }
 
     complete = (): void => {
+        this.root.config.setOnboarded()
+    }
+
+    topupNow = (): void => {
+        this.root.router.push({ path: "/onboarding/wallet/topup", title: "" })
+    }
+
+    skipTopup = (): void => {
         this.root.router.push(locations.proposals)
     }
 }

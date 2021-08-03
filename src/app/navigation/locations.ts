@@ -47,6 +47,14 @@ export const locations = {
         path: "/onboarding/identity/backup",
         title: "Onboarding / Identity / Backup",
     },
+    onboardingTopupPrompt: {
+        path: "/onboarding/topup-prompt",
+        title: "Onboarding / Topup",
+    },
+    onboardingWalletTopup: {
+        path: "/onboarding/wallet/topup",
+        title: "Onboarding / Wallet Topup",
+    },
     onboardingComplete: {
         path: "/onboarding/complete",
         title: "Onboarding / Complete",
@@ -147,6 +155,14 @@ export const locations = {
         path: "/settings/account",
         title: "Settings/Account",
     },
+}
+
+export const topupSteps = {
+    selectAmount: "select-amount",
+    selectCurrency: "select-currency",
+    waitingForPayment: "waiting-for-payment",
+    success: "success",
+    failed: "failed",
 }
 
 export const locationByPath = (path: string): AppLocation | undefined =>
