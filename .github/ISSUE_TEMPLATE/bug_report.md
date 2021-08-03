@@ -20,7 +20,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Logs**
-Attach logs (app, node, supervisor) to the issue. Where to find the logs: https://github.com/mysteriumnetwork/mysterium-vpn-desktop#logging
+Attach logs (app, node, supervisor) to the issue. Where to find the logs: https://github.com/mysteriumnetwork/mysterium-vpn-desktop#logs
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
