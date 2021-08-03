@@ -151,8 +151,8 @@ export const locations = {
         path: "/settings/connection",
         title: "Settings/Connection",
     },
-    settingsAccount: {
-        path: "/settings/account",
+    settingsMysteriumId: {
+        path: "/settings/mysterium-id",
         title: "Settings/Account",
     },
 }

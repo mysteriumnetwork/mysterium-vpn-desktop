@@ -43,7 +43,7 @@ const ToastWrap = styled.span`
     overflow-wrap: anywhere;
 `
 
-export const SettingsAccount: React.FC = observer(() => {
+export const SettingsMysteriumId: React.FC = observer(() => {
     const { payment, identity } = useStores()
     const { addToast } = useToasts()
 

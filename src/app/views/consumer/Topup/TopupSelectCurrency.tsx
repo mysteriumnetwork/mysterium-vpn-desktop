@@ -130,7 +130,7 @@ export const TopupSelectCurrency: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
-                        <TitleDescription>Select the cryptocurrency in which the topup will be done</TitleDescription>
+                        <TitleDescription>Select the cryptocurrency in which the top-up will be done</TitleDescription>
                     </SideTop>
                     <SideBot>
                         <AmountSelect>
