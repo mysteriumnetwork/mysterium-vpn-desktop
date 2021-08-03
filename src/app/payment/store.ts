@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, makeObservable, observable, reaction, runInAction, when } from "mobx"
-import { Currency, Fees, Money, PaymentOrderResponse } from "mysterium-vpn-js"
+import { Currency, EntertainmentEstimateResponse, Fees, Money, PaymentOrderResponse } from "mysterium-vpn-js"
 import retry from "async-retry"
 
 import { RootStore } from "../store"
@@ -224,5 +224,20 @@ export class PaymentStore {
 
     setTopupAmount = (amount?: number): void => {
         this.topupAmount = amount
+    }
+
+    estimateEntertainment = async (amount: number): Promise<EntertainmentEstimateResponse | undefined> => {
+        try {
+            const amt = fmtMoney({ amount, currency: this.appCurrency })
+            return await tequilapi.estimateEntertainment({ amount: Number(amt) }).then((res) => ({
+                videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
+                musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
+                browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
+                trafficMb: Number((res.trafficMb / 1024).toFixed()),
+            }))
+        } catch (err) {
+            log.warn("Failed to estimate entertainment for amount: ", amount, ", reason:", err.message)
+            return undefined
+        }
     }
 }
