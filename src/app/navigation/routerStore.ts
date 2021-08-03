@@ -34,10 +34,19 @@ export class RouterStore {
 
     push = (loc: AppLocation): void => {
         pageview({
-            documentTitle: loc.title,
+            documentTitle: loc.path,
             href: loc.path,
         })
         this.history?.push(loc.path)
+    }
+
+    pushRelative = (relativeLoc: string): void => {
+        const newLoc = this.location.pathname.substring(0, this.location.pathname.lastIndexOf("/")) + "/" + relativeLoc
+        pageview({
+            documentTitle: newLoc,
+            href: newLoc,
+        })
+        this.history?.push(relativeLoc)
     }
 }
 

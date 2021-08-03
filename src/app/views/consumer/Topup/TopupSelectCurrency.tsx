@@ -25,9 +25,9 @@ import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { isLightningAvailable } from "../../../payment/currency"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
-import { locations } from "../../../navigation/locations"
 import { log } from "../../../../shared/log/log"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { topupSteps } from "../../../navigation/locations"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -101,7 +101,7 @@ export const TopupSelectCurrency: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.push(locations.walletTopupWaitingForPayment)
+            router.pushRelative(topupSteps.waitingForPayment)
         } catch (err) {
             setLoading(() => false)
             log.error("Could not create a payment order", err.message)

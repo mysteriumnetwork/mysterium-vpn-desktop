@@ -26,6 +26,7 @@ import {
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdentityPrompt"
+import { brandLight } from "../../../ui-kit/colors"
 
 import animationIdentity from "./animation_identity.json"
 
@@ -40,6 +41,7 @@ const SideTop = styled.div`
 const SectionIcon = styled(FontAwesomeIcon)`
     margin-bottom: 15px;
     font-size: 20px;
+    color: ${brandLight};
 `
 
 const Title = styled(Heading2)`

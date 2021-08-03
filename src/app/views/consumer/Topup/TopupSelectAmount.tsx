@@ -22,8 +22,8 @@ import { Heading2, Small } from "../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../ui-kit/colors"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
-import { locations } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { topupSteps } from "../../../navigation/locations"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -77,7 +77,6 @@ const FiatEquivalent = styled.div`
 
 export const TopupSelectAmount: React.FC = observer(() => {
     const { payment, router } = useStores()
-
     const isOptionActive = (amt: number) => {
         return payment.topupAmount == amt
     }
@@ -86,9 +85,8 @@ export const TopupSelectAmount: React.FC = observer(() => {
         payment.setTopupAmount(amt)
     }
     const handleNextClick = () => {
-        router.push(locations.walletTopupSelectCurrency)
+        router.pushRelative(topupSteps.selectCurrency)
     }
-    const currency = "MYSTT"
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
@@ -102,7 +100,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
                         <TitleDescription>
-                            Select how many {currency}s you would like to add to your account
+                            Select how many {payment.appCurrency}s you would like to add to your account
                         </TitleDescription>
                     </SideTop>
                     <SideBot>
@@ -118,7 +116,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
                                 >
                                     <div style={{ textAlign: "center" }}>
                                         <Amount>{opt}</Amount>
-                                        <Currency>{currency}</Currency>
+                                        <Currency>{payment.appCurrency}</Currency>
                                     </div>
                                 </AmountToggle>
                             ))}

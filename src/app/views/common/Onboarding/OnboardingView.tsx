@@ -13,6 +13,8 @@ import { IntroductionSteps } from "../../../onboarding/components/IntroductionSt
 import { Welcome } from "../../../onboarding/components/Welcome/Welcome"
 import { IdentitySetup } from "../../../onboarding/components/IdentitySetup/IdentitySetup"
 import { IdentityBackup } from "../../../onboarding/components/IdentityBackup/IdentityBackup"
+import { InitialTopup } from "../../../onboarding/components/InitialTopup/InitialTopup"
+import { TopupView } from "../../consumer/Topup/TopupView"
 
 export const OnboardingView: React.FC = observer(() => {
     return (
@@ -29,6 +31,12 @@ export const OnboardingView: React.FC = observer(() => {
                 </Route>
                 <Route exact path={locations.onboardingIdentityBackup.path}>
                     <IdentityBackup />
+                </Route>
+                <Route path={locations.onboardingTopupPrompt.path}>
+                    <InitialTopup />
+                </Route>
+                <Route path={locations.onboardingWalletTopup.path}>
+                    <TopupView />
                 </Route>
                 <Redirect to={locations.onboardingWelcome.path} />
             </Switch>
