@@ -226,10 +226,13 @@ export class PaymentStore {
         this.topupAmount = amount
     }
 
-    estimateEntertainment = async (amount: number): Promise<EntertainmentEstimateResponse | undefined> => {
+    estimateEntertainment = async (amount: number, big = false): Promise<EntertainmentEstimateResponse | undefined> => {
         try {
-            const amt = fmtMoney({ amount, currency: this.appCurrency })
-            return await tequilapi.estimateEntertainment({ amount: Number(amt) }).then((res) => ({
+            let amt = amount
+            if (big) {
+                amt = Number(fmtMoney({ amount, currency: this.appCurrency }))
+            }
+            return await tequilapi.estimateEntertainment({ amount: amt }).then((res) => ({
                 videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
                 musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
                 browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),

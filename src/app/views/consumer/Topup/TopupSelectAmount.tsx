@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
@@ -18,12 +18,17 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading2, Small } from "../../../ui-kit/typography"
+import { Heading1, Heading2, Paragraph, Small } from "../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../ui-kit/colors"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../navigation/locations"
+import { EntertainmentEstimateResponse } from "../../../../../../mysterium-vpn-js"
+import { IconPlay } from "../../../ui-kit/icons/IconPlay"
+import { IconMusic } from "../../../ui-kit/icons/IconMusic"
+import { IconCloudDownload } from "../../../ui-kit/icons/IconCloudDownload"
+import { IconDocument } from "../../../ui-kit/icons/IconDocument"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -75,6 +80,42 @@ const FiatEquivalent = styled.div`
     font-size: 11px;
 `
 
+const Content = styled(ViewContent)`
+    background: none;
+`
+
+const EntertainmentBlocks = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+`
+
+const EntertainmentBlock = styled.div`
+    width: 179px;
+    height: 235px;
+    background: #ffffff12;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+`
+
+const BlockIcon = styled.div`
+    margin: 5px auto 5px;
+    font-size: 20px;
+    color: ${brandLight};
+`
+
+const BlockMetric = styled(Heading1)``
+
+const EntertainmentExplanation = styled(Paragraph)`
+    margin: 5px auto;
+    opacity: 0.7;
+`
+
 export const TopupSelectAmount: React.FC = observer(() => {
     const { payment, router } = useStores()
     const isOptionActive = (amt: number) => {
@@ -84,6 +125,12 @@ export const TopupSelectAmount: React.FC = observer(() => {
         userEvent(WalletAction.ChangeTopupAmount, String(amt))
         payment.setTopupAmount(amt)
     }
+    const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)
+    useEffect(() => {
+        if (payment.topupAmount) {
+            payment.estimateEntertainment(payment.topupAmount).then((res) => setEstimates(res))
+        }
+    }, [payment.topupAmount])
     const handleNextClick = () => {
         router.pushRelative(topupSteps.selectCurrency)
     }
@@ -134,7 +181,42 @@ export const TopupSelectAmount: React.FC = observer(() => {
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>
-                <ViewContent>{/* TODO: entertainment estimates here */}</ViewContent>
+                <Content>
+                    {estimates && (
+                        <>
+                            <EntertainmentBlocks>
+                                <EntertainmentBlock>
+                                    <BlockIcon>
+                                        <IconPlay color={brandLight} />
+                                    </BlockIcon>
+                                    <BlockMetric>{estimates.videoMinutes}h</BlockMetric>
+                                    <EntertainmentExplanation>Online video</EntertainmentExplanation>
+                                </EntertainmentBlock>
+                                <EntertainmentBlock>
+                                    <BlockIcon>
+                                        <IconMusic color={brandLight} />
+                                    </BlockIcon>
+                                    <BlockMetric>{estimates.musicMinutes}h</BlockMetric>
+                                    <EntertainmentExplanation>Online music</EntertainmentExplanation>
+                                </EntertainmentBlock>
+                                <EntertainmentBlock>
+                                    <BlockIcon>
+                                        <IconCloudDownload color={brandLight} />
+                                    </BlockIcon>
+                                    <BlockMetric>{estimates.trafficMb}GiB</BlockMetric>
+                                    <EntertainmentExplanation>of data download</EntertainmentExplanation>
+                                </EntertainmentBlock>
+                                <EntertainmentBlock>
+                                    <BlockIcon>
+                                        <IconDocument color={brandLight} />
+                                    </BlockIcon>
+                                    <BlockMetric>{estimates.browsingMinutes}h</BlockMetric>
+                                    <EntertainmentExplanation>Web browsing</EntertainmentExplanation>
+                                </EntertainmentBlock>
+                            </EntertainmentBlocks>
+                        </>
+                    )}
+                </Content>
             </ViewSplit>
         </ViewContainer>
     )
