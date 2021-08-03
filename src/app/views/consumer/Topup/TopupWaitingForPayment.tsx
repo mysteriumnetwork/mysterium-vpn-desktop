@@ -164,13 +164,11 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
                         <Heading2>
                             {payment.order?.payAmount} {payment.order?.payCurrency}
                         </Heading2>
-                        {/*<Heading2>0.000245 BTC</Heading2>*/}
                     </PaymentAmount>
                     <PaymentQR>
                         <QR size={192} text={payment.order?.paymentAddress} />
                     </PaymentQR>
                     <PaymentAddress>
-                        {/*lnbc105160n1pswwncgpp5pk2pvvwulw2a7fv30matjqttdvypq7jh4ggqf8hu68yqld4zygaqdp9gdhkjmj8v96x2gz0wfjx2u3qyvursdpkxqungcqzpgxqrp9wsp58rygp0pxd2cljmwmn3lqfent0epz77muztfedhezg7lphsluzc4q9qyyssq4t8r67g9xh80qg2nrgxrvx45frjdque327tc8jpznumy73gjdhw5spfs4y8296zc45mpldhd2kr8xkg5eusjj6v2dms3n44p6nwu42gqqm7hqm*/}
                         {payment.order?.paymentAddress}
                     </PaymentAddress>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>

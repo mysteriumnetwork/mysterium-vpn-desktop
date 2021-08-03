@@ -11,7 +11,7 @@ import { Currency, DECIMAL_PART } from "mysterium-vpn-js"
 import { Redirect, Route, Switch } from "react-router-dom"
 
 import { useStores } from "../../../store"
-import { Heading1, Paragraph } from "../../../ui-kit/typography"
+import { Heading2, Paragraph } from "../../../ui-kit/typography"
 import { displayUSD, fmtMoney } from "../../../payment/display"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
@@ -47,8 +47,8 @@ const SideBot = styled.div`
     justify-content: space-between;
 `
 
-const Balance = styled(Heading1)`
-    margin-top: 17px;
+const Balance = styled(Heading2)`
+    margin-top: 15px;
 `
 
 const BalanceCurrency = styled(Paragraph)`
