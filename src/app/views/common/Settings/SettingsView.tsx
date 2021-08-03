@@ -25,7 +25,7 @@ import { AppVersion } from "../../../daemon/components/AppVersion"
 
 import { SettingsFilters } from "./SettingsFilters"
 import { SettingsConnection } from "./SettingsConnection"
-import { SettingsAccount } from "./SettingsAccount"
+import { SettingsMysteriumId } from "./SettingsMysteriumId"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -91,7 +91,7 @@ export const SettingsView: React.FC = observer(() => {
     const { router } = useStores()
     const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters.path)
     const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection.path)
-    const isAccountTabActive = router.location.pathname.includes(locations.settingsAccount.path)
+    const isMysteriumIdTabActive = router.location.pathname.includes(locations.settingsMysteriumId.path)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -113,9 +113,12 @@ export const SettingsView: React.FC = observer(() => {
                             <FontAwesomeIcon icon={faGlobe} />
                             Connection
                         </NavButton>
-                        <NavButton active={isAccountTabActive} onClick={() => router.push(locations.settingsAccount)}>
+                        <NavButton
+                            active={isMysteriumIdTabActive}
+                            onClick={() => router.push(locations.settingsMysteriumId)}
+                        >
                             <FontAwesomeIcon icon={faUserAlt} />
-                            Account
+                            Mysterium ID
                         </NavButton>
                         <Version />
                     </SideBot>
@@ -128,8 +131,8 @@ export const SettingsView: React.FC = observer(() => {
                         <Route exact path={locations.settingsConnection.path}>
                             <SettingsConnection />
                         </Route>
-                        <Route exact path={locations.settingsAccount.path}>
-                            <SettingsAccount />
+                        <Route exact path={locations.settingsMysteriumId.path}>
+                            <SettingsMysteriumId />
                         </Route>
                         <Redirect to={locations.settingsFilters.path} />
                     </Switch>
