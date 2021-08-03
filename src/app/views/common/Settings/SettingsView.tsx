@@ -14,7 +14,7 @@ import { faGlobe, faSlidersH, faUserAlt } from "@fortawesome/free-solid-svg-icon
 import { Heading2 } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
-import { greyBlue1, lightBlue } from "../../../ui-kit/colors"
+import { brandLight, greyBlue1, lightBlue } from "../../../ui-kit/colors"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
@@ -98,7 +98,7 @@ export const SettingsView: React.FC = observer(() => {
             <ViewSplit>
                 <ViewSidebar>
                     <SideTop>
-                        <IconSettings color={greyBlue1} />
+                        <IconSettings color={brandLight} />
                         <Title>Settings</Title>
                     </SideTop>
                     <SideBot>

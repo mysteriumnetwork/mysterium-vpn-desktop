@@ -19,7 +19,7 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconPerson } from "../../../ui-kit/icons/IconPerson"
-import { darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colors"
+import { brandLight, darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colors"
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
 import { useStores } from "../../../store"
@@ -137,7 +137,7 @@ export const HelpView: React.FC = observer(() => {
             <ViewSplit>
                 <ViewSidebar>
                     <SideTop>
-                        <IconPerson color={greyBlue1} />
+                        <IconPerson color={brandLight} />
                         <Title>Get help</Title>
                         <Small>Help using Mysterium VPN</Small>
                     </SideTop>

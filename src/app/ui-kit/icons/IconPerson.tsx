@@ -9,7 +9,7 @@ import React from "react"
 import { IconProps } from "./Props"
 
 export const IconPerson: React.FC<IconProps> = ({ color }) => (
-    <svg width="16" height="19" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg height="20" viewBox="0 0 16 19" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             d="M3 5C3 2.23858 5.23858 0 8 0C10.7614 0 13 2.23858 13 5C13 7.76142 10.7614 10 8 10C5.23858 10 3 7.76142 3 5ZM8 8C9.65685 8 11 6.65685 11 5C11 3.34315 9.65685 2 8 2C6.34315 2 5 3.34315 5 5C5 6.65685 6.34315 8 8 8Z"
             fill={color}
