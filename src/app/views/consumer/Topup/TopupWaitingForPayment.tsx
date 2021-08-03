@@ -168,9 +168,7 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
                     <PaymentQR>
                         <QR size={192} text={payment.order?.paymentAddress} />
                     </PaymentQR>
-                    <PaymentAddress>
-                        {payment.order?.paymentAddress}
-                    </PaymentAddress>
+                    <PaymentAddress>{payment.order?.paymentAddress}</PaymentAddress>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
                 </Content>
             </ViewSplit>
