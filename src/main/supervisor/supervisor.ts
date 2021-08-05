@@ -248,6 +248,7 @@ export class Supervisor implements SupervisorInterface {
             let err = ""
             cli.stdout?.on("data", (data) => {
                 const message = data.toString()
+                log.info(message)
                 const idx = message.indexOf("Possible error: ")
                 if (idx != -1) {
                     err = message.substr(idx)
@@ -283,6 +284,7 @@ export class Supervisor implements SupervisorInterface {
             let err = ""
             cli.stdout?.on("data", (data) => {
                 const message = data.toString()
+                log.info(message)
                 const idx = message.indexOf("Possible error: ")
                 if (idx != -1) {
                     err = message.substr(idx)
