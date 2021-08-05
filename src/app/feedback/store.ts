@@ -10,6 +10,7 @@ import { Issue } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { tequilapi } from "../tequilapi"
+import { log } from "../../shared/log/log"
 
 export class FeedbackStore {
     root: RootStore
@@ -30,6 +31,9 @@ export class FeedbackStore {
         try {
             const issueId = await tequilapi.reportIssue(issue)
             return issueId.issueId
+        } catch (err) {
+            log.error("Could not submit the report", err.message)
+            throw err
         } finally {
             this.setLoading(false)
         }

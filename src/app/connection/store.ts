@@ -119,11 +119,11 @@ export class ConnectionStore {
                         dns: this.root.config.dnsOption,
                     },
                 },
-                30000,
+                30_000,
             )
         } catch (err) {
             log.error("Could not connect", err.message)
-            throw err
+            return Promise.reject(err.message)
         } finally {
             this.setConnectInProgress(false)
         }
