@@ -7,7 +7,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { useToasts } from "react-toast-notifications"
+import toast from "react-hot-toast"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -80,7 +80,6 @@ const LightningCheckbox = styled(Checkbox)``
 
 export const TopupSelectCurrency: React.FC = observer(() => {
     const { payment, router } = useStores()
-    const { addToast } = useToasts()
     const [loading, setLoading] = useState(false)
 
     const isOptionActive = (cur: string) => {
@@ -112,9 +111,8 @@ export const TopupSelectCurrency: React.FC = observer(() => {
                 userMessage =
                     "There seems to be a problem with your account. Please create a new identity to continue using MysteriumVPN."
             }
-            addToast(userMessage, {
-                appearance: "error",
-                autoDismiss: true,
+            toast.error(function errorToast() {
+                return <span>{userMessage}</span>
             })
         }
     }

@@ -10,7 +10,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
 import { Router } from "react-router-dom"
-import { ToastProvider } from "react-toast-notifications"
+import { Toaster } from "react-hot-toast"
 import { observer } from "mobx-react-lite"
 import { createHashHistory } from "history"
 import { remote } from "electron"
@@ -116,9 +116,6 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         outline: 2px solid ${brandLight};
         outline-offset: 2px;
     }
-    .react-toast-notifications__container {
-        left: 262px !important;
-    }
     ${(props) => {
         if (props.showGrid) {
             return `
@@ -158,12 +155,23 @@ const App: React.FC = observer(() => {
         <React.Fragment>
             <GlobalStyle showGrid={root.showGrid} />
             <Router history={history}>
-                <ToastProvider placement="top-left">
-                    <StoreContext.Provider value={rootStore}>
-                        <Routes />
-                    </StoreContext.Provider>
-                </ToastProvider>
+                <StoreContext.Provider value={rootStore}>
+                    <Routes />
+                </StoreContext.Provider>
             </Router>
+            <Toaster
+                position="top-right"
+                gutter={40}
+                containerStyle={{
+                    marginTop: 35,
+                    overflowWrap: "anywhere",
+                    wordBreak: "break-word",
+                    fontSize: 14,
+                }}
+                toastOptions={{
+                    duration: 8_000,
+                }}
+            />
             <div className="baseline" />
         </React.Fragment>
     )

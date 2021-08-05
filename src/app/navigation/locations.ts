@@ -63,14 +63,6 @@ export const locations = {
         path: "/terms",
         title: "Terms",
     },
-    activate: {
-        path: "/activate",
-        title: "Activate",
-    },
-    activateTopup: {
-        path: "/activate-topup",
-        title: "Activate / Topup",
-    },
     identity: {
         path: "/identity",
         title: "Identity",
