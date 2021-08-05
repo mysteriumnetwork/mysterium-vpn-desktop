@@ -13,7 +13,6 @@ import styled from "styled-components"
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
 import { OnboardingView } from "../../../views/common/Onboarding/OnboardingView"
-import { ActivateAccountTopup } from "../../../views/common/ActivateAccountTopup/ActivateAccountTopup"
 import { SelectProposalView } from "../../../views/consumer/SelectProposal/SelectProposalView"
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
@@ -21,7 +20,6 @@ import { useStores } from "../../../store"
 import { TitleBar } from "../TitleBar/TitleBar"
 import { locations } from "../../locations"
 import { winSize } from "../../../../config"
-import { ActivateAccount } from "../../../views/common/ActivateAccount/ActivateAccount"
 import ReferralView from "../../../views/consumer/Referral/ReferralView"
 import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
 import { HelpView } from "../../../views/common/Help/HelpView"
@@ -61,13 +59,6 @@ export const Routes: React.FC = observer(() => {
                         <Route path={locations.terms.path}>
                             <NakedTitleBar />
                             <AcceptTermsView />
-                        </Route>
-                        <Route path={locations.activate.path}>
-                            <NakedTitleBar />
-                            <ActivateAccount />
-                        </Route>
-                        <Route path={locations.activateTopup.path}>
-                            <ActivateAccountTopup />
                         </Route>
                         <Route path={locations.proposals.path}>
                             <TitleBar />
