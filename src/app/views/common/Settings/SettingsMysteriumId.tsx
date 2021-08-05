@@ -9,7 +9,7 @@ import React, { useState } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFileExport, faIdBadge } from "@fortawesome/free-solid-svg-icons"
-import { useToasts } from "react-toast-notifications"
+import toast from "react-hot-toast"
 
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
@@ -38,31 +38,39 @@ const Explanation = styled(Small)`
     margin-bottom: 15px;
 `
 
-const ToastWrap = styled.span`
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-`
-
 export const SettingsMysteriumId: React.FC = observer(() => {
     const { payment, identity } = useStores()
-    const { addToast } = useToasts()
 
     // Export
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleExportInitiate = () => {
         setExportPrompt(true)
     }
-    const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {
+
+    const handleExportSubmit = ({ passphrase }: { passphrase: string }) => {
         setExportPrompt(false)
-        const res = await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
-        if (res.result) {
-            addToast(<ToastWrap>Identity backed up to {res.result}</ToastWrap>, { appearance: "success" })
-        } else if (res.error) {
-            addToast(<ToastWrap>Identity backup failed. Error: {res.error}</ToastWrap>, {
-                appearance: "error",
-                autoDismiss: true,
-            })
-        }
+        const res = identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
+        toast.promise(res, {
+            loading: "Creating backup...",
+            success: function successToast(filename) {
+                return (
+                    <span>
+                        <b>Identity backed up!</b>
+                        <br />
+                        {filename}
+                    </span>
+                )
+            },
+            error: function errorToast(reason) {
+                return (
+                    <span>
+                        <b>Identity backup failed.</b>
+                        <br />
+                        Error: {reason}
+                    </span>
+                )
+            },
+        })
     }
     const handleExportCancel = () => {
         setExportPrompt(false)
@@ -81,15 +89,26 @@ export const SettingsMysteriumId: React.FC = observer(() => {
     }
     const handleImportSubmit = async ({ passphrase }: { passphrase: string }) => {
         setImportPrompt(false)
-        const res = await identity.importIdentity({ filename: importFilename, passphrase })
-        if (res.result) {
-            addToast(<ToastWrap>Identity restored.</ToastWrap>, { appearance: "success" })
-        } else if (res.error) {
-            addToast(<ToastWrap>Identity restoration failed. Error: {res.error}</ToastWrap>, {
-                appearance: "error",
-                autoDismiss: true,
-            })
-        }
+        const res = identity.importIdentity({ filename: importFilename, passphrase })
+        toast.promise(res, {
+            loading: "Importing identity...",
+            success: function successToast() {
+                return (
+                    <span>
+                        <b>Mysterium ID imported!</b>
+                    </span>
+                )
+            },
+            error: function errorToast(reason) {
+                return (
+                    <span>
+                        <b>Mysterium ID import failed.</b>
+                        <br />
+                        Error: {reason}
+                    </span>
+                )
+            },
+        })
     }
     const handleImportCancel = () => {
         setImportPrompt(false)

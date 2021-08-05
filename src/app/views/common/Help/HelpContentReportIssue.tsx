@@ -7,15 +7,14 @@
 import React, { useRef } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { useToasts } from "react-toast-notifications"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBug } from "@fortawesome/free-solid-svg-icons"
+import toast from "react-hot-toast"
 
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
 import { TextArea } from "../../../ui-kit/form-components/TextArea"
 import { useStores } from "../../../store"
-import { log } from "../../../../shared/log/log"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../../shared/analytics/actions"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
@@ -41,7 +40,6 @@ const SendButton = styled(LightButton)`
 
 export const HelpContentReportIssue: React.FC = observer(() => {
     const { feedback } = useStores()
-    const { addToast } = useToasts()
     const email = useRef<HTMLInputElement>(null)
     const description = useRef<HTMLTextAreaElement>(null)
     const clearInputs = () => {
@@ -54,20 +52,32 @@ export const HelpContentReportIssue: React.FC = observer(() => {
     }
     const submit = async () => {
         userEvent(OtherAction.SubmitBugReport)
-        try {
-            const issueId = await feedback.reportIssue({
-                email: email.current?.value,
-                description: description.current?.value ?? "",
-            })
-            addToast(`Thanks for the feedback! Issue reference #${issueId}`, { appearance: "success" })
-            clearInputs()
-        } catch (err) {
-            addToast("Could not submit the report.\nPlease try again later.", {
-                appearance: "error",
-                autoDismiss: true,
-            })
-            log.error("Could not submit the report", err.message)
-        }
+        const res = feedback.reportIssue({
+            email: email.current?.value,
+            description: description.current?.value ?? "",
+        })
+        await toast.promise(res, {
+            loading: "Sending report...",
+            success: function successToast(issueId) {
+                return (
+                    <span>
+                        <b>Report #{issueId} submitted</b>
+                        <br />
+                        Thanks for the feedback!
+                    </span>
+                )
+            },
+            error: function errorToast(reason) {
+                return (
+                    <span>
+                        <b>Could not submit the report.</b>
+                        <br />
+                        Error: {reason}
+                    </span>
+                )
+            },
+        })
+        clearInputs()
     }
     return (
         <>

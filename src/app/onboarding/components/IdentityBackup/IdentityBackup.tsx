@@ -10,7 +10,7 @@ import { faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
-import { useToasts } from "react-toast-notifications"
+import toast from "react-hot-toast"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -65,14 +65,8 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
-const ToastWrap = styled.span`
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-`
-
 export const IdentityBackup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
-    const { addToast } = useToasts()
 
     const nextStep = () => {
         onboarding.finishIdSetup()
@@ -85,13 +79,18 @@ export const IdentityBackup: React.FC = observer(() => {
     }
     const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {
         setExportPrompt(false)
-        const res = await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
-        if (res.result) {
+        try {
+            await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
             nextStep()
-        } else if (res.error) {
-            addToast(<ToastWrap>Identity backup failed. Error: {res.error}</ToastWrap>, {
-                appearance: "error",
-                autoDismiss: true,
+        } catch (reason) {
+            toast.error(function errorToast() {
+                return (
+                    <span>
+                        <b>Identity backup failed.</b>
+                        <br />
+                        Error: {reason}
+                    </span>
+                )
             })
         }
     }

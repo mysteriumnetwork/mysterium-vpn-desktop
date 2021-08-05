@@ -33,7 +33,7 @@ export class FeedbackStore {
             return issueId.issueId
         } catch (err) {
             log.error("Could not submit the report", err.message)
-            throw err
+            return Promise.reject(err.message)
         } finally {
             this.setLoading(false)
         }

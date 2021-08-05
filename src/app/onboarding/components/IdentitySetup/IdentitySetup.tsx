@@ -10,7 +10,7 @@ import { faCircleNotch, faFileImport, faIdCardAlt, faUserPlus } from "@fortaweso
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
-import { useToasts } from "react-toast-notifications"
+import toast from "react-hot-toast"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -73,14 +73,8 @@ const IdentityProgress = styled(Heading2)`
     opacity: 0.7;
 `
 
-const ToastWrap = styled.span`
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-`
-
 export const IdentitySetup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
-    const { addToast } = useToasts()
 
     const handleCreateNew = async () => {
         await onboarding.createNewId()
@@ -97,15 +91,28 @@ export const IdentitySetup: React.FC = observer(() => {
     }
     const handleImportSubmit = async ({ passphrase }: { passphrase: string }) => {
         setImportPrompt(false)
-        const res = await identity.importIdentity({ filename: importFilename, passphrase })
-        if (res.result) {
-            onboarding.finishIdSetup()
-        } else if (res.error) {
-            addToast(<ToastWrap>Mysterium ID import failed. Error: {res.error}</ToastWrap>, {
-                appearance: "error",
-                autoDismiss: true,
+        const res = identity.importIdentity({ filename: importFilename, passphrase })
+        toast
+            .promise(res, {
+                loading: "Importing identity...",
+                success: function successToast() {
+                    return (
+                        <span>
+                            <b>Mysterium ID imported!</b>
+                        </span>
+                    )
+                },
+                error: function errorToast(reason) {
+                    return (
+                        <span>
+                            <b>Mysterium ID import failed.</b>
+                            <br />
+                            Error: {reason}
+                        </span>
+                    )
+                },
             })
-        }
+            .then(() => onboarding.finishIdSetup())
     }
     const handleImportCancel = () => {
         setImportPrompt(false)
