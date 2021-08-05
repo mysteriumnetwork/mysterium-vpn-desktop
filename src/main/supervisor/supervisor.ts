@@ -225,6 +225,18 @@ export class Supervisor implements SupervisorInterface {
         return Promise.resolve()
     }
 
+    parseCLIError = (message: string): string => {
+        let idx = message.indexOf("Possible error: ")
+        if (idx != -1) {
+            return message.substr(idx)
+        }
+        idx = message.indexOf("reason: ")
+        if (idx != -1) {
+            return message.substr(idx)
+        }
+        return message
+    }
+
     exportIdentity({
         id,
         filename,
@@ -249,10 +261,7 @@ export class Supervisor implements SupervisorInterface {
             cli.stdout?.on("data", (data) => {
                 const message = data.toString()
                 log.info(message)
-                const idx = message.indexOf("Possible error: ")
-                if (idx != -1) {
-                    err = message.substr(idx)
-                }
+                err = this.parseCLIError(message)
             })
             cli.on("exit", (code) => {
                 if (code == 0) {
@@ -285,10 +294,7 @@ export class Supervisor implements SupervisorInterface {
             cli.stdout?.on("data", (data) => {
                 const message = data.toString()
                 log.info(message)
-                const idx = message.indexOf("Possible error: ")
-                if (idx != -1) {
-                    err = message.substr(idx)
-                }
+                err = this.parseCLIError(message)
             })
             cli.on("exit", (code) => {
                 if (code == 0) {

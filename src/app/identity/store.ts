@@ -164,8 +164,12 @@ export class IdentityStore {
         this.identities = identities
     }
 
-    exportIdentity({ id, passphrase }: { id: string; passphrase: string }): Promise<IpcResponse> {
-        return ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
+    async exportIdentity({ id, passphrase }: { id: string; passphrase: string }): Promise<string> {
+        const res = await ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
+        if (res.error) {
+            return Promise.reject(res.error)
+        }
+        return res.result
     }
 
     importIdentityChooseFile(): Promise<string> {
@@ -174,9 +178,12 @@ export class IdentityStore {
             .then((result: IpcResponse) => result.result as string)
     }
 
-    async importIdentity(opts: ImportIdentityOpts): Promise<IpcResponse> {
-        const importResult = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
+    async importIdentity(opts: ImportIdentityOpts): Promise<string> {
+        const res = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
+        if (res.error) {
+            return Promise.reject(res.error)
+        }
         await this.loadIdentity()
-        return importResult
+        return res.result
     }
 }
