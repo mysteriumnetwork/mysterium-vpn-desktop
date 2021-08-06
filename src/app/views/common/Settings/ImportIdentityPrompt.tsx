@@ -52,7 +52,12 @@ export const ImportIdentityPrompt: React.FC<ImportIdentityPromptProps> = ({ visi
         }
     }, [visible])
     return (
-        <Prompt title="Enter identity passphrase" visible={visible} onOK={handleSubmit(onSubmit)} onCancel={onCancel}>
+        <Prompt
+            title="Enter identity passphrase"
+            visible={visible}
+            onSubmit={handleSubmit(onSubmit)}
+            onCancel={onCancel}
+        >
             <PromptExplanation>Used to decrypt the selected file.</PromptExplanation>
             <PromptInput
                 autoFocus

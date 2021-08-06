@@ -53,7 +53,7 @@ export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visi
         }
     }, [visible])
     return (
-        <Prompt title="Choose a passphrase" visible={visible} onOK={handleSubmit(onSubmit)} onCancel={onCancel}>
+        <Prompt title="Choose a passphrase" visible={visible} onSubmit={handleSubmit(onSubmit)} onCancel={onCancel}>
             <PromptExplanation>Used to encrypt the exported file. Min. length: 12</PromptExplanation>
             <PromptInput
                 autoFocus

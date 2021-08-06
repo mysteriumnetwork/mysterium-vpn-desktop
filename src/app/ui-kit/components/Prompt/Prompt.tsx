@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react"
+import React, { FormEventHandler } from "react"
 import styled from "styled-components"
 
 import { OutlineButton } from "../Button/OutlineButton"
@@ -59,16 +59,17 @@ const PromptButtonOK = styled(BrandButton)`
 export interface PromptProps {
     visible: boolean
     title?: string
-    onOK?: () => void
+    onSubmit?: () => void
     onCancel?: () => void
 }
 
-export const Prompt: React.FC<PromptProps> = ({ visible, title, onOK, onCancel, children }) => {
+export const Prompt: React.FC<PromptProps> = ({ visible, title, onSubmit, onCancel, children }) => {
     if (!visible) {
         return <></>
     }
-    const handleOK = () => {
-        onOK?.()
+    const handleOnSubmit: FormEventHandler = (evt) => {
+        evt.preventDefault()
+        onSubmit?.()
     }
     const handleCancel = () => {
         onCancel?.()
@@ -76,14 +77,14 @@ export const Prompt: React.FC<PromptProps> = ({ visible, title, onOK, onCancel, 
     return (
         <Background>
             <Box>
-                <form>
+                <form onSubmit={handleOnSubmit}>
                     <PromptTitle>{title}</PromptTitle>
                     {children}
                     <PromptButtons>
-                        <PromptButtonOK onClick={handleOK} type="submit">
-                            OK
-                        </PromptButtonOK>
-                        <OutlineButton onClick={handleCancel}>Cancel</OutlineButton>
+                        <PromptButtonOK type="submit">OK</PromptButtonOK>
+                        <OutlineButton onClick={handleCancel} type="button">
+                            Cancel
+                        </OutlineButton>
                     </PromptButtons>
                 </form>
             </Box>
