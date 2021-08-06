@@ -76,12 +76,16 @@ export const Prompt: React.FC<PromptProps> = ({ visible, title, onOK, onCancel, 
     return (
         <Background>
             <Box>
-                <PromptTitle>{title}</PromptTitle>
-                {children}
-                <PromptButtons>
-                    <PromptButtonOK onClick={handleOK}>OK</PromptButtonOK>
-                    <OutlineButton onClick={handleCancel}>Cancel</OutlineButton>
-                </PromptButtons>
+                <form>
+                    <PromptTitle>{title}</PromptTitle>
+                    {children}
+                    <PromptButtons>
+                        <PromptButtonOK onClick={handleOK} type="submit">
+                            OK
+                        </PromptButtonOK>
+                        <OutlineButton onClick={handleCancel}>Cancel</OutlineButton>
+                    </PromptButtons>
+                </form>
             </Box>
         </Background>
     )

@@ -54,40 +54,38 @@ export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visi
     }, [visible])
     return (
         <Prompt title="Choose a passphrase" visible={visible} onOK={handleSubmit(onSubmit)} onCancel={onCancel}>
-            <form>
-                <PromptExplanation>Used to encrypt the exported file. Min. length: 12</PromptExplanation>
-                <PromptInput
-                    autoFocus
-                    placeholder="Passphrase"
-                    type="password"
-                    {...register("passphrase", {
-                        required: "This is required",
-                        minLength: {
-                            value: 12,
-                            message: "Should be at least 12 characters",
+            <PromptExplanation>Used to encrypt the exported file. Min. length: 12</PromptExplanation>
+            <PromptInput
+                autoFocus
+                placeholder="Passphrase"
+                type="password"
+                {...register("passphrase", {
+                    required: "This is required",
+                    minLength: {
+                        value: 12,
+                        message: "Should be at least 12 characters",
+                    },
+                })}
+            />
+            <PromptValidation>{errors.passphrase?.message}</PromptValidation>
+            <PromptInput
+                placeholder="Confirm passphrase"
+                type="password"
+                {...register("confirmPassphrase", {
+                    required: "This is required",
+                    minLength: {
+                        value: 12,
+                        message: "Should be at least 12 characters",
+                    },
+                    validate: {
+                        matchesPassphrase: (value) => {
+                            const { passphrase } = getValues()
+                            return value === passphrase || "Passphrases do not match!"
                         },
-                    })}
-                />
-                <PromptValidation>{errors.passphrase?.message}</PromptValidation>
-                <PromptInput
-                    placeholder="Confirm passphrase"
-                    type="password"
-                    {...register("confirmPassphrase", {
-                        required: "This is required",
-                        minLength: {
-                            value: 12,
-                            message: "Should be at least 12 characters",
-                        },
-                        validate: {
-                            matchesPassphrase: (value) => {
-                                const { passphrase } = getValues()
-                                return value === passphrase || "Passphrases do not match!"
-                            },
-                        },
-                    })}
-                />
-                <PromptValidation>{errors.confirmPassphrase?.message}</PromptValidation>
-            </form>
+                    },
+                })}
+            />
+            <PromptValidation>{errors.confirmPassphrase?.message}</PromptValidation>
         </Prompt>
     )
 }
