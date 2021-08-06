@@ -13,7 +13,7 @@ import { Router } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { observer } from "mobx-react-lite"
 import { createHashHistory } from "history"
-import { remote } from "electron"
+import { observe } from "mobx"
 
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 
@@ -180,6 +180,9 @@ const App: React.FC = observer(() => {
 // Render components
 const app = document.getElementById("app")
 ReactDOM.render(<App />, app)
-if (app) {
-    app.className = remote.getGlobal("os")
-}
+
+observe(rootStore, (change) => {
+    if (change.name === "os" && app) {
+        app.className = change.object[change.name]
+    }
+})

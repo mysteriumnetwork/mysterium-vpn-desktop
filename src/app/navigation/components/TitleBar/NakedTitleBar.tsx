@@ -5,8 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { remote } from "electron"
 import styled from "styled-components"
+import { observer } from "mobx-react-lite"
+
+import { useStores } from "../../../store"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
 import { WindowButtonsLinux } from "./WindowButtonsLinux"
@@ -16,13 +18,12 @@ const Container = styled(TitlebarContainer)`
     justify-content: flex-end;
 `
 
-export const NakedTitleBar: React.FC = () => {
-    const isWindows = remote.getGlobal("os") === "win32"
-    const isLinux = remote.getGlobal("os") !== "darwin" && !isWindows
+export const NakedTitleBar: React.FC = observer(() => {
+    const root = useStores()
     return (
         <Container>
-            {isWindows && <WindowButtonsWindows />}
-            {isLinux && <WindowButtonsLinux />}
+            {root.isWindows && <WindowButtonsWindows />}
+            {root.isLinux && <WindowButtonsLinux />}
         </Container>
     )
-}
+})

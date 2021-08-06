@@ -9,9 +9,7 @@ import { SupervisorInterface } from "../shared/supervisor"
 declare global {
     namespace NodeJS {
         interface Global {
-            os: Platform
             supervisor: SupervisorInterface
-            machineId: string
         }
     }
 }

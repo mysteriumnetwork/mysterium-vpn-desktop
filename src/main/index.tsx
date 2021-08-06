@@ -11,6 +11,7 @@ import * as os from "os"
 
 import { app, BrowserWindow, dialog, ipcMain, IpcMainEvent, IpcMainInvokeEvent, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
+import { machineIdSync } from "node-machine-id"
 
 import * as packageJson from "../../package.json"
 import { winSize } from "../config"
@@ -35,7 +36,6 @@ autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = "info"
 
 global.supervisor = supervisor
-global.os = os.platform()
 
 // global reference to win (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | null
@@ -209,6 +209,16 @@ app.on("before-quit", async () => {
     app.quitting = true
     await supervisor.connect()
     await supervisor.stopMyst()
+})
+
+ipcMain.handle(MainIpcListenChannels.GetOS, (): Promise<string> => {
+    return Promise.resolve(os.platform())
+})
+
+ipcMain.handle(MainIpcListenChannels.GetMachineId, (): Promise<string> => {
+    const machineId = machineIdSync()
+    log.info("Resolved machine ID", machineId)
+    return Promise.resolve(machineId)
 })
 
 ipcMain.on(MainIpcListenChannels.ConnectionStatus, (event, status) => {

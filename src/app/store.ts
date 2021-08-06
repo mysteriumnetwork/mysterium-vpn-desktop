@@ -5,11 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { action, configure, makeObservable, observable, reaction } from "mobx"
+import { action, computed, configure, makeObservable, observable, reaction, runInAction } from "mobx"
 import { ipcRenderer } from "electron"
 
 // import { enableLogging } from "mobx-logger"
-import { WebIpcListenChannels } from "../shared/ipc"
+import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { isDevelopment } from "../utils/env"
 import { AppStateAction } from "../shared/analytics/actions"
 import { log } from "../shared/log/log"
@@ -43,11 +43,16 @@ export class RootStore {
     referral: ReferralStore
 
     showGrid = false
+    os = ""
 
     constructor() {
         makeObservable(this, {
             showGrid: observable,
             toggleGrid: action,
+            os: observable,
+            isWindows: computed,
+            isMacOS: computed,
+            isLinux: computed,
         })
         this.navigation = new NavigationStore(this)
         this.router = new RouterStore()
@@ -69,13 +74,18 @@ export class RootStore {
         this.proposals.setupReactions()
         this.payment.setupReactions()
         this.connection.setupReactions()
-        this.referral.setupReactions()
         this.setupReactions()
 
         document.addEventListener("keydown", (ev: KeyboardEvent) => {
             if (ev.code == "F5") {
                 this.toggleGrid()
             }
+        })
+
+        ipcRenderer.invoke(MainIpcListenChannels.GetOS).then((os) => {
+            runInAction(() => {
+                this.os = os
+            })
         })
     }
 
@@ -97,6 +107,18 @@ export class RootStore {
                 }
             },
         )
+    }
+
+    get isWindows(): boolean {
+        return this.os === "win32"
+    }
+
+    get isMacOS(): boolean {
+        return this.os === "darwin"
+    }
+
+    get isLinux(): boolean {
+        return !this.isWindows && !this.isMacOS
     }
 
     toggleGrid = (): void => {

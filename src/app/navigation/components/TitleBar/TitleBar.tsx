@@ -10,7 +10,6 @@ import { Currency } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { remote } from "electron"
 
 import { useStores } from "../../../store"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
@@ -107,7 +106,7 @@ const Money = styled.div`
     }
 `
 export const TitleBar: React.FC = observer(() => {
-    const { navigation, router, identity } = useStores()
+    const { navigation, router, identity, isWindows, isLinux } = useStores()
     // const clickReferrals = () => {
     //     navigation.toggleReferrals()
     //     if (!referralsActive) {
@@ -124,8 +123,6 @@ export const TitleBar: React.FC = observer(() => {
             removeInsignificantZeros: true,
         },
     )
-    const isWindows = remote.getGlobal("os") === "win32"
-    const isLinux = remote.getGlobal("os") !== "darwin" && !isWindows
     return (
         <Container>
             {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.

@@ -33,10 +33,6 @@ export class ReferralStore {
         this.root = root
     }
 
-    setupReactions(): void {
-        log.debug("reserved")
-    }
-
     async generateToken(): Promise<void> {
         const id = this.root.identity.identity?.id
         if (!id) {

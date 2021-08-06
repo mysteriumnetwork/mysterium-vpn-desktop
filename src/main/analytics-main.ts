@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { machineIdSync } from "node-machine-id"
 import { BrowserWindow } from "electron"
 
 import { WebIpcListenChannels } from "../shared/ipc"
@@ -14,7 +13,6 @@ let win: BrowserWindow
 
 export const initialize = (w: BrowserWindow): void => {
     win = w
-    global.machineId = machineIdSync()
 }
 export const webAnalyticsAppStateEvent = (action: string, name?: string, value?: number): void => {
     win?.webContents.send(WebIpcListenChannels.AnalyticsAppStateEvent, action, name, value)

@@ -15,6 +15,8 @@ export enum WebIpcListenChannels {
 }
 
 export enum MainIpcListenChannels {
+    GetOS = "get-os",
+    GetMachineId = "get-machine-id",
     Update = "update",
     ConnectionStatus = "connection-status",
     OpenSupportChat = "open-support-chat",

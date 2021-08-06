@@ -7,20 +7,24 @@
 import MatomoTracker from "@datapunt/matomo-tracker-js"
 import { TrackEventParams } from "@datapunt/matomo-tracker-js/lib/types"
 import { TrackPageViewParams } from "@datapunt/matomo-tracker-js/es/types"
-import { ipcRenderer, remote } from "electron"
+import { ipcRenderer } from "electron"
 
 import * as packageJson from "../../../package.json"
 import { isDevelopment } from "../../utils/env"
-import { WebIpcListenChannels } from "../../shared/ipc"
+import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
 import { AppStateAction, Category, UserAction } from "../../shared/analytics/actions"
 
 const appVersion = packageJson.version
-const tracker = new MatomoTracker({
-    siteId: 1,
-    userId: remote.getGlobal("machineId"),
-    urlBase: packageJson.analyticsUrl,
-    disabled: isDevelopment(),
-    linkTracking: false,
+
+let tracker: MatomoTracker
+ipcRenderer.invoke(MainIpcListenChannels.GetMachineId).then((machineId) => {
+    tracker = new MatomoTracker({
+        siteId: 1,
+        userId: machineId,
+        urlBase: packageJson.analyticsUrl,
+        disabled: isDevelopment(),
+        linkTracking: false,
+    })
 })
 
 export const initialize = (): void => {
