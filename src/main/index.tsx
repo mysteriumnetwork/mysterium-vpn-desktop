@@ -253,9 +253,11 @@ ipcMain.handle(MainIpcListenChannels.ImportIdentityChooseFile, async (): Promise
     if (!mainWindow) {
         return {}
     }
-    const filename = dialog.showOpenDialogSync(mainWindow, {
-        filters: [{ extensions: ["json"], name: "keystore" }],
-    })
+    const filename = dialog
+        .showOpenDialogSync(mainWindow, {
+            filters: [{ extensions: ["json"], name: "keystore" }],
+        })
+        ?.find(Boolean)
     return Promise.resolve({ result: filename })
 })
 

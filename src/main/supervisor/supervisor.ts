@@ -7,7 +7,7 @@
 import * as net from "net"
 import { Socket } from "net"
 import { platform } from "os"
-import { ChildProcess, spawn } from "child_process"
+import { ChildProcess } from "child_process"
 
 import semver from "semver"
 import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
@@ -22,6 +22,7 @@ import { AppStateAction } from "../../shared/analytics/actions"
 import { ImportIdentityOpts, SupervisorInterface } from "../../shared/supervisor"
 import { TEQUILAPI_PORT } from "../../app/tequilapi"
 import { IpcResponse } from "../../shared/ipc"
+import { spawnProcess } from "../../utils/spawn"
 
 const isWin = platform() === "win32"
 
@@ -196,7 +197,7 @@ export class Supervisor implements SupervisorInterface {
         this.setSupervisorTequilapiPort(port)
         this.port = port
 
-        const mystProcess = spawn(
+        const mystProcess = spawnProcess(
             this.mystBin(),
             [
                 "--ui.enable=false",
@@ -247,7 +248,7 @@ export class Supervisor implements SupervisorInterface {
         passphrase: string
     }): Promise<IpcResponse> {
         return new Promise((resolve) => {
-            const cli = spawn(this.mystBin(), [
+            const cli = spawnProcess(this.mystBin(), [
                 "cli",
                 "--agreed-terms-and-conditions",
                 `--tequilapi.port=${TEQUILAPI_PORT}`,
@@ -281,7 +282,7 @@ export class Supervisor implements SupervisorInterface {
 
     importIdentity({ filename, passphrase }: ImportIdentityOpts): Promise<IpcResponse> {
         return new Promise((resolve) => {
-            const cli = spawn(this.mystBin(), [
+            const cli = spawnProcess(this.mystBin(), [
                 "cli",
                 "--agreed-terms-and-conditions",
                 `--tequilapi.port=${TEQUILAPI_PORT}`,
