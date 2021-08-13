@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
+import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 import { ipcRenderer } from "electron"
 
@@ -178,6 +178,9 @@ export class IdentityStore {
             return Promise.reject(res.error)
         }
         await this.loadIdentity()
+        if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
+            await this.register(this.identity)
+        }
         return res.result
     }
 }
