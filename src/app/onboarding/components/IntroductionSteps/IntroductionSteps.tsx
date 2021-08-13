@@ -20,13 +20,13 @@ import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { useStores } from "../../../store"
 import { userEvent } from "../../../analytics/analytics"
 import { OnboardingAction } from "../../../../shared/analytics/actions"
+import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 
 import animationPayAsYouGo from "./animation_payasyougo.json"
 import animationNetwork from "./animation_network.json"
 
-const Container = styled.div`
+const Container = styled(ViewContainer)`
     background: ${bg1};
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
