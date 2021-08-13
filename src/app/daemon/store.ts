@@ -28,7 +28,7 @@ export enum StartupStatus {
     UpdateAvailable = "Update available",
     UpdateNotAvailable = "No update available",
     Downloading = "Downloading update",
-    DownloadingComplete = "Download complete. Restarting...",
+    DownloadingComplete = "Download complete. Restart the app to upgrade!",
     KillingGhosts = "Killing ghosts",
     StartingDaemon = "Starting daemon",
 }
