@@ -124,8 +124,7 @@ export class PaymentStore {
     async fetchPaymentOptions(): Promise<void> {
         const optionsResponse = await tequilapi.getPaymentOrderOptions()
         runInAction(() => {
-            const min = Math.max(Math.round(optionsResponse.minimum ?? 10), 10)
-            this.orderOptions = [min, min * 2, min * 3, min * 5, min * 8, min * 10]
+            this.orderOptions = optionsResponse.suggested.slice(0, 6)
         })
     }
 
