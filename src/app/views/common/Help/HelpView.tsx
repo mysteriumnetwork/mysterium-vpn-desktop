@@ -129,8 +129,8 @@ const SupportChatButton = styled.button`
 
 export const HelpView: React.FC = observer(() => {
     const { navigation, router } = useStores()
-    const isBugReportActive = router.location.pathname.includes(locations.helpBugReport.path)
-    const isTermsAndConditionsActive = router.location.pathname.includes(locations.helpTermsAndConditions.path)
+    const isBugReportActive = router.location.pathname.includes(locations.helpBugReport)
+    const isTermsAndConditionsActive = router.location.pathname.includes(locations.helpTermsAndConditions)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -210,13 +210,13 @@ export const HelpView: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <Switch>
-                        <Route exact path={locations.helpBugReport.path}>
+                        <Route exact path={locations.helpBugReport}>
                             <HelpContentReportIssue />
                         </Route>
-                        <Route exact path={locations.helpTermsAndConditions.path}>
+                        <Route exact path={locations.helpTermsAndConditions}>
                             <HelpContentTermsAndConditions />
                         </Route>
-                        <Redirect to={locations.helpBugReport.path} />
+                        <Redirect to={locations.helpBugReport} />
                     </Switch>
                 </Content>
             </ViewSplit>

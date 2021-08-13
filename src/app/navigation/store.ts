@@ -14,7 +14,7 @@ import { MainIpcListenChannels } from "../../shared/ipc"
 import { OnboardingAction, OtherAction } from "../../shared/analytics/actions"
 import { registered } from "../identity/identity"
 
-import { AppLocation, locations } from "./locations"
+import { locations } from "./locations"
 
 const connectionInProgress = (status: ConnectionStatus): boolean => {
     return [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)
@@ -64,9 +64,9 @@ export class NavigationStore {
         }
     }
 
-    determineLocation = (): AppLocation | undefined => {
+    determineLocation = (): string | undefined => {
         const { config, identity, connection } = this.root
-        if (this.root.router.location.pathname == locations.wallet.path) {
+        if (this.root.router.location.pathname == locations.wallet) {
             return undefined
         }
         if (!config.onboarded) {
@@ -109,18 +109,18 @@ export class NavigationStore {
     }
 
     get isHomeActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.consumer.path)
+        return this.root.router.location.pathname.includes(locations.consumer)
     }
 
     get isSettingsActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.settings.path)
+        return this.root.router.location.pathname.includes(locations.settings)
     }
 
     get isHelpActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.help.path)
+        return this.root.router.location.pathname.includes(locations.help)
     }
 
     get isWalletActive(): boolean {
-        return this.root.router.location.pathname.includes(locations.wallet.path)
+        return this.root.router.location.pathname.includes(locations.wallet)
     }
 }

@@ -20,25 +20,25 @@ export const OnboardingView: React.FC = observer(() => {
     return (
         <>
             <Switch>
-                <Route exact path={locations.onboardingWelcome.path}>
+                <Route exact path={locations.onboardingWelcome}>
                     <Welcome />
                 </Route>
-                <Route path={locations.onboardingIntro.path}>
+                <Route path={locations.onboardingIntro}>
                     <IntroductionSteps />
                 </Route>
-                <Route exact path={locations.onboardingIdentitySetup.path}>
+                <Route exact path={locations.onboardingIdentitySetup}>
                     <IdentitySetup />
                 </Route>
-                <Route exact path={locations.onboardingIdentityBackup.path}>
+                <Route exact path={locations.onboardingIdentityBackup}>
                     <IdentityBackup />
                 </Route>
-                <Route path={locations.onboardingTopupPrompt.path}>
+                <Route path={locations.onboardingTopupPrompt}>
                     <InitialTopup />
                 </Route>
-                <Route path={locations.onboardingWalletTopup.path}>
+                <Route path={locations.onboardingWalletTopup}>
                     <TopupView />
                 </Route>
-                <Redirect to={locations.onboardingWelcome.path} />
+                <Redirect to={locations.onboardingWelcome} />
             </Switch>
         </>
     )

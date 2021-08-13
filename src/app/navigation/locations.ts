@@ -5,148 +5,41 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export interface AppLocation {
-    path: string
-    title: string
-}
-
 export const locations = {
-    onboarding: {
-        path: "/onboarding",
-        title: "Onboarding",
-    },
-    onboardingWelcome: {
-        path: "/onboarding/welcome",
-        title: "Onboarding / Welcome",
-    },
-    onboardingIntro: {
-        path: "/onboarding/intro",
-        title: "Onboarding / Intro",
-    },
-    onboardingIntro1: {
-        path: "/onboarding/intro/1",
-        title: "Onboarding / Intro / 1",
-    },
-    onboardingIntro2: {
-        path: "/onboarding/intro/2",
-        title: "Onboarding / Intro / 2",
-    },
-    onboardingIntro3: {
-        path: "/onboarding/intro/3",
-        title: "Onboarding / Intro / 3",
-    },
-    onboardingIntro4: {
-        path: "/onboarding/intro/4",
-        title: "Onboarding / Intro / 4",
-    },
-    onboardingIdentitySetup: {
-        path: "/onboarding/identity/setup",
-        title: "Onboarding / Identity / Create",
-    },
-    onboardingIdentityBackup: {
-        path: "/onboarding/identity/backup",
-        title: "Onboarding / Identity / Backup",
-    },
-    onboardingTopupPrompt: {
-        path: "/onboarding/topup-prompt",
-        title: "Onboarding / Topup",
-    },
-    onboardingWalletTopup: {
-        path: "/onboarding/wallet/topup",
-        title: "Onboarding / Wallet Topup",
-    },
-    onboardingComplete: {
-        path: "/onboarding/complete",
-        title: "Onboarding / Complete",
-    },
-    terms: {
-        path: "/terms",
-        title: "Terms",
-    },
-    identity: {
-        path: "/identity",
-        title: "Identity",
-    },
-    loading: {
-        path: "/loading",
-        title: "Loading",
-    },
-    wallet: {
-        path: "/wallet",
-        title: "Wallet",
-    },
-    walletIdentity: {
-        path: "/wallet/identity",
-        title: "Wallet/Identity",
-    },
-    walletTopup: {
-        path: "/wallet/topup",
-        title: "Wallet/Topup",
-    },
-    walletTopupSelectAmount: {
-        path: "/wallet/topup/select-amount",
-        title: "Wallet / Topup / Select Amount",
-    },
-    walletTopupSelectCurrency: {
-        path: "/wallet/topup/select-currency",
-        title: "Wallet / Topup / Select Currency",
-    },
-    walletTopupWaitingForPayment: {
-        path: "/wallet/topup/waiting-for-payment",
-        title: "Wallet / Topup / Waiting For Payment",
-    },
-    walletTopupSuccess: {
-        path: "/wallet/topup/success",
-        title: "Wallet / Topup / Success",
-    },
-    walletTopupFailed: {
-        path: "/wallet/topup/failed",
-        title: "Wallet / Topup / Failed",
-    },
-    consumer: {
-        path: "/consumer",
-        title: "Consumer",
-    },
-    proposals: {
-        path: "/consumer/proposals",
-        title: "Proposals",
-    },
-    connection: {
-        path: "/consumer/connection",
-        title: "Connection",
-    },
-    referrals: {
-        path: "/referrals",
-        title: "Refer a friend",
-    },
-    help: {
-        title: "Help",
-        path: "/help",
-    },
-    helpBugReport: {
-        path: "/help/bug-report",
-        title: "Bug report",
-    },
-    helpTermsAndConditions: {
-        path: "/help/terms-and-conditions",
-        title: "Terms & Conditions",
-    },
-    settings: {
-        path: "/settings",
-        title: "Settings",
-    },
-    settingsFilters: {
-        path: "/settings/filters",
-        title: "Settings/Filters",
-    },
-    settingsConnection: {
-        path: "/settings/connection",
-        title: "Settings/Connection",
-    },
-    settingsMysteriumId: {
-        path: "/settings/mysterium-id",
-        title: "Settings/Account",
-    },
+    onboarding: "/onboarding",
+    onboardingWelcome: "/onboarding/welcome",
+    onboardingIntro: "/onboarding/intro",
+    onboardingIntro1: "/onboarding/intro/1",
+    onboardingIntro2: "/onboarding/intro/2",
+    onboardingIntro3: "/onboarding/intro/3",
+    onboardingIntro4: "/onboarding/intro/4",
+    onboardingIdentitySetup: "/onboarding/identity/setup",
+    onboardingIdentityBackup: "/onboarding/identity/backup",
+    onboardingTopupPrompt: "/onboarding/topup-prompt",
+    onboardingWalletTopup: "/onboarding/wallet/topup",
+    onboardingComplete: "/onboarding/complete",
+    terms: "/terms",
+    identity: "/identity",
+    loading: "/loading",
+    wallet: "/wallet",
+    walletIdentity: "/wallet/identity",
+    walletTopup: "/wallet/topup",
+    walletTopupSelectAmount: "/wallet/topup/select-amount",
+    walletTopupSelectCurrency: "/wallet/topup/select-currency",
+    walletTopupWaitingForPayment: "/wallet/topup/waiting-for-payment",
+    walletTopupSuccess: "/wallet/topup/success",
+    walletTopupFailed: "/wallet/topup/failed",
+    consumer: "/consumer",
+    proposals: "/consumer/proposals",
+    connection: "/consumer/connection",
+    referrals: "/referrals",
+    help: "/help",
+    helpBugReport: "/help/bug-report",
+    helpTermsAndConditions: "/help/terms-and-conditions",
+    settings: "/settings",
+    settingsFilters: "/settings/filters",
+    settingsConnection: "/settings/connection",
+    settingsMysteriumId: "/settings/mysterium-id",
 }
 
 export const topupSteps = {
@@ -156,6 +49,3 @@ export const topupSteps = {
     success: "success",
     failed: "failed",
 }
-
-export const locationByPath = (path: string): AppLocation | undefined =>
-    Object.values(locations).find((loc) => loc.path == path)

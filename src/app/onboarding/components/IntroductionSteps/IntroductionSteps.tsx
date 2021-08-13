@@ -117,7 +117,7 @@ export const IntroductionSteps: React.FC = observer(() => {
     return (
         <>
             <Switch>
-                <Route exact path={locations.onboardingIntro1.path}>
+                <Route exact path={locations.onboardingIntro1}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={0} />
@@ -151,7 +151,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboardingIntro2.path}>
+                <Route exact path={locations.onboardingIntro2}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={1} />
@@ -177,7 +177,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboardingIntro3.path}>
+                <Route exact path={locations.onboardingIntro3}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={2} />
@@ -214,7 +214,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                         </SkipContainer>
                     </Container>
                 </Route>
-                <Route exact path={locations.onboardingIntro4.path}>
+                <Route exact path={locations.onboardingIntro4}>
                     <Container>
                         <Steps>
                             <StepProgressBar step={3} />
@@ -240,7 +240,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                         <SkipContainer />
                     </Container>
                 </Route>
-                <Redirect to={locations.onboardingIntro1.path} />
+                <Redirect to={locations.onboardingIntro1} />
             </Switch>
         </>
     )

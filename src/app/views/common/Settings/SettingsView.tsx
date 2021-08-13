@@ -89,9 +89,9 @@ const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTML
 
 export const SettingsView: React.FC = observer(() => {
     const { router } = useStores()
-    const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters.path)
-    const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection.path)
-    const isMysteriumIdTabActive = router.location.pathname.includes(locations.settingsMysteriumId.path)
+    const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters)
+    const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection)
+    const isMysteriumIdTabActive = router.location.pathname.includes(locations.settingsMysteriumId)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -125,16 +125,16 @@ export const SettingsView: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <Switch>
-                        <Route exact path={locations.settingsFilters.path}>
+                        <Route exact path={locations.settingsFilters}>
                             <SettingsFilters />
                         </Route>
-                        <Route exact path={locations.settingsConnection.path}>
+                        <Route exact path={locations.settingsConnection}>
                             <SettingsConnection />
                         </Route>
-                        <Route exact path={locations.settingsMysteriumId.path}>
+                        <Route exact path={locations.settingsMysteriumId}>
                             <SettingsMysteriumId />
                         </Route>
-                        <Redirect to={locations.settingsFilters.path} />
+                        <Redirect to={locations.settingsFilters} />
                     </Switch>
                 </Content>
             </ViewSplit>

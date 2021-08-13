@@ -9,8 +9,6 @@ import { History, Location, LocationListener, UnregisterCallback } from "history
 
 import { pageview } from "../analytics/analytics"
 
-import { AppLocation } from "./locations"
-
 export class RouterStore {
     location: Location = {
         pathname: "",
@@ -32,21 +30,17 @@ export class RouterStore {
         this.location = newLocation
     }
 
-    push = (loc: AppLocation): void => {
-        pageview({
-            documentTitle: loc.path,
-            href: loc.path,
-        })
-        this.history?.push(loc.path)
+    push = (path: string): void => {
+        pageview({ href: path })
+        this.history?.push(path)
     }
 
-    pushRelative = (relativeLoc: string): void => {
-        const newLoc = this.location.pathname.substring(0, this.location.pathname.lastIndexOf("/")) + "/" + relativeLoc
+    pushRelative = (relativePath: string): void => {
+        const newLoc = this.location.pathname.substring(0, this.location.pathname.lastIndexOf("/")) + "/" + relativePath
         pageview({
-            documentTitle: newLoc,
             href: newLoc,
         })
-        this.history?.push(relativeLoc)
+        this.history?.push(relativePath)
     }
 }
 

@@ -81,7 +81,7 @@ export class OnboardingStore {
     }
 
     topupNow = (): void => {
-        this.root.router.push({ path: "/onboarding/wallet/topup", title: "" })
+        this.root.router.push(locations.onboardingWalletTopup)
     }
 
     skipTopup = (): void => {

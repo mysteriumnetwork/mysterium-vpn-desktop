@@ -186,10 +186,10 @@ export const WalletView: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <Switch>
-                        <Route exact path={locations.walletIdentity.path}>
+                        <Route exact path={locations.walletIdentity}>
                             <WalletIdentity />
                         </Route>
-                        <Redirect to={locations.walletIdentity.path} />
+                        <Redirect to={locations.walletIdentity} />
                     </Switch>
                 </Content>
             </ViewSplit>

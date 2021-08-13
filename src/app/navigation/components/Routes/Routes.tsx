@@ -50,56 +50,56 @@ export const Routes: React.FC = observer(() => {
                 <Main>
                     <Switch>
                         <Route exact path="/">
-                            <Redirect to={locations.loading.path} />
+                            <Redirect to={locations.loading} />
                         </Route>
-                        <Route path={locations.onboarding.path}>
+                        <Route path={locations.onboarding}>
                             <NakedTitleBar />
                             <OnboardingView />
                         </Route>
-                        <Route path={locations.terms.path}>
+                        <Route path={locations.terms}>
                             <NakedTitleBar />
                             <AcceptTermsView />
                         </Route>
-                        <Route path={locations.proposals.path}>
+                        <Route path={locations.proposals}>
                             <TitleBar />
                             <SelectProposalView />
                         </Route>
-                        <Route path={locations.consumer.path} exact>
+                        <Route path={locations.consumer} exact>
                             <Redirect
                                 to={
                                     connection.status === ConnectionStatus.NOT_CONNECTED
-                                        ? locations.proposals.path
-                                        : locations.connection.path
+                                        ? locations.proposals
+                                        : locations.connection
                                 }
                                 push
                             />
                         </Route>
-                        <Route path={locations.connection.path}>
+                        <Route path={locations.connection}>
                             <TitleBar />
                             <ConnectedView />
                         </Route>
-                        <Route path={locations.settings.path}>
+                        <Route path={locations.settings}>
                             <TitleBar />
                             <SettingsView />
                         </Route>
-                        <Route path={locations.referrals.path}>
+                        <Route path={locations.referrals}>
                             <TitleBar />
                             <ReferralView />
                         </Route>
-                        <Route path={locations.walletTopup.path}>
+                        <Route path={locations.walletTopup}>
                             <TitleBar />
                             <TopupView />
                         </Route>
-                        <Route path={locations.wallet.path}>
+                        <Route path={locations.wallet}>
                             <TitleBar />
                             <WalletView />
                         </Route>
-                        <Route path={locations.help.path}>
+                        <Route path={locations.help}>
                             <TitleBar />
                             <HelpView />
                         </Route>
 
-                        <Route path={locations.loading.path}>
+                        <Route path={locations.loading}>
                             <NakedTitleBar />
                             <LoadingView />
                         </Route>
