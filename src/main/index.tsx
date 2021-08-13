@@ -143,6 +143,7 @@ const createChatWindow = async (id: string): Promise<BrowserWindow> => {
         x: (mainWindow?.getBounds().x ?? 0) + 40,
         y: mainWindow?.getBounds().y,
     })
+    chatWindow.removeMenu()
     chatWindow.on("close", (event) => {
         if (app.quitting) {
             chatWindow = null
