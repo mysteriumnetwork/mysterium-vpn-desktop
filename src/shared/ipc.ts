@@ -25,6 +25,8 @@ export enum MainIpcListenChannels {
     ExportIdentity = "export-identity",
     ImportIdentityChooseFile = "import-identity-choose-file",
     ImportIdentity = "import-identity",
+    PushSubscribe = "push-subscribe-country",
+    PushUnsubscribe = "push-unsubscribe",
 }
 
 export interface IpcResponse {

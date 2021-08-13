@@ -6,12 +6,13 @@
  */
 import Pushy from "pushy-electron"
 import { Notification, shell } from "electron"
+import { ipcMain } from "electron"
 
 import * as packageJson from "../../../package.json"
 import { log } from "../../shared/log/log"
-// eslint-disable-next-line no-restricted-imports
 import { webAnalyticsAppStateEvent, webAnalyticsUserEvent } from "../analytics-main"
 import { AppStateAction, OtherAction } from "../../shared/analytics/actions"
+import { MainIpcListenChannels } from "../../shared/ipc"
 
 interface PushPayload {
     title?: string
@@ -31,6 +32,20 @@ export const initialize = (): void => {
             log.error("Pushy registration error", err.message)
         })
     Pushy.setNotificationListener(listener)
+    ipcMain.on(MainIpcListenChannels.PushSubscribe, (evt, pushTopic) => {
+        if (Pushy.isRegistered()) {
+            const qualifiedTopic = "desktop." + pushTopic
+            log.info("Subscribing to:", qualifiedTopic)
+            Pushy.subscribe(qualifiedTopic)
+        }
+    })
+    ipcMain.on(MainIpcListenChannels.PushUnsubscribe, (evt, pushTopic) => {
+        if (Pushy.isRegistered()) {
+            const qualifiedTopic = "desktop." + pushTopic
+            log.info("Unsubscribing from:", qualifiedTopic)
+            Pushy.unsubscribe(qualifiedTopic)
+        }
+    })
 }
 
 const listener = (data: PushPayload) => {

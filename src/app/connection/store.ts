@@ -18,6 +18,7 @@ import { appStateEvent, userEvent } from "../analytics/analytics"
 import { log } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction, ConnectionAction } from "../../shared/analytics/actions"
+import { subscribePush } from "../push/push"
 
 export class ConnectionStore {
     connectInProgress = false
@@ -167,6 +168,7 @@ export class ConnectionStore {
         try {
             const location = await tequilapi.location()
             this.setOriginalLocation(location)
+            subscribePush(location.country)
         } catch (err) {
             log.error("Failed to lookup original location", err.message)
         }

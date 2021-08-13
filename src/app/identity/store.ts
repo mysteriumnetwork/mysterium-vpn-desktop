@@ -16,6 +16,9 @@ import { AppStateAction } from "../../shared/analytics/actions"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { ImportIdentityOpts } from "../../shared/supervisor"
 import { log } from "../../shared/log/log"
+import { decimalPart } from "../payment/display"
+import { PushTopic } from "../../shared/push/topics"
+import { subscribePush, unsubscribePush } from "../push/push"
 
 export class IdentityStore {
     loading = false
@@ -66,6 +69,16 @@ export class IdentityStore {
             () => this.identity?.registrationStatus,
             (status) => {
                 appStateEvent(AppStateAction.IdentityStatus, status)
+            },
+        )
+        reaction(
+            () => this.identity?.balance,
+            (balance) => {
+                if (balance != null && balance / decimalPart() < 0.5) {
+                    subscribePush(PushTopic.LessThanHalfMyst)
+                } else {
+                    unsubscribePush(PushTopic.LessThanHalfMyst)
+                }
             },
         )
     }
