@@ -67,12 +67,6 @@ export class IdentityStore {
                 appStateEvent(AppStateAction.IdentityStatus, status)
             },
         )
-        reaction(
-            () => this.identity?.balance,
-            (balance) => {
-                appStateEvent(AppStateAction.BalanceChanged, String(balance))
-            },
-        )
     }
 
     async hasIdentities(): Promise<boolean> {
