@@ -166,7 +166,6 @@ export const HelpView: React.FC = observer(() => {
                                 active={false}
                                 onClick={() => {
                                     userEvent(OtherAction.SocialDiscord)
-                                    navigation.showMenu(false)
                                     shell.openExternal("https://discordapp.com/invite/n3vtSwc")
                                 }}
                             >
@@ -176,7 +175,6 @@ export const HelpView: React.FC = observer(() => {
                                 active={false}
                                 onClick={() => {
                                     userEvent(OtherAction.SocialReddit)
-                                    navigation.showMenu(false)
                                     shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
                                 }}
                             >
@@ -188,7 +186,6 @@ export const HelpView: React.FC = observer(() => {
                                     size="2x"
                                     onClick={() => {
                                         userEvent(OtherAction.SocialTwitter)
-                                        navigation.showMenu(false)
                                         shell.openExternal("https://twitter.com/MysteriumNet")
                                     }}
                                 />
@@ -199,7 +196,6 @@ export const HelpView: React.FC = observer(() => {
                                     size="2x"
                                     onClick={() => {
                                         userEvent(OtherAction.SocialFacebook)
-                                        navigation.showMenu(false)
                                         shell.openExternal("https://www.facebook.com/MysteriumNet")
                                     }}
                                 />

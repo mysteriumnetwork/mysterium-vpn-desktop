@@ -27,6 +27,8 @@ import {
 import { useStores } from "../../../store"
 import { ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
+import { userEvent } from "../../../analytics/analytics"
+import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationIdentity from "./animation_identity.json"
 
@@ -77,11 +79,13 @@ export const IdentitySetup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
 
     const handleCreateNew = async () => {
+        userEvent(OnboardingAction.CreateID)
         await onboarding.createNewId()
     }
     const [importPrompt, setImportPrompt] = useState(false)
     const [importFilename, setImportFilename] = useState("")
     const handleImportExisting = async () => {
+        userEvent(OnboardingAction.ImportID)
         const filename = await identity.importIdentityChooseFile()
         if (!filename) {
             return

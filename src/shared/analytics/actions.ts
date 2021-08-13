@@ -10,10 +10,17 @@ export enum Category {
 }
 
 export enum OnboardingAction {
-    GetStarted = "Get started",
     TermsScroll = "Terms scroll",
     AcceptTermsCheckbox = "Accept terms: checkbox",
     AcceptTermsContinue = "Accept terms: continue",
+    CompleteIntro = "Onboarding: complete intro",
+    SkipIntro = "Onboarding: skip intro",
+    CreateID = "Onboarding: create ID",
+    ImportID = "Onboarding: import ID",
+    BackupIDNow = "Onboarding: backup ID now",
+    BackupIDLater = "Onboarding: backup ID later",
+    TopupNow = "Onboarding: top up now",
+    TopupLater = "Onboarding: top up later",
 }
 
 export enum ProposalViewAction {
@@ -51,19 +58,16 @@ export enum TrayAction {
 
 export enum OtherAction {
     PushNotificationClick = "Push notification: clicked",
-    ToggleQrView = "Toggle QR view (image)",
     SupportChat = "Support chat",
-    SupportChatClose = "Support chat: close",
+    Documentation = "Documentation",
     SocialFacebook = "Social: Facebook",
     SocialDiscord = "Social: Discord",
     SocialTwitter = "Social: Twitter",
-    SocialMedium = "Social: Medium",
     SocialReddit = "Social: Reddit",
-    SocialGithub = "Social: Github",
-    MenuQuit = "Menu: quit",
-    AboutApp = "About app",
     SetDnsOption = "Set DNS option",
     SubmitBugReport = "Submit bug report",
+    BackupID = "Backup ID",
+    RestoreID = "Restore ID",
 }
 
 export type UserAction =
@@ -77,11 +81,15 @@ export type UserAction =
 export enum AppStateAction {
     DaemonStatus = "Daemon status",
     ConnectionStatus = "Connection status",
-    BalanceChanged = "Balance changed",
+    ConnectedCountry = "Connected country",
+    DisconnectedCountry = "Disconnected country",
+    IdentityImported = "Identity imported",
+    IdentityLoaded = "Identity loaded",
     IdentityStatus = "Identity status",
-    IdentityCreate = "Identity create",
-    IdentityUnlock = "Identity unlock",
-    IdentityRegister = "Identity register",
+    IdentityCreated = "Identity create",
+    IdentityUnlocked = "Identity unlock",
+    IdentityRegistered = "Identity register",
+    PaymentStatus = "Payment status",
     PushNotificationShown = "Push notification shown",
     SupervisorConnected = "Supervisor connected",
     SupervisorInstall = "Supervisor install",

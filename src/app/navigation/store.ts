@@ -11,7 +11,7 @@ import { ipcRenderer } from "electron"
 import { RootStore } from "../store"
 import { userEvent } from "../analytics/analytics"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { OnboardingAction, OtherAction } from "../../shared/analytics/actions"
+import { OtherAction } from "../../shared/analytics/actions"
 import { registered } from "../identity/identity"
 
 import { locations } from "./locations"
@@ -33,9 +33,6 @@ export class NavigationStore {
             showLoading: action,
             goHome: action,
             determineRoute: action,
-            showWelcome: action,
-            dismissWelcome: action,
-            showMenu: action,
             openChat: action,
             isHomeActive: computed,
             isSettingsActive: computed,
@@ -82,25 +79,6 @@ export class NavigationStore {
             return locations.connection
         }
         return locations.proposals
-    }
-
-    showWelcome = (): void => {
-        this.welcome = true
-    }
-
-    onboardingFinished = async (): Promise<void> => {
-        await this.root.config.setOnboarded()
-        this.goHome() // TODO go to account setup
-    }
-
-    dismissWelcome = (): void => {
-        userEvent(OnboardingAction.GetStarted)
-        this.welcome = false
-        this.root.router.push(locations.terms)
-    }
-
-    showMenu = (show = true): void => {
-        this.menu = show
     }
 
     openChat = (): void => {

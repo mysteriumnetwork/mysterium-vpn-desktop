@@ -15,6 +15,7 @@ import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { ImportIdentityOpts } from "../../shared/supervisor"
+import { log } from "../../shared/log/log"
 
 export class IdentityStore {
     loading = false
@@ -77,6 +78,7 @@ export class IdentityStore {
     async loadIdentity(): Promise<void> {
         const identity = await this.fetchIdentity()
         this.setIdentity(identity)
+        appStateEvent(AppStateAction.IdentityLoaded, identity?.id)
         return await this.unlock()
     }
 
@@ -107,8 +109,13 @@ export class IdentityStore {
     }
 
     async create(): Promise<void> {
-        appStateEvent(AppStateAction.IdentityCreate)
-        await tequilapi.identityCreate("")
+        try {
+            await tequilapi.identityCreate("")
+            appStateEvent(AppStateAction.IdentityCreated, String(true))
+        } catch (err) {
+            log.error("Failed to create ID", err)
+            appStateEvent(AppStateAction.IdentityCreated, String(false))
+        }
     }
 
     async unlock(): Promise<void> {
@@ -119,17 +126,27 @@ export class IdentityStore {
             return
         }
         const i = this.identity.id
-        appStateEvent(AppStateAction.IdentityUnlock)
-        await tequilapi.identityUnlock(i, "", 10000)
-        runInAction(() => {
-            this.unlocked = true
-        })
+        try {
+            await tequilapi.identityUnlock(i, "", 10_000)
+            appStateEvent(AppStateAction.IdentityUnlocked, String(true))
+            runInAction(() => {
+                this.unlocked = true
+            })
+        } catch (err) {
+            log.error("Failed to unlock identity", err)
+            appStateEvent(AppStateAction.IdentityUnlocked, String(false))
+        }
     }
 
     async register(id: Identity): Promise<void> {
         await this.root.payment.fetchTransactorFees()
-        appStateEvent(AppStateAction.IdentityRegister)
-        return tequilapi.identityRegister(id.id, { stake: 0 })
+        try {
+            await tequilapi.identityRegister(id.id, { stake: 0 })
+            appStateEvent(AppStateAction.IdentityRegistered, String(true))
+        } catch (err) {
+            log.error("Failed to register identity", err)
+            appStateEvent(AppStateAction.IdentityRegistered, String(false))
+        }
     }
 
     async registerWithReferralToken(token: string): Promise<void> {
@@ -175,8 +192,10 @@ export class IdentityStore {
     async importIdentity(opts: ImportIdentityOpts): Promise<string> {
         const res = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
         if (res.error) {
+            appStateEvent(AppStateAction.IdentityImported, String(false))
             return Promise.reject(res.error)
         }
+        appStateEvent(AppStateAction.IdentityImported, String(true))
         await this.loadIdentity()
         if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
             await this.register(this.identity)

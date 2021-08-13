@@ -25,6 +25,8 @@ import {
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
+import { userEvent } from "../../../analytics/analytics"
+import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
 
@@ -66,9 +68,11 @@ const Content = styled(ViewContent)`
 export const InitialTopup: React.FC = observer(() => {
     const { onboarding } = useStores()
     const handleTopupNow = () => {
+        userEvent(OnboardingAction.TopupNow)
         onboarding.topupNow()
     }
     const handleTopupLater = () => {
+        userEvent(OnboardingAction.TopupLater)
         onboarding.skipTopup()
     }
     return (

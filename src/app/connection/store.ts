@@ -81,6 +81,14 @@ export class ConnectionStore {
             () => this.status,
             async (status) => {
                 appStateEvent(AppStateAction.ConnectionStatus, status)
+                switch (status) {
+                    case ConnectionStatus.CONNECTED:
+                        appStateEvent(AppStateAction.ConnectedCountry, this.proposal?.country)
+                        break
+                    case ConnectionStatus.DISCONNECTING:
+                        appStateEvent(AppStateAction.DisconnectedCountry, this.proposal?.country)
+                        break
+                }
                 this.resetLocation()
                 if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
                     await this.resolveLocation()

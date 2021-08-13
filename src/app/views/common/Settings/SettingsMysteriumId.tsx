@@ -16,6 +16,8 @@ import { ViewContent } from "../../../navigation/components/ViewContent/ViewCont
 import { useStores } from "../../../store"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
+import { userEvent } from "../../../analytics/analytics"
+import { OtherAction } from "../../../../shared/analytics/actions"
 
 import { ExportIdentityPrompt } from "./ExportIdentityPrompt"
 import { ImportIdentityPrompt } from "./ImportIdentityPrompt"
@@ -44,6 +46,7 @@ export const SettingsMysteriumId: React.FC = observer(() => {
     // Export
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleExportInitiate = () => {
+        userEvent(OtherAction.BackupID)
         setExportPrompt(true)
     }
 
@@ -80,6 +83,7 @@ export const SettingsMysteriumId: React.FC = observer(() => {
     const [importPrompt, setImportPrompt] = useState(false)
     const [importFilename, setImportFilename] = useState("")
     const handleImportInitiate = async () => {
+        userEvent(OtherAction.RestoreID)
         const filename = await identity.importIdentityChooseFile()
         if (!filename) {
             return

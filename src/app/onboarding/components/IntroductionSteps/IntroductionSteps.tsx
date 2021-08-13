@@ -18,6 +18,8 @@ import { Heading2, Small } from "../../../ui-kit/typography"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { useStores } from "../../../store"
+import { userEvent } from "../../../analytics/analytics"
+import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationPayAsYouGo from "./animation_payasyougo.json"
 import animationNetwork from "./animation_network.json"
@@ -111,9 +113,13 @@ const SkipContainer = styled.div`
 export const IntroductionSteps: React.FC = observer(() => {
     const { router, onboarding } = useStores()
     const handleSetupMyAccountClick = () => {
+        userEvent(OnboardingAction.CompleteIntro)
         onboarding.setupMyId()
     }
-    const handleSkip = handleSetupMyAccountClick
+    const handleSkip = () => {
+        userEvent(OnboardingAction.SkipIntro)
+        onboarding.setupMyId()
+    }
     return (
         <>
             <Switch>
