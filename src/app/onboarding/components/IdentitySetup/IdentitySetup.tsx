@@ -80,7 +80,7 @@ export const IdentitySetup: React.FC = observer(() => {
 
     const handleCreateNew = async () => {
         userEvent(OnboardingAction.CreateID)
-        await onboarding.createNewId()
+        await onboarding.createNewID()
     }
     const [importPrompt, setImportPrompt] = useState(false)
     const [importFilename, setImportFilename] = useState("")
@@ -116,7 +116,7 @@ export const IdentitySetup: React.FC = observer(() => {
                     )
                 },
             })
-            .then(() => onboarding.finishIdSetup())
+            .then(() => onboarding.finishIDSetup())
     }
     const handleImportCancel = () => {
         setImportPrompt(false)

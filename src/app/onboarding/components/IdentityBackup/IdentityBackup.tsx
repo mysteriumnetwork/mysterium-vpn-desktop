@@ -71,7 +71,7 @@ export const IdentityBackup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
 
     const nextStep = () => {
-        onboarding.finishIdSetup()
+        onboarding.finishIDSetup()
     }
     const handleBackupLater = () => {
         userEvent(OnboardingAction.BackupIDLater)

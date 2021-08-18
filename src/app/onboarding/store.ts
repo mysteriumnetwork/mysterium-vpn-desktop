@@ -26,11 +26,11 @@ export class OnboardingStore {
     constructor(root: RootStore) {
         makeObservable(this, {
             getStarted: action,
-            setupMyId: action,
-            createNewId: action,
+            setupMyID: action,
+            createNewID: action,
             identityProgress: observable,
             setIdentityProgress: action,
-            finishIdSetup: action,
+            finishIDSetup: action,
             complete: action,
             topupNow: action,
             skipTopup: action,
@@ -42,7 +42,7 @@ export class OnboardingStore {
         this.root.router.push(locations.terms)
     }
 
-    setupMyId = (): void => {
+    setupMyID = (): void => {
         if (this.root.identity.identityExists) {
             this.root.router.push(locations.onboardingIdentityBackup)
         } else {
@@ -50,7 +50,7 @@ export class OnboardingStore {
         }
     }
 
-    createNewId = async (): Promise<void> => {
+    createNewID = async (): Promise<void> => {
         this.setIdentityProgress(IdentityProgress.CREATING)
         await this.root.identity.create()
         this.setIdentityProgress(IdentityProgress.LOADING)
@@ -71,7 +71,7 @@ export class OnboardingStore {
         this.identityProgress = p
     }
 
-    finishIdSetup = (): void => {
+    finishIDSetup = (): void => {
         this.complete()
         this.root.router.push(locations.onboardingTopupPrompt)
     }
