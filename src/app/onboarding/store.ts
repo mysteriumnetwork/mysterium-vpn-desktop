@@ -28,6 +28,7 @@ export class OnboardingStore {
             getStarted: action,
             setupMyID: action,
             createNewID: action,
+            createNewIDWithReferralCode: action,
             identityProgress: observable,
             setIdentityProgress: action,
             finishIDSetup: action,
@@ -62,6 +63,22 @@ export class OnboardingStore {
         }
         this.setIdentityProgress(IdentityProgress.REGISTERING)
         await this.root.identity.register(id)
+        this.setIdentityProgress(IdentityProgress.COMPLETE)
+        this.root.router.push(locations.onboardingIdentityBackup)
+    }
+
+    createNewIDWithReferralCode = async (code: string): Promise<void> => {
+        this.setIdentityProgress(IdentityProgress.CREATING)
+        await this.root.identity.create()
+        this.setIdentityProgress(IdentityProgress.LOADING)
+        await this.root.identity.loadIdentity()
+        const id = this.root.identity.identity
+        if (!id) {
+            log.error("ID not found, exiting")
+            return
+        }
+        this.setIdentityProgress(IdentityProgress.REGISTERING)
+        await this.root.identity.register(id, code)
         this.setIdentityProgress(IdentityProgress.COMPLETE)
         this.root.router.push(locations.onboardingIdentityBackup)
     }

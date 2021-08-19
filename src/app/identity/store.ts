@@ -151,10 +151,10 @@ export class IdentityStore {
         }
     }
 
-    async register(id: Identity): Promise<void> {
+    async register(id: Identity, referralToken?: string): Promise<void> {
         await this.root.payment.fetchTransactorFees()
         try {
-            await tequilapi.identityRegister(id.id, { stake: 0 })
+            await tequilapi.identityRegister(id.id, { stake: 0, referralToken })
             appStateEvent(AppStateAction.IdentityRegistered, String(true))
         } catch (err) {
             log.error("Failed to register identity", err)
