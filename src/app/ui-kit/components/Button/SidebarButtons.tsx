@@ -17,7 +17,6 @@ export const PrimarySidebarActionButton = styled(BrandButton).attrs({
     border-radius: 10px;
     box-shadow: none;
     flex: 1;
-    margin-bottom: 20px;
 `
 
 export const SecondarySidebarActionButton = styled(BrandButton).attrs({
@@ -30,6 +29,7 @@ export const SecondarySidebarActionButton = styled(BrandButton).attrs({
     &:enabled:hover {
         filter: brightness(98%);
     }
+    margin-top: 20px;
 `
 
 export const ButtonContent = styled.div`
