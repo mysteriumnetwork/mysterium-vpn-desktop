@@ -1100,10 +1100,10 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@0.53.2":
-  version "0.53.2"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.53.2.tgz#3f58548072bc2381a627334a7780e58d841f51da"
-  integrity sha512-DLYzb1r2OEG5IWamjaTlILgN32axISTb2DIeaU0IcOTYuqRFbXNUT3pEUZwlzQMf3Vs58G+S0g2YTMNWmxztvw==
+"@mysteriumnetwork/node@0.53.3":
+  version "0.53.3"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.53.3.tgz#16a9c8f0b1be30606ca31ecc1d6d092f81e4eb50"
+  integrity sha512-ZFaowNwGxpnE3dv0dphY2CLL3PMQ8jgif0pP7FlDAo1fAu7rgCUkp8gLDzD04H+rtKSqnU9oX7+Og5/DQHbv0Q==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
@@ -7347,10 +7347,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-mysterium-vpn-js@^14.2.1:
-  version "14.2.1"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-14.2.1.tgz#fb5be9c6aae953f28e56f263fecef497dae6fbef"
-  integrity sha512-Tl+QYKAAtJPoWwbtzLWMwhcfvTl7Tbzdk3QNfK2hGf03PUVry3+6iKMOOTROiQfrQIcukLLk5Zw5HJGI6qH4jw==
+mysterium-vpn-js@^14.5.0:
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-14.5.0.tgz#c42ca69f7de07499d6d7868ee4f45c51708c82cb"
+  integrity sha512-d2M0XTEbSJiO3y29p8WlelxNn2G/PWya+LE+L7HPE9vLCDFtjB5DbCZdMfvSOoXhMEvFasdRvQ4kS8SJrVuCuA==
   dependencies:
     axios "^0.21.1"
     camelcase-keys "^6.2.2"
@@ -8537,10 +8537,10 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-hook-form@^7.11.1:
-  version "7.11.1"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.11.1.tgz#936f8a14bdf02b0791c2130d7c78c49c10e6de09"
-  integrity sha512-lBt428oU03dNUF5qZy5xqEdANaH3L/ilKWQS2t8wD6zF7FypOv46kEkZmg+oHf3n2xgeGYJgbMIGtYExsfKJ8A==
+react-hook-form@^7.12.2:
+  version "7.12.2"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.12.2.tgz#2660afbf03c4ef360a9314ebf46ce3d972296c77"
+  integrity sha512-cpxocjrgpMAJCMJQR51BQhMoEx80/EQqePNihMTgoTYTqCRbd2GExi+N4GJIr+cFqrmbwNj9wxk5oLWYQsUefg==
 
 react-hot-toast@^2.1.0:
   version "2.1.0"

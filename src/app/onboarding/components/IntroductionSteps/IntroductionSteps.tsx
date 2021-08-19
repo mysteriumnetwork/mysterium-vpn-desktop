@@ -114,11 +114,11 @@ export const IntroductionSteps: React.FC = observer(() => {
     const { router, onboarding } = useStores()
     const handleSetupMyAccountClick = () => {
         userEvent(OnboardingAction.CompleteIntro)
-        onboarding.setupMyId()
+        onboarding.setupMyID()
     }
     const handleSkip = () => {
         userEvent(OnboardingAction.SkipIntro)
-        onboarding.setupMyId()
+        onboarding.setupMyID()
     }
     return (
         <>

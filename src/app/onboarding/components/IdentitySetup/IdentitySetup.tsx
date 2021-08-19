@@ -31,6 +31,7 @@ import { userEvent } from "../../../analytics/analytics"
 import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationIdentity from "./animation_identity.json"
+import { UseReferralCodePrompt } from "./UseReferralCodePrompt"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -75,12 +76,16 @@ const IdentityProgress = styled(Heading2)`
     opacity: 0.7;
 `
 
+const UseReferralCodeButton = styled(SecondarySidebarActionButton)`
+    flex: 0;
+`
+
 export const IdentitySetup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
 
     const handleCreateNew = async () => {
         userEvent(OnboardingAction.CreateID)
-        await onboarding.createNewId()
+        await onboarding.createNewID()
     }
     const [importPrompt, setImportPrompt] = useState(false)
     const [importFilename, setImportFilename] = useState("")
@@ -116,10 +121,24 @@ export const IdentitySetup: React.FC = observer(() => {
                     )
                 },
             })
-            .then(() => onboarding.finishIdSetup())
+            .then(() => onboarding.finishIDSetup())
     }
     const handleImportCancel = () => {
         setImportPrompt(false)
+    }
+    const [referralPrompt, setReferralPrompt] = useState(false)
+    const handleUseReferralCode = () => {
+        userEvent(OnboardingAction.UseReferralCode)
+        setReferralPrompt(true)
+    }
+    const handleReferralSubmit = async ({ code }: { code: string }) => {
+        userEvent(OnboardingAction.UseReferralCodeSubmit, String(code))
+        setReferralPrompt(false)
+        await onboarding.createNewIDWithReferralCode(code)
+    }
+    const handleReferralCancel = () => {
+        userEvent(OnboardingAction.UseReferralCodeCancel)
+        setReferralPrompt(false)
     }
     return (
         <ViewContainer>
@@ -148,6 +167,9 @@ export const IdentitySetup: React.FC = observer(() => {
                                 Import existing
                             </ButtonContent>
                         </SecondarySidebarActionButton>
+                        <UseReferralCodeButton onClick={handleUseReferralCode}>
+                            <ButtonContent>Use a Referral Code</ButtonContent>
+                        </UseReferralCodeButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
@@ -169,6 +191,11 @@ export const IdentitySetup: React.FC = observer(() => {
                 </Content>
             </ViewSplit>
             <ImportIdentityPrompt visible={importPrompt} onSubmit={handleImportSubmit} onCancel={handleImportCancel} />
+            <UseReferralCodePrompt
+                visible={referralPrompt}
+                onSubmit={handleReferralSubmit}
+                onCancel={handleReferralCancel}
+            />
         </ViewContainer>
     )
 })

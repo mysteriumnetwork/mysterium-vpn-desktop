@@ -61,9 +61,10 @@ export interface PromptProps {
     title?: string
     onSubmit?: () => void
     onCancel?: () => void
+    submitText?: string
 }
 
-export const Prompt: React.FC<PromptProps> = ({ visible, title, onSubmit, onCancel, children }) => {
+export const Prompt: React.FC<PromptProps> = ({ visible, title, onSubmit, onCancel, submitText = "OK", children }) => {
     if (!visible) {
         return <></>
     }
@@ -81,7 +82,7 @@ export const Prompt: React.FC<PromptProps> = ({ visible, title, onSubmit, onCanc
                     <PromptTitle>{title}</PromptTitle>
                     {children}
                     <PromptButtons>
-                        <PromptButtonOK type="submit">OK</PromptButtonOK>
+                        <PromptButtonOK type="submit">{submitText}</PromptButtonOK>
                         <OutlineButton onClick={handleCancel} type="button">
                             Cancel
                         </OutlineButton>

@@ -12,9 +12,11 @@ import { RootStore } from "../store"
 import { log } from "../../shared/log/log"
 import { parseError } from "../tequilapi/parseError"
 import { tequilapi } from "../tequilapi"
+import { decimalPart } from "../payment/display"
 
 export class ReferralStore {
     token?: string
+    rewardAmount?: number
     message?: string
     loading = false
 
@@ -23,14 +25,39 @@ export class ReferralStore {
     constructor(root: RootStore) {
         makeObservable(this, {
             token: observable,
+            rewardAmount: observable,
             message: observable,
             loading: observable,
+            validateToken: action,
+            resetToken: action,
             generateToken: action,
             setToken: action,
             setMessage: action,
             setLoading: action,
         })
         this.root = root
+    }
+
+    async validateToken(code: string): Promise<boolean> {
+        this.token = undefined
+        this.rewardAmount = undefined
+        try {
+            const res = await tequilapi.referralTokenRewards(code)
+            if (!res.amount) {
+                return false
+            }
+            this.token = code
+            this.rewardAmount = Number(Number(BigInt(res.amount) / BigInt(decimalPart())).toFixed(1))
+            return true
+        } catch (err) {
+            log.error("Invalid referral token:", err)
+            return false
+        }
+    }
+
+    resetToken(): void {
+        this.token = undefined
+        this.rewardAmount = undefined
     }
 
     async generateToken(): Promise<void> {
