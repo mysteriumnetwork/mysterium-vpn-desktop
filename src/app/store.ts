@@ -9,6 +9,7 @@ import { action, computed, configure, makeObservable, observable, reaction, runI
 import { ipcRenderer } from "electron"
 
 // import { enableLogging } from "mobx-logger"
+
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { isDevelopment } from "../utils/env"
 import { AppStateAction } from "../shared/analytics/actions"
@@ -27,6 +28,7 @@ import { ReferralStore } from "./referral/store"
 import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
 import { appStateEvent } from "./analytics/analytics"
+import { registered } from "./identity/identity"
 
 export class RootStore {
     navigation: NavigationStore
@@ -99,9 +101,19 @@ export class RootStore {
                         this.config.loadConfig().catch((reason) => {
                             log.warn("Could not load app config: ", reason)
                         }),
-                        this.identity.loadIdentity().catch((reason) => {
-                            log.warn("Could not load identity: ", reason)
-                        }),
+                        this.identity
+                            .loadIdentity()
+                            .catch((reason) => {
+                                log.warn("Could not load identity: ", reason)
+                            })
+                            .then(() => {
+                                // A temporary measure to migrate to Testnet3
+                                const id = this.identity.identity
+                                log.info("Identity loaded:", JSON.stringify(id))
+                                if (id && !registered(id)) {
+                                    this.identity.register(id)
+                                }
+                            }),
                     ])
                     this.navigation.determineRoute()
                 }
