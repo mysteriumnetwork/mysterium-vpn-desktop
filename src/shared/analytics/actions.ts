@@ -29,10 +29,7 @@ export enum OnboardingAction {
 export enum ProposalViewAction {
     FilterCountry = "Filter: country",
     FilterText = "Filter: text",
-    FilterPriceTime = "Filter: price/time",
-    FilterPriceData = "Filter: price/data",
     FilterQuality = "Filter: quality",
-    FilterIpType = "Filter: IP type",
     FilterIncludeFailed = "Filter: include failed",
     FilterReset = "Filter: reset",
     SelectProposal = "Select proposal",
