@@ -48,7 +48,6 @@ export interface ProposalFilters {
 }
 
 export interface PriceCeiling {
-    // perHourMax: number
     perGibMax: number
 }
 
