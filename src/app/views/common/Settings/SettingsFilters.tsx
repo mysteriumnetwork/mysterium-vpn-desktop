@@ -6,11 +6,8 @@
  */
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { faDollarSign } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-import { PriceFilter } from "../../../proposals/components/PriceFilter/PriceFilter"
 import { Heading2 } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { QualityFilter } from "../../../proposals/components/QualityFilter/QualityFilter"
@@ -25,10 +22,6 @@ const Section = styled(ViewContent)`
     margin-bottom: 10px;
 `
 
-const SectionIcon = styled(FontAwesomeIcon)`
-    margin-bottom: 15px;
-`
-
 const SectionIconWrap = styled.div`
     margin-bottom: 15px;
 `
@@ -36,11 +29,6 @@ const SectionIconWrap = styled.div`
 export const SettingsFilters: React.FC = observer(() => {
     return (
         <>
-            <Section>
-                <SectionIcon icon={faDollarSign} color="#ffffff88" size="2x" />
-                <Title>Price limit</Title>
-                <PriceFilter />
-            </Section>
             <Section>
                 <SectionIconWrap>
                     <ProposalQuality level={2} color="#ffffff88" />

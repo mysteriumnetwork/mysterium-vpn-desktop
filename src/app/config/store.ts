@@ -38,10 +38,6 @@ export interface ProposalFilters {
     preset?: {
         id?: number | null
     }
-    price?: {
-        pergib?: number
-        perhour?: number
-    }
     quality?: {
         "include-failed"?: boolean
         level?: QualityLevel
@@ -52,14 +48,12 @@ export interface ProposalFilters {
 }
 
 export interface PriceCeiling {
-    perHourMax: number
     perGibMax: number
 }
 
 export class ConfigStore {
     config: Config = { desktop: {} }
     loaded = false
-    defaultConfig: Config = { desktop: {} }
 
     root: RootStore
 
@@ -68,7 +62,6 @@ export class ConfigStore {
         makeObservable(this, {
             config: observable,
             loaded: observable,
-            defaultConfig: observable,
             loadConfig: action,
             updateConfigPartial: action,
             persistConfig: action,
@@ -84,20 +77,13 @@ export class ConfigStore {
     }
 
     loadConfig = async (): Promise<void> => {
-        const [config, defaultConfig] = await Promise.all([tequilapi.userConfig(), tequilapi.defaultConfig()])
+        const config = await tequilapi.userConfig()
         runInAction(() => {
             this.config = {
                 desktop: {},
                 ...config.data,
             }
             log.info("Using config:", JSON.stringify(this.config))
-        })
-        runInAction(() => {
-            this.defaultConfig = {
-                desktop: {},
-                ...defaultConfig.data,
-            }
-            log.info("Default node config:", JSON.stringify(this.defaultConfig))
         })
         runInAction(() => {
             this.loaded = true

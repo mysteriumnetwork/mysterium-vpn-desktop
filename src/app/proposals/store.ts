@@ -13,7 +13,7 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { userEvent } from "../analytics/analytics"
 import { log } from "../../shared/log/log"
-import { ProposalFilters } from "../config/store"
+import { PriceCeiling, ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../../shared/analytics/actions"
 
@@ -49,10 +49,6 @@ export class ProposalStore {
             fetchProposalFilterPresets: action,
             setTextFilter: action,
             textFiltered: computed,
-            setPricePerHourMaxFilter: action,
-            setPricePerHourMaxFilterDebounced: action,
-            setPricePerGibMaxFilter: action,
-            setPricePerGibMaxFilterDebounced: action,
             setQualityFilter: action,
             setIncludeFailed: action,
             countryCounts: computed,
@@ -60,6 +56,7 @@ export class ProposalStore {
             toggleCountryFilter: action,
             countryFiltered: computed,
             filteredProposals: computed,
+            priceCeil: computed,
             toggleActiveProposal: action,
             setLoading: action,
             setProposals: action,
@@ -108,8 +105,6 @@ export class ProposalStore {
             }
             query.presetId = this.filters.preset?.id ?? undefined
             query.qualityMin = this.filters.quality?.level
-            query.priceGibMax = this.filters.price?.pergib
-            query.priceHourMax = this.filters.price?.perhour
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
@@ -151,34 +146,6 @@ export class ProposalStore {
         }
         return input.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
     }
-
-    // #####################
-    // Price filter
-    // #####################
-
-    async setPricePerHourMaxFilter(pricePerHourMax: number): Promise<void> {
-        await this.root.filters.setPartial({
-            price: {
-                perhour: pricePerHourMax,
-            },
-        })
-        await this.fetchProposals()
-        userEvent(ProposalViewAction.FilterPriceTime, String(pricePerHourMax))
-    }
-
-    setPricePerHourMaxFilterDebounced = _.debounce(this.setPricePerHourMaxFilter, 800)
-
-    async setPricePerGibMaxFilter(pricePerGibMax: number): Promise<void> {
-        await this.root.filters.setPartial({
-            price: {
-                pergib: pricePerGibMax,
-            },
-        })
-        await this.fetchProposals()
-        userEvent(ProposalViewAction.FilterPriceData, String(pricePerGibMax))
-    }
-
-    setPricePerGibMaxFilterDebounced = _.debounce(this.setPricePerGibMaxFilter, 800)
 
     // #####################
     // Quality filter
@@ -237,8 +204,14 @@ export class ProposalStore {
         return this.countryFiltered.slice().sort(compareProposal)
     }
 
+    get priceCeil(): PriceCeiling {
+        return {
+            perGibMax: Math.max(...this.filteredProposals.map((p) => p.price.perGib)),
+        }
+    }
+
     priceTier = (p: UIProposal): number => {
-        const perGibMax = this.root.filters.priceCeiling?.perGibMax ?? 0
+        const perGibMax = this.priceCeil?.perGibMax ?? 0
         if (p.price.perGib > perGibMax * 0.75) {
             return 3
         }

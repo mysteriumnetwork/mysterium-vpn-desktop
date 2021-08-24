@@ -201,7 +201,6 @@ export class Supervisor implements SupervisorInterface {
             this.mystBin(),
             [
                 "--ui.enable=false",
-                "--testnet2",
                 "--usermode",
                 "--consumer",
                 `--tequilapi.port=${port}`,
