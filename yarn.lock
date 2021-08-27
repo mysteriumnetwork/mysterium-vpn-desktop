@@ -7347,10 +7347,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-mysterium-vpn-js@^14.5.0:
-  version "14.5.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-14.5.0.tgz#c42ca69f7de07499d6d7868ee4f45c51708c82cb"
-  integrity sha512-d2M0XTEbSJiO3y29p8WlelxNn2G/PWya+LE+L7HPE9vLCDFtjB5DbCZdMfvSOoXhMEvFasdRvQ4kS8SJrVuCuA==
+mysterium-vpn-js@^14.6.0:
+  version "14.6.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-14.6.0.tgz#fff3c75ef4ffddb6152b22b02115f603efe3a730"
+  integrity sha512-GFCIfIYJWaj0jVGWyhMHaTICFKl90WV929Q7WXsK6CKsKLAvXmGqIMCfVnhyZCxwE7jtdfGqsp4HO6jSKDPNcw==
   dependencies:
     axios "^0.21.1"
     camelcase-keys "^6.2.2"
@@ -8633,6 +8633,14 @@ react-toast-notifications@*:
   dependencies:
     "@emotion/core" "^10.0.14"
     react-transition-group "^4.4.1"
+
+react-tooltip@^4.2.21:
+  version "4.2.21"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.2.21.tgz#840123ed86cf33d50ddde8ec8813b2960bfded7f"
+  integrity sha512-zSLprMymBDowknr0KVDiJ05IjZn9mQhhg4PRsqln0OZtURAJ1snt1xi5daZfagsh6vfsziZrc9pErPTDY1ACig==
+  dependencies:
+    prop-types "^15.7.2"
+    uuid "^7.0.3"
 
 react-transition-group@^4.4.1:
   version "4.4.1"
@@ -10642,6 +10650,11 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"

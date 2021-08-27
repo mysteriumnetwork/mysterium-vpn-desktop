@@ -28,6 +28,7 @@ export class ConnectionStore {
     proposal?: UIProposal
     location?: Location
     originalLocation?: Location
+    natType?: string
 
     root: RootStore
 
@@ -40,6 +41,7 @@ export class ConnectionStore {
             proposal: observable,
             location: observable,
             originalLocation: observable,
+            natType: observable,
             connect: action,
             statusCheck: action,
             disconnect: action,
@@ -109,6 +111,28 @@ export class ConnectionStore {
                 this.root.navigation.determineRoute()
             },
         )
+        reaction(
+            () => this.root.daemon.status,
+            async (status) => {
+                if (status === DaemonStatusType.Up) {
+                    await this.resolveNATType()
+                }
+            },
+        )
+        reaction(
+            () => this.root.config.autoNATCompatibility,
+            async () => {
+                await this.resolveNATType()
+            },
+        )
+        window.addEventListener("online", async () => {
+            log.info("Network connection restored")
+            await this.resolveNATType()
+        })
+        window.addEventListener("offline", async () => {
+            log.info("Network connection lost")
+            await this.resolveNATType()
+        })
     }
 
     async connect(): Promise<void> {
@@ -206,6 +230,19 @@ export class ConnectionStore {
             },
         )
         this.setLocation(location)
+    }
+
+    async resolveNATType(): Promise<void> {
+        if (this.root.config.autoNATCompatibility && this.status !== ConnectionStatus.CONNECTED) {
+            log.info("Resolving NAT type...")
+            try {
+                const natType = await tequilapi.natType()
+                this.natType = natType.type
+                log.info("Resolved NAT type:", natType)
+            } catch (err) {
+                log.error("Could not resolve NAT type:", err)
+            }
+        }
     }
 
     get currentIp(): string {

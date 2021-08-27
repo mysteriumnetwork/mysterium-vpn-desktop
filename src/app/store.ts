@@ -119,6 +119,8 @@ export class RootStore {
                 }
             },
         )
+        window.addEventListener("online", () => console.log("online"))
+        window.addEventListener("offline", () => console.log("offline"))
     }
 
     get isWindows(): boolean {

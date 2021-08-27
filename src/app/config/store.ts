@@ -31,6 +31,7 @@ export interface DesktopConfig {
     }
     onboarded?: boolean
     dns?: DNSOption
+    natCompatibility?: "auto" | "off"
     filters?: ProposalFilters
 }
 
@@ -71,6 +72,8 @@ export class ConfigStore {
             agreeToTerms: action,
             dnsOption: computed,
             setDnsOption: action,
+            autoNATCompatibility: computed,
+            setAutoNATCompatibility: action,
             onboarded: computed,
             setOnboarded: action,
         })
@@ -139,5 +142,13 @@ export class ConfigStore {
 
     setDnsOption = async (dns: string): Promise<void> => {
         return this.updateConfigPartial({ dns })
+    }
+
+    get autoNATCompatibility(): boolean {
+        return this.config.desktop?.natCompatibility !== "off"
+    }
+
+    setAutoNATCompatibility = async (enabled: boolean): Promise<void> => {
+        return this.updateConfigPartial({ natCompatibility: enabled ? "auto" : "off" })
     }
 }

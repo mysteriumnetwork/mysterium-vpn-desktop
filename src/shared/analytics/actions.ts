@@ -65,6 +65,7 @@ export enum OtherAction {
     SocialTwitter = "Social: Twitter",
     SocialReddit = "Social: Reddit",
     SetDnsOption = "Set DNS option",
+    SetNATCompatibility = "Set NAT compatibility",
     SubmitBugReport = "Submit bug report",
     BackupID = "Backup ID",
     RestoreID = "Restore ID",
