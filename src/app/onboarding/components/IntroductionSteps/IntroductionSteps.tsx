@@ -23,6 +23,8 @@ import { OnboardingAction } from "../../../../shared/analytics/actions"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 
 import animationPayAsYouGo from "./animation_payasyougo.json"
+import animationCrypto from "./animation_crypto.json"
+import animationPrivacy from "./animation_privacy.json"
 import animationNetwork from "./animation_network.json"
 
 const Container = styled(ViewContainer)`
@@ -163,7 +165,15 @@ export const IntroductionSteps: React.FC = observer(() => {
                             <StepProgressBar step={1} />
                         </Steps>
                         <Title>Privacy first</Title>
-                        <Animation />
+                        <Animation>
+                            <Lottie
+                                play
+                                loop
+                                animationData={animationPrivacy}
+                                style={{ width: 256, height: 256 }}
+                                renderer="svg"
+                            />
+                        </Animation>
                         <Subtitle>Distributed infrastructure, decentralised logs</Subtitle>
                         <Description>
                             Now everyone says no logs, but do they mean no logs? Don&apos;t trust. Verify.
@@ -230,7 +240,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                             <Lottie
                                 play
                                 loop
-                                animationData={animationPayAsYouGo}
+                                animationData={animationCrypto}
                                 style={{ width: 256, height: 256 }}
                                 renderer="svg"
                             />
