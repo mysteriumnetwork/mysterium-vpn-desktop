@@ -79,6 +79,7 @@ const PaymentAmount = styled.div`
     padding: 5px 10px;
     border-radius: 50px;
     margin-bottom: 15px;
+    user-select: text;
 `
 
 const PaymentQR = styled.div`
