@@ -8,31 +8,51 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
+import ReactTooltip from "react-tooltip"
 
-import { Heading2, Small } from "../../../ui-kit/typography"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { useStores } from "../../../store"
 import { userEvent } from "../../../analytics/analytics"
 import { OtherAction } from "../../../../shared/analytics/actions"
 import { Select } from "../../../ui-kit/form-components/Select"
-
-const Title = styled(Heading2)`
-    margin-bottom: 15px;
-`
+import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 
 const Section = styled(ViewContent)`
     padding: 20px;
     margin-bottom: 10px;
 `
 
-const SectionIcon = styled(FontAwesomeIcon)`
-    margin-bottom: 15px;
+const FormRow = styled.div`
+    width: 100%;
+    height: 45px;
+    display: flex;
+    flex-direction: row;
 `
 
-const Explanation = styled(Small)`
-    opacity: 0.5;
-    margin-bottom: 15px;
+const FormLabel = styled.div`
+    font-weight: bold;
+    width: 50%;
+    display: flex;
+    align-items: center;
+`
+
+const FormValue = styled.div`
+    flex: 1;
+    display: flex;
+    align-items: center;
+`
+
+const Tooltip = styled(ReactTooltip).attrs({
+    effect: "solid",
+})`
+    width: 200px;
+`
+
+const TooltipIcon = styled(FontAwesomeIcon).attrs({
+    icon: faQuestionCircle,
+})`
+    margin-left: 10px;
 `
 
 export const SettingsConnection: React.FC = observer(() => {
@@ -45,18 +65,51 @@ export const SettingsConnection: React.FC = observer(() => {
     return (
         <>
             <Section>
-                <SectionIcon icon={faGlobe} color="#ffffff88" size="2x" />
-                <Title>DNS server</Title>
-                <Explanation>
-                    Domain Name System (DNS) is used to resolve internet addresses. You will need to re-connect for the
-                    change to apply.
-                </Explanation>
-                <Select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>
-                    <option value="1.1.1.1">Cloudflare</option>
-                    <option value="auto">Automatic</option>
-                    <option value="provider">Provider</option>
-                    <option value="system">System</option>
-                </Select>
+                <FormRow>
+                    <Tooltip id="dns-server-tooltip">
+                        <span>
+                            Domain Name System (DNS) is used to resolve internet addresses. <br />
+                            <b>Provider</b> - maximum privacy
+                            <br />
+                            <b>Automatic</b> - maximum reliability <br />
+                            <br />
+                            You will need to re-connect for the change to apply.
+                        </span>
+                    </Tooltip>
+                    <FormLabel>
+                        DNS server <TooltipIcon data-tip="" data-for="dns-server-tooltip" />
+                    </FormLabel>
+                    <FormValue>
+                        <Select id="dns" value={config.dnsOption} onChange={onDnsOptionChange}>
+                            <option value="1.1.1.1">Cloudflare</option>
+                            <option value="auto">Automatic</option>
+                            <option value="provider">Provider</option>
+                            <option value="system">System</option>
+                        </Select>
+                    </FormValue>
+                </FormRow>
+                <FormRow>
+                    <Tooltip id="nat-type-detection-tooltip">
+                        <span>
+                            Use automatic NAT type detection to filter out incompatible providers. <br />
+                            It increases your chances of successfully connecting to provider nodes. <br />
+                            Disable to see all provider nodes.
+                        </span>
+                    </Tooltip>
+                    <FormLabel>
+                        NAT type detection <TooltipIcon data-tip="" data-for="nat-type-detection-tooltip" />
+                    </FormLabel>
+                    <FormValue>
+                        <Checkbox
+                            checked={config.autoNATCompatibility}
+                            onChange={(event): void => {
+                                const val = event.target.checked
+                                userEvent(OtherAction.SetNATCompatibility, String(val))
+                                config.setAutoNATCompatibility(val)
+                            }}
+                        />
+                    </FormValue>
+                </FormRow>
             </Section>
         </>
     )

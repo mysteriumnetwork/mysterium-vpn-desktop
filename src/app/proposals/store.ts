@@ -76,6 +76,9 @@ export class ProposalStore {
                             this.fetchProposalFilterPresets()
                         },
                     )
+                    setTimeout(() => {
+                        this.fetchProposals()
+                    }, 8_000)
                 }
             },
         )
@@ -105,6 +108,7 @@ export class ProposalStore {
             }
             query.presetId = this.filters.preset?.id ?? undefined
             query.qualityMin = this.filters.quality?.level
+            query.natCompatibility = this.root.config.autoNATCompatibility ? this.root.connection.natType : undefined
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {

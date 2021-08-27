@@ -41,7 +41,7 @@ const Label = styled.label`
 `
 
 export type CheckboxProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
-    children: React.ReactNode
+    children?: React.ReactNode
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({ children, ...rest }) => {

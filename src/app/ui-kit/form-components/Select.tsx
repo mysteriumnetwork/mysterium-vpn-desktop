@@ -9,7 +9,6 @@ import styled from "styled-components"
 export const Select = styled.select`
     box-sizing: border-box;
     height: 35px;
-    margin-bottom: 15px;
     width: 100%;
 
     padding: 0 12px;
