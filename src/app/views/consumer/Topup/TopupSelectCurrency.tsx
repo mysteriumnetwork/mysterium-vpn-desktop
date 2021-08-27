@@ -28,7 +28,7 @@ import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 import { log } from "../../../../shared/log/log"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../navigation/locations"
-import { IconCurrency } from "../../../ui-kit/icons/crypto/IconCurrency"
+import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -169,8 +169,8 @@ export const TopupSelectCurrency: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <ViewContent>
-                    <div style={{ opacity: 0.3, paddingTop: 100 }}>
-                        <IconCurrency currency={payment.paymentCurrency} color="#ffffff" />
+                    <div style={{ paddingTop: 100 }}>
+                        <CryptoAnimation currency={payment.paymentCurrency} />
                     </div>
                 </ViewContent>
             </ViewSplit>
