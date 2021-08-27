@@ -104,10 +104,11 @@ export const TopupSelectCurrency: React.FC = observer(() => {
             router.pushRelative(topupSteps.waitingForPayment)
         } catch (err) {
             setLoading(() => false)
-            log.error("Could not create a payment order", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Could not create a payment order", msg)
             let userMessage = "Could not inititate the payment. Please try again later or contact us via chat!"
             // We can remove this hack later; this is a special message for ids registered during 'offchain' period.
-            if ((err.message as string).indexOf("identity is offchain") != -1) {
+            if ((msg as string).indexOf("identity is offchain") != -1) {
                 userMessage =
                     "There seems to be a problem with your account. Please create a new identity to continue using MysteriumVPN."
             }

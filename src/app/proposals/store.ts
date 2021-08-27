@@ -112,7 +112,8 @@ export class ProposalStore {
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
-            log.error("Could not get proposals", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Could not get proposals", msg)
         }
         this.setLoading(false)
     }

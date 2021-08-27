@@ -101,7 +101,8 @@ export class DaemonStore {
             await tequilapi.healthCheck(10000)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
-            log.error("Healthcheck failed:", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Healthcheck failed:", msg)
             this.setStatus(DaemonStatusType.Down)
         }
         this.setStatusLoading(false)
@@ -144,7 +145,8 @@ export class DaemonStore {
         try {
             await supervisor.connect()
         } catch (err) {
-            log.error("Failed to connect to the supervisor, installing", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Failed to connect to the supervisor, installing", msg)
             await this.supervisorInstall()
         }
 

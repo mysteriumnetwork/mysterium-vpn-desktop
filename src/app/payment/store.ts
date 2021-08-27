@@ -238,7 +238,8 @@ export class PaymentStore {
                 trafficMb: Number((res.trafficMb / 1024).toFixed()),
             }))
         } catch (err) {
-            log.warn("Failed to estimate entertainment for amount: ", amount, ", reason:", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.warn("Failed to estimate entertainment for amount: ", amount, ", reason:", msg)
             return undefined
         }
     }

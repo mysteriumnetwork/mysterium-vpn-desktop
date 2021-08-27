@@ -32,8 +32,9 @@ export class FeedbackStore {
             const issueId = await tequilapi.reportIssue(issue)
             return issueId.issueId
         } catch (err) {
-            log.error("Could not submit the report", err.message)
-            return Promise.reject(err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Could not submit the report", msg)
+            return Promise.reject(msg)
         } finally {
             this.setLoading(false)
         }

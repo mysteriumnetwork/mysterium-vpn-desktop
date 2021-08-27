@@ -155,8 +155,9 @@ export class ConnectionStore {
                 30_000,
             )
         } catch (err) {
-            log.error("Could not connect", err.message)
-            return Promise.reject(err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Could not connect", msg)
+            return Promise.reject(msg)
         } finally {
             this.setConnectInProgress(false)
         }
@@ -173,7 +174,8 @@ export class ConnectionStore {
             }
             this.setStatus(conn.status)
         } catch (err) {
-            log.error("Connection status check failed", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Connection status check failed", msg)
             this.setStatus(ConnectionStatus.NOT_CONNECTED)
         }
     }
@@ -184,7 +186,8 @@ export class ConnectionStore {
         try {
             await tequilapi.connectionCancel()
         } catch (err) {
-            log.error("Failed to disconnect", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Failed to disconnect", msg)
         }
     }
 
@@ -194,7 +197,8 @@ export class ConnectionStore {
             this.setOriginalLocation(location)
             subscribePush(location.country)
         } catch (err) {
-            log.error("Failed to lookup original location", err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.error("Failed to lookup original location", msg)
         }
     }
 

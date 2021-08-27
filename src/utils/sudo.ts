@@ -27,7 +27,6 @@ export const sudoExec = (cmd: string): void => {
             name: packageJson.productName,
             icns: staticAssetPath("logo.icns"),
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (error?: Error, stdout?: string | Buffer, stderr?: string | Buffer) => {
             log.info("[sudo-exec]", stdout, stderr)
             if (error) {

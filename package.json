@@ -101,7 +101,7 @@
     "glob": "^7.1.7",
     "prettier": "^2.3.2",
     "shx": "^0.3.2",
-    "typescript": "^4.3.4",
+    "typescript": "^4.4.2",
     "url-loader": "^4.1.0",
     "webpack": "^4.46.0"
   },

@@ -173,7 +173,8 @@ export class Supervisor implements SupervisorInterface {
             await api.stop()
             return
         } catch (err) {
-            log.info("Could not stop node on", port, err.message)
+            const msg = err instanceof Error ? err.message : JSON.stringify(err)
+            log.info("Could not stop node on", port, msg)
         }
         log.info("Attempting to kill process", hc.process)
         try {
@@ -321,7 +322,8 @@ export class Supervisor implements SupervisorInterface {
                 await api.stop()
                 return
             } catch (err) {
-                log.error("Could not shutdown myst gracefully", err.message)
+                const msg = err instanceof Error ? err.message : JSON.stringify(err)
+                log.error("Could not shutdown myst gracefully", msg)
             }
         }
         if (this.proc) {
@@ -329,7 +331,8 @@ export class Supervisor implements SupervisorInterface {
             try {
                 this.proc.kill()
             } catch (err) {
-                log.error("Could not kill node process", err.message)
+                const msg = err instanceof Error ? err.message : JSON.stringify(err)
+                log.error("Could not kill node process", msg)
             }
         }
     }

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { ChangeEvent } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
@@ -40,8 +40,7 @@ const SearchInput = styled.input`
 `
 
 export const Search: React.FC<SearchProps> = ({ onChange, ...rest }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChange = (evt: any): void => onChange(evt.target.value)
+    const handleChange = (evt: ChangeEvent<HTMLInputElement>): void => onChange(evt.target.value)
     return (
         <>
             <SearchInput placeholder="Search for node..." onChange={handleChange} {...rest} />
