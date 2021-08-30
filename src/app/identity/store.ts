@@ -174,6 +174,13 @@ export class IdentityStore {
         }
     }
 
+    async refreshBalance(): Promise<void> {
+        if (!this.identity) {
+            return
+        }
+        await tequilapi.identityBalanceRefresh(this.identity.id)
+    }
+
     setLoading = (b: boolean): void => {
         this.loading = b
     }

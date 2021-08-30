@@ -9,6 +9,10 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency, DECIMAL_PART, EntertainmentEstimateResponse } from "mysterium-vpn-js"
 import { Redirect, Route, Switch } from "react-router-dom"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSync } from "@fortawesome/free-solid-svg-icons"
+import { toast } from "react-hot-toast"
+import ReactTooltip from "react-tooltip"
 
 import { useStores } from "../../../store"
 import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
@@ -53,6 +57,19 @@ const SideBot = styled.div`
 
 const Balance = styled(Heading2)`
     margin-top: 15px;
+`
+
+const BalanceRefreshButton = styled(FontAwesomeIcon)`
+    position: absolute;
+    margin-left: 10px;
+    color: ${brandLight};
+    cursor: pointer;
+`
+
+const Tooltip = styled(ReactTooltip).attrs({
+    effect: "solid",
+})`
+    width: 200px;
 `
 
 const BalanceCurrency = styled(Paragraph)`
@@ -117,6 +134,16 @@ export const WalletView: React.FC = observer(() => {
     useEffect(() => {
         payment.estimateEntertainment(balance, true).then((res) => setEstimates(res))
     }, [balance])
+    const handleRefreshBalanceClick = () => {
+        if (!identity.identity?.id) {
+            return
+        }
+        toast.promise(identity.refreshBalance(), {
+            loading: "Refreshing balance from blockchain",
+            success: "Balance updated",
+            error: "Failed to refresh balance",
+        })
+    }
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -125,7 +152,18 @@ export const WalletView: React.FC = observer(() => {
                 <ViewSidebar>
                     <SideTop>
                         <IconWallet color={brandLight} />
-                        <Balance>{balanceDisplay}</Balance>
+                        <Balance>
+                            {balanceDisplay}{" "}
+                            <BalanceRefreshButton
+                                icon={faSync}
+                                onClick={handleRefreshBalanceClick}
+                                data-tip=""
+                                data-for="balance-refresh-tooltip"
+                            />
+                        </Balance>
+                        <Tooltip id="balance-refresh-tooltip">
+                            <span>Force refresh wallet&apos;s balance from the blockchain.</span>
+                        </Tooltip>
                         <BalanceCurrency>{payment.appCurrency}</BalanceCurrency>
                         <BalanceFiatEquivalent>
                             {payment.appFiatCurrency} equivalent ≈{" "}
