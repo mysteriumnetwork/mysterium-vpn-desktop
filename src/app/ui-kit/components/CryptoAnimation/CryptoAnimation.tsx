@@ -16,6 +16,7 @@ import animationETH from "./animation_eth.json"
 import animationLTC from "./animation_ltc.json"
 import animationMYST from "./animation_myst.json"
 import animationUSDT from "./animation_usdt.json"
+import animationDOGE from "./animation_doge.json"
 
 export type IconCurrencyProps = IconProps & {
     currency?: string
@@ -30,6 +31,7 @@ const animations: { [key: string]: object } = {
     LTC: animationLTC,
     USDT: animationUSDT,
     MYST: animationMYST,
+    DOGE: animationDOGE,
 }
 
 export const CryptoAnimation: React.FC<IconCurrencyProps> = ({ currency }) => {
