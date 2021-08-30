@@ -18,10 +18,6 @@ export const fmtMoney = (m: Money, opts?: DisplayMoneyOptions): string => {
     })
 }
 
-export const displayMYST = (amount: number): string => {
-    return new Decimal(amount).toFixed(4) + " MYSTT"
-}
-
 export const displayUSD = (amount: number): string => {
     return "$" + new Decimal(amount).toFixed(4)
 }

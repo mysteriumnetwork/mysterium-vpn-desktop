@@ -149,13 +149,6 @@ export class Supervisor implements SupervisorInterface {
         }
     }
 
-    killMyst(): void {
-        if (!this.conn) {
-            throw new Error("Supervisor is not connected")
-        }
-        this.conn.write("kill\n")
-    }
-
     async killGhost(port: number): Promise<void> {
         const api = new TequilapiClientFactory(`http://127.0.0.1:${port}`, 3_000).build()
         let hc: NodeHealthcheck | undefined

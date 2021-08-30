@@ -7,5 +7,3 @@
 export const titleBarSize = { height: 37 }
 export const contentSize = { width: 640, height: 560 }
 export const winSize = { width: contentSize.width, height: contentSize.height + titleBarSize.height }
-export const supportPanelSize = { width: 400, height: winSize.height }
-export const winSizeExt = { width: winSize.width + supportPanelSize.width, height: winSize.height }
