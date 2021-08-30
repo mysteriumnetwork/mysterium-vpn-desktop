@@ -6,17 +6,15 @@
  */
 
 import { action, makeObservable, observable, reaction, when } from "mobx"
-import { ipcRenderer, remote } from "electron"
+import { ipcRenderer } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { log } from "../../shared/log/log"
-import { tequilapi, TEQUILAPI_PORT } from "../tequilapi"
+import { tequilapi } from "../tequilapi"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
-import { isProduction } from "../../utils/env"
-import { SupervisorInterface } from "../../shared/supervisor"
-
-const supervisor: SupervisorInterface = remote.getGlobal("supervisor")
+import { mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
+import { supervisorIPC } from "../../shared/node/supervisor-ipc"
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -143,26 +141,24 @@ export class DaemonStore {
         }
         this.setStarting(true)
         try {
-            await supervisor.connect()
+            await supervisorIPC.connect()
         } catch (err) {
             const msg = err instanceof Error ? err.message : JSON.stringify(err)
             log.error("Failed to connect to the supervisor, installing", msg)
             await this.supervisorInstall()
         }
 
-        await supervisor.upgrade()
+        await supervisorIPC.upgrade()
         this.setStartupStatus(StartupStatus.KillingGhosts)
-        if (isProduction()) {
-            await Promise.all([supervisor.killGhost(4050), supervisor.killGhost(44050)])
-        }
+        await mysteriumNodeIPC.killGhosts()
         this.setStartupStatus(StartupStatus.StartingDaemon)
-        await supervisor.startMyst(TEQUILAPI_PORT)
+        await mysteriumNodeIPC.start()
         this.setStarting(false)
     }
 
     async supervisorInstall(): Promise<void> {
         try {
-            return await supervisor.install()
+            return await supervisorIPC.install()
         } catch (err) {
             log.error("Failed to install supervisor", err)
         }

@@ -6,19 +6,17 @@
  */
 import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
-import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { eventBus } from "../tequila-sse"
 import { appStateEvent } from "../analytics/analytics"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
-import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
-import { ImportIdentityOpts } from "../../shared/supervisor"
 import { log } from "../../shared/log/log"
 import { decimalPart } from "../payment/display"
 import { PushTopic } from "../../shared/push/topics"
 import { subscribePush, unsubscribePush } from "../push/push"
+import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
 
 export class IdentityStore {
     loading = false
@@ -188,22 +186,20 @@ export class IdentityStore {
         this.identities = identities
     }
 
-    async exportIdentity({ id, passphrase }: { id: string; passphrase: string }): Promise<string> {
-        const res = await ipcRenderer.invoke(MainIpcListenChannels.ExportIdentity, id, passphrase)
+    async exportIdentity(opts: ExportIdentityOpts): Promise<string> {
+        const res = await mysteriumNodeIPC.exportIdentity(opts)
         if (res.error) {
             return Promise.reject(res.error)
         }
-        return res.result
+        return String(res.result)
     }
 
     importIdentityChooseFile(): Promise<string> {
-        return ipcRenderer
-            .invoke(MainIpcListenChannels.ImportIdentityChooseFile)
-            .then((result: IpcResponse) => result.result as string)
+        return mysteriumNodeIPC.importIdentityChooseFile()
     }
 
     async importIdentity(opts: ImportIdentityOpts): Promise<string> {
-        const res = await ipcRenderer.invoke(MainIpcListenChannels.ImportIdentity, opts)
+        const res = await mysteriumNodeIPC.importIdentity(opts)
         if (res.error) {
             appStateEvent(AppStateAction.IdentityImported, String(false))
             return Promise.reject(res.error)
@@ -213,6 +209,6 @@ export class IdentityStore {
         if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
             await this.register(this.identity)
         }
-        return res.result
+        return String(res.result)
     }
 }
