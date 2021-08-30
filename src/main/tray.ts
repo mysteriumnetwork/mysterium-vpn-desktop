@@ -14,7 +14,7 @@ import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
 import { TrayAction } from "../shared/analytics/actions"
 
-import { supervisor } from "./supervisor/supervisor"
+import { supervisor } from "./node/supervisor"
 import { webAnalyticsUserEvent } from "./analytics-main"
 
 import { ipcWebDisconnect } from "./index"

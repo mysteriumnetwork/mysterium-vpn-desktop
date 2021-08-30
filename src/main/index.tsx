@@ -9,7 +9,7 @@ import * as path from "path"
 import { format as formatUrl } from "url"
 import * as os from "os"
 
-import { app, BrowserWindow, dialog, ipcMain, IpcMainEvent, IpcMainInvokeEvent, Menu, Tray } from "electron"
+import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
 import { autoUpdater } from "electron-updater"
 import { machineIdSync } from "node-machine-id"
 
@@ -18,15 +18,15 @@ import { winSize } from "../config"
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 import { log } from "../shared/log/log"
 import { isDevelopment } from "../utils/env"
-import { IpcResponse, MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
+import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { handleProcessExit } from "../utils/handle-process-exit"
-import { ImportIdentityOpts } from "../shared/supervisor"
 
 import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
 import { initialize as initializeAnalytics } from "./analytics-main"
-import { supervisor } from "./supervisor/supervisor"
+import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
+import { mysteriumNode } from "./node/mysterium-node"
 
 initializeSentry()
 
@@ -35,10 +35,12 @@ autoUpdater.logger = log
 // @ts-ignore
 autoUpdater.logger.transports.file.level = "info"
 
-global.supervisor = supervisor
-
 // global reference to win (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | null
+
+export const getMainWindow = (): BrowserWindow | null => {
+    return mainWindow
+}
 
 let chatWindow: BrowserWindow | null
 
@@ -79,7 +81,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         webPreferences: {
             contextIsolation: false,
             nodeIntegration: true,
-            enableRemoteModule: true,
             nativeWindowOpen: true,
         },
     })
@@ -208,8 +209,8 @@ app.whenReady().then(() => {
 
 app.on("before-quit", async () => {
     app.quitting = true
-    await supervisor.connect()
-    await supervisor.stopMyst()
+    await mysteriumNode.stop()
+    await supervisor.disconnect()
 })
 
 ipcMain.handle(MainIpcListenChannels.GetOS, (): Promise<string> => {
@@ -244,40 +245,9 @@ ipcMain.on(MainIpcListenChannels.MinimizeWindow, () => {
 ipcMain.on(MainIpcListenChannels.CloseWindow, () => {
     mainWindow?.close()
 })
-ipcMain.handle(
-    MainIpcListenChannels.ExportIdentity,
-    async (event: IpcMainInvokeEvent, id: string, passphrase: string): Promise<IpcResponse> => {
-        if (!mainWindow) {
-            return {}
-        }
-        const filename = dialog.showSaveDialogSync(mainWindow, {
-            filters: [{ extensions: ["json"], name: "keystore" }],
-            defaultPath: `${id}.json`,
-        })
-        if (!filename) {
-            return {}
-        }
-        return await supervisor.exportIdentity({ id, filename, passphrase })
-    },
-)
-ipcMain.handle(MainIpcListenChannels.ImportIdentityChooseFile, async (): Promise<IpcResponse> => {
-    if (!mainWindow) {
-        return {}
-    }
-    const filename = dialog
-        .showOpenDialogSync(mainWindow, {
-            filters: [{ extensions: ["json"], name: "keystore" }],
-        })
-        ?.find(Boolean)
-    return Promise.resolve({ result: filename })
-})
 
-ipcMain.handle(
-    MainIpcListenChannels.ImportIdentity,
-    async (event: IpcMainInvokeEvent, opts: ImportIdentityOpts): Promise<IpcResponse> => {
-        return supervisor.importIdentity(opts)
-    },
-)
+supervisor.registerIPC()
+mysteriumNode.registerIPC(getMainWindow)
 
 autoUpdater.on("download-progress", () => {
     mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloading)
