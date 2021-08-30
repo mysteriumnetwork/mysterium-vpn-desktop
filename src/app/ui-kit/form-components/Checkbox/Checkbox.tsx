@@ -8,8 +8,6 @@ import styled from "styled-components"
 import React from "react"
 import { uniqueId } from "lodash"
 
-import { brandLight } from "../../colors"
-
 const Container = styled.div`
     height: 24px;
     font-size: 14px;
@@ -23,15 +21,10 @@ const Input = styled.input`
     height: 18px;
     width: 18px;
     -webkit-appearance: none;
-    background: transparent;
-    padding-left: 2px;
-    border: 2px solid ${brandLight};
+    background-repeat: no-repeat;
+    background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M22 2v20h-20v-20h20zm2-2h-24v24h24v-24z" stroke="%23ed5bac" fill="%23ed5bac"/></svg>');
     &:checked {
-        background: ${brandLight};
-    }
-    &:checked:after {
-        content: "✔";
-        color: white;
+        background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M22 2v20h-20v-20h20zm2-2h-24v24h24v-24zm-5.541 8.409l-1.422-1.409-7.021 7.183-3.08-2.937-1.395 1.435 4.5 4.319 8.418-8.591z" stroke="%23ed5bac" fill="%23ed5bac"/></svg>');
     }
 ` as React.FC<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>>
 
