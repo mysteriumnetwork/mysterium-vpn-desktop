@@ -15,10 +15,11 @@ import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { appStateEvent, userEvent } from "../analytics/analytics"
-import { log } from "../../shared/log/log"
+import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { AppStateAction, ConnectionAction } from "../../shared/analytics/actions"
 import { subscribePush } from "../push/push"
+import { parseError } from "../../shared/errors/translate"
 
 export class ConnectionStore {
     connectInProgress = false
@@ -155,9 +156,9 @@ export class ConnectionStore {
                 30_000,
             )
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Could not connect", msg)
-            return Promise.reject(msg)
+            const msg = parseError(err)
+            logErrorMessage("Could not connect", msg)
+            return Promise.reject(msg.humanReadable)
         } finally {
             this.setConnectInProgress(false)
         }
@@ -174,8 +175,8 @@ export class ConnectionStore {
             }
             this.setStatus(conn.status)
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Connection status check failed", msg)
+            const msg = parseError(err)
+            logErrorMessage("Could not check connection status", msg)
             this.setStatus(ConnectionStatus.NOT_CONNECTED)
         }
     }
@@ -186,8 +187,8 @@ export class ConnectionStore {
         try {
             await tequilapi.connectionCancel()
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Failed to disconnect", msg)
+            const msg = parseError(err)
+            logErrorMessage("Failed to disconnect", msg)
         }
     }
 
@@ -197,8 +198,8 @@ export class ConnectionStore {
             this.setOriginalLocation(location)
             subscribePush(location.country)
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Failed to lookup original location", msg)
+            const msg = parseError(err)
+            logErrorMessage("Failed to lookup original location", msg)
         }
     }
 

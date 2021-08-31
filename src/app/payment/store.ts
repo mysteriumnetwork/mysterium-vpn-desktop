@@ -10,10 +10,11 @@ import retry from "async-retry"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
-import { log } from "../../shared/log/log"
+import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { appStateEvent } from "../analytics/analytics"
 import { AppStateAction } from "../../shared/analytics/actions"
+import { parseError } from "../../shared/errors/translate"
 
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
@@ -238,8 +239,8 @@ export class PaymentStore {
                 trafficMb: Number((res.trafficMb / 1024).toFixed()),
             }))
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.warn("Failed to estimate entertainment for amount: ", amount, ", reason:", msg)
+            const msg = parseError(err)
+            logErrorMessage("Failed to estimate entertainment for amount: " + amount, msg)
             return undefined
         }
     }

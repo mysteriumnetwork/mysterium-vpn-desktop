@@ -6,7 +6,12 @@
  */
 import electronLog from "electron-log"
 
+import { ParsedMessage } from "../errors/translate"
+
 electronLog.transports.console.level = "silly"
 electronLog.transports.file.level = "debug"
 
 export const log = electronLog
+export const logErrorMessage = (caption: string, err: ParsedMessage): void => {
+    log.error(`${caption}: ${err.humanReadable}\nOriginal message: ${err.original}`)
+}

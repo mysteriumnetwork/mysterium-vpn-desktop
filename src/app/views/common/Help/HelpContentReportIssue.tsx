@@ -70,9 +70,9 @@ export const HelpContentReportIssue: React.FC = observer(() => {
             error: function errorToast(reason) {
                 return (
                     <span>
-                        <b>Could not submit the report.</b>
+                        <b>Could not submit the report 😶</b>
                         <br />
-                        Error: {reason}
+                        {reason}
                     </span>
                 )
             },

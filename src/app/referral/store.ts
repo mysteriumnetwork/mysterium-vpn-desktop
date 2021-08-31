@@ -9,10 +9,10 @@ import { action, makeObservable, observable } from "mobx"
 import * as _ from "lodash"
 
 import { RootStore } from "../store"
-import { log } from "../../shared/log/log"
-import { parseError } from "../tequilapi/parseError"
+import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { decimalPart } from "../payment/display"
+import { parseError } from "../../shared/errors/translate"
 
 export class ReferralStore {
     token?: string
@@ -71,8 +71,9 @@ export class ReferralStore {
                 const tokenResponse = await tequilapi.getReferralToken(id)
                 this.setToken(tokenResponse.token)
             } catch (err) {
-                this.setMessage(parseError(err))
-                log.error("Referral token generation failed", err)
+                const msg = parseError(err)
+                logErrorMessage("Referral token generation failed", msg)
+                this.setMessage(msg.humanReadable)
             } finally {
                 this.setLoading(false)
             }

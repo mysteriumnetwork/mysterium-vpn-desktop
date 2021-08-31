@@ -41,9 +41,9 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
                 toast.error(function errorToast() {
                     return (
                         <span>
-                            <b>Oops! Could not connect :(</b>
+                            <b>Oops! Could not connect 😶</b>
                             <br />
-                            Error: {reason}
+                            {reason}
                         </span>
                     )
                 })

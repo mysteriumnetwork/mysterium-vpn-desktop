@@ -12,10 +12,11 @@ import { FilterPreset } from "mysterium-vpn-js"
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { userEvent } from "../analytics/analytics"
-import { log } from "../../shared/log/log"
+import { logErrorMessage } from "../../shared/log/log"
 import { PriceCeiling, ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../../shared/analytics/actions"
+import { parseError } from "../../shared/errors/translate"
 
 import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
 
@@ -112,8 +113,8 @@ export class ProposalStore {
             const proposals = await tequilapi.findProposals(query).then((proposals) => proposals.map(newUIProposal))
             this.setProposals(proposals)
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Could not get proposals", msg)
+            const msg = parseError(err)
+            logErrorMessage("Could not get proposals", msg)
         }
         this.setLoading(false)
     }

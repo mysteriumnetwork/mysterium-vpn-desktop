@@ -25,10 +25,11 @@ import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayUSD } from "../../../payment/display"
 import { isLightningAvailable } from "../../../payment/currency"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
-import { log } from "../../../../shared/log/log"
+import { logErrorMessage } from "../../../../shared/log/log"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../navigation/locations"
 import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
+import { parseError } from "../../../../shared/errors/translate"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -104,16 +105,11 @@ export const TopupSelectCurrency: React.FC = observer(() => {
             router.pushRelative(topupSteps.waitingForPayment)
         } catch (err) {
             setLoading(() => false)
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Could not create a payment order", msg)
-            let userMessage = "Could not inititate the payment. Please try again later or contact us via chat!"
-            // We can remove this hack later; this is a special message for ids registered during 'offchain' period.
-            if ((msg as string).indexOf("identity is offchain") != -1) {
-                userMessage =
-                    "There seems to be a problem with your account. Please create a new identity to continue using MysteriumVPN."
-            }
+            const msg = parseError(err)
+            logErrorMessage("Could not create a payment order", msg)
+            msg.humanReadable = "Could not inititate the payment. Please try again later or contact us via chat!"
             toast.error(function errorToast() {
-                return <span>{userMessage}</span>
+                return <span>{msg.humanReadable}</span>
             })
         }
     }

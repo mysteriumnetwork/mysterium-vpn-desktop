@@ -114,7 +114,7 @@ export const IdentitySetup: React.FC = observer(() => {
                 error: function errorToast(reason) {
                     return (
                         <span>
-                            <b>Mysterium ID import failed.</b>
+                            <b>Mysterium ID import failed 😶</b>
                             <br />
                             Error: {reason}
                         </span>

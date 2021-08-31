@@ -11,12 +11,13 @@ import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
 import { BrowserWindow, dialog, ipcMain, IpcMainInvokeEvent } from "electron"
 
 import { spawnProcess } from "../../utils/spawn"
-import { log } from "../../shared/log/log"
+import { log, logErrorMessage } from "../../shared/log/log"
 import { TEQUILAPI_PORT } from "../../app/tequilapi"
 import { staticAssetPath } from "../../utils/paths"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { isProduction } from "../../utils/env"
 import { ExportIdentityOpts, ImportIdentityOpts } from "../../shared/node/mysterium-node-ipc"
+import { parseError } from "../../shared/errors/translate"
 
 const mystBin = (): string => {
     let mystBinaryName = "bin/myst"
@@ -141,14 +142,15 @@ export class MysteriumNode {
             await api.stop()
             return
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.info("Could not stop node on", port, msg)
+            const msg = parseError(err)
+            logErrorMessage("Could not stop node on port " + port, msg)
         }
         log.info("Attempting to kill process", hc.process)
         try {
             process.kill(hc.process)
         } catch (err) {
-            log.info("Could not kill process", hc.process, err)
+            const msg = parseError(err)
+            logErrorMessage("Could not kill process PID " + hc.process, msg)
         }
     }
 
@@ -161,8 +163,8 @@ export class MysteriumNode {
                 await api.stop()
                 return
             } catch (err) {
-                const msg = err instanceof Error ? err.message : JSON.stringify(err)
-                log.error("Could not shutdown myst gracefully", msg)
+                const msg = parseError(err)
+                logErrorMessage("Could not shutdown Mysterium node gracefully", msg)
             }
         }
         if (this.proc) {
@@ -170,8 +172,8 @@ export class MysteriumNode {
             try {
                 this.proc.kill()
             } catch (err) {
-                const msg = err instanceof Error ? err.message : JSON.stringify(err)
-                log.error("Could not kill node process", msg)
+                const msg = parseError(err)
+                logErrorMessage("Could not kill node process", msg)
             }
         }
     }

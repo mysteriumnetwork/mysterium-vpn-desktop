@@ -10,11 +10,12 @@ import { ipcRenderer } from "electron"
 
 import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
-import { log } from "../../shared/log/log"
+import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
 import { mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
 import { supervisorIPC } from "../../shared/node/supervisor-ipc"
+import { parseError } from "../../shared/errors/translate"
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -99,8 +100,8 @@ export class DaemonStore {
             await tequilapi.healthCheck(10000)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Healthcheck failed:", msg)
+            const msg = parseError(err)
+            logErrorMessage("Healthcheck failed", msg)
             this.setStatus(DaemonStatusType.Down)
         }
         this.setStatusLoading(false)
@@ -143,8 +144,8 @@ export class DaemonStore {
         try {
             await supervisorIPC.connect()
         } catch (err) {
-            const msg = err instanceof Error ? err.message : JSON.stringify(err)
-            log.error("Failed to connect to the supervisor, installing", msg)
+            const msg = parseError(err)
+            logErrorMessage("Failed to connect to the supervisor, installing", msg)
             await this.supervisorInstall()
         }
 
