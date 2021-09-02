@@ -72,6 +72,21 @@ export class DaemonStore {
         reaction(
             () => this.status,
             async (status) => {
+                if (status == DaemonStatusType.Down) {
+                    log.info("Connection to Mysterium Node lost (auto-start in 5s)")
+                    setTimeout(async () => {
+                        if (this.status == DaemonStatusType.Down) {
+                            await this.start()
+                        } else {
+                            log.info("Connection to Mysterium Node restored")
+                        }
+                    }, 5_000)
+                }
+            },
+        )
+        reaction(
+            () => this.status,
+            async (status) => {
                 if (status == DaemonStatusType.Up) {
                     this.eventSource = sseConnect()
                 }
@@ -135,6 +150,11 @@ export class DaemonStore {
     }
 
     async start(): Promise<void> {
+        if (this.status == DaemonStatusType.Up) {
+            log.info("Mysterium Node is already running")
+            return
+        }
+        log.info("Starting Mysterium Node")
         if (this.starting) {
             log.info("Already starting")
             return
