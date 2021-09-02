@@ -120,7 +120,14 @@ export class ProposalStore {
     }
 
     async fetchProposalFilterPresets(): Promise<void> {
-        const systemPresets = await tequilapi.proposalFilterPresets().then((res) => res.items)
+        let systemPresets: FilterPreset[] = []
+        try {
+            const res = await tequilapi.proposalFilterPresets()
+            systemPresets = res.items
+        } catch (err) {
+            const msg = parseError(err)
+            logErrorMessage("Could not get proposal filter presets", msg)
+        }
         runInAction(() => {
             this.filterPresets = systemPresets.concat([{ id: 0, name: "All nodes" }])
         })
