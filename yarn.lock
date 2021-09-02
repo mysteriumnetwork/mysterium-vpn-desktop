@@ -1107,10 +1107,10 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@0.62.0":
-  version "0.62.0"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.62.0.tgz#c695e5174c874498a55c6b17fbd69da1a6a952f6"
-  integrity sha512-TF8nnmJS+d6y3Y0b2nAOEYM/W1U1+Ffyn1QUpOEwvA/hJ+A1pXiQm58YNg4cI4HqSVC/xjKbIyeY/i4RJloznw==
+"@mysteriumnetwork/node@0.62.1":
+  version "0.62.1"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.62.1.tgz#0e805365b287bd85d54aa3f7333559957abeab64"
+  integrity sha512-68o77IpzBhJCyU7KTPaQaDeDAheDkGhfKVV9JDCXXOm/EkZtlM4wRB6KyaBkp8SaK0zyIXzGUAaZr+QPltwuHg==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
