@@ -40,7 +40,6 @@ const SideBot = styled.div`
     box-shadow: 0px 0px 30px rgba(11, 0, 75, 0.1);
     border-radius: 10px;
     box-sizing: border-box;
-    padding: 12px 0;
 
     flex: 1;
     height: 350px;

@@ -19,8 +19,12 @@ const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 12px;
+    padding: 12px;
     overflow-y: scroll;
+
+    &::-webkit-scrollbar-track {
+        margin: 12px 0;
+    }
 `
 
 const CountryToggle = styled(Toggle).attrs({
