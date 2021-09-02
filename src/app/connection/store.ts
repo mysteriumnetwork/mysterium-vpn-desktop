@@ -241,8 +241,10 @@ export class ConnectionStore {
             log.info("Resolving NAT type...")
             try {
                 const natType = await tequilapi.natType()
-                this.natType = natType.type
-                log.info("Resolved NAT type:", natType)
+                runInAction(() => {
+                    this.natType = natType.type
+                })
+                log.info("Resolved NAT type:", natType.type || natType)
             } catch (err) {
                 log.error("Could not resolve NAT type:", err)
             }
