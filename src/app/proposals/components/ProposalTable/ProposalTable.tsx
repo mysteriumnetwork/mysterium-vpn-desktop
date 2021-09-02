@@ -96,7 +96,7 @@ type TableProps = {
 }
 
 const Table: React.FC<TableProps> = observer(({ columns, data }) => {
-    const { proposals } = useStores()
+    const { proposals, filters } = useStores()
     const defaultColumn = React.useMemo(
         () => ({
             width: 50,
@@ -118,12 +118,12 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
         useSortBy,
     )
     useEffect(() => {
-        if (proposals.filter.country == null) {
+        if (filters.country == null) {
             setHiddenColumns(["priceHour", "priceGib"])
         } else {
             setHiddenColumns(["country"])
         }
-    }, [proposals.filter.country])
+    }, [filters.country])
     const activeKey = proposals.active?.key
     const renderRow = React.useCallback(
         ({ index, style }): JSX.Element => {

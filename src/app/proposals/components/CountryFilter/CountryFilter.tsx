@@ -36,7 +36,7 @@ const Count = styled.span`
 `
 
 export const CountryFilter = observer(() => {
-    const { proposals } = useStores()
+    const { proposals, filters } = useStores()
     const countryCounts = proposals.countryCounts
     if (!Object.keys(countryCounts).length) {
         return <></>
@@ -52,9 +52,9 @@ export const CountryFilter = observer(() => {
             <CountryToggle
                 key="all"
                 onClick={() => proposals.setCountryFilter(undefined)}
-                active={proposals.filter.country == null}
+                active={filters.country == null}
             >
-                <IconGlobe color={proposals.filter.country == null ? "#fff" : brand} />
+                <IconGlobe color={filters.country == null ? "#fff" : brand} />
                 <CountryName>All countries</CountryName>
                 <Count>{proposals.textFiltered.length}</Count>
             </CountryToggle>
@@ -63,11 +63,7 @@ export const CountryFilter = observer(() => {
                     proposals.toggleCountryFilter(countryCode)
                 }
                 return (
-                    <CountryToggle
-                        key={countryCode}
-                        onClick={toggleAction}
-                        active={proposals.filter.country == countryCode}
-                    >
+                    <CountryToggle key={countryCode} onClick={toggleAction} active={filters.country == countryCode}>
                         <Flag countryCode={countryCode} />
                         <CountryName>{countryName(countryCode)}</CountryName>
                         <Count>{countryCounts[countryCode]}</Count>

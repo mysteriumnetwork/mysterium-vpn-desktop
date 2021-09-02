@@ -192,21 +192,26 @@ export class ProposalStore {
     }
 
     async setCountryFilter(countryCode?: string): Promise<void> {
-        this.filter.country = countryCode
+        await this.root.filters.setPartial({
+            other: {
+                country: countryCode,
+            },
+        })
     }
 
     toggleCountryFilter(countryCode?: string): void {
-        this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
+        this.setCountryFilter(this.root.filters.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
         userEvent(ProposalViewAction.FilterCountry, countryCode)
     }
 
     get countryFiltered(): UIProposal[] {
         const input = this.textFiltered
-        if (!this.filter.country) {
+        const country = this.root.filters.country
+        if (!country) {
             return input
         }
-        return input.filter((p) => p.country == this.filter.country)
+        return input.filter((p) => p.country == country)
     }
 
     // #####################
