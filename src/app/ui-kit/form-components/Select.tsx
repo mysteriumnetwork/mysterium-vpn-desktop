@@ -23,4 +23,11 @@ export const Select = styled.select`
     font-family: inherit;
     font-size: 12px;
     line-height: 14px;
+
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #fff 50%),
+        linear-gradient(135deg, #fff 50%, transparent 50%);
+    background-position: calc(100% - 16px) 50%, calc(100% - 12px) 50%;
+    background-size: 4px 4px, 4px 4px;
+    background-repeat: no-repeat;
 `
