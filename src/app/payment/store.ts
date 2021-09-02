@@ -14,7 +14,7 @@ import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { appStateEvent } from "../analytics/analytics"
 import { AppStateAction } from "../../shared/analytics/actions"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"

@@ -16,9 +16,9 @@ import { logErrorMessage } from "../../shared/log/log"
 import { PriceCeiling, ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../../shared/analytics/actions"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
-import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
+import { compareProposal, newUIProposal, UIProposal } from "./uiProposal"
 
 const supportedServiceType = "wireguard"
 

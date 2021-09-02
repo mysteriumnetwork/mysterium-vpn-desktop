@@ -12,7 +12,7 @@ import { RootStore } from "../store"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { decimalPart } from "../payment/display"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
 export class ReferralStore {
     token?: string

@@ -15,7 +15,7 @@ import { staticAssetPath } from "../utils/paths"
 import { TrayAction } from "../shared/analytics/actions"
 
 import { supervisor } from "./node/supervisor"
-import { webAnalyticsUserEvent } from "./analytics-main"
+import { webAnalyticsUserEvent } from "./analytics"
 
 import { ipcWebDisconnect } from "./index"
 

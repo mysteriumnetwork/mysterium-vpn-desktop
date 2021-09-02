@@ -8,15 +8,14 @@ import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "my
 import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 
 import { RootStore } from "../store"
-import { eventBus } from "../tequila-sse"
 import { appStateEvent } from "../analytics/analytics"
-import { tequilapi } from "../tequilapi"
+import { eventBus, tequilapi } from "../tequilapi"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { log } from "../../shared/log/log"
 import { decimalPart } from "../payment/display"
 import { PushTopic } from "../../shared/push/topics"
 import { subscribePush, unsubscribePush } from "../push/push"
-import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
+import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
 
 export class IdentityStore {
     loading = false

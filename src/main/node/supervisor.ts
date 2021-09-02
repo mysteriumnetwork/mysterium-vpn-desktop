@@ -16,7 +16,7 @@ import { staticAssetPath } from "../../utils/paths"
 import { log } from "../../shared/log/log"
 import { sudoExec } from "../../utils/sudo"
 import { uid } from "../../utils/user"
-import { webAnalyticsAppStateEvent } from "../analytics-main"
+import { webAnalyticsAppStateEvent } from "../analytics"
 import { AppStateAction } from "../../shared/analytics/actions"
 import { MainIpcListenChannels } from "../../shared/ipc"
 

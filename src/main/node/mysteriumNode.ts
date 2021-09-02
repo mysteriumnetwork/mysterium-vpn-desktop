@@ -16,8 +16,8 @@ import { TEQUILAPI_PORT } from "../../app/tequilapi"
 import { staticAssetPath } from "../../utils/paths"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { isProduction } from "../../utils/env"
-import { ExportIdentityOpts, ImportIdentityOpts } from "../../shared/node/mysterium-node-ipc"
-import { parseError } from "../../shared/errors/translate"
+import { ExportIdentityOpts, ImportIdentityOpts } from "../../shared/node/mysteriumNodeIPC"
+import { parseError } from "../../shared/errors/parseError"
 
 const mystBin = (): string => {
     let mystBinaryName = "bin/myst"

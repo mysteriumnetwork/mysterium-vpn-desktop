@@ -10,7 +10,7 @@ import { ipcMain } from "electron"
 
 import * as packageJson from "../../../package.json"
 import { log } from "../../shared/log/log"
-import { webAnalyticsAppStateEvent, webAnalyticsUserEvent } from "../analytics-main"
+import { webAnalyticsAppStateEvent, webAnalyticsUserEvent } from "../analytics"
 import { AppStateAction, OtherAction } from "../../shared/analytics/actions"
 import { MainIpcListenChannels } from "../../shared/ipc"
 

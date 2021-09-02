@@ -8,14 +8,13 @@
 import { action, makeObservable, observable, reaction, when } from "mobx"
 import { ipcRenderer } from "electron"
 
-import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { log, logErrorMessage } from "../../shared/log/log"
-import { tequilapi } from "../tequilapi"
+import { sseConnect, tequilapi } from "../tequilapi"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
-import { mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
-import { supervisorIPC } from "../../shared/node/supervisor-ipc"
-import { parseError } from "../../shared/errors/translate"
+import { mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
+import { supervisorIPC } from "../../shared/node/supervisorIPC"
+import { parseError } from "../../shared/errors/parseError"
 
 export enum DaemonStatusType {
     Up = "UP",

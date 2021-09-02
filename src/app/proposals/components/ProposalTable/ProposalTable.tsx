@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 
 import { useStores } from "../../../store"
-import { UIProposal } from "../../ui-proposal-type"
+import { UIProposal } from "../../uiProposal"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { brand, darkBlue, lightBlue } from "../../../ui-kit/colors"
 import { perGiB, perHour } from "../../../payment/rate"
