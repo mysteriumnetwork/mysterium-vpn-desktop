@@ -13,19 +13,25 @@ import * as packageJson from "../../../package.json"
 import { isDevelopment } from "../../utils/env"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
 import { AppStateAction, Category, UserAction } from "../../shared/analytics/actions"
+import { logErrorMessage } from "../../shared/log/log"
 
 const appVersion = packageJson.version
 
 let tracker: MatomoTracker
-ipcRenderer.invoke(MainIpcListenChannels.GetMachineId).then((machineId) => {
-    tracker = new MatomoTracker({
-        siteId: 1,
-        userId: machineId,
-        urlBase: packageJson.analyticsUrl,
-        disabled: isDevelopment(),
-        linkTracking: false,
+ipcRenderer
+    .invoke(MainIpcListenChannels.GetMachineId)
+    .then((machineId) => {
+        tracker = new MatomoTracker({
+            siteId: 1,
+            userId: machineId,
+            urlBase: packageJson.analyticsUrl,
+            disabled: isDevelopment(),
+            linkTracking: false,
+        })
     })
-})
+    .catch((err) => {
+        logErrorMessage("Failed to generate machine ID", err)
+    })
 
 export const initialize = (): void => {
     ipcRenderer.on(
