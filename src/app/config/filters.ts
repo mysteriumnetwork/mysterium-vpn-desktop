@@ -19,6 +19,7 @@ export class Filters {
         makeObservable(this, {
             config: computed,
             country: computed,
+            presetID: computed,
             setPartial: action,
             initialized: computed,
             defaults: computed,
@@ -48,7 +49,11 @@ export class Filters {
     }
 
     get country(): string | undefined {
-        return this.root.config.config.desktop?.filters?.other?.country
+        return this.config.other?.country
+    }
+
+    get presetID(): number | undefined | null {
+        return this.config.preset?.id
     }
 
     get initialized(): boolean {

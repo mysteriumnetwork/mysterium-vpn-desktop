@@ -33,7 +33,7 @@ const SideTop = styled.div<{ presetCount: number }>`
     padding: 12px;
     overflow: hidden;
     text-align: center;
-    flex-shrink: 0;
+    flex: 0 0 auto;
 `
 
 const SideBot = styled.div`
