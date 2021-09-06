@@ -41,6 +41,8 @@ const Metrics = styled.div`
 const Metric = styled.div`
     width: 88px;
     height: 115px;
+    box-sizing: border-box;
+    padding: 12px 0;
     background: #f8f8fd;
     border-radius: 10px;
     text-align: center;
@@ -49,7 +51,7 @@ const Metric = styled.div`
 `
 
 const MetricIcon = styled.div`
-    margin: 12px auto;
+    margin-bottom: 16px;
 `
 
 const MetricValue = styled.div`
@@ -58,9 +60,7 @@ const MetricValue = styled.div`
     font-weight: bold;
 `
 
-const MetricLabel = styled.div`
-    margin: 6px auto;
-`
+const MetricLabel = styled.div``
 
 const MetricPlaceholder = () => (
     <div>
