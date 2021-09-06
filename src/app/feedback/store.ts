@@ -11,7 +11,7 @@ import { Issue } from "mysterium-vpn-js"
 import { RootStore } from "../store"
 import { tequilapi } from "../tequilapi"
 import { logErrorMessage } from "../../shared/log/log"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
 export class FeedbackStore {
     root: RootStore

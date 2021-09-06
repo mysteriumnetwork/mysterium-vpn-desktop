@@ -41,16 +41,17 @@ const Metrics = styled.div`
 const Metric = styled.div`
     width: 88px;
     height: 115px;
+    box-sizing: border-box;
+    padding: 15px 0;
     background: #f8f8fd;
     border-radius: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 `
 
-const MetricIcon = styled.div`
-    margin: 12px auto;
-`
+const MetricIcon = styled.div``
 
 const MetricValue = styled.div`
     color: ${darkBlue};
@@ -59,8 +60,9 @@ const MetricValue = styled.div`
 `
 
 const MetricLabel = styled.div`
-    margin: 6px auto;
+    margin-top: auto;
 `
+const MetricUnit = styled.div``
 
 const MetricPlaceholder = () => (
     <div>
@@ -96,7 +98,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Received</MetricLabel>
                 <MetricValue>{connected ? down?.value : <MetricPlaceholder />}</MetricValue>
-                <MetricLabel>{down?.unit}</MetricLabel>
+                <MetricUnit>{down?.unit}</MetricUnit>
             </Metric>
             <Metric>
                 <MetricIcon>
@@ -104,7 +106,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Sent</MetricLabel>
                 <MetricValue>{connected ? up?.value : <MetricPlaceholder />}</MetricValue>
-                <MetricLabel>{up?.unit}</MetricLabel>
+                <MetricUnit>{up?.unit}</MetricUnit>
             </Metric>
             <Metric>
                 <MetricIcon>
@@ -112,7 +114,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Duration</MetricLabel>
                 <MetricValue>{connected ? clock : <MetricPlaceholder />}</MetricValue>
-                <MetricLabel>hh:mm:ss</MetricLabel>
+                <MetricUnit>hh:mm:ss</MetricUnit>
             </Metric>
             <Metric>
                 <MetricIcon>
@@ -120,7 +122,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Paid</MetricLabel>
                 <MetricValue>{connected ? paid : <MetricPlaceholder />}</MetricValue>
-                <MetricLabel>{Currency.MYSTTestToken}</MetricLabel>
+                <MetricUnit>{Currency.MYSTTestToken}</MetricUnit>
             </Metric>
         </Metrics>
     )

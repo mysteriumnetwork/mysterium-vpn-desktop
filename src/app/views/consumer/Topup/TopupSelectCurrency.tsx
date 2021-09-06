@@ -29,7 +29,7 @@ import { logErrorMessage } from "../../../../shared/log/log"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../navigation/locations"
 import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
-import { parseError } from "../../../../shared/errors/translate"
+import { parseError } from "../../../../shared/errors/parseError"
 
 const SideTop = styled.div`
     box-sizing: border-box;
