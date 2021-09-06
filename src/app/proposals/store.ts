@@ -16,9 +16,9 @@ import { logErrorMessage } from "../../shared/log/log"
 import { PriceCeiling, ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
 import { ProposalViewAction } from "../../shared/analytics/actions"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
-import { compareProposal, newUIProposal, UIProposal } from "./ui-proposal-type"
+import { compareProposal, newUIProposal, UIProposal } from "./uiProposal"
 
 const supportedServiceType = "wireguard"
 
@@ -120,7 +120,14 @@ export class ProposalStore {
     }
 
     async fetchProposalFilterPresets(): Promise<void> {
-        const systemPresets = await tequilapi.proposalFilterPresets().then((res) => res.items)
+        let systemPresets: FilterPreset[] = []
+        try {
+            const res = await tequilapi.proposalFilterPresets()
+            systemPresets = res.items
+        } catch (err) {
+            const msg = parseError(err)
+            logErrorMessage("Could not get proposal filter presets", msg)
+        }
         runInAction(() => {
             this.filterPresets = systemPresets.concat([{ id: 0, name: "All nodes" }])
         })
@@ -185,21 +192,26 @@ export class ProposalStore {
     }
 
     async setCountryFilter(countryCode?: string): Promise<void> {
-        this.filter.country = countryCode
+        await this.root.filters.setPartial({
+            other: {
+                country: countryCode,
+            },
+        })
     }
 
     toggleCountryFilter(countryCode?: string): void {
-        this.setCountryFilter(this.filter.country !== countryCode ? countryCode : undefined)
+        this.setCountryFilter(this.root.filters.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
         userEvent(ProposalViewAction.FilterCountry, countryCode)
     }
 
     get countryFiltered(): UIProposal[] {
         const input = this.textFiltered
-        if (!this.filter.country) {
+        const country = this.root.filters.country
+        if (!country) {
             return input
         }
-        return input.filter((p) => p.country == this.filter.country)
+        return input.filter((p) => p.country == country)
     }
 
     // #####################

@@ -10,7 +10,8 @@ import styled, { keyframes } from "styled-components"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import welcomeBg from "../../../ui-kit/assets/welcome-bg.png"
+
+import welcomeBg from "./welcome-bg.png"
 
 const Container = styled.div`
     background: url(${welcomeBg}) no-repeat, #8e3061;

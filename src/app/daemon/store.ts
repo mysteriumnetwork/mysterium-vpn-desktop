@@ -8,14 +8,13 @@
 import { action, makeObservable, observable, reaction, when } from "mobx"
 import { ipcRenderer } from "electron"
 
-import { sseConnect } from "../tequila-sse"
 import { RootStore } from "../store"
 import { log, logErrorMessage } from "../../shared/log/log"
-import { tequilapi } from "../tequilapi"
+import { sseConnect, tequilapi } from "../tequilapi"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../../shared/ipc"
-import { mysteriumNodeIPC } from "../../shared/node/mysterium-node-ipc"
-import { supervisorIPC } from "../../shared/node/supervisor-ipc"
-import { parseError } from "../../shared/errors/translate"
+import { mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
+import { supervisorIPC } from "../../shared/node/supervisorIPC"
+import { parseError } from "../../shared/errors/parseError"
 
 export enum DaemonStatusType {
     Up = "UP",
@@ -68,6 +67,21 @@ export class DaemonStore {
             () => this.startupStatus == StartupStatus.UpdateNotAvailable,
             async () => {
                 await this.start()
+            },
+        )
+        reaction(
+            () => this.status,
+            async (status) => {
+                if (status == DaemonStatusType.Down) {
+                    log.info("Connection to Mysterium Node lost (auto-start in 5s)")
+                    setTimeout(async () => {
+                        if (this.status == DaemonStatusType.Down) {
+                            await this.start()
+                        } else {
+                            log.info("Connection to Mysterium Node restored")
+                        }
+                    }, 5_000)
+                }
             },
         )
         reaction(
@@ -136,6 +150,11 @@ export class DaemonStore {
     }
 
     async start(): Promise<void> {
+        if (this.status == DaemonStatusType.Up) {
+            log.info("Mysterium Node is already running")
+            return
+        }
+        log.info("Starting Mysterium Node")
         if (this.starting) {
             log.info("Already starting")
             return

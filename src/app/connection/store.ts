@@ -10,16 +10,15 @@ import { ipcRenderer } from "electron"
 import retry from "async-retry"
 
 import { RootStore } from "../store"
-import { eventBus } from "../tequila-sse"
 import { DaemonStatusType } from "../daemon/store"
-import { newUIProposal, UIProposal } from "../proposals/ui-proposal-type"
+import { newUIProposal, UIProposal } from "../proposals/uiProposal"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { appStateEvent, userEvent } from "../analytics/analytics"
 import { log, logErrorMessage } from "../../shared/log/log"
-import { tequilapi } from "../tequilapi"
+import { eventBus, tequilapi } from "../tequilapi"
 import { AppStateAction, ConnectionAction } from "../../shared/analytics/actions"
 import { subscribePush } from "../push/push"
-import { parseError } from "../../shared/errors/translate"
+import { parseError } from "../../shared/errors/parseError"
 
 export class ConnectionStore {
     connectInProgress = false
@@ -242,8 +241,10 @@ export class ConnectionStore {
             log.info("Resolving NAT type...")
             try {
                 const natType = await tequilapi.natType()
-                this.natType = natType.type
-                log.info("Resolved NAT type:", natType)
+                runInAction(() => {
+                    this.natType = natType.type
+                })
+                log.info("Resolved NAT type:", natType.type || natType)
             } catch (err) {
                 log.error("Could not resolve NAT type:", err)
             }

@@ -13,16 +13,16 @@ import { faTwitter, faFacebook } from "@fortawesome/free-brands-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { shell } from "electron"
 
-import mosaicBg from "../../../ui-kit/assets/mosaic-bg.png"
 import { useStores } from "../../../store"
 import { Clipboard } from "../../../ui-kit/components/Clipboard/Clipboard"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
+import { bg1 } from "../../../ui-kit/colors"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-image: url(${mosaicBg});
+    background: ${bg1};
     background-position: 0 -5px;
     overflow: hidden;
     align-items: center;

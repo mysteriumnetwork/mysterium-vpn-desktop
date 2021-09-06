@@ -19,14 +19,14 @@ import { initialize as initializeSentry } from "../shared/errors/sentry"
 import { log } from "../shared/log/log"
 import { isDevelopment } from "../utils/env"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
-import { handleProcessExit } from "../utils/handle-process-exit"
+import { handleProcessExit } from "../utils/handleProcessExit"
 
 import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
-import { initialize as initializeAnalytics } from "./analytics-main"
+import { initialize as initializeAnalytics } from "./analytics"
 import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
-import { mysteriumNode } from "./node/mysterium-node"
+import { mysteriumNode } from "./node/mysteriumNode"
 
 initializeSentry()
 

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { RefObject } from "react"
 import styled from "styled-components"
 
 import { brand, darkBlue } from "../../colors"
@@ -23,6 +23,7 @@ export interface ToggleProps {
     paddingX?: string
     onClick?: () => void
     className?: string
+    innerRef?: RefObject<HTMLDivElement>
 }
 
 const defaultProps = {
@@ -80,6 +81,7 @@ export const Toggle: React.FC<ToggleProps> = ({
     activeShadowColor = defaultProps.activeShadowColor,
     paddingX = defaultProps.paddingX,
     className,
+    innerRef,
 }: ToggleProps) => {
     const styles = {
         height,
@@ -93,7 +95,13 @@ export const Toggle: React.FC<ToggleProps> = ({
         paddingX,
     }
     return (
-        <Container className={`${className} ${active ? "active" : ""}`} active={active} onClick={onClick} {...styles}>
+        <Container
+            className={`${className} ${active ? "active" : ""}`}
+            active={active}
+            onClick={onClick}
+            {...styles}
+            ref={innerRef}
+        >
             <Highlight active={active} {...styles}>
                 {children}
             </Highlight>

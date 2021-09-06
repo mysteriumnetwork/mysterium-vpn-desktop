@@ -27,12 +27,13 @@ const Content = styled(ViewContent)`
     color: ${darkBlue};
 `
 
-const SideTop = styled.div`
+const SideTop = styled.div<{ presetCount: number }>`
     box-sizing: border-box;
-    height: 136px;
+    height: ${(props) => props.presetCount * 30 + 24}px;
     padding: 12px;
     overflow: hidden;
     text-align: center;
+    flex: 0 0 auto;
 `
 
 const SideBot = styled.div`
@@ -73,7 +74,7 @@ export const SelectProposalView: React.FC = observer(() => {
             </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>
-                    <SideTop>
+                    <SideTop presetCount={proposals.filterPresets.length || 4}>
                         <Preset />
                     </SideTop>
                     <SideBot>

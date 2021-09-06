@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
@@ -21,6 +21,7 @@ const Container = styled.div`
     flex-direction: column;
     padding: 0 12px;
     overflow-y: scroll;
+    position: relative; /* For scrollTop to work properly on children */
 `
 
 const CountryToggle = styled(Toggle).attrs({
@@ -36,7 +37,14 @@ const Count = styled.span`
 `
 
 export const CountryFilter = observer(() => {
-    const { proposals } = useStores()
+    const { proposals, filters } = useStores()
+    const myRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const parent = myRef.current?.parentNode
+        if (parent) {
+            ;(parent as HTMLDivElement).scrollTop = myRef.current?.offsetTop
+        }
+    }, [proposals.countryFiltered.length != 0, filters.presetID])
     const countryCounts = proposals.countryCounts
     if (!Object.keys(countryCounts).length) {
         return <></>
@@ -52,9 +60,9 @@ export const CountryFilter = observer(() => {
             <CountryToggle
                 key="all"
                 onClick={() => proposals.setCountryFilter(undefined)}
-                active={proposals.filter.country == null}
+                active={filters.country == null}
             >
-                <IconGlobe color={proposals.filter.country == null ? "#fff" : brand} />
+                <IconGlobe color={filters.country == null ? "#fff" : brand} />
                 <CountryName>All countries</CountryName>
                 <Count>{proposals.textFiltered.length}</Count>
             </CountryToggle>
@@ -66,7 +74,8 @@ export const CountryFilter = observer(() => {
                     <CountryToggle
                         key={countryCode}
                         onClick={toggleAction}
-                        active={proposals.filter.country == countryCode}
+                        active={filters.country == countryCode}
+                        innerRef={filters.country == countryCode ? myRef : undefined}
                     >
                         <Flag countryCode={countryCode} />
                         <CountryName>{countryName(countryCode)}</CountryName>

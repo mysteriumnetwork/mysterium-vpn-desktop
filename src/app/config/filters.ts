@@ -18,6 +18,8 @@ export class Filters {
     constructor(root: RootStore) {
         makeObservable(this, {
             config: computed,
+            country: computed,
+            presetID: computed,
             setPartial: action,
             initialized: computed,
             defaults: computed,
@@ -44,6 +46,14 @@ export class Filters {
 
     setPartial = (filters: ProposalFilters): Promise<void> => {
         return this.root.config.updateConfigPartial({ filters })
+    }
+
+    get country(): string | undefined {
+        return this.config.other?.country
+    }
+
+    get presetID(): number | undefined | null {
+        return this.config.preset?.id
     }
 
     get initialized(): boolean {

@@ -6,7 +6,7 @@
  */
 import electronLog from "electron-log"
 
-import { ParsedMessage } from "../errors/translate"
+import { ParsedMessage } from "../errors/parseError"
 
 electronLog.transports.console.level = "silly"
 electronLog.transports.file.level = "debug"
