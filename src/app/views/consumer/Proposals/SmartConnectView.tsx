@@ -7,13 +7,11 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import _ from "lodash"
 
 import { CountryFilter } from "../../../proposals/components/CountryFilter/CountryFilter"
 import { ProposalTable } from "../../../proposals/components/ProposalTable/ProposalTable"
 import { SelectedProposal } from "../../../proposals/components/SelectedProposal/SelectedProposal"
 import { useStores } from "../../../store"
-import { Search } from "../../../ui-kit/form-components/Search"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -21,6 +19,8 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { darkBlue } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
+
+import { SwitchConnectView } from "./SwitchConnectView"
 
 const Content = styled(ViewContent)`
     background: #fff;
@@ -55,22 +55,12 @@ const MainBottom = styled.div`
     width: 100%;
 `
 
-const SearchNodeWrap = styled.div`
-    width: 378px;
-    height: 35px;
-`
-
-export const SelectProposalView: React.FC = observer(() => {
+export const SmartConnectView: React.FC = observer(() => {
     const { proposals } = useStores()
-    const searchDebounced = _.debounce((text): void => {
-        proposals.setTextFilter(text)
-    }, 500)
     return (
         <ViewContainer>
             <ViewNavBar>
-                <SearchNodeWrap>
-                    <Search onChange={searchDebounced} />
-                </SearchNodeWrap>
+                <SwitchConnectView />
             </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>
