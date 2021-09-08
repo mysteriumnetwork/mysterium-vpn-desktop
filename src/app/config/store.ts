@@ -45,7 +45,7 @@ export interface ProposalFilters {
         level?: QualityLevel
     }
     other?: {
-        country?: string
+        country?: string | null
     }
 }
 

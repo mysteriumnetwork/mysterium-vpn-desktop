@@ -195,7 +195,7 @@ export class ProposalStore {
     async setCountryFilter(countryCode?: string): Promise<void> {
         await this.root.filters.setPartial({
             other: {
-                country: countryCode,
+                country: countryCode ?? null,
             },
         })
     }
