@@ -43,8 +43,8 @@ const SideBot = styled.div`
     box-sizing: border-box;
     padding: 12px 0;
 
-    flex: 1;
-    height: 350px;
+    flex: 1 1 auto;
+    height: 272px;
 
     display: flex;
     flex-direction: column;

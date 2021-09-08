@@ -8,6 +8,7 @@ import { action, computed, makeObservable, observable, reaction, runInAction } f
 import { AppState, ConnectionStatistics, ConnectionStatus, Location, SSEEventType } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 import retry from "async-retry"
+import _ from "lodash"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
@@ -142,6 +143,39 @@ export class ConnectionStore {
         userEvent(ConnectionAction.Connect, this.root.proposals.active.country)
         this.setConnectInProgress(true)
         this.setGracePeriod()
+        try {
+            await tequilapi.connectionCreate(
+                {
+                    consumerId: this.root.identity.identity.id,
+                    providerId: this.root.proposals.active.providerId,
+                    serviceType: this.root.proposals.active.serviceType,
+                    connectOptions: {
+                        dns: this.root.config.dnsOption,
+                    },
+                },
+                30_000,
+            )
+        } catch (err) {
+            const msg = parseError(err)
+            logErrorMessage("Could not connect", msg)
+            return Promise.reject(msg.humanReadable)
+        } finally {
+            this.setConnectInProgress(false)
+        }
+    }
+
+    async smartConnect(): Promise<void> {
+        if (!this.root.identity.identity) {
+            return
+        }
+        log.info("Smart connect preset:", this.root.filters.presetID, "country:", this.root.filters.country)
+        this.setConnectInProgress(true)
+        this.setGracePeriod()
+        this.root.proposals.setActiveProposal(_.sample(this.root.proposals.filteredProposals))
+        if (!this.root.proposals.active) {
+            return
+        }
+        userEvent(ConnectionAction.SmartConnect, this.root.proposals.active.country)
         try {
             await tequilapi.connectionCreate(
                 {
