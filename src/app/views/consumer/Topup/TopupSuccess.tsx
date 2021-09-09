@@ -88,7 +88,7 @@ export const TopupSuccess: React.FC = observer(() => {
                         </Paragraph>
                         <LogoCoingate />
                         <BrandButton style={{ marginTop: "15px" }} onClick={handleLetsConnect}>
-                            Let&pos;s connect!
+                            Let&apos;s connect!
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>
