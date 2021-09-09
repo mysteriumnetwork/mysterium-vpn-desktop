@@ -49,7 +49,7 @@ export class Filters {
     }
 
     get country(): string | undefined {
-        return this.config.other?.country
+        return this.config.other?.country ?? undefined
     }
 
     get presetID(): number | undefined | null {
