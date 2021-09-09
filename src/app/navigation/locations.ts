@@ -31,6 +31,8 @@ export const locations = {
     walletTopupFailed: "/wallet/topup/failed",
     consumer: "/consumer",
     proposals: "/consumer/proposals",
+    proposalsManualConnect: "/consumer/proposals/manual-connect",
+    proposalsSmartConnect: "/consumer/proposals/smart-connect",
     connection: "/consumer/connection",
     referrals: "/referrals",
     help: "/help",

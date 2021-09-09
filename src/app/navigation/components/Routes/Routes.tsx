@@ -13,7 +13,6 @@ import styled from "styled-components"
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
 import { OnboardingView } from "../../../views/common/Onboarding/OnboardingView"
-import { SelectProposalView } from "../../../views/consumer/SelectProposal/SelectProposalView"
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
 import { WalletView } from "../../../views/consumer/Wallet/WalletView"
 import { useStores } from "../../../store"
@@ -25,6 +24,7 @@ import { NakedTitleBar } from "../TitleBar/NakedTitleBar"
 import { HelpView } from "../../../views/common/Help/HelpView"
 import { SettingsView } from "../../../views/common/Settings/SettingsView"
 import { TopupView } from "../../../views/consumer/Topup/TopupView"
+import { ProposalsView } from "../../../views/consumer/Proposals/ProposalsView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -62,7 +62,7 @@ export const Routes: React.FC = observer(() => {
                         </Route>
                         <Route path={locations.proposals}>
                             <TitleBar />
-                            <SelectProposalView />
+                            <ProposalsView />
                         </Route>
                         <Route path={locations.consumer} exact>
                             <Redirect

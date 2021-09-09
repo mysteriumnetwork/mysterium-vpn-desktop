@@ -31,7 +31,8 @@ export interface DesktopConfig {
     }
     onboarded?: boolean
     dns?: DNSOption
-    natCompatibility?: "auto" | "off"
+    "nat-compatibility"?: "auto" | "off"
+    "smart-connect"?: boolean
     filters?: ProposalFilters
 }
 
@@ -44,7 +45,7 @@ export interface ProposalFilters {
         level?: QualityLevel
     }
     other?: {
-        country?: string
+        country?: string | null
     }
 }
 
@@ -76,6 +77,8 @@ export class ConfigStore {
             setAutoNATCompatibility: action,
             onboarded: computed,
             setOnboarded: action,
+            smartConnect: computed,
+            setSmartConnect: action,
         })
     }
 
@@ -145,10 +148,18 @@ export class ConfigStore {
     }
 
     get autoNATCompatibility(): boolean {
-        return this.config.desktop?.natCompatibility !== "off"
+        return this.config.desktop?.["nat-compatibility"] !== "off"
     }
 
     setAutoNATCompatibility = async (enabled: boolean): Promise<void> => {
-        return this.updateConfigPartial({ natCompatibility: enabled ? "auto" : "off" })
+        return this.updateConfigPartial({ "nat-compatibility": enabled ? "auto" : "off" })
+    }
+
+    get smartConnect(): boolean {
+        return this.config.desktop?.["smart-connect"] !== false
+    }
+
+    setSmartConnect = async (enabled: boolean): Promise<void> => {
+        return this.updateConfigPartial({ "smart-connect": enabled })
     }
 }

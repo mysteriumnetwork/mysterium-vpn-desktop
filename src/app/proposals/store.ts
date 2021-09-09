@@ -59,6 +59,7 @@ export class ProposalStore {
             filteredProposals: computed,
             priceCeil: computed,
             toggleActiveProposal: action,
+            setActiveProposal: action,
             setLoading: action,
             setProposals: action,
         })
@@ -194,7 +195,7 @@ export class ProposalStore {
     async setCountryFilter(countryCode?: string): Promise<void> {
         await this.root.filters.setPartial({
             other: {
-                country: countryCode,
+                country: countryCode ?? null,
             },
         })
     }
@@ -248,6 +249,11 @@ export class ProposalStore {
 
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
+        userEvent(ProposalViewAction.SelectProposal, proposal?.country)
+    }
+
+    setActiveProposal(proposal?: UIProposal): void {
+        this.active = proposal
         userEvent(ProposalViewAction.SelectProposal, proposal?.country)
     }
 

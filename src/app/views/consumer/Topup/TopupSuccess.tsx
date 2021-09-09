@@ -79,7 +79,7 @@ export const TopupSuccess: React.FC = observer(() => {
                         </TitleIcon>
                         <Title>Payment successful!</Title>
                         <TitleDescription>
-                            {payment.appCurrency}s will be credited to your account shortly.
+                            {payment.appCurrency}s will be credited to your wallet within next 3-5 minutes.
                         </TitleDescription>
                     </SideTop>
                     <SideBot>
@@ -88,7 +88,7 @@ export const TopupSuccess: React.FC = observer(() => {
                         </Paragraph>
                         <LogoCoingate />
                         <BrandButton style={{ marginTop: "15px" }} onClick={handleLetsConnect}>
-                            Let&pos;s connect!
+                            Let&apos;s connect!
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>

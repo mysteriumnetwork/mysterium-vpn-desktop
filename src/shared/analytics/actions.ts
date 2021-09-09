@@ -37,6 +37,7 @@ export enum ProposalViewAction {
 
 export enum ConnectionAction {
     Connect = "Connect",
+    SmartConnect = "Smart Connect",
     Disconnect = "Disconnect",
 }
 
