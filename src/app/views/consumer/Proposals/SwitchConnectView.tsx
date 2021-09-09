@@ -45,22 +45,22 @@ const SwitchLink = styled.div<{ active: boolean }>`
 export const SwitchConnectView: React.FC = observer(() => {
     const { router, config } = useStores()
     const manual = router.location.pathname == locations.proposalsManualConnect
-    const smart = router.location.pathname == locations.proposalsSmartConnect
+    const quick = router.location.pathname == locations.proposalsQuickConnect
     return (
         <Container>
             <SwitchGroup>
-                <SwitchLink active={smart}>
-                    {!smart ? (
-                        <Link to={locations.proposalsSmartConnect} onClick={() => config.setSmartConnect(true)}>
-                            Smart Connect
+                <SwitchLink active={quick}>
+                    {!quick ? (
+                        <Link to={locations.proposalsQuickConnect} onClick={() => config.setQuickConnect(true)}>
+                            Quick Connect
                         </Link>
                     ) : (
-                        <a>Smart Connect</a>
+                        <a>Quick Connect</a>
                     )}
                 </SwitchLink>
                 <SwitchLink active={manual}>
                     {!manual ? (
-                        <Link to={locations.proposalsManualConnect} onClick={() => config.setSmartConnect(false)}>
+                        <Link to={locations.proposalsManualConnect} onClick={() => config.setQuickConnect(false)}>
                             Manual Connect
                         </Link>
                     ) : (

@@ -12,21 +12,21 @@ import { locations } from "../../../navigation/locations"
 import { useStores } from "../../../store"
 
 import { ManualConnectView } from "./ManualConnectView"
-import { SmartConnectView } from "./SmartConnectView"
+import { QuickConnectView } from "./QuickConnectView"
 
 export const ProposalsView: React.FC = observer(() => {
     const { config } = useStores()
     return (
         <>
             <Switch>
-                <Route path={locations.proposalsSmartConnect}>
-                    <SmartConnectView />
+                <Route path={locations.proposalsQuickConnect}>
+                    <QuickConnectView />
                 </Route>
                 <Route path={locations.proposalsManualConnect}>
                     <ManualConnectView />
                 </Route>
                 <Redirect
-                    to={config.smartConnect ? locations.proposalsSmartConnect : locations.proposalsManualConnect}
+                    to={config.quickConnect ? locations.proposalsQuickConnect : locations.proposalsManualConnect}
                 />
             </Switch>
         </>

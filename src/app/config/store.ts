@@ -32,7 +32,7 @@ export interface DesktopConfig {
     onboarded?: boolean
     dns?: DNSOption
     "nat-compatibility"?: "auto" | "off"
-    "smart-connect"?: boolean
+    "quick-connect"?: boolean
     filters?: ProposalFilters
 }
 
@@ -77,8 +77,8 @@ export class ConfigStore {
             setAutoNATCompatibility: action,
             onboarded: computed,
             setOnboarded: action,
-            smartConnect: computed,
-            setSmartConnect: action,
+            quickConnect: computed,
+            setQuickConnect: action,
         })
     }
 
@@ -155,11 +155,11 @@ export class ConfigStore {
         return this.updateConfigPartial({ "nat-compatibility": enabled ? "auto" : "off" })
     }
 
-    get smartConnect(): boolean {
-        return this.config.desktop?.["smart-connect"] !== false
+    get quickConnect(): boolean {
+        return this.config.desktop?.["quick-connect"] !== false
     }
 
-    setSmartConnect = async (enabled: boolean): Promise<void> => {
-        return this.updateConfigPartial({ "smart-connect": enabled })
+    setQuickConnect = async (enabled: boolean): Promise<void> => {
+        return this.updateConfigPartial({ "quick-connect": enabled })
     }
 }

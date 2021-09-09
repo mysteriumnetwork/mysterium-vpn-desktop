@@ -32,7 +32,7 @@ export const locations = {
     consumer: "/consumer",
     proposals: "/consumer/proposals",
     proposalsManualConnect: "/consumer/proposals/manual-connect",
-    proposalsSmartConnect: "/consumer/proposals/smart-connect",
+    proposalsQuickConnect: "/consumer/proposals/quick-connect",
     connection: "/consumer/connection",
     referrals: "/referrals",
     help: "/help",

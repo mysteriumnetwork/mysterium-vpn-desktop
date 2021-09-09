@@ -22,7 +22,7 @@ import { brand } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
 import { RippleButton } from "../../../ui-kit/components/Button/RippleButton"
 
-import animationSmartConnect from "./animation_smart_connect.json"
+import animationQuickConnect from "./animation_quick_connect.json"
 import { SwitchConnectView } from "./SwitchConnectView"
 
 const Sidebar = styled(ViewSidebar)`
@@ -66,7 +66,7 @@ const SideBot = styled.div`
     }
 `
 
-const SmartConnectButtonContainer = styled.div`
+const QuickConnectButtonContainer = styled.div`
     position: absolute;
     bottom: 0;
     box-sizing: border-box;
@@ -76,7 +76,7 @@ const SmartConnectButtonContainer = styled.div`
     background: ${brand};
 `
 
-const SmartConnectButton = styled(RippleButton)`
+const QuickConnectButton = styled(RippleButton)`
     width: 222px;
     height: 73px;
     padding-top: 10px;
@@ -84,12 +84,12 @@ const SmartConnectButton = styled(RippleButton)`
     font-size: 18px;
 `
 
-export const SmartConnectView: React.FC = observer(() => {
+export const QuickConnectView: React.FC = observer(() => {
     const { proposals, connection } = useStores()
     const handleConnectClick = async (): Promise<void> => {
         if (connection.status === ConnectionStatus.NOT_CONNECTED) {
             try {
-                return await connection.smartConnect()
+                return await connection.quickConnect()
             } catch (reason) {
                 toast.error(function errorToast() {
                     return (
@@ -118,16 +118,16 @@ export const SmartConnectView: React.FC = observer(() => {
                     <SideBot>
                         <CountryFilter />
                     </SideBot>
-                    <SmartConnectButtonContainer>
-                        <SmartConnectButton onClick={handleConnectClick}>Connect</SmartConnectButton>
-                    </SmartConnectButtonContainer>
+                    <QuickConnectButtonContainer>
+                        <QuickConnectButton onClick={handleConnectClick}>Quick Connect</QuickConnectButton>
+                    </QuickConnectButtonContainer>
                 </Sidebar>
                 <ViewContent>
                     <div>
                         <Lottie
                             play
                             loop={true}
-                            animationData={animationSmartConnect}
+                            animationData={animationQuickConnect}
                             style={{ width: 378, height: 486 }}
                             renderer="svg"
                         />

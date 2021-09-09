@@ -164,18 +164,17 @@ export class ConnectionStore {
         }
     }
 
-    async smartConnect(): Promise<void> {
+    async quickConnect(): Promise<void> {
         if (!this.root.identity.identity) {
             return
         }
-        log.info("Smart connect preset:", this.root.filters.presetID, "country:", this.root.filters.country)
         this.setConnectInProgress(true)
         this.setGracePeriod()
         this.root.proposals.setActiveProposal(_.sample(this.root.proposals.filteredProposals))
         if (!this.root.proposals.active) {
             return
         }
-        userEvent(ConnectionAction.SmartConnect, this.root.proposals.active.country)
+        userEvent(ConnectionAction.QuickConnect, this.root.proposals.active.country)
         try {
             await tequilapi.connectionCreate(
                 {
