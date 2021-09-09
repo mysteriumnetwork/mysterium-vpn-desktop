@@ -20,6 +20,7 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { brand } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
+import { RippleButton } from "../../../ui-kit/components/Button/RippleButton"
 
 import animationSmartConnect from "./animation_smart_connect.json"
 import { SwitchConnectView } from "./SwitchConnectView"
@@ -65,24 +66,22 @@ const SideBot = styled.div`
     }
 `
 
-const SmartConnectButton = styled.div`
+const SmartConnectButtonContainer = styled.div`
     position: absolute;
     bottom: 0;
     box-sizing: border-box;
     width: 222px;
     height: 73px;
-    padding-top: 10px;
     line-height: 63px;
     background: ${brand};
-    color: #fff;
+`
+
+const SmartConnectButton = styled(RippleButton)`
+    width: 222px;
+    height: 73px;
+    padding-top: 10px;
+    line-height: 63px;
     font-size: 18px;
-
-    text-align: center;
-    flex: 0 0 auto;
-
-    &:hover {
-        filter: brightness(98%);
-    }
 `
 
 export const SmartConnectView: React.FC = observer(() => {
@@ -119,7 +118,9 @@ export const SmartConnectView: React.FC = observer(() => {
                     <SideBot>
                         <CountryFilter />
                     </SideBot>
-                    <SmartConnectButton onClick={handleConnectClick}>Connect</SmartConnectButton>
+                    <SmartConnectButtonContainer>
+                        <SmartConnectButton onClick={handleConnectClick}>Connect</SmartConnectButton>
+                    </SmartConnectButtonContainer>
                 </Sidebar>
                 <ViewContent>
                     <div>
