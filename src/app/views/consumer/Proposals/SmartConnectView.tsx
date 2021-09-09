@@ -25,7 +25,7 @@ import animationSmartConnect from "./animation_smart_connect.json"
 import { SwitchConnectView } from "./SwitchConnectView"
 
 const Sidebar = styled(ViewSidebar)`
-    background: linear-gradient(to bottom, #f8f8fd 50%, ${brand} 50%);
+    position: relative;
 `
 
 const SideTop = styled.div<{ presetCount: number }>`
@@ -43,27 +43,16 @@ const SideBot = styled.div`
     border-radius: 10px;
     box-sizing: border-box;
     padding: 12px 0;
+    margin-bottom: 63px;
 
     flex: 1 1 auto;
     height: 272px;
 
     display: flex;
     flex-direction: column;
-`
+    z-index: 1;
 
-const SmartConnectButton = styled.div`
-    background: ${brand};
-    color: #fff;
-    font-size: 18px;
-    height: 63px;
-    line-height: 63px;
-    text-align: center;
-    flex: 0 0 auto;
-
-    &:hover {
-        filter: brightness(98%);
-    }
-    &:before {
+    &:after {
         display: block;
         position: absolute;
         content: " ";
@@ -71,8 +60,28 @@ const SmartConnectButton = styled.div`
         height: 10px;
         background: #fff;
         transform: rotate(45deg);
-        margin-left: 110px;
-        margin-top: -5px;
+        bottom: 59px;
+        left: 110px;
+    }
+`
+
+const SmartConnectButton = styled.div`
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    width: 222px;
+    height: 73px;
+    padding-top: 10px;
+    line-height: 63px;
+    background: ${brand};
+    color: #fff;
+    font-size: 18px;
+
+    text-align: center;
+    flex: 0 0 auto;
+
+    &:hover {
+        filter: brightness(98%);
     }
 `
 
