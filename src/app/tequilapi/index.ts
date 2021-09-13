@@ -23,7 +23,7 @@ export const sseConnect = (): EventSource => {
     }
     es.onmessage = (evt): void => {
         const { type, payload } = parseSSEResponse(evt.data)
-        log.silly("[sse message event]", type, JSON.stringify(payload, null, 2))
+        log.debug("[sse message event]", type, JSON.stringify(payload, null, 2))
         eventBus.emit(type, payload)
     }
     return es
