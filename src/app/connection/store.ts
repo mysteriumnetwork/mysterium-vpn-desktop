@@ -257,13 +257,15 @@ export class ConnectionStore {
             isp: "",
             userType: "",
         }
+        const MAX_RETRIES = 5
         await retry(
             async () => {
                 location = await tequilapi.connectionLocation()
             },
             {
-                retries: 5,
-                onRetry: (e, attempt) => log.warn(`Retrying location update (${attempt}): ${e.message}`),
+                retries: MAX_RETRIES,
+                onRetry: (e, attempt) =>
+                    log.warn(`Failed to update location (${attempt}/${MAX_RETRIES}): ${e.message}`),
             },
         )
         this.setLocation(location)

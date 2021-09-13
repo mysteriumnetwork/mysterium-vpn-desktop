@@ -6,6 +6,7 @@
  */
 import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
+import retry from "async-retry"
 
 import { RootStore } from "../store"
 import { appStateEvent } from "../analytics/analytics"
@@ -104,7 +105,16 @@ export class IdentityStore {
         const current = await tequilapi.identityCurrent({ passphrase: "" }).catch((reason) => {
             throw Error("Could not get current identity ref: " + reason)
         })
-        return await tequilapi.identity(current.id).catch((reason) => {
+        const MAX_RETRIES = 10
+        return await retry(
+            async () => {
+                return tequilapi.identity(current.id)
+            },
+            {
+                retries: MAX_RETRIES,
+                onRetry: (e, attempt) => log.warn(`Failed to get identity (${attempt}/${MAX_RETRIES}): ${e.message}`),
+            },
+        ).catch((reason) => {
             throw Error("Could not get identity: " + reason)
         })
     }
