@@ -918,11 +918,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@datapunt/matomo-tracker-js@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-js/-/matomo-tracker-js-0.3.1.tgz#a707429471d89da78f095d75a055bad98b299eec"
-  integrity sha512-JIeK7SUHlunspS+6z4wzw9YdsWv1mN2UyL10JWPHhOC45y7rTpcvmvIzkV67xdOd7qS8fE1M2e1qLBFz/dfJug==
-
 "@develar/schema-utils@~2.6.5":
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/@develar/schema-utils/-/schema-utils-2.6.5.tgz#3ece22c5838402419a6e0425f85742b961d9b6c6"

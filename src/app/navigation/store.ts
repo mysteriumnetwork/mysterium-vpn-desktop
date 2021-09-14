@@ -9,9 +9,7 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
-import { userEvent } from "../analytics/analytics"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { OtherAction } from "../../shared/analytics/actions"
 import { registered } from "../identity/identity"
 
 import { locations } from "./locations"
@@ -82,7 +80,6 @@ export class NavigationStore {
     }
 
     openChat = (): void => {
-        userEvent(OtherAction.SupportChat)
         ipcRenderer.send(MainIpcListenChannels.OpenSupportChat, this.root.identity.identity?.id)
     }
 

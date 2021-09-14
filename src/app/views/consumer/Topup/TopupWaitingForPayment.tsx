@@ -20,8 +20,6 @@ import { IconWallet } from "../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
 import { brand, brandLight } from "../../../ui-kit/colors"
 import { displayUSD } from "../../../payment/display"
-import { userEvent } from "../../../analytics/analytics"
-import { WalletAction } from "../../../../shared/analytics/actions"
 import { Anchor } from "../../../ui-kit/components/Anchor"
 import { QR } from "../../../ui-kit/components/QR/QR"
 import { OrderStatus } from "../../../payment/store"
@@ -106,7 +104,6 @@ const PaymentExplanation = styled(Paragraph)`
 export const TopupWaitingForPayment: React.FC = observer(() => {
     const { payment, router } = useStores()
     const onPayInBrowserClick = () => {
-        userEvent(WalletAction.PayInBrowser)
         if (payment.order?.paymentUrl) {
             shell.openExternal(payment.order?.paymentUrl)
         }

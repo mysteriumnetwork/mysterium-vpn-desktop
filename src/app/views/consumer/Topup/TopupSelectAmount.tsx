@@ -11,8 +11,6 @@ import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { userEvent } from "../../../analytics/analytics"
-import { WalletAction } from "../../../../shared/analytics/actions"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -122,7 +120,6 @@ export const TopupSelectAmount: React.FC = observer(() => {
         return payment.topupAmount == amt
     }
     const selectOption = (amt: number) => () => {
-        userEvent(WalletAction.ChangeTopupAmount, String(amt))
         payment.setTopupAmount(amt)
     }
     const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)

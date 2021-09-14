@@ -7,16 +7,17 @@
 import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
 import retry from "async-retry"
+import _ from "lodash"
 
 import { RootStore } from "../store"
-import { appStateEvent } from "../analytics/analytics"
 import { eventBus, tequilapi } from "../tequilapi"
-import { AppStateAction } from "../../shared/analytics/actions"
 import { log } from "../../shared/log/log"
-import { decimalPart } from "../payment/display"
+import { decimalPart, fmtMoney } from "../payment/display"
 import { PushTopic } from "../../shared/push/topics"
 import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
+import { analytics } from "../analytics/analytics"
+import { Event } from "../analytics/event"
 
 export class IdentityStore {
     loading = false
@@ -62,13 +63,19 @@ export class IdentityStore {
             },
             { name: "Refresh identity from node state" },
         )
-        // analytics
-        reaction(
-            () => this.identity?.registrationStatus,
-            (status) => {
-                appStateEvent(AppStateAction.IdentityStatus, status)
-            },
-        )
+        const reportBalanceUpdate = _.debounce((amount: number) => {
+            analytics.event(Event.balance_update, {
+                balance: Number(
+                    fmtMoney(
+                        {
+                            amount,
+                            currency: this.root.payment.appCurrency,
+                        },
+                        { showCurrency: false },
+                    ),
+                ),
+            })
+        }, 60_000)
         reaction(
             () => this.identity?.balance,
             (balance) => {
@@ -77,6 +84,7 @@ export class IdentityStore {
                 } else {
                     unsubscribePush(PushTopic.LessThanHalfMyst)
                 }
+                reportBalanceUpdate(this.root.identity.identity?.balance ?? 0)
             },
         )
     }
@@ -89,7 +97,6 @@ export class IdentityStore {
     async loadIdentity(): Promise<void> {
         const identity = await this.fetchIdentity()
         this.setIdentity(identity)
-        appStateEvent(AppStateAction.IdentityLoaded, identity?.id)
         return await this.unlock()
     }
 
@@ -131,10 +138,8 @@ export class IdentityStore {
     async create(): Promise<void> {
         try {
             await tequilapi.identityCreate("")
-            appStateEvent(AppStateAction.IdentityCreated, String(true))
         } catch (err) {
             log.error("Failed to create ID", err)
-            appStateEvent(AppStateAction.IdentityCreated, String(false))
         }
     }
 
@@ -148,13 +153,11 @@ export class IdentityStore {
         const i = this.identity.id
         try {
             await tequilapi.identityUnlock(i, "", 10_000)
-            appStateEvent(AppStateAction.IdentityUnlocked, String(true))
             runInAction(() => {
                 this.unlocked = true
             })
         } catch (err) {
             log.error("Failed to unlock identity", err)
-            appStateEvent(AppStateAction.IdentityUnlocked, String(false))
         }
     }
 
@@ -162,10 +165,8 @@ export class IdentityStore {
         await this.root.payment.fetchTransactorFees()
         try {
             await tequilapi.identityRegister(id.id, { stake: 0, referralToken })
-            appStateEvent(AppStateAction.IdentityRegistered, String(true))
         } catch (err) {
             log.error("Failed to register identity", err)
-            appStateEvent(AppStateAction.IdentityRegistered, String(false))
         }
     }
 
@@ -217,10 +218,8 @@ export class IdentityStore {
     async importIdentity(opts: ImportIdentityOpts): Promise<string> {
         const res = await mysteriumNodeIPC.importIdentity(opts)
         if (res.error) {
-            appStateEvent(AppStateAction.IdentityImported, String(false))
             return Promise.reject(res.error)
         }
-        appStateEvent(AppStateAction.IdentityImported, String(true))
         await this.loadIdentity()
         if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
             await this.register(this.identity)

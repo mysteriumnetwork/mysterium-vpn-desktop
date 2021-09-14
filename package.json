@@ -19,7 +19,6 @@
     "bundle": "yarn build && electron-builder"
   },
   "dependencies": {
-    "@datapunt/matomo-tracker-js": "^0.3.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",

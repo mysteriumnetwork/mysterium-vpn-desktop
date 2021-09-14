@@ -20,8 +20,8 @@ import { initialize as initializeSentry } from "../shared/errors/sentry"
 import { Routes } from "./navigation/components/Routes/Routes"
 import { rootStore, StoreContext, useStores } from "./store"
 import { synchronizedHistory } from "./navigation/routerStore"
-import { initialize as initializeAnalytics } from "./analytics/analytics"
 import { greyBlue1, brandLight, brand } from "./ui-kit/colors"
+import { analytics } from "./analytics/analytics"
 
 initializeSentry()
 
@@ -147,7 +147,7 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 
 const hashHistory = createHashHistory()
 const history = synchronizedHistory(hashHistory, rootStore.router)
-initializeAnalytics()
+analytics.initialize()
 
 const App: React.FC = observer(() => {
     const root = useStores()

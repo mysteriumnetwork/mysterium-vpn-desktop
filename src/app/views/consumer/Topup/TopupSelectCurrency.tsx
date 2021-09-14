@@ -11,8 +11,6 @@ import toast from "react-hot-toast"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { userEvent } from "../../../analytics/analytics"
-import { WalletAction } from "../../../../shared/analytics/actions"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -87,17 +85,14 @@ export const TopupSelectCurrency: React.FC = observer(() => {
         return payment.paymentCurrency == cur
     }
     const selectOption = (cur: string) => () => {
-        userEvent(WalletAction.ChangeTopupCurrency, cur)
         payment.setPaymentCurrency(cur)
     }
     const setUseLightning = (): void => {
         const val = !payment.lightningNetwork
-        userEvent(WalletAction.UseLightningNetwork, String(val))
         payment.setLightningNetwork(val)
     }
 
     const handleNextClick = async () => {
-        userEvent(WalletAction.CreatePayment)
         setLoading(() => true)
         try {
             await payment.createOrder()

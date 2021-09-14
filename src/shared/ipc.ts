@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 export enum WebIpcListenChannels {
-    AnalyticsUserEvent = "analytics-user-event",
-    AnalyticsAppStateEvent = "analytics-appstate-event",
     Disconnect = "disconnect",
     UpdateAvailable = "update-available",
     UpdateNotAvailable = "update-not-available",
@@ -16,6 +14,7 @@ export enum WebIpcListenChannels {
 
 export enum MainIpcListenChannels {
     GetOS = "get-os",
+    GetOSVersion = "get-os-version",
     GetMachineId = "get-machine-id",
     Update = "update",
     ConnectionStatus = "connection-status",
