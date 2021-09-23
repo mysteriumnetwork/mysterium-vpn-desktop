@@ -27,8 +27,6 @@ import {
 import { useStores } from "../../../store"
 import { ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
-import { userEvent } from "../../../analytics/analytics"
-import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationIdentityKeys from "./animation_identity_keys.json"
 
@@ -74,13 +72,11 @@ export const IdentityBackup: React.FC = observer(() => {
         onboarding.finishIDSetup()
     }
     const handleBackupLater = () => {
-        userEvent(OnboardingAction.BackupIDLater)
         nextStep()
     }
 
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleBackupNow = () => {
-        userEvent(OnboardingAction.BackupIDNow)
         setExportPrompt(true)
     }
     const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {

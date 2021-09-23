@@ -8,7 +8,7 @@ import electronLog from "electron-log"
 
 import { ParsedMessage } from "../errors/parseError"
 
-electronLog.transports.console.level = "silly"
+electronLog.transports.console.level = "debug"
 electronLog.transports.file.level = "debug"
 
 export const log = electronLog

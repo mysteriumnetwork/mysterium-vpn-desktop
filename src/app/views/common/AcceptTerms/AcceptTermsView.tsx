@@ -10,14 +10,11 @@ import ReactMarkdown from "react-markdown"
 import { TermsEndUser } from "@mysteriumnetwork/terms"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import styled from "styled-components"
-import * as _ from "lodash"
 import { shell } from "electron"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
-import { userEvent } from "../../../analytics/analytics"
-import { OnboardingAction } from "../../../../shared/analytics/actions"
 import { Heading1 } from "../../../ui-kit/typography"
 import { bg1, brand } from "../../../ui-kit/colors"
 import { Anchor } from "../../../ui-kit/components/Anchor"
@@ -89,16 +86,13 @@ const Actions = styled.div`
 export const AcceptTermsView: React.FC = observer(({}) => {
     const { config } = useStores()
     const [agree, setAgree] = useState(false)
-    const scrollAnalyticsDebounced = _.debounce((): void => {
-        userEvent(OnboardingAction.TermsScroll)
-    }, 1000)
     return (
         <Container>
             <Title>Terms and Conditions</Title>
             <TermsMeta>
                 Version: {termsPackageJson.version} / Last updated: {termsPackageJson.updatedAt ?? ""}
             </TermsMeta>
-            <Terms onScroll={scrollAnalyticsDebounced}>
+            <Terms>
                 <ReactMarkdown
                     components={{
                         // eslint-disable-next-line react/display-name,@typescript-eslint/no-unused-vars
@@ -117,7 +111,6 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                     checked={agree}
                     onChange={(): void => {
                         setAgree(!agree)
-                        userEvent(OnboardingAction.AcceptTermsCheckbox)
                     }}
                 >
                     I agree to all Terms of Service
@@ -128,7 +121,6 @@ export const AcceptTermsView: React.FC = observer(({}) => {
                     disabled={!agree}
                     onClick={(): void => {
                         config.agreeToTerms()
-                        userEvent(OnboardingAction.AcceptTermsContinue)
                     }}
                 >
                     Continue

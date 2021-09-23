@@ -13,8 +13,6 @@ import ReactTooltip from "react-tooltip"
 
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { useStores } from "../../../store"
-import { userEvent } from "../../../analytics/analytics"
-import { OtherAction } from "../../../../shared/analytics/actions"
 import { Select } from "../../../ui-kit/form-components/Select"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 
@@ -59,7 +57,6 @@ export const SettingsConnection: React.FC = observer(() => {
     const { config } = useStores()
     const onDnsOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const val = event.target.value
-        userEvent(OtherAction.SetDnsOption, val)
         config.setDnsOption(val)
     }
     return (
@@ -104,7 +101,6 @@ export const SettingsConnection: React.FC = observer(() => {
                             checked={config.autoNATCompatibility}
                             onChange={(event): void => {
                                 const val = event.target.checked
-                                userEvent(OtherAction.SetNATCompatibility, String(val))
                                 config.setAutoNATCompatibility(val)
                             }}
                         />

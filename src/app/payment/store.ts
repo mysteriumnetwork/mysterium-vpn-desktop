@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, makeObservable, observable, reaction, runInAction, when } from "mobx"
+import { action, computed, makeObservable, observable, runInAction, when } from "mobx"
 import { Currency, EntertainmentEstimateResponse, Fees, Money, PaymentOrderResponse } from "mysterium-vpn-js"
 import retry from "async-retry"
 
@@ -12,8 +12,6 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
-import { appStateEvent } from "../analytics/analytics"
-import { AppStateAction } from "../../shared/analytics/actions"
 import { parseError } from "../../shared/errors/parseError"
 
 import { fmtMoney } from "./display"
@@ -170,12 +168,6 @@ export class PaymentStore {
                 factor: 1,
                 minTimeout: 20_000,
                 onRetry: (e, attempt) => log.warn(`Retrying payment order check (${attempt}): ${e.message}`),
-            },
-        )
-        reaction(
-            () => this.orderStatus,
-            (status) => {
-                appStateEvent(AppStateAction.OrderStatus, String(status))
             },
         )
     }

@@ -12,10 +12,8 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 
 import * as packageJson from "../../package.json"
 import { staticAssetPath } from "../utils/paths"
-import { TrayAction } from "../shared/analytics/actions"
 
 import { supervisor } from "./node/supervisor"
-import { webAnalyticsUserEvent } from "./analytics"
 
 import { ipcWebDisconnect } from "./index"
 
@@ -42,7 +40,6 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Show window",
                 click: (): void => {
-                    webAnalyticsUserEvent(TrayAction.ShowWindow)
                     win.show()
                 },
             },
@@ -52,14 +49,12 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
             {
                 label: "Check for updates",
                 click: async (): Promise<void> => {
-                    webAnalyticsUserEvent(TrayAction.CheckForUpdates)
                     await autoUpdater.checkForUpdatesAndNotify()
                 },
             },
             {
                 label: "Repair supervisor",
                 click: async (): Promise<void> => {
-                    webAnalyticsUserEvent(TrayAction.RepairSupervisor)
                     ipcWebDisconnect()
                     await supervisor.install()
                 },
@@ -72,7 +67,6 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
                 label: `Quit ${packageJson.productName}`,
                 accelerator: "CommandOrControl+Q",
                 click: (): void => {
-                    webAnalyticsUserEvent(TrayAction.Quit)
                     app.quit()
                 },
             },
@@ -80,7 +74,6 @@ export const createTray = (app: App, win: BrowserWindow): Tray => {
     )
     tray.on("double-click", () => {
         if (platform() == "win32") {
-            webAnalyticsUserEvent(TrayAction.DoubleClickActivate)
             win.show()
         }
     })

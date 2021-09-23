@@ -15,8 +15,6 @@ import { Heading2, Small } from "../../../ui-kit/typography"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
 import { TextArea } from "../../../ui-kit/form-components/TextArea"
 import { useStores } from "../../../store"
-import { userEvent } from "../../../analytics/analytics"
-import { OtherAction } from "../../../../shared/analytics/actions"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 
 const Title = styled(Heading2)`
@@ -51,7 +49,6 @@ export const HelpContentReportIssue: React.FC = observer(() => {
         }
     }
     const submit = async () => {
-        userEvent(OtherAction.SubmitBugReport)
         const res = feedback.reportIssue({
             email: email.current?.value,
             description: description.current?.value ?? "",

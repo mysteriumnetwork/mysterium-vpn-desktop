@@ -11,11 +11,9 @@ import { FilterPreset } from "mysterium-vpn-js"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
-import { userEvent } from "../analytics/analytics"
 import { logErrorMessage } from "../../shared/log/log"
 import { PriceCeiling, ProposalFilters } from "../config/store"
 import { tequilapi } from "../tequilapi"
-import { ProposalViewAction } from "../../shared/analytics/actions"
 import { parseError } from "../../shared/errors/parseError"
 
 import { compareProposal, newUIProposal, UIProposal } from "./uiProposal"
@@ -149,7 +147,6 @@ export class ProposalStore {
     setTextFilter(text?: string): void {
         this.filter.text = text
         this.setCountryFilter(undefined)
-        userEvent(ProposalViewAction.FilterText, text)
     }
 
     get textFiltered(): UIProposal[] {
@@ -170,7 +167,6 @@ export class ProposalStore {
             quality: { level },
         })
         await this.fetchProposals()
-        userEvent(ProposalViewAction.FilterQuality, level ? QualityLevel[level] : undefined)
     }
 
     setIncludeFailed(includeFailed: boolean): void {
@@ -179,7 +175,6 @@ export class ProposalStore {
                 "include-failed": includeFailed,
             },
         })
-        userEvent(ProposalViewAction.FilterIncludeFailed, String(includeFailed))
     }
 
     // #####################
@@ -203,7 +198,6 @@ export class ProposalStore {
     toggleCountryFilter(countryCode?: string): void {
         this.setCountryFilter(this.root.filters.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
-        userEvent(ProposalViewAction.FilterCountry, countryCode)
     }
 
     get countryFiltered(): UIProposal[] {
@@ -249,12 +243,10 @@ export class ProposalStore {
 
     toggleActiveProposal(proposal?: UIProposal): void {
         this.active = this.active?.key !== proposal?.key ? proposal : undefined
-        userEvent(ProposalViewAction.SelectProposal, proposal?.country)
     }
 
     setActiveProposal(proposal?: UIProposal): void {
         this.active = proposal
-        userEvent(ProposalViewAction.SelectProposal, proposal?.country)
     }
 
     setLoading = (b: boolean): void => {

@@ -23,8 +23,6 @@ import { brandLight, darkBlue, greyBlue1, lightBlue } from "../../../ui-kit/colo
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
 import { useStores } from "../../../store"
-import { userEvent } from "../../../analytics/analytics"
-import { OtherAction } from "../../../../shared/analytics/actions"
 import { AppVersion } from "../../../daemon/components/AppVersion"
 
 import { HelpContentReportIssue } from "./HelpContentReportIssue"
@@ -165,7 +163,6 @@ export const HelpView: React.FC = observer(() => {
                             <IconButton
                                 active={false}
                                 onClick={() => {
-                                    userEvent(OtherAction.SocialDiscord)
                                     shell.openExternal("https://discordapp.com/invite/n3vtSwc")
                                 }}
                             >
@@ -174,7 +171,6 @@ export const HelpView: React.FC = observer(() => {
                             <IconButton
                                 active={false}
                                 onClick={() => {
-                                    userEvent(OtherAction.SocialReddit)
                                     shell.openExternal("https://www.reddit.com/r/MysteriumNetwork/")
                                 }}
                             >
@@ -185,7 +181,6 @@ export const HelpView: React.FC = observer(() => {
                                     icon={faTwitter}
                                     size="2x"
                                     onClick={() => {
-                                        userEvent(OtherAction.SocialTwitter)
                                         shell.openExternal("https://twitter.com/MysteriumNet")
                                     }}
                                 />
@@ -195,7 +190,6 @@ export const HelpView: React.FC = observer(() => {
                                     icon={faFacebookSquare}
                                     size="2x"
                                     onClick={() => {
-                                        userEvent(OtherAction.SocialFacebook)
                                         shell.openExternal("https://www.facebook.com/MysteriumNet")
                                     }}
                                 />

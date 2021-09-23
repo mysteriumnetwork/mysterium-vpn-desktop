@@ -23,7 +23,6 @@ import { handleProcessExit } from "../utils/handleProcessExit"
 
 import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
-import { initialize as initializeAnalytics } from "./analytics"
 import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
 import { mysteriumNode } from "./node/mysteriumNode"
@@ -88,7 +87,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
     if (!isDevelopment()) {
         Menu.setApplicationMenu(createMenu())
     }
-    initializeAnalytics(window)
 
     if (isDevelopment()) {
         window.webContents.once("dom-ready", () => {
@@ -215,6 +213,10 @@ app.on("before-quit", async () => {
 
 ipcMain.handle(MainIpcListenChannels.GetOS, (): Promise<string> => {
     return Promise.resolve(os.platform())
+})
+
+ipcMain.handle(MainIpcListenChannels.GetOSVersion, (): Promise<string> => {
+    return Promise.resolve(os.release())
 })
 
 ipcMain.handle(MainIpcListenChannels.GetMachineId, (): Promise<string> => {

@@ -10,8 +10,6 @@ import { ipcMain } from "electron"
 
 import * as packageJson from "../../../package.json"
 import { log } from "../../shared/log/log"
-import { webAnalyticsAppStateEvent, webAnalyticsUserEvent } from "../analytics"
-import { AppStateAction, OtherAction } from "../../shared/analytics/actions"
 import { MainIpcListenChannels } from "../../shared/ipc"
 
 interface PushPayload {
@@ -54,9 +52,7 @@ const listener = (data: PushPayload) => {
         title: data.title ?? packageJson.productName,
         body: data.message ?? "",
     })
-    webAnalyticsAppStateEvent(AppStateAction.PushNotificationShown, data.url)
     notification.on("click", () => {
-        webAnalyticsUserEvent(OtherAction.PushNotificationClick, data.url)
         if (data.url != null) {
             shell.openExternal(data.url)
         }

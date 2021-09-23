@@ -16,8 +16,6 @@ import { staticAssetPath } from "../../utils/paths"
 import { log } from "../../shared/log/log"
 import { sudoExec } from "../../utils/sudo"
 import { uid } from "../../utils/user"
-import { webAnalyticsAppStateEvent } from "../analytics"
-import { AppStateAction } from "../../shared/analytics/actions"
 import { MainIpcListenChannels } from "../../shared/ipc"
 
 const isWin = platform() === "win32"
@@ -55,7 +53,6 @@ export class Supervisor {
                 .createConnection(mystSock)
                 .on("connect", () => {
                     log.info("Connected to: ", mystSock)
-                    webAnalyticsAppStateEvent(AppStateAction.SupervisorConnected)
                     return resolve()
                 })
                 .on("data", (data: Buffer) => {

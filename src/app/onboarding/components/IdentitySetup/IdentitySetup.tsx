@@ -27,8 +27,6 @@ import {
 import { useStores } from "../../../store"
 import { ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
-import { userEvent } from "../../../analytics/analytics"
-import { OnboardingAction } from "../../../../shared/analytics/actions"
 
 import animationIdentity from "./animation_identity.json"
 import { UseReferralCodePrompt } from "./UseReferralCodePrompt"
@@ -84,13 +82,11 @@ export const IdentitySetup: React.FC = observer(() => {
     const { onboarding, identity } = useStores()
 
     const handleCreateNew = async () => {
-        userEvent(OnboardingAction.CreateID)
         await onboarding.createNewID()
     }
     const [importPrompt, setImportPrompt] = useState(false)
     const [importFilename, setImportFilename] = useState("")
     const handleImportExisting = async () => {
-        userEvent(OnboardingAction.ImportID)
         const filename = await identity.importIdentityChooseFile()
         if (!filename) {
             return
@@ -128,16 +124,13 @@ export const IdentitySetup: React.FC = observer(() => {
     }
     const [referralPrompt, setReferralPrompt] = useState(false)
     const handleUseReferralCode = () => {
-        userEvent(OnboardingAction.UseReferralCode)
         setReferralPrompt(true)
     }
     const handleReferralSubmit = async ({ code }: { code: string }) => {
-        userEvent(OnboardingAction.UseReferralCodeSubmit, String(code))
         setReferralPrompt(false)
         await onboarding.createNewIDWithReferralCode(code)
     }
     const handleReferralCancel = () => {
-        userEvent(OnboardingAction.UseReferralCodeCancel)
         setReferralPrompt(false)
     }
     return (

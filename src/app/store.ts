@@ -9,10 +9,8 @@ import { action, computed, configure, makeObservable, observable, reaction, runI
 import { ipcRenderer } from "electron"
 
 // import { enableLogging } from "mobx-logger"
-
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { isDevelopment } from "../utils/env"
-import { AppStateAction } from "../shared/analytics/actions"
 import { log } from "../shared/log/log"
 
 import { NavigationStore } from "./navigation/store"
@@ -27,8 +25,9 @@ import { RouterStore } from "./navigation/routerStore"
 import { ReferralStore } from "./referral/store"
 import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
-import { appStateEvent } from "./analytics/analytics"
 import { registered } from "./identity/identity"
+import { analytics } from "./analytics/analytics"
+import { Event } from "./analytics/event"
 
 export class RootStore {
     navigation: NavigationStore
@@ -95,7 +94,6 @@ export class RootStore {
         reaction(
             () => this.daemon.status,
             async (status) => {
-                appStateEvent(AppStateAction.DaemonStatus, status)
                 if (status == DaemonStatusType.Up) {
                     await Promise.all([
                         this.config.loadConfig().catch((reason) => {
@@ -115,6 +113,7 @@ export class RootStore {
                                 }
                             }),
                     ])
+                    analytics.event(Event.startup)
                     this.navigation.determineRoute()
                 }
             },

@@ -14,12 +14,13 @@ import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { newUIProposal, UIProposal } from "../proposals/uiProposal"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { appStateEvent, userEvent } from "../analytics/analytics"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { eventBus, tequilapi } from "../tequilapi"
-import { AppStateAction, ConnectionAction } from "../../shared/analytics/actions"
 import { subscribePush } from "../push/push"
 import { parseError } from "../../shared/errors/parseError"
+import { analytics } from "../analytics/analytics"
+import { Event } from "../analytics/event"
+import { fmtMoney } from "../payment/display"
 
 export class ConnectionStore {
     connectInProgress = false
@@ -84,13 +85,10 @@ export class ConnectionStore {
         reaction(
             () => this.status,
             async (status) => {
-                appStateEvent(AppStateAction.ConnectionStatus, status)
                 switch (status) {
                     case ConnectionStatus.CONNECTED:
-                        appStateEvent(AppStateAction.ConnectedCountry, this.proposal?.country)
                         break
                     case ConnectionStatus.DISCONNECTING:
-                        appStateEvent(AppStateAction.DisconnectedCountry, this.proposal?.country)
                         break
                 }
                 this.resetLocation()
@@ -137,57 +135,55 @@ export class ConnectionStore {
     }
 
     async connect(): Promise<void> {
-        if (!this.root.identity.identity || !this.root.proposals.active) {
-            return
-        }
-        userEvent(ConnectionAction.Connect, this.root.proposals.active.country)
-        this.setConnectInProgress(true)
-        this.setGracePeriod()
-        try {
-            await tequilapi.connectionCreate(
-                {
-                    consumerId: this.root.identity.identity.id,
-                    providerId: this.root.proposals.active.providerId,
-                    serviceType: this.root.proposals.active.serviceType,
-                    connectOptions: {
-                        dns: this.root.config.dnsOption,
-                    },
-                },
-                30_000,
-            )
-        } catch (err) {
-            const msg = parseError(err)
-            logErrorMessage("Could not connect", msg)
-            return Promise.reject(msg.humanReadable)
-        } finally {
-            this.setConnectInProgress(false)
-        }
+        analytics.event(Event.manual_connect, { country: this.root.proposals.active?.country })
+        return this._doConnect()
     }
 
     async quickConnect(): Promise<void> {
-        if (!this.root.identity.identity) {
+        const proposal = _.sample(this.root.proposals.filteredProposals)
+        this.root.proposals.setActiveProposal(proposal)
+        analytics.event(Event.quick_connect, { country: proposal?.country })
+        return this._doConnect()
+    }
+
+    private async _doConnect(): Promise<void> {
+        analytics.event(Event.balance_update, {
+            balance: Number(
+                fmtMoney(
+                    { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
+                    { showCurrency: false },
+                ),
+            ),
+        })
+        const proposal = this.root.proposals.active
+        if (!this.root.identity.identity || !proposal) {
             return
         }
         this.setConnectInProgress(true)
         this.setGracePeriod()
-        this.root.proposals.setActiveProposal(_.sample(this.root.proposals.filteredProposals))
-        if (!this.root.proposals.active) {
-            return
-        }
-        userEvent(ConnectionAction.QuickConnect, this.root.proposals.active.country)
+        const before = new Date()
         try {
+            analytics.event(Event.connect_attempt, { country: proposal.country })
             await tequilapi.connectionCreate(
                 {
                     consumerId: this.root.identity.identity.id,
-                    providerId: this.root.proposals.active.providerId,
-                    serviceType: this.root.proposals.active.serviceType,
+                    providerId: proposal.providerId,
+                    serviceType: proposal.serviceType,
                     connectOptions: {
                         dns: this.root.config.dnsOption,
                     },
                 },
                 30_000,
             )
+            analytics.event(Event.connect_success, {
+                country: proposal.country,
+                duration: new Date().getTime() - before.getTime(),
+            })
         } catch (err) {
+            analytics.event(Event.connect_failure, {
+                country: proposal.country,
+                duration: new Date().getTime() - before.getTime(),
+            })
             const msg = parseError(err)
             logErrorMessage("Could not connect", msg)
             return Promise.reject(msg.humanReadable)
@@ -214,11 +210,28 @@ export class ConnectionStore {
     }
 
     async disconnect(): Promise<void> {
-        userEvent(ConnectionAction.Disconnect, this.root.connection.location?.country)
+        analytics.event(Event.balance_update, {
+            balance: Number(
+                fmtMoney(
+                    { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
+                    { showCurrency: false },
+                ),
+            ),
+        })
+        const from = this.root.connection.location?.country
         this.setGracePeriod()
+        const before = new Date()
         try {
+            setTimeout(() => {
+                // Delay to avoid the brief network unavailability
+                analytics.event(Event.disconnect_attempt, { country: from })
+            }, 3_000)
             await tequilapi.connectionCancel()
+            const duration = new Date().getTime() - before.getTime()
+            analytics.event(Event.disconnect_success, { country: from, duration })
         } catch (err) {
+            const duration = new Date().getTime() - before.getTime()
+            analytics.event(Event.disconnect_failure, { country: from, duration })
             const msg = parseError(err)
             logErrorMessage("Failed to disconnect", msg)
         }
@@ -257,13 +270,15 @@ export class ConnectionStore {
             isp: "",
             userType: "",
         }
+        const MAX_RETRIES = 5
         await retry(
             async () => {
                 location = await tequilapi.connectionLocation()
             },
             {
-                retries: 5,
-                onRetry: (e, attempt) => log.warn(`Retrying location update (${attempt}): ${e.message}`),
+                retries: MAX_RETRIES,
+                onRetry: (e, attempt) =>
+                    log.warn(`Failed to update location (${attempt}/${MAX_RETRIES}): ${e.message}`),
             },
         )
         this.setLocation(location)
