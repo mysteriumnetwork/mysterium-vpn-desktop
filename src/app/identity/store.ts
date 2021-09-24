@@ -17,7 +17,7 @@ import { PushTopic } from "../../shared/push/topics"
 import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
 import { analytics } from "../analytics/analytics"
-import { Event } from "../analytics/event"
+import { EventName } from "../analytics/event"
 
 export class IdentityStore {
     loading = false
@@ -64,7 +64,7 @@ export class IdentityStore {
             { name: "Refresh identity from node state" },
         )
         const reportBalanceUpdate = _.debounce((amount: number) => {
-            analytics.event(Event.balance_update, {
+            analytics.event(EventName.balance_update, {
                 balance: Number(
                     fmtMoney(
                         {

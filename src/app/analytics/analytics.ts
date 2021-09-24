@@ -15,26 +15,10 @@ import { log, logErrorMessage } from "../../shared/log/log"
 import { parseError } from "../../shared/errors/parseError"
 import { isDevelopment } from "../../utils/env"
 
-import { Event } from "./event"
+import { Client, Event } from "./event"
 
-interface Request extends Payload {
+interface Request extends Event {
     client?: Client
-}
-
-interface Payload {
-    name: Event
-    duration?: number
-    balance?: number
-    country?: string
-    page_title?: string
-}
-
-interface Client {
-    machine_id?: string
-    app_version?: string
-    os?: string
-    os_version?: string
-    country?: string
 }
 
 export class Analytics {
@@ -66,7 +50,7 @@ export class Analytics {
         })
     }
 
-    event = (name: Payload["name"], fields?: Omit<Payload, "name">): void => {
+    event = (name: Event["name"], fields?: Omit<Event, "name">): void => {
         log.debug("UserEvent:", name, fields)
         if (this.disabled) {
             return

@@ -8,7 +8,7 @@ import { action, makeObservable, observable, observe } from "mobx"
 import { History, Location, LocationListener, UnregisterCallback } from "history"
 
 import { analytics } from "../analytics/analytics"
-import { Event } from "../analytics/event"
+import { EventName } from "../analytics/event"
 
 import { locations } from "./locations"
 
@@ -35,14 +35,14 @@ export class RouterStore {
 
     push = (path: string): void => {
         if (![locations.loading].includes(path)) {
-            analytics.event(Event.page_view, { page_title: path })
+            analytics.event(EventName.page_view, { page_title: path })
         }
         this.history?.push(path)
     }
 
     pushRelative = (relativePath: string): void => {
         const newLoc = this.location.pathname.substring(0, this.location.pathname.lastIndexOf("/")) + "/" + relativePath
-        analytics.event(Event.page_view, { page_title: newLoc })
+        analytics.event(EventName.page_view, { page_title: newLoc })
         this.history?.push(relativePath)
     }
 }

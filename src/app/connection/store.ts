@@ -19,7 +19,7 @@ import { eventBus, tequilapi } from "../tequilapi"
 import { subscribePush } from "../push/push"
 import { parseError } from "../../shared/errors/parseError"
 import { analytics } from "../analytics/analytics"
-import { Event } from "../analytics/event"
+import { EventName } from "../analytics/event"
 import { fmtMoney } from "../payment/display"
 
 export class ConnectionStore {
@@ -135,19 +135,19 @@ export class ConnectionStore {
     }
 
     async connect(): Promise<void> {
-        analytics.event(Event.manual_connect, { country: this.root.proposals.active?.country })
+        analytics.event(EventName.manual_connect, { country: this.root.proposals.active?.country })
         return this._doConnect()
     }
 
     async quickConnect(): Promise<void> {
         const proposal = _.sample(this.root.proposals.filteredProposals)
         this.root.proposals.setActiveProposal(proposal)
-        analytics.event(Event.quick_connect, { country: proposal?.country })
+        analytics.event(EventName.quick_connect, { country: proposal?.country })
         return this._doConnect()
     }
 
     private async _doConnect(): Promise<void> {
-        analytics.event(Event.balance_update, {
+        analytics.event(EventName.balance_update, {
             balance: Number(
                 fmtMoney(
                     { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
@@ -163,7 +163,7 @@ export class ConnectionStore {
         this.setGracePeriod()
         const before = new Date()
         try {
-            analytics.event(Event.connect_attempt, { country: proposal.country })
+            analytics.event(EventName.connect_attempt, { country: proposal.country })
             await tequilapi.connectionCreate(
                 {
                     consumerId: this.root.identity.identity.id,
@@ -175,12 +175,12 @@ export class ConnectionStore {
                 },
                 30_000,
             )
-            analytics.event(Event.connect_success, {
+            analytics.event(EventName.connect_success, {
                 country: proposal.country,
                 duration: new Date().getTime() - before.getTime(),
             })
         } catch (err) {
-            analytics.event(Event.connect_failure, {
+            analytics.event(EventName.connect_failure, {
                 country: proposal.country,
                 duration: new Date().getTime() - before.getTime(),
             })
@@ -210,7 +210,7 @@ export class ConnectionStore {
     }
 
     async disconnect(): Promise<void> {
-        analytics.event(Event.balance_update, {
+        analytics.event(EventName.balance_update, {
             balance: Number(
                 fmtMoney(
                     { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
@@ -224,14 +224,14 @@ export class ConnectionStore {
         try {
             setTimeout(() => {
                 // Delay to avoid the brief network unavailability
-                analytics.event(Event.disconnect_attempt, { country: from })
+                analytics.event(EventName.disconnect_attempt, { country: from })
             }, 3_000)
             await tequilapi.connectionCancel()
             const duration = new Date().getTime() - before.getTime()
-            analytics.event(Event.disconnect_success, { country: from, duration })
+            analytics.event(EventName.disconnect_success, { country: from, duration })
         } catch (err) {
             const duration = new Date().getTime() - before.getTime()
-            analytics.event(Event.disconnect_failure, { country: from, duration })
+            analytics.event(EventName.disconnect_failure, { country: from, duration })
             const msg = parseError(err)
             logErrorMessage("Failed to disconnect", msg)
         }

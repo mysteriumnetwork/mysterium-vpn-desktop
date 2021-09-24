@@ -27,7 +27,7 @@ import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
 import { registered } from "./identity/identity"
 import { analytics } from "./analytics/analytics"
-import { Event } from "./analytics/event"
+import { EventName } from "./analytics/event"
 
 export class RootStore {
     navigation: NavigationStore
@@ -113,7 +113,7 @@ export class RootStore {
                                 }
                             }),
                     ])
-                    analytics.event(Event.startup)
+                    analytics.event(EventName.startup)
                     this.navigation.determineRoute()
                 }
             },

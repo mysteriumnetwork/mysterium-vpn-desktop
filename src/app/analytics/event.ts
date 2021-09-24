@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export enum Event {
+export enum EventName {
     startup = "startup",
     connect_attempt = "connect_attempt",
     connect_success = "connect_success",
@@ -17,4 +17,20 @@ export enum Event {
     disconnect_failure = "disconnect_failure",
     page_view = "page_view",
     balance_update = "balance_update",
+}
+
+export interface Event {
+    name: EventName
+    duration?: number
+    balance?: number
+    country?: string
+    page_title?: string
+}
+
+export interface Client {
+    machine_id?: string
+    app_version?: string
+    os?: string
+    os_version?: string
+    country?: string
 }
