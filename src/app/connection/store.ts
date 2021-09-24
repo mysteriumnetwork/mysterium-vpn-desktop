@@ -163,7 +163,7 @@ export class ConnectionStore {
         this.setGracePeriod()
         const before = new Date()
         try {
-            analytics.event(EventName.connect_attempt, { country: proposal.country })
+            analytics.event(EventName.connect_attempt, { country: proposal.country, provider_id: proposal.providerId })
             await tequilapi.connectionCreate(
                 {
                     consumerId: this.root.identity.identity.id,
@@ -177,11 +177,13 @@ export class ConnectionStore {
             )
             analytics.event(EventName.connect_success, {
                 country: proposal.country,
+                provider_id: proposal.providerId,
                 duration: new Date().getTime() - before.getTime(),
             })
         } catch (err) {
             analytics.event(EventName.connect_failure, {
                 country: proposal.country,
+                provider_id: proposal.providerId,
                 duration: new Date().getTime() - before.getTime(),
             })
             const msg = parseError(err)

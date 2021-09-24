@@ -39,6 +39,9 @@ export class Analytics {
         autorun(() => {
             this.client.country = rootStore.connection.originalLocation?.country
         })
+        autorun(() => {
+            this.client.consumer_id = rootStore.identity.identity?.id
+        })
         ipcRenderer.invoke(MainIpcListenChannels.GetMachineId).then((machineId) => {
             this.client.machine_id = machineId
         })
@@ -51,7 +54,7 @@ export class Analytics {
     }
 
     event = (name: Event["name"], fields?: Omit<Event, "name">): void => {
-        log.debug("UserEvent:", name, fields)
+        log.debug("UserEvent:", name, fields, "Client:", this.client)
         if (this.disabled) {
             return
         }

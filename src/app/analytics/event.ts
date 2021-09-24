@@ -24,6 +24,7 @@ export interface Event {
     duration?: number
     balance?: number
     country?: string
+    provider_id?: string
     page_title?: string
 }
 
@@ -33,4 +34,5 @@ export interface Client {
     os?: string
     os_version?: string
     country?: string
+    consumer_id?: string
 }
