@@ -224,10 +224,7 @@ export class ConnectionStore {
         this.setGracePeriod()
         const before = new Date()
         try {
-            setTimeout(() => {
-                // Delay to avoid the brief network unavailability
-                analytics.event(EventName.disconnect_attempt, { country: from })
-            }, 3_000)
+            analytics.event(EventName.disconnect_attempt, { country: from })
             await tequilapi.connectionCancel()
             const duration = new Date().getTime() - before.getTime()
             analytics.event(EventName.disconnect_success, { country: from, duration })

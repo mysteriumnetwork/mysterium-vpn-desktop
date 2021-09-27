@@ -7,12 +7,12 @@
 
 import { autorun } from "mobx"
 import { ipcRenderer } from "electron"
+import retry from "async-retry"
 
 import * as packageJson from "../../../package.json"
 import { rootStore } from "../store"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { log, logErrorMessage } from "../../shared/log/log"
-import { parseError } from "../../shared/errors/parseError"
+import { log } from "../../shared/log/log"
 import { isDevelopment } from "../../utils/env"
 
 import { Client, Event } from "./event"
@@ -58,21 +58,24 @@ export class Analytics {
         if (this.disabled) {
             return
         }
-        try {
-            const req: Request = {
-                name,
-                ...fields,
-                client: this.client,
-            }
-            fetch(`${this.baseUrl}/events`, {
-                mode: "no-cors",
-                method: "POST",
-                body: JSON.stringify(req),
-            })
-        } catch (err) {
-            const msg = parseError(err)
-            logErrorMessage("Could not report event", msg)
+        const MAX_RETRIES = 10
+        const req: Request = {
+            name,
+            ...fields,
+            client: this.client,
         }
+        retry(
+            async () => {
+                return await fetch(`${this.baseUrl}/events`, {
+                    mode: "no-cors",
+                    method: "POST",
+                    body: JSON.stringify(req),
+                })
+            },
+            {
+                onRetry: (e, attempt) => log.warn(`Failed to report event (${attempt}/${MAX_RETRIES}): ${e.message}`),
+            },
+        )
     }
 }
 
