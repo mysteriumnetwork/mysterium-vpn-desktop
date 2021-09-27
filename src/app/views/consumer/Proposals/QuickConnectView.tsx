@@ -21,6 +21,7 @@ import { ViewContent } from "../../../navigation/components/ViewContent/ViewCont
 import { brand } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
 import { RippleButton } from "../../../ui-kit/components/Button/RippleButton"
+import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
 import animationQuickConnect from "./animation_quick_connect.json"
 import { SwitchConnectView } from "./SwitchConnectView"
@@ -91,15 +92,15 @@ export const QuickConnectView: React.FC = observer(() => {
             try {
                 return await connection.quickConnect()
             } catch (reason) {
-                toast.error(function errorToast() {
-                    return (
+                toast.error(
+                    dismissibleToast(
                         <span>
                             <b>Oops! Could not connect 😶</b>
                             <br />
                             {reason}
-                        </span>
-                    )
-                })
+                        </span>,
+                    ),
+                )
                 return
             }
         }

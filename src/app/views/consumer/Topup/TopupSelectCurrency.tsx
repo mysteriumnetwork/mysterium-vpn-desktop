@@ -28,6 +28,7 @@ import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/Step
 import { topupSteps } from "../../../navigation/locations"
 import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
 import { parseError } from "../../../../shared/errors/parseError"
+import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -103,9 +104,7 @@ export const TopupSelectCurrency: React.FC = observer(() => {
             const msg = parseError(err)
             logErrorMessage("Could not create a payment order", msg)
             msg.humanReadable = "Could not inititate the payment. Please try again later or contact us via chat!"
-            toast.error(function errorToast() {
-                return <span>{msg.humanReadable}</span>
-            })
+            toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
         }
     }
     const options = payment.currencies

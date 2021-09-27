@@ -27,6 +27,7 @@ import {
 import { useStores } from "../../../store"
 import { ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
+import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
 import animationIdentityKeys from "./animation_identity_keys.json"
 
@@ -85,15 +86,15 @@ export const IdentityBackup: React.FC = observer(() => {
             await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
             nextStep()
         } catch (reason) {
-            toast.error(function errorToast() {
-                return (
+            toast.error(
+                dismissibleToast(
                     <span>
                         <b>Identity backup failed 😶</b>
                         <br />
                         Error: {reason}
-                    </span>
-                )
-            })
+                    </span>,
+                ),
+            )
         }
     }
     const handleExportCancel = () => {

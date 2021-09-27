@@ -12,6 +12,7 @@ import toast from "react-hot-toast"
 import { useStores } from "../../../store"
 import { BrandButton, BrandButtonProps } from "../../../ui-kit/components/Button/BrandButton"
 import { CancelButton } from "../../../ui-kit/components/Button/CancelButton"
+import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
 export type ConnectDisconnectButtonProps = {
     width?: number
@@ -38,15 +39,15 @@ export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = o
             try {
                 return await connection.connect()
             } catch (reason) {
-                toast.error(function errorToast() {
-                    return (
+                toast.error(
+                    dismissibleToast(
                         <span>
                             <b>Oops! Could not connect 😶</b>
                             <br />
                             {reason}
-                        </span>
-                    )
-                })
+                        </span>,
+                    ),
+                )
                 return
             }
         }
