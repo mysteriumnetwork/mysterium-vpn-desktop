@@ -173,7 +173,7 @@ export class ConnectionStore {
                         dns: this.root.config.dnsOption,
                     },
                 },
-                30_000,
+                60_000,
             )
             analytics.event(EventName.connect_success, {
                 country: proposal.country,
