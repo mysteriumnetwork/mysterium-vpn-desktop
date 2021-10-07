@@ -26,7 +26,7 @@ const Dismiss = styled.div`
         color: #aaa;
     }
 `
-export const dismissibleToast = (message: JSX.Element): ((t: Toast) => JSX.Element) => {
+export const dismissibleToast = (message: JSX.Element | string | null): ((t: Toast) => JSX.Element) => {
     return function dismissibleToast(t: Toast): JSX.Element {
         return (
             <Container>
