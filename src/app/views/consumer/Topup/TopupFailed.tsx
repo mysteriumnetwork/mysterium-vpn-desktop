@@ -17,12 +17,10 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
+import { Heading2, Small } from "../../../ui-kit/typography"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
-
-import { LogoCoingate } from "./LogoCoingate"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -80,13 +78,7 @@ export const TopupFailed: React.FC = observer(() => {
                         <TitleDescription>Order expired or there was another issue.</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-                            <Paragraph style={{ marginBottom: 15, marginTop: "auto" }}>
-                                Cryptocurrency payment is handled by our payment partner Coingate.
-                            </Paragraph>
-                            <LogoCoingate />
-                        </div>
-                        <BrandButton style={{ marginTop: "15px" }} onClick={handleStartOver}>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleStartOver}>
                             Start over
                         </BrandButton>
                     </SideBot>

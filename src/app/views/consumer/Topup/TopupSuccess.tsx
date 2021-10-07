@@ -17,13 +17,11 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
+import { Heading2, Small } from "../../../ui-kit/typography"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { locations } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
-
-import { LogoCoingate } from "./LogoCoingate"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -83,11 +81,7 @@ export const TopupSuccess: React.FC = observer(() => {
                         </TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <Paragraph style={{ marginBottom: 15, marginTop: "auto" }}>
-                            Payment is handled by our payment partner Coingate.
-                        </Paragraph>
-                        <LogoCoingate />
-                        <BrandButton style={{ marginTop: "15px" }} onClick={handleLetsConnect}>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleLetsConnect}>
                             Let&apos;s connect!
                         </BrandButton>
                     </SideBot>
