@@ -33,7 +33,6 @@ export class OnboardingStore {
             setIdentityProgress: action,
             finishIDSetup: action,
             complete: action,
-            topupNow: action,
             skipTopup: action,
         })
         this.root = root
@@ -95,10 +94,6 @@ export class OnboardingStore {
 
     complete = (): void => {
         this.root.config.setOnboarded()
-    }
-
-    topupNow = (): void => {
-        this.root.router.push(locations.onboardingWalletTopup)
     }
 
     skipTopup = (): void => {

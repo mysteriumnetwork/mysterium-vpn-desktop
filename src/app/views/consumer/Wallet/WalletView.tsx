@@ -30,6 +30,9 @@ import { IconMusic } from "../../../ui-kit/icons/IconMusic"
 import { IconDocument } from "../../../ui-kit/icons/IconDocument"
 import { IconPlay } from "../../../ui-kit/icons/IconPlay"
 import { IconCloudDownload } from "../../../ui-kit/icons/IconCloudDownload"
+import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
+import { parseError } from "../../../../shared/errors/parseError"
+import { logErrorMessage } from "../../../../shared/log/log"
 
 import { WalletIdentity } from "./WalletIdentity"
 
@@ -115,7 +118,8 @@ const EntertainmentExplanation = styled(Small)`
 `
 
 export const WalletView: React.FC = observer(() => {
-    const { identity, payment, router } = useStores()
+    const { identity, payment } = useStores()
+    const [topupLoading, setTopupLoading] = useState(false)
     const balance = identity.identity?.balance ?? 0
     const balanceDisplay = fmtMoney(
         {
@@ -127,8 +131,17 @@ export const WalletView: React.FC = observer(() => {
             removeInsignificantZeros: false,
         },
     )
-    const handleTopupClick = () => {
-        router.push(locations.walletTopup)
+    const handleTopupClick = async () => {
+        setTopupLoading(true)
+        try {
+            await payment.startTopupFlow(locations.walletTopup)
+        } catch (err) {
+            setTopupLoading(false)
+            const msg = parseError(err)
+            logErrorMessage("Could not contact payment gateways", msg)
+            msg.humanReadable = "Could not contact payment gateways. Please try again later."
+            toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
+        }
     }
     const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)
     useEffect(() => {
@@ -217,7 +230,7 @@ export const WalletView: React.FC = observer(() => {
                                 </EntertainmentBlocks>
                             </>
                         )}
-                        <BrandButton style={{ marginTop: "auto" }} onClick={handleTopupClick}>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleTopupClick} loading={topupLoading}>
                             Top up
                         </BrandButton>
                     </SideBot>

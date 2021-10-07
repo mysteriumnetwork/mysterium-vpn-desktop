@@ -4,11 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { toast } from "react-hot-toast"
 
 import { useStores } from "../../../store"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
@@ -17,13 +18,11 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
+import { Heading2, Small } from "../../../ui-kit/typography"
 import { brandLight } from "../../../ui-kit/colors"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { locations } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
-
-import { LogoCoingate } from "./LogoCoingate"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -64,6 +63,9 @@ export const TopupSuccess: React.FC = observer(() => {
     const handleLetsConnect = () => {
         router.push(locations.proposals)
     }
+    useEffect(() => {
+        toast.success(`${payment.appCurrency}s will be credited to your wallet within next 1-3 minutes.`)
+    }, [])
     return (
         <ViewContainer>
             <ViewNavBar>
@@ -79,15 +81,11 @@ export const TopupSuccess: React.FC = observer(() => {
                         </TitleIcon>
                         <Title>Payment successful!</Title>
                         <TitleDescription>
-                            {payment.appCurrency}s will be credited to your wallet within next 3-5 minutes.
+                            {payment.appCurrency}s will be credited to your wallet within next 1-3 minutes.
                         </TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <Paragraph style={{ marginBottom: 15, marginTop: "auto" }}>
-                            Payment is handled by our payment partner Coingate.
-                        </Paragraph>
-                        <LogoCoingate />
-                        <BrandButton style={{ marginTop: "15px" }} onClick={handleLetsConnect}>
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleLetsConnect}>
                             Let&apos;s connect!
                         </BrandButton>
                     </SideBot>

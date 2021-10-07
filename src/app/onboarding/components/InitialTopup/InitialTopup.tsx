@@ -25,6 +25,7 @@ import {
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
+import { locations } from "../../../navigation/locations"
 
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
 
@@ -64,9 +65,9 @@ const Content = styled(ViewContent)`
 `
 
 export const InitialTopup: React.FC = observer(() => {
-    const { onboarding } = useStores()
-    const handleTopupNow = () => {
-        onboarding.topupNow()
+    const { onboarding, payment } = useStores()
+    const handleTopupNow = async () => {
+        return payment.startTopupFlow(locations.onboardingWalletTopup)
     }
     const handleTopupLater = () => {
         onboarding.skipTopup()
