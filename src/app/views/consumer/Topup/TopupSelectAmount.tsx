@@ -129,7 +129,8 @@ export const TopupSelectAmount: React.FC = observer(() => {
         }
     }, [payment.topupAmount])
     const handleNextClick = () => {
-        router.pushRelative(topupSteps.selectCurrency)
+        payment.setPaymentMethod(undefined)
+        router.pushRelative(topupSteps.chooseMethod)
     }
     return (
         <ViewContainer>

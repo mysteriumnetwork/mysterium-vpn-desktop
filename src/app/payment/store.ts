@@ -4,27 +4,62 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, makeObservable, observable, runInAction, when } from "mobx"
-import { Currency, EntertainmentEstimateResponse, Fees, Money, PaymentOrderResponse } from "mysterium-vpn-js"
+import { action, computed, makeObservable, observable, runInAction, toJS, when } from "mobx"
+import {
+    CreatePaymentOrderRequest,
+    Currency,
+    EntertainmentEstimateResponse,
+    Fees,
+    Money,
+    PaymentGateway,
+    PaymentOrder,
+} from "mysterium-vpn-js"
 import retry from "async-retry"
+import { Decimal } from "decimal.js-light"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { parseError } from "../../shared/errors/parseError"
+import { MainIpcListenChannels } from "../../shared/ipc"
 
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
 import { mystToUSD } from "./rate"
 
-const _20minutes = 20 * 60 * 1000
-const orderExpirationPeriod = _20minutes
-
 export enum OrderStatus {
     PENDING,
     SUCCESS,
     FAILED,
+}
+
+export enum PaymentType {
+    FIAT = "fiat",
+    CRYPTO = "crypto",
+}
+
+export const SUPPORTED_PAYMENT_METHODS: { [val: string]: PaymentMethod } = {
+    COINGATE: {
+        gateway: "coingate",
+        type: PaymentType.CRYPTO,
+        display: "Crypto",
+        currencies: [], // returned from backend
+    },
+    CARDINITY: {
+        gateway: "cardinity",
+        type: PaymentType.FIAT,
+        display: "Credit card",
+        currencies: [],
+    },
+}
+
+export interface PaymentMethod {
+    gateway: string
+    type: PaymentType
+    display: string
+    currencies: string[]
 }
 
 export class PaymentStore {
@@ -37,11 +72,11 @@ export class PaymentStore {
     mystToUsdRate?: Money
     registrationTopupAmount?: number
     topupAmount?: number
-    currencies: string[] = []
-    orderOptions: number[] = []
+    paymentMethod?: PaymentMethod
+    paymentGateways?: PaymentGateway[]
     paymentCurrency?: string
     lightningNetwork = false
-    order?: PaymentOrderResponse
+    order?: PaymentOrder
     orderExpiresAt?: Date
 
     constructor(root: RootStore) {
@@ -51,21 +86,24 @@ export class PaymentStore {
             mystToUsdRate: observable,
             registrationTopupAmount: observable,
             topupAmount: observable,
-            currencies: observable,
-            orderOptions: observable,
+            paymentMethod: observable,
+
+            paymentGateways: observable,
+            orderOptions: computed,
+            paymentMethods: computed,
+
             paymentCurrency: observable,
             lightningNetwork: observable,
             order: observable,
             fetchTransactorFees: action,
             fetchMystToUsdRate: action,
-            fetchCurrencies: action,
             registrationFee: computed,
-            fetchPaymentOptions: action,
             createOrder: action,
             orderStatus: computed,
             clearOrder: action,
             topupTotal: computed,
             setRegistrationTopupAmount: action,
+            setPaymentMethod: action,
             setPaymentCurrency: action,
             setLightningNetwork: action,
             setTopupAmount: action,
@@ -78,8 +116,6 @@ export class PaymentStore {
             () => this.root.daemon.status == DaemonStatusType.Up,
             () => {
                 this.fetchMystToUsdRate()
-                this.fetchCurrencies()
-                this.fetchPaymentOptions()
             },
         )
     }
@@ -98,17 +134,6 @@ export class PaymentStore {
         })
     }
 
-    async fetchCurrencies(): Promise<void> {
-        const currencies = await tequilapi.getPaymentOrderCurrencies()
-        runInAction(() => {
-            this.currencies = currencies
-            if (!this.paymentCurrency) {
-                this.paymentCurrency = currencies[0]
-                this.lightningNetwork = isLightningAvailable(currencies[0])
-            }
-        })
-    }
-
     get registrationFee(): number | undefined {
         if (!this.fees) {
             return undefined
@@ -120,33 +145,96 @@ export class PaymentStore {
         return mystToUSD(amount, this.mystToUsdRate?.amount ?? 0) ?? 0
     }
 
-    async fetchPaymentOptions(): Promise<void> {
-        const optionsResponse = await tequilapi.getPaymentOrderOptions()
+    async fetchPaymentGateways(): Promise<void> {
+        const gateways = await tequilapi.payment.gateways()
         runInAction(() => {
-            this.orderOptions = optionsResponse.suggested.slice(0, 6)
+            this.paymentGateways = gateways
         })
+    }
+
+    get orderOptions(): number[] {
+        if (!this.paymentGateways) {
+            return []
+        }
+        const gw = this.paymentGateways
+            .slice()
+            .sort((a, b) => (a.orderOptions.suggested[0] < b.orderOptions.suggested[0] ? 1 : -1))[0]
+        return gw.orderOptions.suggested.slice(0, 6)
+    }
+
+    get paymentMethods(): PaymentMethod[] {
+        return (
+            (this.paymentGateways || [])
+                .map((gw) => {
+                    const match = Object.values(SUPPORTED_PAYMENT_METHODS).find((m) => m.gateway === gw.name)
+                    if (!match) {
+                        return undefined
+                    }
+                    return {
+                        gateway: gw.name,
+                        currencies: gw.currencies,
+                        type: match.type,
+                        display: match.display,
+                    }
+                })
+                .filter(Boolean) as PaymentMethod[]
+        ).sort((a, b) => a.type.localeCompare(b.type))
+    }
+
+    buildCallerData(): CreatePaymentOrderRequest["gatewayCallerData"] {
+        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
+            return {
+                lightningNetwork: this.lightningNetwork,
+            }
+        }
+        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
+            return {
+                country: this.root.connection.originalLocation?.country,
+            }
+        }
+        throw new Error("Unsupported payment gateway")
+    }
+    validateOrderResponse(order: PaymentOrder): void {
+        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
+            if (!order.publicGatewayData?.paymentAddress) {
+                throw new Error("Could not retrieve payment address")
+            }
+            if (!order.publicGatewayData?.paymentUrl) {
+                throw new Error("Could not retrieve payment URL")
+            }
+            return
+        }
+        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
+            if (!order.publicGatewayData?.secureForm) {
+                throw new Error("Could not retrieve secure form for payment")
+            }
+            return
+        }
     }
 
     async createOrder(): Promise<void> {
         const id = this.root.identity.identity?.id
-        if (!id) {
+        if (!id || !this.topupAmount || !this.paymentCurrency || !this.paymentMethod) {
             return
         }
-        if (!this.topupAmount) {
-            return
-        }
-        if (!this.paymentCurrency) {
-            return
-        }
-        const order = await tequilapi.createPaymentOrder(id, {
-            mystAmount: this.topupAmount,
+
+        const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
+            mystAmount: new Decimal(this.topupAmount).toFixed(2),
             payCurrency: this.paymentCurrency,
-            lightningNetwork: this.lightningNetwork,
+            gatewayCallerData: this.buildCallerData(),
         })
         log.info("Payment order created", order)
+        this.validateOrderResponse(order)
+        log.info("Payment order validated")
+
         runInAction(() => {
             this.order = order
-            this.orderExpiresAt = new Date(Date.now() + orderExpirationPeriod)
+            if (order.publicGatewayData?.expireAt) {
+                this.orderExpiresAt = new Date(order.publicGatewayData.expireAt)
+            }
+            if (order.publicGatewayData?.secureForm) {
+                ipcRenderer.send(MainIpcListenChannels.OpenCardinityPaymentWindow, order.publicGatewayData?.secureForm)
+            }
         })
 
         retry(
@@ -154,10 +242,10 @@ export class PaymentStore {
                 if (!this.order) {
                     return
                 }
-                const order = await tequilapi.getPaymentOrder(id, this.order.id)
+                const order = await tequilapi.payment.order(id, this.order.id)
                 runInAction(() => {
                     this.order = order
-                    log.info("Updated order", this.order)
+                    log.info("Updated order", toJS(this.order))
                     if (this.orderStatus == OrderStatus.PENDING) {
                         throw Error("Order is in pending state")
                     }
@@ -166,7 +254,7 @@ export class PaymentStore {
             {
                 retries: 60,
                 factor: 1,
-                minTimeout: 20_000,
+                minTimeout: 10_000,
                 onRetry: (e, attempt) => log.warn(`Retrying payment order check (${attempt}): ${e.message}`),
             },
         )
@@ -178,18 +266,25 @@ export class PaymentStore {
         }
         if (["confirming", "paid"].includes(this.order.status)) {
             return OrderStatus.SUCCESS
-        } else if (["invalid", "expired", "canceled"].includes(this.order.status)) {
+        } else if (["invalid", "expired", "canceled", "failed"].includes(this.order.status)) {
             return OrderStatus.FAILED
         } else {
             return OrderStatus.PENDING
         }
     }
 
+    async startTopupFlow(location: string): Promise<void> {
+        await Promise.all([this.fetchPaymentGateways(), this.fetchMystToUsdRate()])
+        this.clearOrder()
+        this.root.router.push(location)
+    }
+
     clearOrder(): void {
         this.order = undefined
         this.orderExpiresAt = undefined
-        this.setPaymentCurrency(this.currencies[0])
-        this.setLightningNetwork(isLightningAvailable(this.currencies[0]))
+        this.setPaymentMethod(undefined)
+        this.setPaymentCurrency(undefined)
+        this.setLightningNetwork(false)
         this.setTopupAmount(undefined)
     }
 
@@ -203,6 +298,10 @@ export class PaymentStore {
 
     setRegistrationTopupAmount = (amount?: number): void => {
         this.registrationTopupAmount = amount
+    }
+
+    setPaymentMethod = (pm?: PaymentMethod): void => {
+        this.paymentMethod = pm
     }
 
     setPaymentCurrency = (currency?: string): void => {
@@ -224,12 +323,14 @@ export class PaymentStore {
             if (big) {
                 amt = Number(fmtMoney({ amount, currency: this.appCurrency }))
             }
-            return await tequilapi.estimateEntertainment({ amount: amt }).then((res) => ({
-                videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
-                musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
-                browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
-                trafficMb: Number((res.trafficMb / 1024).toFixed()),
-            }))
+            return await tequilapi
+                .estimateEntertainment({ amount: amt })
+                .then((res: EntertainmentEstimateResponse) => ({
+                    videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
+                    musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
+                    browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
+                    trafficMb: Number((res.trafficMb / 1024).toFixed()),
+                }))
         } catch (err) {
             const msg = parseError(err)
             logErrorMessage("Failed to estimate entertainment for amount: " + amount, msg)

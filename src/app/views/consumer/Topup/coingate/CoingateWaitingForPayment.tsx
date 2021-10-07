@@ -10,21 +10,21 @@ import styled from "styled-components"
 import { shell } from "electron"
 import CountDown from "react-countdown"
 
-import { useStores } from "../../../store"
-import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
-import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
-import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
-import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
-import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
-import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
-import { brand, brandLight } from "../../../ui-kit/colors"
-import { displayUSD } from "../../../payment/display"
-import { Anchor } from "../../../ui-kit/components/Anchor"
-import { QR } from "../../../ui-kit/components/QR/QR"
-import { OrderStatus } from "../../../payment/store"
-import { topupSteps } from "../../../navigation/locations"
-import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { useStores } from "../../../../store"
+import { ViewContainer } from "../../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewNavBar } from "../../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewSplit } from "../../../../navigation/components/ViewSplit/ViewSplit"
+import { ViewSidebar } from "../../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewContent } from "../../../../navigation/components/ViewContent/ViewContent"
+import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
+import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
+import { brand, brandLight } from "../../../../ui-kit/colors"
+import { displayUSD } from "../../../../payment/display"
+import { Anchor } from "../../../../ui-kit/components/Anchor"
+import { QR } from "../../../../ui-kit/components/QR/QR"
+import { OrderStatus } from "../../../../payment/store"
+import { topupSteps } from "../../../../navigation/locations"
+import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 
 import { LogoCoingate } from "./LogoCoingate"
 
@@ -101,11 +101,11 @@ const PaymentExplanation = styled(Paragraph)`
     margin-top: auto;
 `
 
-export const TopupWaitingForPayment: React.FC = observer(() => {
+export const CoingateWaitingForPayment: React.FC = observer(() => {
     const { payment, router } = useStores()
     const onPayInBrowserClick = () => {
-        if (payment.order?.paymentUrl) {
-            shell.openExternal(payment.order?.paymentUrl)
+        if (payment.order?.publicGatewayData?.paymentUrl) {
+            shell.openExternal(payment.order?.publicGatewayData.paymentUrl)
         }
     }
     useEffect(() => {
@@ -164,9 +164,9 @@ export const TopupWaitingForPayment: React.FC = observer(() => {
                         </Heading2>
                     </PaymentAmount>
                     <PaymentQR>
-                        <QR size={192} text={payment.order?.paymentAddress} />
+                        <QR size={192} text={payment.order?.publicGatewayData?.paymentAddress} />
                     </PaymentQR>
-                    <PaymentAddress>{payment.order?.paymentAddress}</PaymentAddress>
+                    <PaymentAddress>{payment.order?.publicGatewayData?.paymentAddress}</PaymentAddress>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
                 </Content>
             </ViewSplit>

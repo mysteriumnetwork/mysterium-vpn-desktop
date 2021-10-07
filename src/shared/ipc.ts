@@ -19,6 +19,7 @@ export enum MainIpcListenChannels {
     Update = "update",
     ConnectionStatus = "connection-status",
     OpenSupportChat = "open-support-chat",
+    OpenCardinityPaymentWindow = "open-cardinity-payment-window",
     MinimizeWindow = "minimize-window",
     CloseWindow = "close-window",
     ExportIdentity = "export-identity",

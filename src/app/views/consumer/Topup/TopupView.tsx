@@ -11,10 +11,13 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom"
 import { topupSteps } from "../../../navigation/locations"
 
 import { TopupSelectAmount } from "./TopupSelectAmount"
-import { TopupSelectCurrency } from "./TopupSelectCurrency"
-import { TopupWaitingForPayment } from "./TopupWaitingForPayment"
+import { CoingateSelectCurrency } from "./coingate/CoingateSelectCurrency"
+import { CoingateWaitingForPayment } from "./coingate/CoingateWaitingForPayment"
 import { TopupSuccess } from "./TopupSuccess"
 import { TopupFailed } from "./TopupFailed"
+import { TopupChooseMethod } from "./TopupChooseMethod"
+import { CardinitySelectCurrency } from "./cardinity/CardinitySelectCurrency"
+import { CardinityWaitingForPayment } from "./cardinity/CardinityWaitingForPayment"
 
 export const TopupView: React.FC = observer(() => {
     const { url } = useRouteMatch()
@@ -24,11 +27,20 @@ export const TopupView: React.FC = observer(() => {
                 <Route path={"*/" + topupSteps.selectAmount}>
                     <TopupSelectAmount />
                 </Route>
-                <Route path={"*/" + topupSteps.selectCurrency}>
-                    <TopupSelectCurrency />
+                <Route path={"*/" + topupSteps.chooseMethod}>
+                    <TopupChooseMethod />
                 </Route>
-                <Route path={"*/" + topupSteps.waitingForPayment}>
-                    <TopupWaitingForPayment />
+                <Route path={"*/" + topupSteps.cardinitySelectCurrency}>
+                    <CardinitySelectCurrency />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinityWaitingForPayment}>
+                    <CardinityWaitingForPayment />
+                </Route>
+                <Route path={"*/" + topupSteps.coingateSelectCurrency}>
+                    <CoingateSelectCurrency />
+                </Route>
+                <Route path={"*/" + topupSteps.coingateWaitingForPayment}>
+                    <CoingateWaitingForPayment />
                 </Route>
                 <Route path={"*/" + topupSteps.success}>
                     <TopupSuccess />

@@ -19,5 +19,5 @@ export const fmtMoney = (m: Money, opts?: DisplayMoneyOptions): string => {
 }
 
 export const displayUSD = (amount: number): string => {
-    return "$" + new Decimal(amount).toFixed(4)
+    return "$" + new Decimal(amount).toFixed(2)
 }
