@@ -65,7 +65,7 @@ export interface PaymentMethod {
 export class PaymentStore {
     root: RootStore
 
-    appCurrency: Currency = Currency.MYSTTestToken
+    appCurrency: Currency = Currency.MYST
     appFiatCurrency = "USD"
 
     fees?: Fees
@@ -138,7 +138,7 @@ export class PaymentStore {
         if (!this.fees) {
             return undefined
         }
-        return Number(fmtMoney({ amount: this.fees.registration, currency: Currency.MYSTTestToken }))
+        return Number(fmtMoney({ amount: this.fees.registration, currency: Currency.MYST }))
     }
 
     fiatEquivalent(amount: number): number {
