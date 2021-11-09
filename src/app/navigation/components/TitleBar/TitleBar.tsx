@@ -116,7 +116,7 @@ export const TitleBar: React.FC = observer(() => {
     const balance = fmtMoney(
         {
             amount: identity.identity?.balance ?? 0,
-            currency: Currency.MYSTTestToken,
+            currency: Currency.MYST,
         },
         {
             fractionDigits: 2,
@@ -151,7 +151,7 @@ export const TitleBar: React.FC = observer(() => {
                 <Money>
                     <IconMystToken color={navigation.isWalletActive ? "#fff" : greyBlue1} />
                     <span>
-                        {balance} {Currency.MYSTTestToken}
+                        {balance} {Currency.MYST}
                     </span>
                 </Money>
             </WalletButton>

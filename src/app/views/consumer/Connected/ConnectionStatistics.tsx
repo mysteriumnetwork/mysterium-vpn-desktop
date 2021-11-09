@@ -82,7 +82,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
     const paid = fmtMoney(
         {
             amount: tokensSpent ?? 0,
-            currency: Currency.MYSTTestToken,
+            currency: Currency.MYST,
         },
         {
             fractionDigits: 3,
@@ -122,7 +122,7 @@ export const ConnectionStatistics: React.FC = observer(() => {
                 </MetricIcon>
                 <MetricLabel>Paid</MetricLabel>
                 <MetricValue>{connected ? paid : <MetricPlaceholder />}</MetricValue>
-                <MetricUnit>{Currency.MYSTTestToken}</MetricUnit>
+                <MetricUnit>{Currency.MYST}</MetricUnit>
             </Metric>
         </Metrics>
     )

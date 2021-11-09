@@ -124,7 +124,7 @@ export const WalletView: React.FC = observer(() => {
     const balanceDisplay = fmtMoney(
         {
             amount: balance,
-            currency: Currency.MYSTTestToken,
+            currency: Currency.MYST,
         },
         {
             fractionDigits: 4,
