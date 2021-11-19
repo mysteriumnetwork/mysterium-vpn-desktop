@@ -1116,10 +1116,10 @@
     follow-redirects "^1.5.2"
     targz "^1.0.1"
 
-"@mysteriumnetwork/terms@0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.33.tgz#47cb43a7978c955e7c2420117ad30e27181260ac"
-  integrity sha512-JrIY+LaND3dJfFNX/2G86/H1z3LdRJw99S6EcBPHy5GEkvx4DB7oBZ0cbMo8e8lGO3xPRTJauzCqJNbokI8gpA==
+"@mysteriumnetwork/terms@0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.34.tgz#615201fb175ecf5c23074ca74259c05a2b2e0d89"
+  integrity sha512-mRtX1+MXTByIW2DwesPSDyMlsIzn5GMFB5pub1BdZ3niotb3YwuHAnub/vXc96qJKxmK9FXIDqDuP5/rMfjdgg==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
