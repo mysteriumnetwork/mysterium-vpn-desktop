@@ -7385,10 +7385,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-mysterium-vpn-js@^17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-17.0.1.tgz#884ff38e65870ee2d1c1b406bf3a8490173d8553"
-  integrity sha512-Objq9VnCXpGWmVFUjK9m7NThFUzlfvLoNmbFnYLUaRqzr90WL88a5XphhoNCeoAl2kjOKvyr5VccZ98SiemFeQ==
+mysterium-vpn-js@18.3.0:
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-18.3.0.tgz#389300717dd51cd65f65e94064ebca3fa4ff0e2f"
+  integrity sha512-56lxHfHklemFAX1GUiE2TRLhRcfT+OuyLsfwaQl7oOofq5DK77DKY492bde6LAHrSkYJtpBgxgvP4n6JBs8MqA==
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     axios "^0.21.1"

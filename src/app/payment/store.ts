@@ -100,6 +100,7 @@ export class PaymentStore {
             registrationFee: computed,
             createOrder: action,
             orderStatus: computed,
+            downloadInvoice: action,
             clearOrder: action,
             topupTotal: computed,
             setRegistrationTopupAmount: action,
@@ -219,6 +220,7 @@ export class PaymentStore {
         }
 
         const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
+            country: this.root.connection.originalLocation?.country || "",
             mystAmount: new Decimal(this.topupAmount).toFixed(2),
             payCurrency: this.paymentCurrency,
             gatewayCallerData: this.buildCallerData(),
@@ -271,6 +273,40 @@ export class PaymentStore {
         } else {
             return OrderStatus.PENDING
         }
+    }
+
+    async downloadInvoice(): Promise<void> {
+        const id = this.root.identity.identity?.id
+        const orderId = this.order?.id
+        if (!id || !orderId) {
+            return
+        }
+
+        const data = await tequilapi.payment.invoice(id, orderId)
+        // create a download anchor tag
+        const downloadLink = document.createElement("a")
+        downloadLink.target = "_blank"
+        downloadLink.download = `MysteriumVPN-order-${orderId}.pdf`
+
+        // convert downloaded data to a Blob
+        const blob = new Blob([data], { type: "application/pdf" })
+
+        // create an object URL from the Blob
+        const URL = window.URL || window.webkitURL
+        const downloadUrl = URL.createObjectURL(blob)
+
+        // set object URL as the anchor's href
+        downloadLink.href = downloadUrl
+
+        // append the anchor to document body
+        document.body.appendChild(downloadLink)
+
+        // fire a click event on the anchor
+        downloadLink.click()
+
+        // cleanup: remove element and revoke object URL
+        document.body.removeChild(downloadLink)
+        URL.revokeObjectURL(downloadUrl)
     }
 
     async startTopupFlow(location: string): Promise<void> {
