@@ -8,6 +8,7 @@ import * as net from "net"
 import { Socket } from "net"
 import { platform } from "os"
 
+import semver from "semver"
 import { ipcMain } from "electron"
 
 import * as packageJson from "../../../package.json"
@@ -113,12 +114,12 @@ export class Supervisor {
             log.info("Running supervisor version matches, skipping the upgrade")
             return
         }
-        // if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
-        //     log.info("Exotic versions of supervisor found, proceeding to upgrade")
-        // } else if (semver.gte(runningVersion, bundledVersion)) {
-        //     log.info("Running supervisor version is compatible, skipping the upgrade")
-        //     return
-        // }
+        if (!semver.valid(runningVersion) || !semver.valid(bundledVersion)) {
+            log.info("Exotic versions of supervisor found, proceeding to upgrade")
+        } else if (semver.gte(runningVersion, bundledVersion)) {
+            log.info("Running supervisor version is compatible, skipping the upgrade")
+            return
+        }
         log.info(`Upgrading supervisor ${runningVersion} → ${bundledVersion}`)
         await supervisor.install()
     }
