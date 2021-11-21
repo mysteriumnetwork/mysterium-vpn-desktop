@@ -19,6 +19,8 @@ import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
 
+import { registered } from "./identity"
+
 export class IdentityStore {
     loading = false
     identity?: Identity
@@ -85,6 +87,21 @@ export class IdentityStore {
                     unsubscribePush(PushTopic.LessThanHalfMyst)
                 }
                 reportBalanceUpdate(this.root.identity.identity?.balance ?? 0)
+            },
+        )
+        reaction(
+            () => this.identity?.balance,
+            async (balance) => {
+                if (!this.identity) {
+                    return
+                }
+                if (registered(this.identity)) {
+                    return
+                }
+                if (!balance) {
+                    return
+                }
+                await this.register(this.identity)
             },
         )
     }

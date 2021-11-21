@@ -6,7 +6,7 @@
  */
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { faClock, faWallet } from "@fortawesome/free-solid-svg-icons"
+import { faWallet } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
@@ -17,12 +17,7 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { Heading2, Small } from "../../../ui-kit/typography"
-import {
-    ButtonContent,
-    ButtonIcon,
-    PrimarySidebarActionButton,
-    SecondarySidebarActionButton,
-} from "../../../ui-kit/components/Button/SidebarButtons"
+import { ButtonContent, ButtonIcon, PrimarySidebarActionButton } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
 import { locations } from "../../../navigation/locations"
@@ -65,12 +60,9 @@ const Content = styled(ViewContent)`
 `
 
 export const InitialTopup: React.FC = observer(() => {
-    const { onboarding, payment } = useStores()
+    const { payment } = useStores()
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
-    }
-    const handleTopupLater = () => {
-        onboarding.skipTopup()
     }
     return (
         <ViewContainer>
@@ -80,12 +72,10 @@ export const InitialTopup: React.FC = observer(() => {
                     <SideTop>
                         <SectionIcon icon={faWallet} />
                         <Title>Your Wallet</Title>
-                        <Small>
-                            Top up your wallet now or do it later and use limited functionality and free nodes
-                        </Small>
+                        <Small>Top up your wallet now to complete the registration</Small>
                     </SideTop>
                     <SideBot>
-                        <PrimarySidebarActionButton onClick={handleTopupNow}>
+                        <PrimarySidebarActionButton style={{ maxHeight: 100 }} onClick={handleTopupNow}>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faWallet} />
@@ -93,14 +83,6 @@ export const InitialTopup: React.FC = observer(() => {
                                 Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleTopupLater}>
-                            <ButtonContent>
-                                <ButtonIcon>
-                                    <FontAwesomeIcon icon={faClock} />
-                                </ButtonIcon>
-                                Top up later
-                            </ButtonContent>
-                        </SecondarySidebarActionButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
