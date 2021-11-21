@@ -9,6 +9,7 @@ import { action, makeObservable, observable } from "mobx"
 import { RootStore } from "../store"
 import { locations } from "../navigation/locations"
 import { log } from "../../shared/log/log"
+import { registered } from "../identity/identity"
 
 enum IdentityProgress {
     NOT_STARTED = "",
@@ -60,9 +61,6 @@ export class OnboardingStore {
             log.error("ID not found, exiting")
             return
         }
-        this.setIdentityProgress(IdentityProgress.REGISTERING)
-        await this.root.identity.register(id)
-        this.setIdentityProgress(IdentityProgress.COMPLETE)
         this.root.router.push(locations.onboardingIdentityBackup)
     }
 
@@ -89,7 +87,12 @@ export class OnboardingStore {
 
     finishIDSetup = (): void => {
         this.complete()
-        this.root.router.push(locations.onboardingTopupPrompt)
+        const id = this.root.identity.identity
+        if (this.identityProgress == IdentityProgress.COMPLETE || (id && registered(id))) {
+            this.skipTopup()
+        } else {
+            this.root.router.push(locations.onboardingTopupPrompt)
+        }
     }
 
     complete = (): void => {
