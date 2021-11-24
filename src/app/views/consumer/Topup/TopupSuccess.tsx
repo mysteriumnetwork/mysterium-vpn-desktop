@@ -7,7 +7,7 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
+import { faCheckCircle, faDownload } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { toast } from "react-hot-toast"
 
@@ -94,6 +94,16 @@ export const TopupSuccess: React.FC = observer(() => {
                     <div style={{ marginTop: "auto", marginBottom: "auto" }}>
                         <Heading2>
                             <FontAwesomeIcon className="icon" icon={faCheckCircle} color="#ffffff44" size="10x" />
+                            <div style={{ marginTop: 20, cursor: "pointer" }} onClick={() => payment.downloadInvoice()}>
+                                <FontAwesomeIcon
+                                    style={{ marginRight: 10 }}
+                                    className="icon"
+                                    icon={faDownload}
+                                    color="#ffffff44"
+                                    size="1x"
+                                />
+                                Download invoice
+                            </div>
                         </Heading2>
                     </div>
                 </Content>

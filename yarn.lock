@@ -1107,19 +1107,19 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@0.66.3":
-  version "0.66.3"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-0.66.3.tgz#473d76abce88e4d473a6c66037ab24f046453c42"
-  integrity sha512-ATxC95CP86idl010H1SRNIxMfsjhiuuO75FiuQryEeU+N0gkGt+69pJthfxQBJtuScnKDwdxTz+5FDbzCISnig==
+"@mysteriumnetwork/node@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.0.4.tgz#2db24f5e238caf155c9a3e667f7e0d32683d34b3"
+  integrity sha512-PrbVxXy+SMTWls1Y25YL1ZAUAJhKStbQZZKaYFV8+yUJKaNvqnSRUOt+WsHEr6IBxVFwQSCIlfp6GHBqUia4Lw==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
     targz "^1.0.1"
 
-"@mysteriumnetwork/terms@0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.33.tgz#47cb43a7978c955e7c2420117ad30e27181260ac"
-  integrity sha512-JrIY+LaND3dJfFNX/2G86/H1z3LdRJw99S6EcBPHy5GEkvx4DB7oBZ0cbMo8e8lGO3xPRTJauzCqJNbokI8gpA==
+"@mysteriumnetwork/terms@0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/terms/-/terms-0.0.34.tgz#615201fb175ecf5c23074ca74259c05a2b2e0d89"
+  integrity sha512-mRtX1+MXTByIW2DwesPSDyMlsIzn5GMFB5pub1BdZ3niotb3YwuHAnub/vXc96qJKxmK9FXIDqDuP5/rMfjdgg==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -7385,10 +7385,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-mysterium-vpn-js@^17.0.1:
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-17.0.1.tgz#884ff38e65870ee2d1c1b406bf3a8490173d8553"
-  integrity sha512-Objq9VnCXpGWmVFUjK9m7NThFUzlfvLoNmbFnYLUaRqzr90WL88a5XphhoNCeoAl2kjOKvyr5VccZ98SiemFeQ==
+mysterium-vpn-js@18.3.0:
+  version "18.3.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-18.3.0.tgz#389300717dd51cd65f65e94064ebca3fa4ff0e2f"
+  integrity sha512-56lxHfHklemFAX1GUiE2TRLhRcfT+OuyLsfwaQl7oOofq5DK77DKY492bde6LAHrSkYJtpBgxgvP4n6JBs8MqA==
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     axios "^0.21.1"
