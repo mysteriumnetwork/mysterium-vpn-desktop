@@ -120,7 +120,7 @@ export const CoingateSelectCurrency: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
-                        <TitleDescription>Select the cryptocurrency in which the top-up will be done</TitleDescription>
+                        <TitleDescription>Select the cryptocurrency in which the top-up will be done. MYST is currently only supported on the Ethereum network!</TitleDescription>
                     </SideTop>
                     <SideBot>
                         <AmountSelect>
