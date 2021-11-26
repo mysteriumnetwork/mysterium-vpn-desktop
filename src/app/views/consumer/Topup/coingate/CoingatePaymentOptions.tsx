@@ -8,6 +8,9 @@ import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { toast } from "react-hot-toast"
+import { Currency } from "mysterium-vpn-js"
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -17,7 +20,7 @@ import { ViewSplit } from "../../../../navigation/components/ViewSplit/ViewSplit
 import { ViewSidebar } from "../../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
-import { Heading2, Small } from "../../../../ui-kit/typography"
+import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../../ui-kit/colors"
 import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
 import { isLightningAvailable } from "../../../../payment/currency"
@@ -136,6 +139,12 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
                             <LightningCheckbox checked={payment.lightningNetwork} onChange={setUseLightning}>
                                 Use lightning network
                             </LightningCheckbox>
+                        )}
+                        {payment.paymentCurrency == Currency.MYST && (
+                            <Paragraph style={{ color: "red" }}>
+                                <FontAwesomeIcon icon={faExclamationTriangle} style={{ marginRight: 5 }} />
+                                {Currency.MYST} is currently only supported on the Ethereum network!
+                            </Paragraph>
                         )}
                         <BrandButton
                             style={{ marginTop: "auto" }}
