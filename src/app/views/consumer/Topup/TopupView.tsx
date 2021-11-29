@@ -11,13 +11,15 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom"
 import { topupSteps } from "../../../navigation/locations"
 
 import { TopupSelectAmount } from "./TopupSelectAmount"
-import { CoingateSelectCurrency } from "./coingate/CoingateSelectCurrency"
+import { CoingatePaymentOptions } from "./coingate/CoingatePaymentOptions"
 import { CoingateWaitingForPayment } from "./coingate/CoingateWaitingForPayment"
 import { TopupSuccess } from "./TopupSuccess"
 import { TopupFailed } from "./TopupFailed"
 import { TopupChooseMethod } from "./TopupChooseMethod"
-import { CardinitySelectCurrency } from "./cardinity/CardinitySelectCurrency"
+import { CardinityPaymentOptions } from "./cardinity/CardinityPaymentOptions"
 import { CardinityWaitingForPayment } from "./cardinity/CardinityWaitingForPayment"
+import { CardinityOrderSummary } from "./cardinity/CardinityOrderSummary"
+import { CoingateOrderSummary } from "./coingate/CoingateOrderSummary"
 
 export const TopupView: React.FC = observer(() => {
     const { url } = useRouteMatch()
@@ -30,14 +32,20 @@ export const TopupView: React.FC = observer(() => {
                 <Route path={"*/" + topupSteps.chooseMethod}>
                     <TopupChooseMethod />
                 </Route>
-                <Route path={"*/" + topupSteps.cardinitySelectCurrency}>
-                    <CardinitySelectCurrency />
+                <Route path={"*/" + topupSteps.cardinityPaymentOptions}>
+                    <CardinityPaymentOptions />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinityOrderSummary}>
+                    <CardinityOrderSummary />
                 </Route>
                 <Route path={"*/" + topupSteps.cardinityWaitingForPayment}>
                     <CardinityWaitingForPayment />
                 </Route>
-                <Route path={"*/" + topupSteps.coingateSelectCurrency}>
-                    <CoingateSelectCurrency />
+                <Route path={"*/" + topupSteps.coingatePaymentOptions}>
+                    <CoingatePaymentOptions />
+                </Route>
+                <Route path={"*/" + topupSteps.coingateOrderSummary}>
+                    <CoingateOrderSummary />
                 </Route>
                 <Route path={"*/" + topupSteps.coingateWaitingForPayment}>
                     <CoingateWaitingForPayment />

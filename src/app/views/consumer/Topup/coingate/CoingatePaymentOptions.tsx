@@ -7,7 +7,7 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import toast from "react-hot-toast"
+import { toast } from "react-hot-toast"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -20,14 +20,13 @@ import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading2, Small } from "../../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../../ui-kit/colors"
 import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
-import { displayUSD } from "../../../../payment/display"
 import { isLightningAvailable } from "../../../../payment/currency"
 import { Checkbox } from "../../../../ui-kit/form-components/Checkbox/Checkbox"
-import { logErrorMessage } from "../../../../../shared/log/log"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../../navigation/locations"
 import { CryptoAnimation } from "../../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
 import { parseError } from "../../../../../shared/errors/parseError"
+import { logErrorMessage } from "../../../../../shared/log/log"
 import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
 
 const SideTop = styled.div`
@@ -70,15 +69,9 @@ const AmountToggle = styled(Toggle)`
 
 const OptionValue = styled(Heading2)``
 
-const FiatEquivalent = styled.div`
-    margin-top: auto;
-    text-align: center;
-    font-size: 11px;
-`
-
 const LightningCheckbox = styled(Checkbox)``
 
-export const CoingateSelectCurrency: React.FC = observer(() => {
+export const CoingatePaymentOptions: React.FC = observer(() => {
     const { payment, router } = useStores()
     const [loading, setLoading] = useState(false)
 
@@ -98,7 +91,7 @@ export const CoingateSelectCurrency: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.pushRelative(topupSteps.coingateWaitingForPayment)
+            router.pushRelative(topupSteps.coingateOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -144,12 +137,8 @@ export const CoingateSelectCurrency: React.FC = observer(() => {
                                 Use lightning network
                             </LightningCheckbox>
                         )}
-                        <FiatEquivalent>
-                            {payment.appFiatCurrency} equivalent ≈{" "}
-                            {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
-                        </FiatEquivalent>
                         <BrandButton
-                            style={{ marginTop: "15px" }}
+                            style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
                             loading={loading}
                             disabled={loading || !payment.paymentCurrency}
