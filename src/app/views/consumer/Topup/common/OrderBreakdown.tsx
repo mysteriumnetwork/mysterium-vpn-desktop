@@ -50,7 +50,7 @@ export const OrderBreakdown: React.FC = observer(() => {
                     {payment.order?.itemsSubTotal} {payment.order?.currency}
                 </LineItemAmount>
             </LineItem>
-            {Number(payment.order?.taxSubTotal) ? (
+            {Number(payment.order?.taxSubTotal) && (
                 <LineItem>
                     <Tooltip id="vat-tooltip">
                         <span>
@@ -63,21 +63,21 @@ export const OrderBreakdown: React.FC = observer(() => {
                         {payment.order?.taxSubTotal} {payment.order?.currency}
                     </LineItemAmount>
                 </LineItem>
-            ) : null}
+            )}
             <LineItem style={{ color: brandLight }}>
                 Total
                 <LineItemAmount>
                     {payment.order?.orderTotal} {payment.order?.currency}
                 </LineItemAmount>
             </LineItem>
-            {payment.order?.payCurrency !== payment.order?.currency ? (
+            {payment.order?.payCurrency !== payment.order?.currency && (
                 <LineItem>
                     Pay by:
                     <LineItemAmount>
                         {payment.order?.payAmount} {payment.order?.payCurrency}
                     </LineItemAmount>
                 </LineItem>
-            ) : null}
+            )}
         </>
     )
 })
