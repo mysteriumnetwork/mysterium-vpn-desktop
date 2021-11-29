@@ -241,7 +241,7 @@ export const IntroductionSteps: React.FC = observer(() => {
                                 renderer="svg"
                             />
                         </Animation>
-                        <Subtitle>BTC, ETH, LTC, BTH and more</Subtitle>
+                        <Subtitle>BTC, ETH, LTC, BCH and more</Subtitle>
                         <Description>
                             Top up your account now or do it later and use limited functionality and free nodes
                         </Description>
