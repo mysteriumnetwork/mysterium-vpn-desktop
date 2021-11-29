@@ -7,9 +7,9 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import toast from "react-hot-toast"
 import { faDollarSign, faEuroSign, faPoundSign, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { toast } from "react-hot-toast"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -24,10 +24,10 @@ import { brandLight, lightBlue } from "../../../../ui-kit/colors"
 import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { topupSteps } from "../../../../navigation/locations"
-import { displayUSD } from "../../../../payment/display"
 import { parseError } from "../../../../../shared/errors/parseError"
 import { logErrorMessage } from "../../../../../shared/log/log"
 import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
+import { SelectTaxCountry } from "../../../../payment/components/SelectTaxCountry/SelectTaxCountry"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -69,7 +69,15 @@ const AmountToggle = styled(Toggle)`
 
 const OptionValue = styled(Heading2)``
 
-export const CardinitySelectCurrency: React.FC = observer(() => {
+const PaymentOption = styled(Paragraph)`
+    &:not(:first-child) {
+        border-top: 1px dashed #ddd;
+    }
+    padding: 10px 0;
+    text-align: left;
+`
+
+export const CardinityPaymentOptions: React.FC = observer(() => {
     const { payment, router } = useStores()
     const [loading, setLoading] = useState(false)
     const isOptionActive = (cur: string) => {
@@ -78,13 +86,12 @@ export const CardinitySelectCurrency: React.FC = observer(() => {
     const selectOption = (cur: string) => () => {
         payment.setPaymentCurrency(cur)
     }
-    const fiatAmount = displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))
     const handleNextClick = async () => {
         setLoading(() => true)
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.pushRelative(topupSteps.cardinityWaitingForPayment)
+            router.pushRelative(topupSteps.cardinityOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -106,9 +113,10 @@ export const CardinitySelectCurrency: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
-                        <TitleDescription>Select the payment currency.</TitleDescription>
+                        <TitleDescription>Select the payment options</TitleDescription>
                     </SideTop>
                     <SideBot>
+                        <PaymentOption>Payment currency:</PaymentOption>
                         <AmountSelect>
                             {options.map((opt) => {
                                 let currencyIcon = faQuestionCircle
@@ -142,14 +150,13 @@ export const CardinitySelectCurrency: React.FC = observer(() => {
                                 )
                             })}
                         </AmountSelect>
-                        <Paragraph style={{ borderTop: "1px solid #ddd", paddingTop: 10 }}>
-                            Estimated USD total:<span style={{ float: "right", fontWeight: "bold" }}>{fiatAmount}</span>
-                        </Paragraph>
+                        <PaymentOption>Tax residence country (VAT):</PaymentOption>
+                        <SelectTaxCountry />
                         <BrandButton
                             style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
                             loading={loading}
-                            disabled={loading || !payment.paymentCurrency}
+                            disabled={loading || !payment.paymentCurrency || !payment.taxCountry}
                         >
                             Next
                         </BrandButton>

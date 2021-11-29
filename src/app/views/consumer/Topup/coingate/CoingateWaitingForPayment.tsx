@@ -19,12 +19,12 @@ import { ViewContent } from "../../../../navigation/components/ViewContent/ViewC
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
 import { brand, brandLight } from "../../../../ui-kit/colors"
-import { displayUSD } from "../../../../payment/display"
 import { Anchor } from "../../../../ui-kit/components/Anchor"
 import { QR } from "../../../../ui-kit/components/QR/QR"
 import { OrderStatus } from "../../../../payment/store"
 import { topupSteps } from "../../../../navigation/locations"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { OrderBreakdown } from "../common/OrderBreakdown"
 
 import { LogoCoingate } from "./LogoCoingate"
 
@@ -60,12 +60,6 @@ const TitleDescription = styled(Small)``
 
 const Content = styled(ViewContent)`
     padding: 20px 15px;
-`
-
-const FiatEquivalent = styled.div`
-    margin-top: auto;
-    text-align: center;
-    font-size: 11px;
 `
 
 const PaymentCountDown = styled(Heading2)`
@@ -135,15 +129,11 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                         <TitleDescription>Scan QR code or use a payment link below</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>
-                        <Paragraph style={{ marginBottom: 15, marginTop: "auto" }}>
-                            Payment is handled by our payment partner Coingate.
-                        </Paragraph>
-                        <LogoCoingate />
-                        <FiatEquivalent>
-                            {payment.appFiatCurrency} equivalent ≈{" "}
-                            {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
-                        </FiatEquivalent>
+                        <OrderBreakdown />
+                        <Small style={{ margin: "auto 0" }}>Payment is handled by our payment partner Coingate.</Small>
+                        <div style={{ height: 40, overflow: "hidden" }}>
+                            <LogoCoingate />
+                        </div>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
@@ -168,6 +158,7 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                     </PaymentQR>
                     <PaymentAddress>{payment.order?.publicGatewayData?.paymentAddress}</PaymentAddress>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
+                    <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>
                 </Content>
             </ViewSplit>
         </ViewContainer>

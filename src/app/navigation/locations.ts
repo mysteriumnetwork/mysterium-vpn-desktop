@@ -47,9 +47,11 @@ export const locations = {
 export const topupSteps = {
     selectAmount: "select-amount",
     chooseMethod: "choose-method",
-    cardinitySelectCurrency: "cardinity-select-currency",
+    cardinityPaymentOptions: "cardinity-payment-options",
+    cardinityOrderSummary: "cardinity-order-summary",
     cardinityWaitingForPayment: "cardinity-waiting-for-payment",
-    coingateSelectCurrency: "coingate-select-currency",
+    coingatePaymentOptions: "coingate-payment-options",
+    coingateOrderSummary: "coingate-order-summary",
     coingateWaitingForPayment: "coingate-waiting-for-payment",
     success: "success",
     failed: "failed",

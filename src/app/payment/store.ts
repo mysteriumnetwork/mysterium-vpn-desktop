@@ -75,6 +75,7 @@ export class PaymentStore {
     paymentMethod?: PaymentMethod
     paymentGateways?: PaymentGateway[]
     paymentCurrency?: string
+    taxCountry?: string
     lightningNetwork = false
     order?: PaymentOrder
     orderExpiresAt?: Date
@@ -93,12 +94,14 @@ export class PaymentStore {
             paymentMethods: computed,
 
             paymentCurrency: observable,
+            taxCountry: observable,
             lightningNetwork: observable,
             order: observable,
             fetchTransactorFees: action,
             fetchMystToUsdRate: action,
             registrationFee: computed,
             createOrder: action,
+            openOrderSecureForm: action,
             orderStatus: computed,
             downloadInvoice: action,
             clearOrder: action,
@@ -190,7 +193,7 @@ export class PaymentStore {
         }
         if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
             return {
-                country: this.root.connection.originalLocation?.country,
+                country: this.taxCountry,
             }
         }
         throw new Error("Unsupported payment gateway")
@@ -220,7 +223,7 @@ export class PaymentStore {
         }
 
         const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
-            country: this.root.connection.originalLocation?.country || "",
+            country: this.taxCountry || "",
             mystAmount: new Decimal(this.topupAmount).toFixed(2),
             payCurrency: this.paymentCurrency,
             gatewayCallerData: this.buildCallerData(),
@@ -233,9 +236,6 @@ export class PaymentStore {
             this.order = order
             if (order.publicGatewayData?.expireAt) {
                 this.orderExpiresAt = new Date(order.publicGatewayData.expireAt)
-            }
-            if (order.publicGatewayData?.secureForm) {
-                ipcRenderer.send(MainIpcListenChannels.OpenCardinityPaymentWindow, order.publicGatewayData?.secureForm)
             }
         })
 
@@ -260,6 +260,12 @@ export class PaymentStore {
                 onRetry: (e, attempt) => log.warn(`Retrying payment order check (${attempt}): ${e.message}`),
             },
         )
+    }
+
+    async openOrderSecureForm(): Promise<void> {
+        if (this.order?.publicGatewayData?.secureForm) {
+            ipcRenderer.send(MainIpcListenChannels.OpenCardinityPaymentWindow, this.order.publicGatewayData?.secureForm)
+        }
     }
 
     get orderStatus(): OrderStatus {
@@ -343,6 +349,10 @@ export class PaymentStore {
     setPaymentCurrency = (currency?: string): void => {
         this.paymentCurrency = currency
         this.lightningNetwork = isLightningAvailable(currency)
+    }
+
+    setTaxCountry = (country?: string): void => {
+        this.taxCountry = country
     }
 
     setLightningNetwork = (use: boolean): void => {

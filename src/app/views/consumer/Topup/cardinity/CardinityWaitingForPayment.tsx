@@ -17,11 +17,11 @@ import { ViewContent } from "../../../../navigation/components/ViewContent/ViewC
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
 import { brand, brandLight } from "../../../../ui-kit/colors"
-import { displayUSD } from "../../../../payment/display"
 import { OrderStatus } from "../../../../payment/store"
 import { topupSteps } from "../../../../navigation/locations"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { Spinner } from "../../../../ui-kit/components/Spinner/Spinner"
+import { OrderBreakdown } from "../common/OrderBreakdown"
 
 import { LogoCardinity } from "./LogoCardinity"
 
@@ -57,12 +57,6 @@ const TitleDescription = styled(Small)``
 
 const Content = styled(ViewContent)`
     padding: 20px 15px;
-`
-
-const FiatEquivalent = styled.div`
-    margin-top: auto;
-    text-align: center;
-    font-size: 11px;
 `
 
 const PaymentAmount = styled.div`
@@ -114,16 +108,15 @@ export const CardinityWaitingForPayment: React.FC = observer(() => {
                         <TitleDescription>Please complete the payment in the popup window.</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <Paragraph style={{ marginBottom: 15, marginTop: "auto" }}>
+                        <OrderBreakdown />
+                        <Small style={{ margin: "auto 0" }}>
                             Payment is handled by our payment partner Cardinity.
                             <br />
                             We do not store any card details.
-                        </Paragraph>
-                        <LogoCardinity />
-                        <FiatEquivalent>
-                            {payment.appFiatCurrency} equivalent ≈{" "}
-                            {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
-                        </FiatEquivalent>
+                        </Small>
+                        <div style={{ height: 100, overflow: "hidden" }}>
+                            <LogoCardinity />
+                        </div>
                     </SideBot>
                 </ViewSidebar>
                 <Content>

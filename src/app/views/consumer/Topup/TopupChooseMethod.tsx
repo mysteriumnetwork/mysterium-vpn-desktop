@@ -76,11 +76,11 @@ export const TopupChooseMethod: React.FC = observer(() => {
     const handleNextClick = () => {
         payment.setPaymentCurrency(undefined)
         if (payment.paymentMethod?.gateway == SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
-            router.pushRelative(topupSteps.coingateSelectCurrency)
+            router.pushRelative(topupSteps.coingatePaymentOptions)
             return
         }
         if (payment.paymentMethod?.gateway == SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
-            router.pushRelative(topupSteps.cardinitySelectCurrency)
+            router.pushRelative(topupSteps.cardinityPaymentOptions)
             return
         }
     }
