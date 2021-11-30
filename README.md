@@ -12,6 +12,11 @@ It is the first Mysterium Network use case in action. Our dVPN is our flagship p
 
 You can download the latest version from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases) page. After installation, run MysteriumVPN to get started.
 
+### Usage: Linux
+
+- Download `*.deb` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
+- Install app with dependencies: `sudo apt install ./name-of-deb-package.deb`
+
 ## Logs
 
 Logs help to debug issues when something goes wrong. Make sure to attach all of them when submitting a bug report.
