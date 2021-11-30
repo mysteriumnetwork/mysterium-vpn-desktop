@@ -146,6 +146,34 @@
       "icon": "static/logo.icns",
       "category": "Network"
     },
+    "deb": {
+      "depends": [
+        "resolvconf",
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1",
+        "libappindicator3-1",
+        "libsecret-1-0"
+      ]
+    },
+    "rpm": {
+      "depends": [
+        "resolvconf",
+        "at-spi2-core",
+        "gtk3",
+        "libXScrnSaver",
+        "libXtst",
+        "libnotify",
+        "libuuid",
+        "nss",
+        "xdg-utils"
+      ]
+    },
     "nsis": {
       "oneClick": true,
       "perMachine": true,
