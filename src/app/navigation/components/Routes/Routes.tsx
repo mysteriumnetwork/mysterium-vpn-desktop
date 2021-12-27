@@ -10,7 +10,6 @@ import { ConnectionStatus } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
-import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { AcceptTermsView } from "../../../views/common/AcceptTerms/AcceptTermsView"
 import { OnboardingView } from "../../../views/common/Onboarding/OnboardingView"
 import { ConnectedView } from "../../../views/consumer/Connected/ConnectedView"
@@ -25,6 +24,8 @@ import { HelpView } from "../../../views/common/Help/HelpView"
 import { SettingsView } from "../../../views/common/Settings/SettingsView"
 import { TopupView } from "../../../views/consumer/Topup/TopupView"
 import { ProposalsView } from "../../../views/consumer/Proposals/ProposalsView"
+import { StartupLoadingView } from "../../../daemon/components/StartupLoadingView/StartupLoadingView"
+import { IdentityRegistrationView } from "../../../identity/components/IdentityRegistrationView/IdentityRegistrationView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -98,10 +99,13 @@ export const Routes: React.FC = observer(() => {
                             <TitleBar />
                             <HelpView />
                         </Route>
-
+                        <Route path={locations.registering}>
+                            <NakedTitleBar />
+                            <IdentityRegistrationView />
+                        </Route>
                         <Route path={locations.loading}>
                             <NakedTitleBar />
-                            <LoadingView />
+                            <StartupLoadingView />
                         </Route>
                     </Switch>
                 </Main>

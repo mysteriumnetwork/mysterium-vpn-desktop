@@ -105,8 +105,6 @@ export class PaymentStore {
             orderStatus: computed,
             downloadInvoice: action,
             clearOrder: action,
-            topupTotal: computed,
-            setRegistrationTopupAmount: action,
             setPaymentMethod: action,
             setPaymentCurrency: action,
             setLightningNetwork: action,
@@ -328,18 +326,6 @@ export class PaymentStore {
         this.setPaymentCurrency(undefined)
         this.setLightningNetwork(false)
         this.setTopupAmount(undefined)
-    }
-
-    get topupTotal(): number | undefined {
-        const reg = this.registrationFee
-        if (!reg) {
-            return
-        }
-        return reg + (this.registrationTopupAmount ?? 0)
-    }
-
-    setRegistrationTopupAmount = (amount?: number): void => {
-        this.registrationTopupAmount = amount
     }
 
     setPaymentMethod = (pm?: PaymentMethod): void => {

@@ -29,7 +29,6 @@ import { ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdent
 import { brandLight } from "../../../ui-kit/colors"
 
 import animationIdentity from "./animation_identity.json"
-import { UseReferralCodePrompt } from "./UseReferralCodePrompt"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -72,10 +71,6 @@ const IdentityProgress = styled(Heading2)`
     align-items: flex-end;
     justify-content: space-around;
     opacity: 0.7;
-`
-
-const UseReferralCodeButton = styled(SecondarySidebarActionButton)`
-    flex: 0;
 `
 
 export const IdentitySetup: React.FC = observer(() => {
@@ -122,17 +117,6 @@ export const IdentitySetup: React.FC = observer(() => {
     const handleImportCancel = () => {
         setImportPrompt(false)
     }
-    const [referralPrompt, setReferralPrompt] = useState(false)
-    const handleUseReferralCode = () => {
-        setReferralPrompt(true)
-    }
-    const handleReferralSubmit = async ({ code }: { code: string }) => {
-        setReferralPrompt(false)
-        await onboarding.createNewIDWithReferralCode(code)
-    }
-    const handleReferralCancel = () => {
-        setReferralPrompt(false)
-    }
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -160,9 +144,6 @@ export const IdentitySetup: React.FC = observer(() => {
                                 Import existing
                             </ButtonContent>
                         </SecondarySidebarActionButton>
-                        <UseReferralCodeButton onClick={handleUseReferralCode}>
-                            <ButtonContent>Use a Referral Code</ButtonContent>
-                        </UseReferralCodeButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
@@ -184,11 +165,6 @@ export const IdentitySetup: React.FC = observer(() => {
                 </Content>
             </ViewSplit>
             <ImportIdentityPrompt visible={importPrompt} onSubmit={handleImportSubmit} onCancel={handleImportCancel} />
-            <UseReferralCodePrompt
-                visible={referralPrompt}
-                onSubmit={handleReferralSubmit}
-                onCancel={handleReferralCancel}
-            />
         </ViewContainer>
     )
 })

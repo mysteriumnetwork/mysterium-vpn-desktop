@@ -9,7 +9,6 @@ import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import Lottie from "react-lottie-player"
 
-import { useStores } from "../../../store"
 import { bg1 } from "../../../ui-kit/colors"
 
 import animationLoadingStart from "./animation_loading_start.json"
@@ -26,12 +25,15 @@ const Container = styled.div`
     -webkit-app-region: drag;
 `
 
-const StartupStatus = styled.div`
+const Status = styled.div`
     color: #fff;
 `
 
-export const LoadingView: React.FC = observer(() => {
-    const { daemon } = useStores()
+export interface LoadingViewProps {
+    status: string
+}
+
+export const LoadingView: React.FC<LoadingViewProps> = observer(({ status }) => {
     // eslint-disable-next-line @typescript-eslint/ban-types
     const [anim, setAnim] = useState<{ src: object; loop: boolean; onComplete?: () => void }>({
         src: animationLoadingStart,
@@ -53,7 +55,7 @@ export const LoadingView: React.FC = observer(() => {
                 style={{ width: 250 }}
                 renderer="svg"
             />
-            <StartupStatus>{daemon.startupStatus}</StartupStatus>
+            <Status>{status}</Status>
         </Container>
     )
 })

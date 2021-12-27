@@ -25,7 +25,6 @@ import { RouterStore } from "./navigation/routerStore"
 import { ReferralStore } from "./referral/store"
 import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
-import { registered } from "./identity/identity"
 import { analytics } from "./analytics/analytics"
 import { EventName } from "./analytics/event"
 
@@ -95,26 +94,18 @@ export class RootStore {
             () => this.daemon.status,
             async (status) => {
                 if (status == DaemonStatusType.Up) {
+                    analytics.event(EventName.startup)
                     await Promise.all([
                         this.config.loadConfig().catch((reason) => {
                             log.warn("Could not load app config: ", reason)
                         }),
-                        this.identity
-                            .loadIdentity()
-                            .catch((reason) => {
-                                log.warn("Could not load identity: ", reason)
-                            })
-                            .then(() => {
-                                // A temporary measure to migrate to Testnet3
-                                const id = this.identity.identity
-                                log.info("Identity loaded:", JSON.stringify(id))
-                                if (id && !registered(id)) {
-                                    this.identity.register(id)
-                                }
-                            }),
+                        this.identity.loadIdentity().catch((reason) => {
+                            log.warn("Could not load identity: ", reason)
+                        }),
                     ])
-                    analytics.event(EventName.startup)
-                    this.navigation.determineRoute()
+
+                    await this.identity.registerIfNeeded()
+                    this.navigation.navigateToInitialRoute()
                 }
             },
         )

@@ -16,6 +16,7 @@ export const locations = {
     onboardingIdentitySetup: "/onboarding/identity/setup",
     onboardingIdentityBackup: "/onboarding/identity/backup",
     onboardingTopupPrompt: "/onboarding/topup-prompt",
+    registering: "/registration",
     onboardingWalletTopup: "/onboarding/wallet/topup",
     onboardingComplete: "/onboarding/complete",
     terms: "/terms",
