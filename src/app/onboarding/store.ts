@@ -29,12 +29,11 @@ export class OnboardingStore {
             getStarted: action,
             setupMyID: action,
             createNewID: action,
-            createNewIDWithReferralCode: action,
+            registerWithReferralCode: action,
             identityProgress: observable,
             setIdentityProgress: action,
             finishIDSetup: action,
             complete: action,
-            skipTopup: action,
         })
         this.root = root
     }
@@ -52,9 +51,7 @@ export class OnboardingStore {
     }
 
     createNewID = async (): Promise<void> => {
-        this.setIdentityProgress(IdentityProgress.CREATING)
         await this.root.identity.create()
-        this.setIdentityProgress(IdentityProgress.LOADING)
         await this.root.identity.loadIdentity()
         const id = this.root.identity.identity
         if (!id) {
@@ -64,11 +61,7 @@ export class OnboardingStore {
         this.root.router.push(locations.onboardingIdentityBackup)
     }
 
-    createNewIDWithReferralCode = async (code: string): Promise<void> => {
-        this.setIdentityProgress(IdentityProgress.CREATING)
-        await this.root.identity.create()
-        this.setIdentityProgress(IdentityProgress.LOADING)
-        await this.root.identity.loadIdentity()
+    registerWithReferralCode = async (code: string): Promise<void> => {
         const id = this.root.identity.identity
         if (!id) {
             log.error("ID not found, exiting")
@@ -77,7 +70,6 @@ export class OnboardingStore {
         this.setIdentityProgress(IdentityProgress.REGISTERING)
         await this.root.identity.register(id, code)
         this.setIdentityProgress(IdentityProgress.COMPLETE)
-        this.root.router.push(locations.onboardingIdentityBackup)
     }
 
     setIdentityProgress = (p: IdentityProgress): void => {
@@ -88,8 +80,8 @@ export class OnboardingStore {
     finishIDSetup = (): void => {
         this.complete()
         const id = this.root.identity.identity
-        if (this.identityProgress == IdentityProgress.COMPLETE || (id && registered(id))) {
-            this.skipTopup()
+        if (id && registered(id)) {
+            this.root.router.push(locations.proposals)
         } else {
             this.root.router.push(locations.onboardingTopupPrompt)
         }
@@ -97,9 +89,5 @@ export class OnboardingStore {
 
     complete = (): void => {
         this.root.config.setOnboarded()
-    }
-
-    skipTopup = (): void => {
-        this.root.router.push(locations.proposals)
     }
 }

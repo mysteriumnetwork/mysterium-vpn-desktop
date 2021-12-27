@@ -10,6 +10,7 @@ import styled from "styled-components"
 import { faCheckCircle, faDownload } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { toast } from "react-hot-toast"
+import { IdentityRegistrationStatus } from "mysterium-vpn-js"
 
 import { useStores } from "../../../store"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
@@ -59,9 +60,14 @@ const Content = styled(ViewContent)`
 `
 
 export const TopupSuccess: React.FC = observer(() => {
-    const { payment, router } = useStores()
-    const handleLetsConnect = () => {
-        router.push(locations.proposals)
+    const { payment, router, identity } = useStores()
+    const isOnboarding = identity.identity?.registrationStatus != IdentityRegistrationStatus.Registered
+    const handleAction = () => {
+        if (isOnboarding) {
+            router.push(locations.registering)
+        } else {
+            router.push(locations.proposals)
+        }
     }
     useEffect(() => {
         toast.success(`${payment.appCurrency}s will be credited to your wallet within next 1-3 minutes.`)
@@ -85,8 +91,8 @@ export const TopupSuccess: React.FC = observer(() => {
                         </TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <BrandButton style={{ marginTop: "auto" }} onClick={handleLetsConnect}>
-                            Let&apos;s connect!
+                        <BrandButton style={{ marginTop: "auto" }} onClick={handleAction}>
+                            Continue
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>

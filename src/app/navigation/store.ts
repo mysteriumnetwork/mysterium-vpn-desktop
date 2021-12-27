@@ -5,12 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, computed, makeObservable, observable } from "mobx"
-import { ConnectionStatus } from "mysterium-vpn-js"
+import { ConnectionStatus, IdentityRegistrationStatus } from "mysterium-vpn-js"
 import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { registered } from "../identity/identity"
 
 import { locations } from "./locations"
 
@@ -30,7 +29,8 @@ export class NavigationStore {
             menu: observable,
             showLoading: action,
             goHome: action,
-            determineRoute: action,
+            navigateToInitialRoute: action,
+            navigateOnConnectionStatus: action,
             openChat: action,
             isHomeActive: computed,
             isSettingsActive: computed,
@@ -52,15 +52,15 @@ export class NavigationStore {
         }
     }
 
-    determineRoute = (): void => {
-        const newLocation = this.determineLocation()
+    navigateToInitialRoute = (): void => {
+        const newLocation = this.determineInitialLocation()
         if (newLocation) {
             this.root.router.push(newLocation)
         }
     }
 
-    determineLocation = (): string | undefined => {
-        const { config, identity, connection } = this.root
+    determineInitialLocation = (): string | undefined => {
+        const { config, identity } = this.root
         if (this.root.router.location.pathname == locations.wallet) {
             return undefined
         }
@@ -70,13 +70,30 @@ export class NavigationStore {
         if (!config.currentTermsAgreed) {
             return locations.terms
         }
-        if (!identity.identity || !registered(identity.identity)) {
+        if (!identity.identity) {
             return locations.onboardingIdentitySetup
         }
-        if (connectionInProgress(connection.status)) {
-            return locations.connection
+        switch (identity.identity.registrationStatus) {
+            case IdentityRegistrationStatus.Unknown:
+                return undefined // Do nothing (leave loading)
+            case IdentityRegistrationStatus.InProgress:
+                return locations.registering
+            case IdentityRegistrationStatus.Unregistered:
+            case IdentityRegistrationStatus.RegistrationError:
+                return locations.onboardingTopupPrompt
         }
         return locations.proposals
+    }
+
+    navigateOnConnectionStatus = (status: ConnectionStatus): void => {
+        if (!this.root.router.location.pathname.includes(locations.consumer)) {
+            return
+        }
+        if (connectionInProgress(status)) {
+            this.root.router.push(locations.connection)
+        } else {
+            this.root.router.push(locations.proposals)
+        }
     }
 
     openChat = (): void => {

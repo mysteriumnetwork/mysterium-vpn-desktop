@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { observer } from "mobx-react-lite"
-import React from "react"
-import { faWallet } from "@fortawesome/free-solid-svg-icons"
+import React, { useState } from "react"
+import { faUserFriends, faWallet } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
@@ -17,11 +17,17 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { Heading2, Small } from "../../../ui-kit/typography"
-import { ButtonContent, ButtonIcon, PrimarySidebarActionButton } from "../../../ui-kit/components/Button/SidebarButtons"
+import {
+    ButtonContent,
+    ButtonIcon,
+    PrimarySidebarActionButton,
+    SecondarySidebarActionButton,
+} from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
 import { locations } from "../../../navigation/locations"
 
+import { UseReferralCodePrompt } from "./UseReferralCodePrompt"
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
 
 const SideTop = styled.div`
@@ -60,9 +66,20 @@ const Content = styled(ViewContent)`
 `
 
 export const InitialTopup: React.FC = observer(() => {
-    const { payment } = useStores()
+    const { payment, onboarding } = useStores()
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
+    }
+    const [referralPrompt, setReferralPrompt] = useState(false)
+    const handleUseReferralCode = () => {
+        setReferralPrompt(true)
+    }
+    const handleReferralSubmit = async ({ code }: { code: string }) => {
+        setReferralPrompt(false)
+        await onboarding.registerWithReferralCode(code)
+    }
+    const handleReferralCancel = () => {
+        setReferralPrompt(false)
     }
     return (
         <ViewContainer>
@@ -75,7 +92,7 @@ export const InitialTopup: React.FC = observer(() => {
                         <Small>Top up your wallet now to complete the registration</Small>
                     </SideTop>
                     <SideBot>
-                        <PrimarySidebarActionButton style={{ maxHeight: 100 }} onClick={handleTopupNow}>
+                        <PrimarySidebarActionButton onClick={handleTopupNow}>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faWallet} />
@@ -83,6 +100,14 @@ export const InitialTopup: React.FC = observer(() => {
                                 Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
+                        <SecondarySidebarActionButton onClick={handleUseReferralCode}>
+                            <ButtonContent>
+                                <ButtonIcon>
+                                    <FontAwesomeIcon icon={faUserFriends} />
+                                </ButtonIcon>
+                                Use a Referral code
+                            </ButtonContent>
+                        </SecondarySidebarActionButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
@@ -94,6 +119,11 @@ export const InitialTopup: React.FC = observer(() => {
                         renderer="svg"
                     />
                 </Content>
+                <UseReferralCodePrompt
+                    visible={referralPrompt}
+                    onSubmit={handleReferralSubmit}
+                    onCancel={handleReferralCancel}
+                />
             </ViewSplit>
         </ViewContainer>
     )

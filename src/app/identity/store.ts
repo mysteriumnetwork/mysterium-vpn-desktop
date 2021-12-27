@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
-import { action, computed, makeObservable, observable, reaction, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, reaction, runInAction, toJS } from "mobx"
 import retry from "async-retry"
 import _ from "lodash"
 
@@ -18,8 +18,15 @@ import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
+import { locations } from "../navigation/locations"
 
-import { registered } from "./identity"
+const registrationPossible = (status: IdentityRegistrationStatus): boolean => {
+    return ![
+        IdentityRegistrationStatus.Registered,
+        IdentityRegistrationStatus.InProgress,
+        IdentityRegistrationStatus.Unknown,
+    ].includes(status)
+}
 
 export class IdentityStore {
     loading = false
@@ -89,21 +96,37 @@ export class IdentityStore {
                 reportBalanceUpdate(this.root.identity.identity?.balance ?? 0)
             },
         )
-        reaction(
-            () => this.identity?.balance,
-            async (balance) => {
-                if (!this.identity) {
-                    return
-                }
-                if (registered(this.identity)) {
-                    return
-                }
-                if (!balance) {
-                    return
-                }
-                await this.register(this.identity)
-            },
-        )
+        reaction(() => this.identity?.balance, this.registerOnBalanceChange)
+        reaction(() => this.identity?.registrationStatus, this.navigateOnStatusChange)
+    }
+
+    registerOnBalanceChange = async (balance?: number): Promise<void> => {
+        if (!this.identity) {
+            return
+        }
+        if (!registrationPossible(this.identity.registrationStatus)) {
+            return
+        }
+        if (!balance) {
+            return
+        }
+        if (balance < (this.root.payment.registrationFee ?? 0)) {
+            log.info("Balance is insufficient to register")
+            return
+        }
+        log.info("Balance is sufficient for registration")
+        return await this.register(this.identity)
+    }
+
+    navigateOnStatusChange = (status?: IdentityRegistrationStatus): void => {
+        switch (status) {
+            case IdentityRegistrationStatus.InProgress:
+            case IdentityRegistrationStatus.RegistrationError:
+                this.root.router.push(locations.registering)
+                return
+            case IdentityRegistrationStatus.Registered:
+                this.root.router.push(locations.proposals)
+        }
     }
 
     async hasIdentities(): Promise<boolean> {
@@ -112,9 +135,11 @@ export class IdentityStore {
     }
 
     async loadIdentity(): Promise<void> {
+        log.info("Loading identity")
         const identity = await this.fetchIdentity()
         this.setIdentity(identity)
-        return await this.unlock()
+        await this.unlock()
+        log.info("Identity loaded:", identity)
     }
 
     get identityExists(): boolean {
@@ -178,7 +203,36 @@ export class IdentityStore {
         }
     }
 
+    async registerIfNeeded(): Promise<void> {
+        if (!this.identity) {
+            log.info("No ID")
+            return
+        }
+        const { id, registrationStatus: status, balance } = this.identity
+        if (!registrationPossible(status)) {
+            log.info(`Status ${status} cannot be registered`) // Identity is already registered or status is unknown
+            return
+        }
+        const eligibleForFreeRegistration = await tequilapi.freeRegistrationEligibility(id).then((res) => res.eligible)
+        log.info("Free registration eligibility:", eligibleForFreeRegistration)
+        if (eligibleForFreeRegistration) {
+            log.info("Attempting to register for free")
+            await this.register(this.identity)
+            return
+        }
+        await this.root.payment.fetchTransactorFees()
+        log.info("Registration fee:", this.root.payment.registrationFee)
+
+        if (balance < (this.root.payment.registrationFee ?? 0)) {
+            log.info("Balance is insufficient to register")
+            return
+        }
+        log.info("Balance is sufficient for registration")
+        await this.register(this.identity)
+    }
+
     async register(id: Identity, referralToken?: string): Promise<void> {
+        log.info("Registering MysteriumID: ", toJS(id), referralToken ? `token: ${referralToken}` : "")
         await this.root.payment.fetchTransactorFees()
         try {
             await tequilapi.identityRegister(id.id, { stake: 0, referralToken })

@@ -1107,10 +1107,10 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.0.11.tgz#03e6528c16b664bcfdcedfec72da0d9d7bda9539"
-  integrity sha512-bvDctFOAwxeRdQD614Hw/gHoLp9alVYuTLSNXHPVgqTas6uBU7c8qmL/q5gTH8ct32POLl124qbe25YZKfnaLA==
+"@mysteriumnetwork/node@1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.0.18.tgz#e65a9536d48485dff9352edb5fa859cb881d5871"
+  integrity sha512-s56LOWoqWpfB68YtliJHf63BckdAyQG+nC8Ecfy9jJCB70Fc7f20rIbR+kxbZQnHDZaWRSGontnExX8wWQOnRg==
   dependencies:
     extract-zip "^2.0.0"
     follow-redirects "^1.5.2"
@@ -7385,10 +7385,10 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
-mysterium-vpn-js@18.3.0:
-  version "18.3.0"
-  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-18.3.0.tgz#389300717dd51cd65f65e94064ebca3fa4ff0e2f"
-  integrity sha512-56lxHfHklemFAX1GUiE2TRLhRcfT+OuyLsfwaQl7oOofq5DK77DKY492bde6LAHrSkYJtpBgxgvP4n6JBs8MqA==
+mysterium-vpn-js@^18.5.0:
+  version "18.5.0"
+  resolved "https://registry.yarnpkg.com/mysterium-vpn-js/-/mysterium-vpn-js-18.5.0.tgz#f8741ec5d4ac4f5851cad4ec056cd21e2d4077cb"
+  integrity sha512-ebdrygqc6oiVGs0numaNRYZb2zZgyRWbkbhMhP7c7BmnpMTcGDqGtwPHysa4Pn8VepolCQ+JyzecrDKiQoB+rQ==
   dependencies:
     "@alloc/quick-lru" "^5.2.0"
     axios "^0.21.1"

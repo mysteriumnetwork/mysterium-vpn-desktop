@@ -106,9 +106,7 @@ export class ConnectionStore {
         )
         reaction(
             () => this.root.connection.status,
-            () => {
-                this.root.navigation.determineRoute()
-            },
+            (status) => this.root.navigation.navigateOnConnectionStatus(status),
         )
         reaction(
             () => this.root.daemon.status,
