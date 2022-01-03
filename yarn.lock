@@ -1260,10 +1260,10 @@
     "@sentry/utils" "6.7.1"
     tslib "^1.9.3"
 
-"@sentry/cli@^1.68.0":
-  version "1.68.0"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.68.0.tgz#2ced8fac67ee01e746a45e8ee45a518d4526937e"
-  integrity sha512-zc7+cxKDqpHLREGJKRH6KwE8fZW8bnczg3OLibJ0czleXoWPdAuOK1Xm1BTMcOnaXfg3VKAh0rI7S1PTdj+SrQ==
+"@sentry/cli@^1.71.0":
+  version "1.71.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.71.0.tgz#1e33e05d7651b68f501764ab24dce3d5932b195d"
+  integrity sha512-Z8TzH7PkiRfjWSzjXOfPWWp6wxjr+n39Jdrt26OcInVQZM1sx/gZULrDiQZ1L2dy9Fe9AR4SF4nt2/7h2GmLQQ==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -1283,10 +1283,10 @@
     "@sentry/utils" "6.7.1"
     tslib "^1.9.3"
 
-"@sentry/electron@^2.5.3":
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.5.3.tgz#28b2e52bc82d57cb0f3623339e1fe4cbafa07b20"
-  integrity sha512-WxfLd8Q9ddk38TUTscahh594MugHNBsN5/82gBhIdPwjKnd4JtuD+BAeZfz0ihe7xhP07SNSkkAszmFOIGnTcg==
+"@sentry/electron@^2.5.4":
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/@sentry/electron/-/electron-2.5.4.tgz#337b2f7e228e805a3e4eb3611c7b12c6cf87c618"
+  integrity sha512-tCCK+P581TmdjsDpHBQz7qYcldzGdUk1Fd6FPxPy1JKGzeY4uf/uSLKzR80Lzs5kTpEZFOwiMHSA8yjwFp5qoA==
   dependencies:
     "@sentry/browser" "6.7.1"
     "@sentry/core" "6.7.1"
