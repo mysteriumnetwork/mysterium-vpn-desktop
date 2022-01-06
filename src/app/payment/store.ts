@@ -24,10 +24,12 @@ import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { parseError } from "../../shared/errors/parseError"
 import { MainIpcListenChannels } from "../../shared/ipc"
+import { topupSteps } from "../navigation/locations"
 
 import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
 import { mystToUSD } from "./rate"
+import { Gateway, PaymentMethod, PaymentMethodName, SUPPORTED_METHODS } from "./methods"
 
 export enum OrderStatus {
     PENDING,
@@ -35,31 +37,9 @@ export enum OrderStatus {
     FAILED,
 }
 
-export enum PaymentType {
-    FIAT = "fiat",
-    CRYPTO = "crypto",
-}
-
-export const SUPPORTED_PAYMENT_METHODS: { [val: string]: PaymentMethod } = {
-    COINGATE: {
-        gateway: "coingate",
-        type: PaymentType.CRYPTO,
-        display: "Crypto",
-        currencies: [], // returned from backend
-    },
-    CARDINITY: {
-        gateway: "cardinity",
-        type: PaymentType.FIAT,
-        display: "Credit card",
-        currencies: [],
-    },
-}
-
-export interface PaymentMethod {
-    gateway: string
-    type: PaymentType
-    display: string
-    currencies: string[]
+export enum MystChain {
+    POLYGON = "polygon",
+    ETHEREUM = "ethereum",
 }
 
 export class PaymentStore {
@@ -74,7 +54,9 @@ export class PaymentStore {
     topupAmount?: number
     paymentMethod?: PaymentMethod
     paymentGateways?: PaymentGateway[]
+    paymentMethods: PaymentMethod[] = []
     paymentCurrency?: string
+    chain?: MystChain
     taxCountry?: string
     lightningNetwork = false
     order?: PaymentOrder
@@ -91,9 +73,10 @@ export class PaymentStore {
 
             paymentGateways: observable,
             orderOptions: computed,
-            paymentMethods: computed,
+            paymentMethods: observable,
 
             paymentCurrency: observable,
+            chain: observable,
             taxCountry: observable,
             lightningNetwork: observable,
             order: observable,
@@ -105,6 +88,8 @@ export class PaymentStore {
             orderStatus: computed,
             downloadInvoice: action,
             clearOrder: action,
+            clearPaymentOptions: action,
+            onPaymentMethodChosen: action,
             setPaymentMethod: action,
             setPaymentCurrency: action,
             setLightningNetwork: action,
@@ -152,65 +137,56 @@ export class PaymentStore {
         runInAction(() => {
             this.paymentGateways = gateways
         })
+        runInAction(() => {
+            this.paymentMethods = Object.keys(SUPPORTED_METHODS)
+                .map((name) => {
+                    const meta = SUPPORTED_METHODS[name]
+                    const gatewayData =
+                        this.paymentGateways?.find((gw) => gw.name === meta.gateway) ??
+                        ({
+                            name: "",
+                            currencies: [],
+                            orderOptions: { suggested: [], minimum: 0 },
+                        } as PaymentGateway)
+                    return { name, ...meta, gatewayData } as PaymentMethod
+                })
+                .sort((a, b) => (a < b ? -1 : 1))
+        })
     }
 
     get orderOptions(): number[] {
-        if (!this.paymentGateways) {
-            return []
-        }
-        const gw = this.paymentGateways
-            .slice()
-            .sort((a, b) => (a.orderOptions.suggested[0] < b.orderOptions.suggested[0] ? 1 : -1))[0]
-        return gw.orderOptions.suggested.slice(0, 6)
-    }
-
-    get paymentMethods(): PaymentMethod[] {
-        return (
-            (this.paymentGateways || [])
-                .map((gw) => {
-                    const match = Object.values(SUPPORTED_PAYMENT_METHODS).find((m) => m.gateway === gw.name)
-                    if (!match) {
-                        return undefined
-                    }
-                    return {
-                        gateway: gw.name,
-                        currencies: gw.currencies,
-                        type: match.type,
-                        display: match.display,
-                    }
-                })
-                .filter(Boolean) as PaymentMethod[]
-        ).sort((a, b) => a.type.localeCompare(b.type))
+        return this.paymentMethod?.gatewayData.orderOptions.suggested ?? []
     }
 
     buildCallerData(): CreatePaymentOrderRequest["gatewayCallerData"] {
-        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
-            return {
-                lightningNetwork: this.lightningNetwork,
-            }
-        }
-        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
-            return {
-                country: this.taxCountry,
-            }
+        switch (this.paymentMethod?.gateway) {
+            case Gateway.COINGATE:
+                return {
+                    lightningNetwork: this.lightningNetwork,
+                }
+            case Gateway.CARDINITY:
+                return {
+                    country: this.taxCountry,
+                }
         }
         throw new Error("Unsupported payment gateway")
     }
+
     validateOrderResponse(order: PaymentOrder): void {
-        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
-            if (!order.publicGatewayData?.paymentAddress) {
-                throw new Error("Could not retrieve payment address")
-            }
-            if (!order.publicGatewayData?.paymentUrl) {
-                throw new Error("Could not retrieve payment URL")
-            }
-            return
-        }
-        if (this.paymentMethod?.gateway === SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
-            if (!order.publicGatewayData?.secureForm) {
-                throw new Error("Could not retrieve secure form for payment")
-            }
-            return
+        switch (this.paymentMethod?.gateway) {
+            case Gateway.COINGATE:
+                if (!order.publicGatewayData?.paymentAddress) {
+                    throw new Error("Could not retrieve payment address")
+                }
+                if (!order.publicGatewayData?.paymentUrl) {
+                    throw new Error("Could not retrieve payment URL")
+                }
+                return
+            case Gateway.CARDINITY:
+                if (!order.publicGatewayData?.secureForm) {
+                    throw new Error("Could not retrieve secure form for payment")
+                }
+                return
         }
     }
 
@@ -315,16 +291,37 @@ export class PaymentStore {
 
     async startTopupFlow(location: string): Promise<void> {
         await Promise.all([this.fetchPaymentGateways(), this.fetchMystToUsdRate()])
+        this.setPaymentMethod(undefined)
+        this.clearPaymentOptions()
         this.clearOrder()
         this.root.router.push(location)
+    }
+
+    async onPaymentMethodChosen(): Promise<void> {
+        this.clearPaymentOptions()
+        this.clearOrder()
+        switch (this.paymentMethod?.name) {
+            case PaymentMethodName.COINGATE:
+                this.root.router.pushRelative(topupSteps.coingate)
+                break
+            case PaymentMethodName.CARDINITY:
+                this.root.router.pushRelative(topupSteps.cardinity)
+                break
+            case PaymentMethodName.MYST:
+                this.root.router.pushRelative(topupSteps.mystChooseChain)
+                break
+        }
     }
 
     clearOrder(): void {
         this.order = undefined
         this.orderExpiresAt = undefined
-        this.setPaymentMethod(undefined)
+    }
+
+    clearPaymentOptions(): void {
         this.setPaymentCurrency(undefined)
         this.setLightningNetwork(false)
+        this.setChain(undefined)
         this.setTopupAmount(undefined)
     }
 
@@ -335,6 +332,10 @@ export class PaymentStore {
     setPaymentCurrency = (currency?: string): void => {
         this.paymentCurrency = currency
         this.lightningNetwork = isLightningAvailable(currency)
+    }
+
+    setChain = (chain?: MystChain): void => {
+        this.chain = chain
     }
 
     setTaxCountry = (country?: string): void => {

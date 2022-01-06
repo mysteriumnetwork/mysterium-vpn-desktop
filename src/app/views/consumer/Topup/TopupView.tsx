@@ -10,7 +10,6 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom"
 
 import { topupSteps } from "../../../navigation/locations"
 
-import { TopupSelectAmount } from "./TopupSelectAmount"
 import { CoingatePaymentOptions } from "./coingate/CoingatePaymentOptions"
 import { CoingateWaitingForPayment } from "./coingate/CoingateWaitingForPayment"
 import { TopupSuccess } from "./TopupSuccess"
@@ -20,26 +19,25 @@ import { CardinityPaymentOptions } from "./cardinity/CardinityPaymentOptions"
 import { CardinityWaitingForPayment } from "./cardinity/CardinityWaitingForPayment"
 import { CardinityOrderSummary } from "./cardinity/CardinityOrderSummary"
 import { CoingateOrderSummary } from "./coingate/CoingateOrderSummary"
+import { MystChooseChain } from "./myst/MystChooseChain"
+import { CoingateSelectAmount } from "./coingate/CoingateSelectAmount"
+import { CardinitySelectAmount } from "./cardinity/CardinitySelectAmount"
+import { MystSelectAmount } from "./myst/MystSelectAmount"
 
 export const TopupView: React.FC = observer(() => {
     const { url } = useRouteMatch()
     return (
         <>
             <Switch>
-                <Route path={"*/" + topupSteps.selectAmount}>
-                    <TopupSelectAmount />
-                </Route>
                 <Route path={"*/" + topupSteps.chooseMethod}>
                     <TopupChooseMethod />
                 </Route>
-                <Route path={"*/" + topupSteps.cardinityPaymentOptions}>
-                    <CardinityPaymentOptions />
+
+                <Route path={"*/" + topupSteps.coingate}>
+                    <Redirect to={`${url}/${topupSteps.coingateSelectAmount}`} />
                 </Route>
-                <Route path={"*/" + topupSteps.cardinityOrderSummary}>
-                    <CardinityOrderSummary />
-                </Route>
-                <Route path={"*/" + topupSteps.cardinityWaitingForPayment}>
-                    <CardinityWaitingForPayment />
+                <Route path={"*/" + topupSteps.coingateSelectAmount}>
+                    <CoingateSelectAmount />
                 </Route>
                 <Route path={"*/" + topupSteps.coingatePaymentOptions}>
                     <CoingatePaymentOptions />
@@ -50,13 +48,40 @@ export const TopupView: React.FC = observer(() => {
                 <Route path={"*/" + topupSteps.coingateWaitingForPayment}>
                     <CoingateWaitingForPayment />
                 </Route>
+
+                <Route path={"*/" + topupSteps.cardinity}>
+                    <Redirect to={`${url}/${topupSteps.cardinitySelectAmount}`} />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinitySelectAmount}>
+                    <CardinitySelectAmount />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinityPaymentOptions}>
+                    <CardinityPaymentOptions />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinityOrderSummary}>
+                    <CardinityOrderSummary />
+                </Route>
+                <Route path={"*/" + topupSteps.cardinityWaitingForPayment}>
+                    <CardinityWaitingForPayment />
+                </Route>
+
+                <Route path={"*/" + topupSteps.myst}>
+                    <Redirect to={`${url}/${topupSteps.mystChooseChain}`} />
+                </Route>
+                <Route path={"*/" + topupSteps.mystChooseChain}>
+                    <MystChooseChain />
+                </Route>
+                <Route path={"*/" + topupSteps.mystSelectAmount}>
+                    <MystSelectAmount />
+                </Route>
+
                 <Route path={"*/" + topupSteps.success}>
                     <TopupSuccess />
                 </Route>
                 <Route path={"*/" + topupSteps.failed}>
                     <TopupFailed />
                 </Route>
-                <Redirect to={`${url}/select-amount`} />
+                <Redirect to={`${url}/${topupSteps.chooseMethod}`} />
             </Switch>
         </>
     )

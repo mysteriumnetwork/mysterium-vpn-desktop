@@ -8,8 +8,6 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCreditCard, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
-import { faBitcoin } from "@fortawesome/free-brands-svg-icons"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -24,8 +22,7 @@ import { brandLight, lightBlue } from "../../../ui-kit/colors"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
-import { PaymentMethod, PaymentType, SUPPORTED_PAYMENT_METHODS } from "../../../payment/store"
-import { topupSteps } from "../../../navigation/locations"
+import { PaymentMethod } from "../../../payment/methods"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -67,28 +64,16 @@ export const TopupChooseMethod: React.FC = observer(() => {
     const { payment, router } = useStores()
 
     const isOptionActive = (pm: PaymentMethod): boolean => {
-        return payment.paymentMethod?.gateway === pm.gateway
+        return payment.paymentMethod?.name === pm.name
     }
     const selectOption = (pm: PaymentMethod) => () => {
         payment.setPaymentMethod(pm)
-    }
-
-    const handleNextClick = () => {
-        payment.setPaymentCurrency(undefined)
-        if (payment.paymentMethod?.gateway == SUPPORTED_PAYMENT_METHODS.COINGATE.gateway) {
-            router.pushRelative(topupSteps.coingatePaymentOptions)
-            return
-        }
-        if (payment.paymentMethod?.gateway == SUPPORTED_PAYMENT_METHODS.CARDINITY.gateway) {
-            router.pushRelative(topupSteps.cardinityPaymentOptions)
-            return
-        }
     }
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <StepProgressBar step={1} />
+                    <StepProgressBar step={0} />
                 </div>
             </ViewNavBar>
             <ViewSplit>
@@ -100,32 +85,23 @@ export const TopupChooseMethod: React.FC = observer(() => {
                     </SideTop>
                     <SideBot>
                         {payment.paymentMethods.map((pm) => {
-                            let methodIcon = faQuestionCircle
-                            switch (pm.type) {
-                                case PaymentType.CRYPTO:
-                                    methodIcon = faBitcoin
-                                    break
-                                case PaymentType.FIAT:
-                                    methodIcon = faCreditCard
-                                    break
-                            }
                             return (
                                 <MethodToggle
-                                    key={pm.gateway}
+                                    key={pm.name}
                                     inactiveColor={lightBlue}
                                     height="63px"
                                     justify="center"
                                     active={isOptionActive(pm)}
                                     onClick={selectOption(pm)}
                                 >
-                                    <FontAwesomeIcon icon={methodIcon} fixedWidth size="sm" pull="left" />
-                                    {pm.display}
+                                    <FontAwesomeIcon icon={pm.icon ?? "question"} fixedWidth size="sm" pull="left" />
+                                    {pm.displayText}
                                 </MethodToggle>
                             )
                         })}
                         <BrandButton
                             style={{ marginTop: "auto" }}
-                            onClick={handleNextClick}
+                            onClick={() => payment.onPaymentMethodChosen()}
                             disabled={!payment.paymentMethod}
                         >
                             Next
