@@ -60,6 +60,7 @@ export const topupSteps = {
     myst: "myst", // entry point - redirects
     mystChooseChain: "myst-choose-chain",
     mystSelectAmount: "myst-select-amount",
+    mystPolygonWaitingForPayment: "myst-polygon-waiting-for-payment",
     success: "success",
     failed: "failed",
 }

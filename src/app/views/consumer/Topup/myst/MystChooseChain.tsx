@@ -71,6 +71,7 @@ export const MystChooseChain: React.FC = observer(() => {
     const handleNextClick = async () => {
         switch (payment.chain) {
             case MystChain.POLYGON:
+                router.pushRelative(topupSteps.mystPolygonWaitingForPayment)
                 break
             case MystChain.ETHEREUM:
                 payment.setPaymentCurrency(Currency.MYST)

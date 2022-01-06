@@ -23,6 +23,7 @@ import { MystChooseChain } from "./myst/MystChooseChain"
 import { CoingateSelectAmount } from "./coingate/CoingateSelectAmount"
 import { CardinitySelectAmount } from "./cardinity/CardinitySelectAmount"
 import { MystSelectAmount } from "./myst/MystSelectAmount"
+import { MystPolygonWaitingForPayment } from "./myst/MystPolygonWaitingForPayment"
 
 export const TopupView: React.FC = observer(() => {
     const { url } = useRouteMatch()
@@ -73,6 +74,9 @@ export const TopupView: React.FC = observer(() => {
                 </Route>
                 <Route path={"*/" + topupSteps.mystSelectAmount}>
                     <MystSelectAmount />
+                </Route>
+                <Route path={"*/" + topupSteps.mystPolygonWaitingForPayment}>
+                    <MystPolygonWaitingForPayment />
                 </Route>
 
                 <Route path={"*/" + topupSteps.success}>

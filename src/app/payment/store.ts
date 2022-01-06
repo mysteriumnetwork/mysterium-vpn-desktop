@@ -94,6 +94,7 @@ export class PaymentStore {
             setPaymentCurrency: action,
             setLightningNetwork: action,
             setTopupAmount: action,
+            refreshBalance: action,
         })
         this.root = root
     }
@@ -369,5 +370,13 @@ export class PaymentStore {
             logErrorMessage("Failed to estimate entertainment for amount: " + amount, msg)
             return undefined
         }
+    }
+
+    refreshBalance = async (): Promise<void> => {
+        const id = this.root.identity.identity?.id
+        if (!id) {
+            return
+        }
+        await tequilapi.identityBalanceRefresh(id)
     }
 }
