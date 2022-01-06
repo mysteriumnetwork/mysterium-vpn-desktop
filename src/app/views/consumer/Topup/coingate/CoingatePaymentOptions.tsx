@@ -103,7 +103,7 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
             toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
         }
     }
-    const options = payment.paymentMethod?.gatewayData.currencies || []
+    const options = payment.paymentMethod?.gatewayData.currencies.filter((it) => it !== Currency.MYST) || []
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
