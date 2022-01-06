@@ -9,24 +9,24 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
 
-import { useStores } from "../../../store"
-import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
-import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
-import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
-import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
-import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
-import { IconWallet } from "../../../ui-kit/icons/IconWallet"
-import { Heading1, Heading2, Paragraph, Small } from "../../../ui-kit/typography"
-import { brandLight, lightBlue } from "../../../ui-kit/colors"
-import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
-import { displayUSD } from "../../../payment/display"
-import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
-import { topupSteps } from "../../../navigation/locations"
-import { IconPlay } from "../../../ui-kit/icons/IconPlay"
-import { IconMusic } from "../../../ui-kit/icons/IconMusic"
-import { IconCloudDownload } from "../../../ui-kit/icons/IconCloudDownload"
-import { IconDocument } from "../../../ui-kit/icons/IconDocument"
+import { useStores } from "../../../../store"
+import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
+import { ViewContainer } from "../../../../navigation/components/ViewContainer/ViewContainer"
+import { ViewNavBar } from "../../../../navigation/components/ViewNavBar/ViewNavBar"
+import { ViewSplit } from "../../../../navigation/components/ViewSplit/ViewSplit"
+import { ViewSidebar } from "../../../../navigation/components/ViewSidebar/ViewSidebar"
+import { ViewContent } from "../../../../navigation/components/ViewContent/ViewContent"
+import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
+import { Heading1, Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
+import { brandLight, lightBlue } from "../../../../ui-kit/colors"
+import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
+import { displayUSD } from "../../../../payment/display"
+import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { IconPlay } from "../../../../ui-kit/icons/IconPlay"
+import { IconMusic } from "../../../../ui-kit/icons/IconMusic"
+import { IconCloudDownload } from "../../../../ui-kit/icons/IconCloudDownload"
+import { IconDocument } from "../../../../ui-kit/icons/IconDocument"
+import { topupSteps } from "../../../../navigation/locations"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -114,7 +114,7 @@ const EntertainmentExplanation = styled(Paragraph)`
     opacity: 0.7;
 `
 
-export const TopupSelectAmount: React.FC = observer(() => {
+export const CoingateSelectAmount: React.FC = observer(() => {
     const { payment, router } = useStores()
     const isOptionActive = (amt: number) => {
         return payment.topupAmount == amt
@@ -128,15 +128,14 @@ export const TopupSelectAmount: React.FC = observer(() => {
             payment.estimateEntertainment(payment.topupAmount).then((res) => setEstimates(res))
         }
     }, [payment.topupAmount])
-    const handleNextClick = () => {
-        payment.setPaymentMethod(undefined)
-        router.pushRelative(topupSteps.chooseMethod)
+    const handleNextClick = async () => {
+        router.pushRelative(topupSteps.coingatePaymentOptions)
     }
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => router.history?.goBack()}>
                 <div style={{ width: 375, textAlign: "center" }}>
-                    <StepProgressBar step={0} />
+                    <StepProgressBar step={1} />
                 </div>
             </ViewNavBar>
             <ViewSplit>
@@ -150,7 +149,7 @@ export const TopupSelectAmount: React.FC = observer(() => {
                     </SideTop>
                     <SideBot>
                         <AmountSelect>
-                            {payment.orderOptions.map((opt) => (
+                            {payment.paymentMethod?.gatewayData.orderOptions.suggested.map((opt) => (
                                 <AmountToggle
                                     key={opt}
                                     active={isOptionActive(opt)}

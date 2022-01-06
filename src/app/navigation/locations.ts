@@ -46,14 +46,21 @@ export const locations = {
 }
 
 export const topupSteps = {
-    selectAmount: "select-amount",
     chooseMethod: "choose-method",
-    cardinityPaymentOptions: "cardinity-payment-options",
-    cardinityOrderSummary: "cardinity-order-summary",
-    cardinityWaitingForPayment: "cardinity-waiting-for-payment",
+    coingate: "coingate", // entry point - redirects
+    coingateSelectAmount: "coingate-select-amount",
     coingatePaymentOptions: "coingate-payment-options",
     coingateOrderSummary: "coingate-order-summary",
     coingateWaitingForPayment: "coingate-waiting-for-payment",
+    cardinity: "cardinity", // entry point - redirects
+    cardinitySelectAmount: "cardinity-select-amount",
+    cardinityPaymentOptions: "cardinity-payment-options",
+    cardinityOrderSummary: "cardinity-order-summary",
+    cardinityWaitingForPayment: "cardinity-waiting-for-payment",
+    myst: "myst", // entry point - redirects
+    mystChooseChain: "myst-choose-chain",
+    mystSelectAmount: "myst-select-amount",
+    mystPolygonWaitingForPayment: "myst-polygon-waiting-for-payment",
     success: "success",
     failed: "failed",
 }
