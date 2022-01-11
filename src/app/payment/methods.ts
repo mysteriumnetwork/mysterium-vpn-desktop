@@ -8,7 +8,7 @@
 import { PaymentGateway } from "mysterium-vpn-js"
 import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons"
-import { faCreditCard, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons"
 
 export enum PaymentMethodName {
     COINGATE = "coingate",
@@ -49,7 +49,6 @@ export const SUPPORTED_METHODS: { [key: string]: PaymentMethodMetadata } = {
     [PaymentMethodName.MYST]: {
         displayOrder: 2,
         displayText: "MYST",
-        icon: faQuestionCircle,
         gateway: "coingate",
     },
 }

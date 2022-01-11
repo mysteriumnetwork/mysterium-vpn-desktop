@@ -94,7 +94,7 @@ export const TopupChooseMethod: React.FC = observer(() => {
                                     active={isOptionActive(pm)}
                                     onClick={selectOption(pm)}
                                 >
-                                    <FontAwesomeIcon icon={pm.icon ?? "question"} fixedWidth size="sm" pull="left" />
+                                    {pm.icon && <FontAwesomeIcon icon={pm.icon} fixedWidth size="sm" pull="left" />}
                                     {pm.displayText}
                                 </MethodToggle>
                             )
