@@ -22,6 +22,7 @@ export interface Config {
             "price-hour-max"?: number
         }
     }
+    "keep-connected-on-fail"?: boolean
 }
 
 export interface DesktopConfig {
@@ -65,7 +66,8 @@ export class ConfigStore {
             config: observable,
             loaded: observable,
             loadConfig: action,
-            updateConfigPartial: action,
+            updateDesktopConfigPartial: action,
+            updateNodeConfigPartial: action,
             persistConfig: action,
             persistConfigDebounced: action,
 
@@ -79,6 +81,8 @@ export class ConfigStore {
             setOnboarded: action,
             quickConnect: computed,
             setQuickConnect: action,
+            killSwitch: computed,
+            setKillSwitch: action,
         })
     }
 
@@ -96,8 +100,13 @@ export class ConfigStore {
         })
     }
 
-    updateConfigPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
+    updateDesktopConfigPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
         this.config.desktop = _.merge({}, this.config.desktop, desktopConfig)
+        return this.persistConfigDebounced()
+    }
+
+    updateNodeConfigPartial = async (config: Partial<Config>): Promise<void> => {
+        this.config = _.merge({}, this.config, config)
         return this.persistConfigDebounced()
     }
 
@@ -118,7 +127,7 @@ export class ConfigStore {
     }
 
     agreeToTerms = async (): Promise<void> => {
-        await this.updateConfigPartial({
+        await this.updateDesktopConfigPartial({
             "terms-agreed": {
                 version: termsPackageJson.version,
                 at: new Date().toISOString(),
@@ -136,7 +145,7 @@ export class ConfigStore {
     }
 
     setOnboarded = async (): Promise<void> => {
-        return this.updateConfigPartial({ onboarded: true })
+        return this.updateDesktopConfigPartial({ onboarded: true })
     }
 
     get dnsOption(): DNSOption {
@@ -144,7 +153,7 @@ export class ConfigStore {
     }
 
     setDnsOption = async (dns: string): Promise<void> => {
-        return this.updateConfigPartial({ dns })
+        return this.updateDesktopConfigPartial({ dns })
     }
 
     get autoNATCompatibility(): boolean {
@@ -152,7 +161,7 @@ export class ConfigStore {
     }
 
     setAutoNATCompatibility = async (enabled: boolean): Promise<void> => {
-        return this.updateConfigPartial({ "nat-compatibility": enabled ? "auto" : "off" })
+        return this.updateDesktopConfigPartial({ "nat-compatibility": enabled ? "auto" : "off" })
     }
 
     get quickConnect(): boolean {
@@ -160,6 +169,16 @@ export class ConfigStore {
     }
 
     setQuickConnect = async (enabled: boolean): Promise<void> => {
-        return this.updateConfigPartial({ "quick-connect": enabled })
+        return this.updateDesktopConfigPartial({ "quick-connect": enabled })
+    }
+
+    get killSwitch(): boolean {
+        return this.config["keep-connected-on-fail"] === true
+    }
+
+    setKillSwitch = async (enabled: boolean): Promise<void> => {
+        return this.updateNodeConfigPartial({
+            "keep-connected-on-fail": enabled,
+        })
     }
 }

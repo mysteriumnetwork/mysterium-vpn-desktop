@@ -10,12 +10,9 @@ import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { MainIpcListenChannels } from "../../shared/ipc"
+import { connectionInProgress } from "../connection/status"
 
 import { locations } from "./locations"
-
-const connectionInProgress = (status: ConnectionStatus): boolean => {
-    return [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)
-}
 
 export class NavigationStore {
     welcome = true

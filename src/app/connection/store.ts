@@ -85,13 +85,9 @@ export class ConnectionStore {
         reaction(
             () => this.status,
             async (status) => {
-                switch (status) {
-                    case ConnectionStatus.CONNECTED:
-                        break
-                    case ConnectionStatus.DISCONNECTING:
-                        break
+                if ([ConnectionStatus.CONNECTING, ConnectionStatus.DISCONNECTING].includes(status)) {
+                    this.resetLocation()
                 }
-                this.resetLocation()
                 if ([ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED].includes(status)) {
                     await this.resolveLocation()
                 }

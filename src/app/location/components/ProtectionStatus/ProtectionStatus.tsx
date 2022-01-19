@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { observer } from "mobx-react-lite"
-import { ConnectionStatus } from "mysterium-vpn-js"
 import React from "react"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
 import { brand } from "../../../ui-kit/colors"
+import { connectionActive } from "../../../connection/status"
 
 const Status = styled.div<{ isProtected: boolean }>`
     box-sizing: border-box;
@@ -26,6 +26,6 @@ const Status = styled.div<{ isProtected: boolean }>`
 
 export const ProtectionStatus = observer(() => {
     const { connection } = useStores()
-    const isProtected = connection.status === ConnectionStatus.CONNECTED
+    const isProtected = connectionActive(connection.status)
     return <Status isProtected={isProtected}>{isProtected ? "Protected" : "Unprotected"}</Status>
 })
