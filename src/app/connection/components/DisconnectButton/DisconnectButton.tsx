@@ -19,10 +19,11 @@ export const DisconnectButton = observer(() => {
                 return "Connect"
             case ConnectionStatus.CONNECTING:
                 return "Cancel"
+            case ConnectionStatus.CONNECTED:
+            case ConnectionStatus.ON_HOLD:
+                return "Disconnect"
             case ConnectionStatus.DISCONNECTING:
                 return "Disconnecting"
-            case ConnectionStatus.CONNECTED:
-                return "Disconnect"
         }
         return ""
     })()

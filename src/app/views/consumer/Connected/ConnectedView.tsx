@@ -119,6 +119,9 @@ export const ConnectedView: React.FC = observer(() => {
         case ConnectionStatus.CONNECTED:
             statusText = "Connected"
             break
+        case ConnectionStatus.ON_HOLD:
+            statusText = "Connection lost"
+            break
         case ConnectionStatus.DISCONNECTING:
             statusText = "Disconnecting..."
             break

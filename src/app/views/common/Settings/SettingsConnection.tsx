@@ -106,6 +106,27 @@ export const SettingsConnection: React.FC = observer(() => {
                         />
                     </FormValue>
                 </FormRow>
+                <FormRow>
+                    <Tooltip id="kill-switch-tooltip">
+                        <span>
+                            If you lose your VPN connection, a kill switch can automatically disconnect your device from
+                            your internet connection to ensure your privacy remains intact until your VPN connection is
+                            restored.
+                        </span>
+                    </Tooltip>
+                    <FormLabel>
+                        Kill switch <TooltipIcon data-tip="" data-for="kill-switch-tooltip" />
+                    </FormLabel>
+                    <FormValue>
+                        <Checkbox
+                            checked={config.killSwitch}
+                            onChange={(event): void => {
+                                const val = event.target.checked
+                                config.setKillSwitch(val)
+                            }}
+                        />
+                    </FormValue>
+                </FormRow>
             </Section>
         </>
     )

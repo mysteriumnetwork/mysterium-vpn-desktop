@@ -45,7 +45,7 @@ export class Filters {
     }
 
     setPartial = (filters: ProposalFilters): Promise<void> => {
-        return this.root.config.updateConfigPartial({ filters })
+        return this.root.config.updateDesktopConfigPartial({ filters })
     }
 
     get country(): string | undefined {
