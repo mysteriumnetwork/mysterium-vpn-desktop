@@ -30,6 +30,9 @@ const CountryToggle = styled(Toggle).attrs({
 
 const CountryName = styled.div`
     margin-left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `
 
 const Count = styled.span`
