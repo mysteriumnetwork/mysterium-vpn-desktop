@@ -34,7 +34,14 @@ sudo dnf install package-name.rpm
 
 ### macOS
 
-- Install with [Homebrew](https://brew.sh/):
+#### Manual Install
+
+- Download the `.dmg` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+- Open the package and drag `MysteriumVPN.app` onto the `Applications` shortcut
+
+#### Homebrew
+
+- Mysterium VPN can also be installed with [Homebrew](https://brew.sh/):
 
 ```sh
 brew install --cask mysteriumvpn
