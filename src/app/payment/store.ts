@@ -166,6 +166,8 @@ export class PaymentStore {
                 return {
                     lightningNetwork: this.lightningNetwork,
                 }
+            case Gateway.PAYPAL:
+                return {}
             case Gateway.CARDINITY:
                 return {
                     country: this.taxCountry,
@@ -305,6 +307,9 @@ export class PaymentStore {
         switch (this.paymentMethod?.name) {
             case PaymentMethodName.COINGATE:
                 this.root.router.pushRelative(topupSteps.coingate)
+                break
+            case PaymentMethodName.PAYPAL:
+                this.root.router.pushRelative(topupSteps.paypal)
                 break
             case PaymentMethodName.CARDINITY:
                 this.root.router.pushRelative(topupSteps.cardinity)
