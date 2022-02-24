@@ -30,7 +30,7 @@ export class FeedbackStore {
     async reportIssue(issue: Issue): Promise<string> {
         this.setLoading(true)
         try {
-            const issueId = await tequilapi.reportIssue(issue)
+            const issueId = await tequilapi.reportIssueGithub(issue)
             return issueId.issueId
         } catch (err) {
             const msg = parseError(err)

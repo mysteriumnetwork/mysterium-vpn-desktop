@@ -24,6 +24,10 @@ import { CoingateSelectAmount } from "./coingate/CoingateSelectAmount"
 import { CardinitySelectAmount } from "./cardinity/CardinitySelectAmount"
 import { MystSelectAmount } from "./myst/MystSelectAmount"
 import { MystPolygonWaitingForPayment } from "./myst/MystPolygonWaitingForPayment"
+import { PaypalSelectAmount } from "./paypal/PaypalSelectAmount"
+import { PaypalPaymentOptions } from "./paypal/PaypalPaymentOptions"
+import { PaypalOrderSummary } from "./paypal/PaypalOrderSummary"
+import { PaypalWaitingForPayment } from "./paypal/PaypalWaitingForPayment"
 
 export const TopupView: React.FC = observer(() => {
     const { url } = useRouteMatch()
@@ -64,6 +68,22 @@ export const TopupView: React.FC = observer(() => {
                 </Route>
                 <Route path={"*/" + topupSteps.cardinityWaitingForPayment}>
                     <CardinityWaitingForPayment />
+                </Route>
+
+                <Route path={"*/" + topupSteps.paypal}>
+                    <Redirect to={`${url}/${topupSteps.paypalSelectAmount}`} />
+                </Route>
+                <Route path={"*/" + topupSteps.paypalSelectAmount}>
+                    <PaypalSelectAmount />
+                </Route>
+                <Route path={"*/" + topupSteps.paypalPaymentOptions}>
+                    <PaypalPaymentOptions />
+                </Route>
+                <Route path={"*/" + topupSteps.paypalOrderSummary}>
+                    <PaypalOrderSummary />
+                </Route>
+                <Route path={"*/" + topupSteps.paypalWaitingForPayment}>
+                    <PaypalWaitingForPayment />
                 </Route>
 
                 <Route path={"*/" + topupSteps.myst}>

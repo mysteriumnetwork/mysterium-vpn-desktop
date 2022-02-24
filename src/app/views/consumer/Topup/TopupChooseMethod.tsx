@@ -51,9 +51,9 @@ const Title = styled(Heading2)`
 const TitleDescription = styled(Small)``
 
 const MethodToggle = styled(Toggle).attrs({
-    height: "63px",
+    height: "52px",
 })`
-    height: 63px;
+    height: 52px;
     margin-bottom: 10px;
     font-size: 18px;
     line-height: 21px;
@@ -89,7 +89,6 @@ export const TopupChooseMethod: React.FC = observer(() => {
                                 <MethodToggle
                                     key={pm.name}
                                     inactiveColor={lightBlue}
-                                    height="63px"
                                     justify="center"
                                     active={isOptionActive(pm)}
                                     onClick={selectOption(pm)}

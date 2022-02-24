@@ -7,17 +7,19 @@
 
 import { PaymentGateway } from "mysterium-vpn-js"
 import { IconProp } from "@fortawesome/fontawesome-svg-core"
-import { faBitcoin } from "@fortawesome/free-brands-svg-icons"
+import { faBitcoin, faPaypal } from "@fortawesome/free-brands-svg-icons"
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons"
 
 export enum PaymentMethodName {
     COINGATE = "coingate",
+    PAYPAL = "paypal",
     CARDINITY = "cardinity",
     MYST = "myst",
 }
 
 export enum Gateway {
     COINGATE = "coingate",
+    PAYPAL = "paypal",
     CARDINITY = "cardinity",
 }
 
@@ -40,14 +42,20 @@ export const SUPPORTED_METHODS: { [key: string]: PaymentMethodMetadata } = {
         icon: faBitcoin,
         gateway: "coingate",
     },
-    [PaymentMethodName.CARDINITY]: {
+    [PaymentMethodName.PAYPAL]: {
         displayOrder: 1,
+        displayText: "Paypal",
+        icon: faPaypal,
+        gateway: "paypal",
+    },
+    [PaymentMethodName.CARDINITY]: {
+        displayOrder: 2,
         displayText: "Credit card",
         icon: faCreditCard,
         gateway: "cardinity",
     },
     [PaymentMethodName.MYST]: {
-        displayOrder: 2,
+        displayOrder: 3,
         displayText: "MYST",
         gateway: "coingate",
     },

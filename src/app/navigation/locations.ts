@@ -57,6 +57,11 @@ export const topupSteps = {
     cardinityPaymentOptions: "cardinity-payment-options",
     cardinityOrderSummary: "cardinity-order-summary",
     cardinityWaitingForPayment: "cardinity-waiting-for-payment",
+    paypal: "paypal", // entry point - redirects
+    paypalSelectAmount: "paypal-select-amount",
+    paypalPaymentOptions: "paypal-payment-options",
+    paypalOrderSummary: "paypal-order-summary",
+    paypalWaitingForPayment: "paypal-waiting-for-payment",
     myst: "myst", // entry point - redirects
     mystChooseChain: "myst-choose-chain",
     mystSelectAmount: "myst-select-amount",
