@@ -249,7 +249,7 @@ export class ConnectionStore {
             city: "",
             continent: "",
             isp: "",
-            userType: "",
+            ipType: "",
         })
     }
 
@@ -261,7 +261,7 @@ export class ConnectionStore {
             city: "",
             continent: "",
             isp: "",
-            userType: "",
+            ipType: "",
         }
         const MAX_RETRIES = 5
         await retry(
