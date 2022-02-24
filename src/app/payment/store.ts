@@ -160,7 +160,8 @@ export class PaymentStore {
     }
 
     buildCallerData(): CreatePaymentOrderRequest["gatewayCallerData"] {
-        switch (this.paymentMethod?.gateway) {
+        const gateway = this.paymentMethod?.gateway
+        switch (gateway) {
             case Gateway.COINGATE:
                 return {
                     lightningNetwork: this.lightningNetwork,
@@ -170,7 +171,7 @@ export class PaymentStore {
                     country: this.taxCountry,
                 }
         }
-        throw new Error("Unsupported payment gateway")
+        throw new Error("Unsupported payment gateway: " + gateway)
     }
 
     validateOrderResponse(order: PaymentOrder): void {
