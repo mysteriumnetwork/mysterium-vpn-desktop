@@ -10,12 +10,42 @@ It is the first Mysterium Network use case in action. Our dVPN is our flagship p
 
 ## Usage
 
-You can download the latest version from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases) page. After installation, run MysteriumVPN to get started.
+Download and install the [latest version](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest) for your platform. After installation, run MysteriumVPN to get started.
 
-### Usage: Linux
+### Linux
 
-- Download `*.deb` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
-- Install app with dependencies: `sudo apt install ./name-of-deb-package.deb`
+#### Ubuntu/Debian
+
+- Download the `.deb` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+- Install app with dependencies: 
+
+```sh
+sudo apt install ./package-name.deb
+```
+
+#### CentOS/Fedora/RHEL 
+
+- Download the `.rpm` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+- Install app with dependencies: 
+
+```sh
+sudo dnf install package-name.rpm
+```
+
+### macOS
+
+#### Manual Install
+
+- Download the `.dmg` package from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+- Open the package and drag `MysteriumVPN.app` onto the `Applications` shortcut
+
+#### Homebrew
+
+- Mysterium VPN can also be installed with [Homebrew](https://brew.sh/):
+
+```sh
+brew install --cask mysteriumvpn
+```
 
 ## Logs
 
