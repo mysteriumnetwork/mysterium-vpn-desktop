@@ -110,7 +110,7 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             defaultColumn,
             autoResetSortBy: false,
             initialState: {
-                sortBy: [{ id: "country" }],
+                sortBy: [{ id: "country" }, { id: "quality", desc: true }],
                 hiddenColumns: ["priceHour", "priceGib"],
             },
         },
