@@ -174,7 +174,11 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
                                     className={`th ${
                                         column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
                                     }`}
-                                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                                    {...column.getHeaderProps(
+                                        column.getSortByToggleProps({
+                                            title: column.canSort ? `Sort by ${column.Header}` : undefined,
+                                        }),
+                                    )}
                                 >
                                     {column.render("Header")}
                                 </div>
