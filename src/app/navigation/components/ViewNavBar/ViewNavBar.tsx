@@ -16,11 +16,14 @@ import { Heading2 } from "../../../ui-kit/typography"
 const Container = styled.div`
     box-sizing: border-box;
     height: 58px;
-    padding: 15px;
+    min-height: 58px;
+    max-height: 58px;
+    padding: 0 15px;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: 222px 378px;
+    column-gap: 10px;
     align-items: center;
-    justify-content: space-between;
 `
 
 const BackContainer = styled.div`

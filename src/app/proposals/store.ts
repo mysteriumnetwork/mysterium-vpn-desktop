@@ -30,6 +30,7 @@ export type TransientFilter = {
 export class ProposalStore {
     loading = false
     proposals: UIProposal[] = []
+    allProposals: UIProposal[] = []
     filterPresets: FilterPreset[] = []
     active?: UIProposal
     filter: TransientFilter = {}
@@ -40,6 +41,7 @@ export class ProposalStore {
         makeObservable(this, {
             loading: observable,
             proposals: observable,
+            allProposals: observable,
             filterPresets: observable,
             active: observable,
             filter: observable,
@@ -76,6 +78,13 @@ export class ProposalStore {
                             this.fetchProposalFilterPresets()
                         },
                     )
+                    runInAction(async () => {
+                        this.allProposals = await tequilapi
+                            .findProposals({
+                                includeMonitoringFailed: true,
+                            })
+                            .then((proposals) => proposals.map(newUIProposal))
+                    })
                     setTimeout(() => {
                         this.fetchProposals()
                     }, 8_000)

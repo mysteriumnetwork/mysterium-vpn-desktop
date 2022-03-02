@@ -21,6 +21,7 @@ import { darkBlue } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
 
 import { SwitchConnectView } from "./SwitchConnectView"
+import { ProposalSearch } from "./ProposalSearch"
 
 const Content = styled(ViewContent)`
     background: #fff;
@@ -50,6 +51,16 @@ const SideBot = styled.div`
     flex-direction: column;
 `
 
+const NavContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 80px;
+`
+const NavActions = styled.div`
+    margin-left: auto;
+`
+
 const MainBottom = styled.div`
     margin-top: auto;
     width: 100%;
@@ -60,7 +71,12 @@ export const ManualConnectView: React.FC = observer(() => {
     return (
         <ViewContainer>
             <ViewNavBar>
-                <SwitchConnectView />
+                <NavContainer>
+                    <SwitchConnectView />
+                    <NavActions>
+                        <ProposalSearch />
+                    </NavActions>
+                </NavContainer>
             </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>
