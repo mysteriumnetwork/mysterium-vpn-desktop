@@ -14,6 +14,7 @@ import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons"
 import { UIProposal } from "../../../proposals/uiProposal"
 import { useStores } from "../../../store"
 import { darkBlue } from "../../../ui-kit/colors"
+import { Small } from "../../../ui-kit/typography"
 import { Flag } from "../../../location/components/Flag/Flag"
 
 import Timeout = NodeJS.Timeout
@@ -76,6 +77,16 @@ const ProposalSearchContainer = styled.div`
     }
     & .react-autosuggest__suggestion--highlighted {
         background-color: #ddd;
+    }
+`
+
+const SuggestionHeader = styled.div`
+    height: 20px;
+    display: flex;
+    align-items: center;
+
+    & > span {
+        margin-left: 5px;
     }
 `
 
@@ -149,10 +160,13 @@ export const ProposalSearch: React.FC = observer(() => {
         },
     }
     const renderSuggestion = (s: UIProposal) => (
-        <span>
-            <Flag countryCode={s.country} />
-            {s.ipType} {s.qualityLevel} {s.providerId}
-        </span>
+        <div>
+            <SuggestionHeader>
+                <Flag countryCode={s.country} />
+                <span>{s.ipType}</span>
+            </SuggestionHeader>
+            <Small>{s.providerId}</Small>
+        </div>
     )
 
     // Icons
