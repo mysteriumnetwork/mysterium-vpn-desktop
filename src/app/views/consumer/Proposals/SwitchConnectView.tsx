@@ -14,7 +14,6 @@ import { locations } from "../../../navigation/locations"
 import { brand } from "../../../ui-kit/colors"
 
 const Container = styled.div`
-    width: 378px;
     height: 35px;
     display: flex;
     align-items: center;

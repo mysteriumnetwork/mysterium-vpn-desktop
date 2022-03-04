@@ -85,6 +85,13 @@ const QuickConnectButton = styled(RippleButton)`
     font-size: 18px;
 `
 
+const NavContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 80px;
+`
+
 export const QuickConnectView: React.FC = observer(() => {
     const { proposals, connection } = useStores()
     const handleConnectClick = async (): Promise<void> => {
@@ -109,7 +116,9 @@ export const QuickConnectView: React.FC = observer(() => {
     return (
         <ViewContainer>
             <ViewNavBar>
-                <SwitchConnectView />
+                <NavContainer>
+                    <SwitchConnectView />
+                </NavContainer>
             </ViewNavBar>
             <ViewSplit>
                 <Sidebar>

@@ -47,7 +47,7 @@ export const CountryFilter = observer(() => {
         if (parent) {
             ;(parent as HTMLDivElement).scrollTop = myRef.current?.offsetTop
         }
-    }, [proposals.countryFiltered.length != 0, filters.presetID])
+    }, [proposals.countryFiltered.length != 0, filters.presetID, proposals.suggestion])
     const countryCounts = proposals.countryCounts
     if (!Object.keys(countryCounts).length) {
         return <></>

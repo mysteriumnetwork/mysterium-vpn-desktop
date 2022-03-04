@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
@@ -21,6 +21,7 @@ import { darkBlue } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
 
 import { SwitchConnectView } from "./SwitchConnectView"
+import { ProposalSearch } from "./ProposalSearch"
 
 const Content = styled(ViewContent)`
     background: #fff;
@@ -50,6 +51,16 @@ const SideBot = styled.div`
     flex-direction: column;
 `
 
+const NavContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 80px;
+`
+const NavActions = styled.div`
+    margin-left: auto;
+`
+
 const MainBottom = styled.div`
     margin-top: auto;
     width: 100%;
@@ -57,10 +68,18 @@ const MainBottom = styled.div`
 
 export const ManualConnectView: React.FC = observer(() => {
     const { proposals } = useStores()
+    useEffect(() => {
+        proposals.fetchAllProposalsForQuickSearchDebounced()
+    }, [])
     return (
         <ViewContainer>
             <ViewNavBar>
-                <SwitchConnectView />
+                <NavContainer>
+                    <SwitchConnectView />
+                    <NavActions>
+                        <ProposalSearch />
+                    </NavActions>
+                </NavContainer>
             </ViewNavBar>
             <ViewSplit>
                 <ViewSidebar>

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
@@ -124,6 +124,15 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             setHiddenColumns(["country"])
         }
     }, [filters.country])
+    const listRef = useRef<FixedSizeList>(null)
+    useEffect(() => {
+        if (proposals.suggestion) {
+            const idx = rows.findIndex((row) => row.original.providerId === proposals.suggestion?.providerId)
+            if (idx != -1) {
+                listRef.current?.scrollToItem(idx, "center")
+            }
+        }
+    }, [proposals.suggestion])
     const activeKey = proposals.active?.key
     const renderRow = React.useCallback(
         ({ index, style }): JSX.Element => {
@@ -190,7 +199,13 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
             <div className="tbody" {...getTableBodyProps()}>
                 <AutoSizer>
                     {({ width, height }): JSX.Element => (
-                        <FixedSizeList itemCount={data.length} itemSize={30} width={width} height={height}>
+                        <FixedSizeList
+                            itemCount={data.length}
+                            itemSize={30}
+                            width={width}
+                            height={height}
+                            ref={listRef}
+                        >
                             {renderRow}
                         </FixedSizeList>
                     )}
