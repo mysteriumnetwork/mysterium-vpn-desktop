@@ -160,6 +160,7 @@ export const ProposalSearch: React.FC = observer(() => {
         setVisible(false)
     }
     const openAction = () => {
+        proposals.prepareForQuickSearch()
         setVisible(true)
         setTimeout(() => {
             autosuggestRef?.current?.input?.focus()
@@ -184,6 +185,9 @@ export const ProposalSearch: React.FC = observer(() => {
                             suggestions={suggestions}
                             onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                             onSuggestionsClearRequested={onSuggestionsClearRequested}
+                            onSuggestionSelected={(evt, { suggestion }) => {
+                                proposals.useQuickSearchSuggestion(suggestion)
+                            }}
                             getSuggestionValue={(p: UIProposal) => p.providerId}
                             renderSuggestion={renderSuggestion}
                         />

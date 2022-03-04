@@ -33,6 +33,7 @@ export class ProposalStore {
     allProposals: UIProposal[] = []
     filterPresets: FilterPreset[] = []
     active?: UIProposal
+    suggestion?: UIProposal
     filter: TransientFilter = {}
 
     root: RootStore
@@ -44,9 +45,12 @@ export class ProposalStore {
             allProposals: observable,
             filterPresets: observable,
             active: observable,
+            suggestion: observable,
             filter: observable,
             filters: computed,
             fetchProposals: action,
+            fetchAllProposalsForQuickSearch: action,
+            prepareForQuickSearch: action,
             fetchProposalFilterPresets: action,
             setTextFilter: action,
             textFiltered: computed,
@@ -60,6 +64,7 @@ export class ProposalStore {
             priceCeil: computed,
             toggleActiveProposal: action,
             setActiveProposal: action,
+            useQuickSearchSuggestion: action,
             setLoading: action,
             setProposals: action,
         })
@@ -78,13 +83,6 @@ export class ProposalStore {
                             this.fetchProposalFilterPresets()
                         },
                     )
-                    runInAction(async () => {
-                        this.allProposals = await tequilapi
-                            .findProposals({
-                                includeMonitoringFailed: true,
-                            })
-                            .then((proposals) => proposals.map(newUIProposal))
-                    })
                     setTimeout(() => {
                         this.fetchProposals()
                     }, 8_000)
@@ -256,6 +254,29 @@ export class ProposalStore {
 
     setActiveProposal(proposal?: UIProposal): void {
         this.active = proposal
+    }
+
+    async prepareForQuickSearch(): Promise<void> {
+        if (this.filters.preset?.id) {
+            this.toggleFilterPreset(0)
+        }
+        return await this.fetchAllProposalsForQuickSearchDebounced()
+    }
+
+    fetchAllProposalsForQuickSearchDebounced = _.throttle(this.fetchAllProposalsForQuickSearch, 60_000)
+
+    async fetchAllProposalsForQuickSearch(): Promise<void> {
+        this.allProposals = await tequilapi
+            .findProposals({
+                includeMonitoringFailed: true,
+            })
+            .then((proposals) => proposals.map(newUIProposal))
+    }
+
+    async useQuickSearchSuggestion(proposal?: UIProposal): Promise<void> {
+        await this.setCountryFilter(proposal?.country)
+        this.active = proposal
+        this.suggestion = proposal
     }
 
     setLoading = (b: boolean): void => {

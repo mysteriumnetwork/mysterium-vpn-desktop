@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React from "react"
+import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
@@ -68,6 +68,9 @@ const MainBottom = styled.div`
 
 export const ManualConnectView: React.FC = observer(() => {
     const { proposals } = useStores()
+    useEffect(() => {
+        proposals.fetchAllProposalsForQuickSearchDebounced()
+    }, [])
     return (
         <ViewContainer>
             <ViewNavBar>
