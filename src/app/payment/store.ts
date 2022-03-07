@@ -15,8 +15,8 @@ import {
     PaymentOrder,
 } from "mysterium-vpn-js"
 import retry from "async-retry"
-import { Decimal } from "decimal.js-light"
 import { ipcRenderer } from "electron"
+import BigNumber from "bignumber.js"
 
 import { RootStore } from "../store"
 import { DaemonStatusType } from "../daemon/store"
@@ -26,9 +26,7 @@ import { parseError } from "../../shared/errors/parseError"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { topupSteps } from "../navigation/locations"
 
-import { fmtMoney } from "./display"
 import { isLightningAvailable } from "./currency"
-import { mystToUSD } from "./rate"
 import { Gateway, PaymentMethod, PaymentMethodName, SUPPORTED_METHODS } from "./methods"
 
 export enum OrderStatus {
@@ -82,7 +80,6 @@ export class PaymentStore {
             order: observable,
             fetchTransactorFees: action,
             fetchMystToUsdRate: action,
-            registrationFee: computed,
             createOrder: action,
             openOrderSecureForm: action,
             orderStatus: computed,
@@ -122,15 +119,9 @@ export class PaymentStore {
         })
     }
 
-    get registrationFee(): number | undefined {
-        if (!this.fees) {
-            return undefined
-        }
-        return Number(fmtMoney({ amount: this.fees.registration, currency: Currency.MYST }))
-    }
-
     fiatEquivalent(amount: number): number {
-        return mystToUSD(amount, this.mystToUsdRate?.amount ?? 0) ?? 0
+        const rate = this.mystToUsdRate?.amount ?? 0
+        return new BigNumber(amount).times(rate).toNumber()
     }
 
     async fetchPaymentGateways(): Promise<void> {
@@ -202,7 +193,7 @@ export class PaymentStore {
 
         const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
             country: this.taxCountry || "",
-            mystAmount: new Decimal(this.topupAmount).toFixed(2),
+            mystAmount: new BigNumber(this.topupAmount).toFixed(2),
             payCurrency: this.paymentCurrency,
             gatewayCallerData: this.buildCallerData(),
         })
@@ -357,20 +348,14 @@ export class PaymentStore {
         this.topupAmount = amount
     }
 
-    estimateEntertainment = async (amount: number, big = false): Promise<EntertainmentEstimateResponse | undefined> => {
+    estimateEntertainment = async (amount: number): Promise<EntertainmentEstimateResponse | undefined> => {
         try {
-            let amt = amount
-            if (big) {
-                amt = Number(fmtMoney({ amount, currency: this.appCurrency }))
-            }
-            return await tequilapi
-                .estimateEntertainment({ amount: amt })
-                .then((res: EntertainmentEstimateResponse) => ({
-                    videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
-                    musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
-                    browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
-                    trafficMb: Number((res.trafficMb / 1024).toFixed()),
-                }))
+            return await tequilapi.estimateEntertainment({ amount }).then((res: EntertainmentEstimateResponse) => ({
+                videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
+                musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
+                browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
+                trafficMb: Number((res.trafficMb / 1024).toFixed()),
+            }))
         } catch (err) {
             const msg = parseError(err)
             logErrorMessage("Failed to estimate entertainment for amount: " + amount, msg)

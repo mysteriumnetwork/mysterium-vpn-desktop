@@ -20,7 +20,6 @@ import { subscribePush } from "../push/push"
 import { parseError } from "../../shared/errors/parseError"
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
-import { fmtMoney } from "../payment/display"
 
 export class ConnectionStore {
     connectInProgress = false
@@ -142,12 +141,7 @@ export class ConnectionStore {
 
     private async _doConnect(): Promise<void> {
         analytics.event(EventName.balance_update, {
-            balance: Number(
-                fmtMoney(
-                    { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
-                    { showCurrency: false },
-                ),
-            ),
+            balance: Number(this.root.identity.identity?.balanceTokens?.human),
         })
         const proposal = this.root.proposals.active
         if (!this.root.identity.identity || !proposal) {
@@ -207,12 +201,7 @@ export class ConnectionStore {
 
     async disconnect(): Promise<void> {
         analytics.event(EventName.balance_update, {
-            balance: Number(
-                fmtMoney(
-                    { amount: this.root.identity.identity?.balance ?? 0, currency: this.root.payment.appCurrency },
-                    { showCurrency: false },
-                ),
-            ),
+            balance: Number(this.root.identity.identity?.balanceTokens?.human),
         })
         const from = this.root.connection.location?.country
         this.setGracePeriod()
