@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
-import { perGiB, perHour } from "../../../payment/rate"
+import { displayTokens4 } from "../../../payment/display"
 
 const MetadataRow = styled.div`
     display: flex;
@@ -33,8 +33,8 @@ export const ConnectionProposal: React.FC = observer(() => {
             </MetadataRow>
             <MetadataRow>
                 <Metadata>Price</Metadata>
-                <Metadata>{perHour(proposal?.price)}/h</Metadata>
-                <Metadata>{perGiB(proposal?.price)}/GiB</Metadata>
+                <Metadata>{displayTokens4(proposal?.price.perHourTokens)}/h</Metadata>
+                <Metadata>{displayTokens4(proposal?.price.perGibTokens)}/GiB</Metadata>
             </MetadataRow>
             <MetadataRow>
                 <Metadata>Type</Metadata>

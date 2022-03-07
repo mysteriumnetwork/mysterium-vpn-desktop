@@ -4,15 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { AppState, Identity, IdentityRegistrationStatus, SSEEventType } from "mysterium-vpn-js"
+import { AppState, Identity, IdentityRegistrationStatus, SSEEventType, Tokens } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction, toJS } from "mobx"
 import retry from "async-retry"
 import _ from "lodash"
+import BigNumber from "bignumber.js"
 
 import { RootStore } from "../store"
 import { eventBus, tequilapi } from "../tequilapi"
 import { log } from "../../shared/log/log"
-import { decimalPart, fmtMoney } from "../payment/display"
 import { PushTopic } from "../../shared/push/topics"
 import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
@@ -74,43 +74,37 @@ export class IdentityStore {
         )
         const reportBalanceUpdate = _.debounce((amount: number) => {
             analytics.event(EventName.balance_update, {
-                balance: Number(
-                    fmtMoney(
-                        {
-                            amount,
-                            currency: this.root.payment.appCurrency,
-                        },
-                        { showCurrency: false },
-                    ),
-                ),
+                balance: amount,
             })
         }, 60_000)
         reaction(
-            () => this.identity?.balance,
+            () => Number(this.identity?.balanceTokens.human ?? 0),
             (balance) => {
-                if (balance != null && balance / decimalPart() < 0.5) {
+                if (balance != null && balance < 0.5) {
                     subscribePush(PushTopic.LessThanHalfMyst)
                 } else {
                     unsubscribePush(PushTopic.LessThanHalfMyst)
                 }
-                reportBalanceUpdate(this.root.identity.identity?.balance ?? 0)
+                reportBalanceUpdate(balance)
             },
         )
-        reaction(() => this.identity?.balance, this.registerOnBalanceChange)
+        reaction(() => this.identity?.balanceTokens, this.registerOnBalanceChange)
         reaction(() => this.identity?.registrationStatus, this.navigateOnStatusChange)
     }
 
-    registerOnBalanceChange = async (balance?: number): Promise<void> => {
+    registerOnBalanceChange = async (balanceTokens?: Tokens): Promise<void> => {
         if (!this.identity) {
             return
         }
         if (!registrationPossible(this.identity.registrationStatus)) {
             return
         }
-        if (!balance) {
+        if (!balanceTokens?.wei) {
             return
         }
-        if (balance < (this.root.payment.registrationFee ?? 0)) {
+        const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
+        const balance = new BigNumber(balanceTokens?.wei ?? 0)
+        if (balance.isLessThan(registrationFee)) {
             log.info("Balance is insufficient to register")
             return
         }
@@ -208,7 +202,7 @@ export class IdentityStore {
             log.info("No ID")
             return
         }
-        const { id, registrationStatus: status, balance } = this.identity
+        const { id, registrationStatus: status, balanceTokens } = this.identity
         if (!registrationPossible(status)) {
             log.info(`Status ${status} cannot be registered`) // Identity is already registered or status is unknown
             return
@@ -221,9 +215,11 @@ export class IdentityStore {
             return
         }
         await this.root.payment.fetchTransactorFees()
-        log.info("Registration fee:", this.root.payment.registrationFee)
+        log.info("Registration fee:", this.root.payment.fees?.registrationTokens.ether)
 
-        if (balance < (this.root.payment.registrationFee ?? 0)) {
+        const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
+        const balance = new BigNumber(balanceTokens.wei)
+        if (balance.isLessThan(registrationFee)) {
             log.info("Balance is insufficient to register")
             return
         }

@@ -11,7 +11,7 @@ import styled, { keyframes } from "styled-components"
 import { useStores } from "../../../store"
 import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
-import { perGiB, perHour } from "../../../payment/rate"
+import { displayTokens4 } from "../../../payment/display"
 
 const slideIn = keyframes`
     from {
@@ -73,8 +73,8 @@ export const SelectedProposal: React.FC = observer(() => {
     if (!proposal) {
         return <></>
     }
-    const timeRate = perHour(proposal.price)
-    const trafficRate = perGiB(proposal.price)
+    const timeRate = displayTokens4(proposal.price.perHourTokens)
+    const trafficRate = displayTokens4(proposal.price.perGibTokens)
     const pricingText = `${timeRate}/h ${trafficRate}/GiB`
 
     return (

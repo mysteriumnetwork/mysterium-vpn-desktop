@@ -7,7 +7,7 @@
 import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { Currency, DECIMAL_PART, EntertainmentEstimateResponse } from "mysterium-vpn-js"
+import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
 import { Redirect, Route, Switch } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSync } from "@fortawesome/free-solid-svg-icons"
@@ -16,7 +16,7 @@ import ReactTooltip from "react-tooltip"
 
 import { useStores } from "../../../store"
 import { Heading2, Paragraph, Small } from "../../../ui-kit/typography"
-import { displayUSD, fmtMoney } from "../../../payment/display"
+import { displayUSD } from "../../../payment/display"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
@@ -120,17 +120,7 @@ const EntertainmentExplanation = styled(Small)`
 export const WalletView: React.FC = observer(() => {
     const { identity, payment } = useStores()
     const [topupLoading, setTopupLoading] = useState(false)
-    const balance = identity.identity?.balance ?? 0
-    const balanceDisplay = fmtMoney(
-        {
-            amount: balance,
-            currency: Currency.MYST,
-        },
-        {
-            fractionDigits: 4,
-            removeInsignificantZeros: false,
-        },
-    )
+    const balance = Number(identity.identity?.balanceTokens.human) ?? 0
     const handleTopupClick = async () => {
         setTopupLoading(true)
         try {
@@ -145,7 +135,7 @@ export const WalletView: React.FC = observer(() => {
     }
     const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)
     useEffect(() => {
-        payment.estimateEntertainment(balance, true).then((res) => setEstimates(res))
+        payment.estimateEntertainment(balance).then((res) => setEstimates(res))
     }, [balance])
     const handleRefreshBalanceClick = () => {
         if (!identity.identity?.id) {
@@ -166,7 +156,7 @@ export const WalletView: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Balance>
-                            {balanceDisplay}{" "}
+                            {balance}{" "}
                             <BalanceRefreshButton
                                 icon={faSync}
                                 onClick={handleRefreshBalanceClick}
@@ -179,8 +169,7 @@ export const WalletView: React.FC = observer(() => {
                         </Tooltip>
                         <BalanceCurrency>{payment.appCurrency}</BalanceCurrency>
                         <BalanceFiatEquivalent>
-                            {payment.appFiatCurrency} equivalent ≈{" "}
-                            {displayUSD(payment.fiatEquivalent(balance / DECIMAL_PART))}
+                            {payment.appFiatCurrency} equivalent ≈ {displayUSD(payment.fiatEquivalent(balance))}
                         </BalanceFiatEquivalent>
                     </SideTop>
                     <SideBot>

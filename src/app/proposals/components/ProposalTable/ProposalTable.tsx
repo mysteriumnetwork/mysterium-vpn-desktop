@@ -18,10 +18,10 @@ import { useStores } from "../../../store"
 import { UIProposal } from "../../uiProposal"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { brand, darkBlue, lightBlue } from "../../../ui-kit/colors"
-import { perGiB, perHour } from "../../../payment/rate"
 import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier"
 import { countryName } from "../../../location/countries"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
+import { displayTokens4 } from "../../../payment/display"
 
 const Styles = styled.div`
     flex: 1;
@@ -260,14 +260,14 @@ export const ProposalTable: React.FC = observer(() => {
             {
                 Header: "Price/h",
                 id: "priceHour",
-                accessor: (p): string => perHour(p.price),
+                accessor: (p): string => displayTokens4(p.price.perHourTokens),
                 width: 62,
                 sortType: "basic",
             },
             {
                 Header: "Price/GiB",
                 id: "priceGib",
-                accessor: (p): string => perGiB(p.price),
+                accessor: (p): string => displayTokens4(p.price.perGibTokens),
                 width: 62,
                 sortType: "basic",
             },

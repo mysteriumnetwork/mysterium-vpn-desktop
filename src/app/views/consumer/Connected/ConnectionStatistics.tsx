@@ -12,7 +12,6 @@ import { ConnectionStatus, Currency } from "mysterium-vpn-js"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
-import { fmtMoney } from "../../../payment/display"
 import { IconDuration } from "../../../ui-kit/icons/IconDuration"
 import { IconReceived } from "../../../ui-kit/icons/IconReceived"
 import { IconSent } from "../../../ui-kit/icons/IconSent"
@@ -74,20 +73,12 @@ const MetricPlaceholder = () => (
 
 export const ConnectionStatistics: React.FC = observer(() => {
     const {
-        connection: { statistics: { duration, bytesReceived, bytesSent, tokensSpent } = {}, status },
+        connection: { statistics: { duration, bytesReceived, bytesSent, spentTokens } = {}, status },
     } = useStores()
     const clock = duration ? toClock(duration) : ""
     const down = bytesReceived ? byteSize(bytesReceived, { units: "iec" }) : undefined
     const up = bytesSent ? byteSize(bytesSent, { units: "iec" }) : undefined
-    const paid = fmtMoney(
-        {
-            amount: tokensSpent ?? 0,
-            currency: Currency.MYST,
-        },
-        {
-            fractionDigits: 3,
-        },
-    )
+    const paid = spentTokens?.human ?? 0
     const connected = status == ConnectionStatus.CONNECTED
     const iconColor = connected ? brandLight : greyBlue1
     return (

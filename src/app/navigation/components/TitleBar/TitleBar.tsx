@@ -13,12 +13,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { useStores } from "../../../store"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
-import { fmtMoney } from "../../../payment/display"
 import { locations } from "../../locations"
 import { titleBarSize } from "../../../../config"
 import { ProtectionStatus } from "../../../location/components/ProtectionStatus/ProtectionStatus"
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
 import { darkBlue, greyBlue1 } from "../../../ui-kit/colors"
+import { displayTokens2 } from "../../../payment/display"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
 import { WindowButtonsLinux } from "./WindowButtonsLinux"
@@ -113,16 +113,6 @@ export const TitleBar: React.FC = observer(() => {
     //         referral.generateToken()
     //     }
     // }
-    const balance = fmtMoney(
-        {
-            amount: identity.identity?.balance ?? 0,
-            currency: Currency.MYST,
-        },
-        {
-            fractionDigits: 2,
-            removeInsignificantZeros: true,
-        },
-    )
     return (
         <Container>
             {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
@@ -151,7 +141,7 @@ export const TitleBar: React.FC = observer(() => {
                 <Money>
                     <IconMystToken color={navigation.isWalletActive ? "#fff" : greyBlue1} />
                     <span>
-                        {balance} {Currency.MYST}
+                        {displayTokens2(identity.identity?.balanceTokens)} {Currency.MYST}
                     </span>
                 </Money>
             </WalletButton>
