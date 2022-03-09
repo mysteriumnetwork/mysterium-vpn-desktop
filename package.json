@@ -42,7 +42,7 @@
     "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
     "pushy-electron": "^1.0.8",
-    "qrcode.react": "^1.0.1",
+    "qrcode.react": "^2.0.0",
     "react": "^17.0.2",
     "react-autosuggest": "^10.1.0",
     "react-circle-flags": "^0.0.14",
