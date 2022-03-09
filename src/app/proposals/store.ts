@@ -266,11 +266,14 @@ export class ProposalStore {
     fetchAllProposalsForQuickSearchDebounced = _.throttle(this.fetchAllProposalsForQuickSearch, 60_000)
 
     async fetchAllProposalsForQuickSearch(): Promise<void> {
-        this.allProposals = await tequilapi
+        const allProposals = await tequilapi
             .findProposals({
                 includeMonitoringFailed: true,
             })
             .then((proposals) => proposals.map(newUIProposal))
+        runInAction(() => {
+            this.allProposals = allProposals
+        })
     }
 
     async useQuickSearchSuggestion(proposal?: UIProposal): Promise<void> {

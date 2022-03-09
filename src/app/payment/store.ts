@@ -90,6 +90,8 @@ export class PaymentStore {
             setPaymentMethod: action,
             setPaymentCurrency: action,
             setLightningNetwork: action,
+            setTaxCountry: action,
+            setChain: action,
             setTopupAmount: action,
             refreshBalance: action,
         })
