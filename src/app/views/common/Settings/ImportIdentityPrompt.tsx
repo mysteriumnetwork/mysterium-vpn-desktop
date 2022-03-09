@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import styled from "styled-components"
 
 import { Prompt } from "../../../ui-kit/components/Prompt/Prompt"
@@ -35,8 +35,12 @@ const PromptValidation = styled(Small)`
 
 export interface ImportIdentityPromptProps {
     visible: boolean
-    onSubmit: ({ passphrase }: { passphrase: string }) => void
+    onSubmit: SubmitHandler<ImportIdentityFormFields>
     onCancel: () => void
+}
+
+export interface ImportIdentityFormFields {
+    passphrase: string
 }
 
 export const ImportIdentityPrompt: React.FC<ImportIdentityPromptProps> = ({ visible, onSubmit, onCancel }) => {
@@ -45,7 +49,7 @@ export const ImportIdentityPrompt: React.FC<ImportIdentityPromptProps> = ({ visi
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm()
+    } = useForm<ImportIdentityFormFields>()
     useEffect(() => {
         if (!visible) {
             reset()

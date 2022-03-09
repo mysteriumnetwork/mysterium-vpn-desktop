@@ -27,7 +27,7 @@ import { useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
 import { locations } from "../../../navigation/locations"
 
-import { UseReferralCodePrompt } from "./UseReferralCodePrompt"
+import { ReferralCodeFormFields, UseReferralCodePrompt } from "./UseReferralCodePrompt"
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
 
 const SideTop = styled.div`
@@ -74,7 +74,7 @@ export const InitialTopup: React.FC = observer(() => {
     const handleUseReferralCode = () => {
         setReferralPrompt(true)
     }
-    const handleReferralSubmit = async ({ code }: { code: string }) => {
+    const handleReferralSubmit = async ({ code }: ReferralCodeFormFields) => {
         setReferralPrompt(false)
         await onboarding.registerWithReferralCode(code)
     }

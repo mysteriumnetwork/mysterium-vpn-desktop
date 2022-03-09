@@ -25,7 +25,7 @@ import {
     SecondarySidebarActionButton,
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
-import { ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
+import { ExportIdentityFormFields, ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
 import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
@@ -80,7 +80,7 @@ export const IdentityBackup: React.FC = observer(() => {
     const handleBackupNow = () => {
         setExportPrompt(true)
     }
-    const handleExportSubmit = async ({ passphrase }: { passphrase: string }) => {
+    const handleExportSubmit = async ({ passphrase }: ExportIdentityFormFields) => {
         setExportPrompt(false)
         try {
             await identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })

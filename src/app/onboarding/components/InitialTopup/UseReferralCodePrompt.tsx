@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
@@ -51,8 +51,12 @@ const RewardAmount = styled(Paragraph)``
 
 export interface UseReferralCodePromptProps {
     visible: boolean
-    onSubmit: ({ code }: { code: string }) => void
+    onSubmit: SubmitHandler<ReferralCodeFormFields>
     onCancel: () => void
+}
+
+export interface ReferralCodeFormFields {
+    code: string
 }
 
 export const UseReferralCodePrompt: React.FC<UseReferralCodePromptProps> = ({ visible, onSubmit, onCancel }) => {
@@ -62,7 +66,7 @@ export const UseReferralCodePrompt: React.FC<UseReferralCodePromptProps> = ({ vi
         reset,
         trigger,
         formState: { errors },
-    } = useForm({ reValidateMode: "onSubmit" })
+    } = useForm<ReferralCodeFormFields>({ reValidateMode: "onSubmit" })
     const { referral, payment } = useStores()
     useEffect(() => {
         if (!visible) {

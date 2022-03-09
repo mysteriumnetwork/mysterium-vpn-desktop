@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import styled from "styled-components"
 
 import { Prompt } from "../../../ui-kit/components/Prompt/Prompt"
@@ -35,8 +35,13 @@ const PromptValidation = styled(Small)`
 
 export interface ExportIdentityPromptProps {
     visible: boolean
-    onSubmit: ({ passphrase }: { passphrase: string }) => void
+    onSubmit: SubmitHandler<ExportIdentityFormFields>
     onCancel: () => void
+}
+
+export interface ExportIdentityFormFields {
+    passphrase: string
+    confirmPassphrase: string
 }
 
 export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visible, onSubmit, onCancel }) => {
@@ -46,7 +51,7 @@ export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visi
         getValues,
         reset,
         formState: { errors },
-    } = useForm()
+    } = useForm<ExportIdentityFormFields>()
     useEffect(() => {
         if (!visible) {
             reset()
@@ -77,6 +82,7 @@ export const ExportIdentityPrompt: React.FC<ExportIdentityPromptProps> = ({ visi
                         value: 12,
                         message: "Should be at least 12 characters",
                     },
+                    deps: ["passphrase"],
                     validate: {
                         matchesPassphrase: (value) => {
                             const { passphrase } = getValues()
