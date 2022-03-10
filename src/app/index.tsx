@@ -12,7 +12,7 @@ import { createGlobalStyle, keyframes } from "styled-components"
 import { Router } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { observer } from "mobx-react-lite"
-import { createHashHistory } from "history"
+import { createHashHistory, History } from "history"
 import { observe } from "mobx"
 
 import { initialize as initializeSentry } from "../shared/errors/sentry"
@@ -154,7 +154,8 @@ const App: React.FC = observer(() => {
     return (
         <React.Fragment>
             <GlobalStyle showGrid={root.showGrid} />
-            <Router history={history}>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <Router history={history as History<any>}>
                 <StoreContext.Provider value={rootStore}>
                     <Routes />
                 </StoreContext.Provider>

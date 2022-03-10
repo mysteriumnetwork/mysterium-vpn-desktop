@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { action, makeObservable, observable, observe } from "mobx"
-import { History, Location, LocationListener, UnregisterCallback } from "history"
+import { History, Location, LocationListener, LocationState, UnregisterCallback } from "history"
 
 export class RouterStore {
     location: Location = {
@@ -42,7 +42,7 @@ interface SynchronizedHistory extends History {
     unsubscribe: UnregisterCallback
 }
 
-export const synchronizedHistory = (history: History, store: RouterStore): History => {
+export const synchronizedHistory = <S = LocationState>(history: History, store: RouterStore): History<S> => {
     store.history = history as SynchronizedHistory
     const handleLocationChange = (location: Location) => {
         store.updateLocation(location)
@@ -61,5 +61,5 @@ export const synchronizedHistory = (history: History, store: RouterStore): Histo
 
     store.history.subscribe = subscribe
     store.history.unsubscribe = unsubscribeFromHistory
-    return store.history
+    return store.history as History<S>
 }
