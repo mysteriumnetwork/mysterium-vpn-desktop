@@ -27,7 +27,7 @@
     "@mysteriumnetwork/terms": "0.0.35",
     "@sentry/electron": "^2.5.4",
     "@use-it/interval": "^1.0.0",
-    "async-retry": "^1.3.1",
+    "async-retry": "^1.3.3",
     "bignumber.js": "^9.0.2",
     "byte-size": "^8.0.0",
     "electron-log": "^4.4.4",
@@ -66,7 +66,7 @@
   "devDependencies": {
     "@octokit/rest": "^18.12.0",
     "@sentry/cli": "^1.71.0",
-    "@types/async-retry": "^1.4.2",
+    "@types/async-retry": "^1.4.3",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/lodash": "^4.14.159",
     "@types/node": "^15.6.2",
