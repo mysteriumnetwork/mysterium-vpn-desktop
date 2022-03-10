@@ -18,6 +18,9 @@
     "build": "electron-webpack",
     "bundle": "yarn build && electron-builder"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
@@ -69,7 +72,7 @@
     "@types/async-retry": "^1.4.3",
     "@types/electron-devtools-installer": "^2.2.1",
     "@types/lodash": "^4.14.179",
-    "@types/node": "^15.6.2",
+    "@types/node": "^16.0.0",
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^17.0.40",
     "@types/react-autosuggest": "^10.1.5",
