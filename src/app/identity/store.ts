@@ -102,6 +102,7 @@ export class IdentityStore {
         if (!balanceTokens?.wei) {
             return
         }
+        await this.root.payment.fetchTransactorFees()
         const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
         const balance = new BigNumber(balanceTokens?.wei ?? 0)
         if (balance.isLessThan(registrationFee)) {
