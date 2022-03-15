@@ -8,19 +8,18 @@ import { platform } from "os"
 
 import React from "react"
 import ReactDOM from "react-dom"
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
-import { Router } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { observer } from "mobx-react-lite"
-import { createHashHistory, History } from "history"
+import { createHashHistory } from "history"
 import { observe } from "mobx"
 
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 
 import { Routes } from "./navigation/components/Routes/Routes"
-import { rootStore, StoreContext, useStores } from "./store"
-import { synchronizedHistory } from "./navigation/routerStore"
-import { greyBlue1, brandLight, brand } from "./ui-kit/colors"
+import { createRootStore, StoreContext, useStores } from "./store"
+import { brand, brandLight, greyBlue1 } from "./ui-kit/colors"
 import { analytics } from "./analytics/analytics"
 
 initializeSentry()
@@ -145,21 +144,23 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
 // const container = document.createElement("div")
 // document.body.appendChild(container)
 
-const hashHistory = createHashHistory()
-const history = synchronizedHistory(hashHistory, rootStore.router)
+const history = createHashHistory()
+const rootStore = createRootStore(history)
+
 analytics.initialize()
 
 const App: React.FC = observer(() => {
+    // const location = useLocation()
     const root = useStores()
     return (
         <React.Fragment>
             <GlobalStyle showGrid={root.showGrid} />
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <Router history={history as History<any>}>
+            <HistoryRouter history={history}>
                 <StoreContext.Provider value={rootStore}>
                     <Routes />
                 </StoreContext.Provider>
-            </Router>
+            </HistoryRouter>
             <Toaster
                 position="top-right"
                 gutter={40}

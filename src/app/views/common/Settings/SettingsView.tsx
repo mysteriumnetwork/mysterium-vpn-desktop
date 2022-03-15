@@ -7,7 +7,7 @@
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { Redirect, Route, Switch } from "react-router-dom"
+import { useNavigate, useLocation, Outlet } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faGlobe, faSlidersH, faUserAlt } from "@fortawesome/free-solid-svg-icons"
 
@@ -20,12 +20,7 @@ import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { locations } from "../../../navigation/locations"
 import { IconSettings } from "../../../ui-kit/icons/IconSettings"
-import { useStores } from "../../../store"
 import { AppVersion } from "../../../daemon/components/AppVersion"
-
-import { SettingsFilters } from "./SettingsFilters"
-import { SettingsConnection } from "./SettingsConnection"
-import { SettingsMysteriumId } from "./SettingsMysteriumId"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -88,10 +83,11 @@ const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTML
 `
 
 export const SettingsView: React.FC = observer(() => {
-    const { router } = useStores()
-    const isFilterTabActive = router.location.pathname.includes(locations.settingsFilters)
-    const isConnectionTabActive = router.location.pathname.includes(locations.settingsConnection)
-    const isMysteriumIdTabActive = router.location.pathname.includes(locations.settingsMysteriumId)
+    const navigate = useNavigate()
+    const location = useLocation()
+    const isFilterTabActive = location.pathname == locations.settingsFilters
+    const isConnectionTabActive = location.pathname == locations.settingsConnection
+    const isMysteriumIdTabActive = location.pathname == locations.settingsMysteriumId
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -102,20 +98,20 @@ export const SettingsView: React.FC = observer(() => {
                         <Title>Settings</Title>
                     </SideTop>
                     <SideBot>
-                        <NavButton active={isFilterTabActive} onClick={() => router.push(locations.settingsFilters)}>
+                        <NavButton active={isFilterTabActive} onClick={() => navigate(locations.settingsFilters)}>
                             <FontAwesomeIcon icon={faSlidersH} />
                             Default filters
                         </NavButton>
                         <NavButton
                             active={isConnectionTabActive}
-                            onClick={() => router.push(locations.settingsConnection)}
+                            onClick={() => navigate(locations.settingsConnection)}
                         >
                             <FontAwesomeIcon icon={faGlobe} />
                             Connection
                         </NavButton>
                         <NavButton
                             active={isMysteriumIdTabActive}
-                            onClick={() => router.push(locations.settingsMysteriumId)}
+                            onClick={() => navigate(locations.settingsMysteriumId)}
                         >
                             <FontAwesomeIcon icon={faUserAlt} />
                             Mysterium ID
@@ -124,18 +120,7 @@ export const SettingsView: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <Switch>
-                        <Route exact path={locations.settingsFilters}>
-                            <SettingsFilters />
-                        </Route>
-                        <Route exact path={locations.settingsConnection}>
-                            <SettingsConnection />
-                        </Route>
-                        <Route exact path={locations.settingsMysteriumId}>
-                            <SettingsMysteriumId />
-                        </Route>
-                        <Redirect to={locations.settingsFilters} />
-                    </Switch>
+                    <Outlet />
                 </Content>
             </ViewSplit>
         </ViewContainer>

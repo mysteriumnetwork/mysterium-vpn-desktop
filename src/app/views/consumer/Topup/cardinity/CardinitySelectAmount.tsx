@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -115,7 +116,8 @@ const EntertainmentExplanation = styled(Paragraph)`
 `
 
 export const CardinitySelectAmount: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const isOptionActive = (amt: number) => {
         return payment.topupAmount == amt
     }
@@ -129,11 +131,11 @@ export const CardinitySelectAmount: React.FC = observer(() => {
         }
     }, [payment.topupAmount])
     const handleNextClick = async () => {
-        router.pushRelative(topupSteps.cardinityPaymentOptions)
+        navigate("../" + topupSteps.cardinityPaymentOptions)
     }
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>
@@ -179,7 +181,7 @@ export const CardinitySelectAmount: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    {estimates && (
+                    {!!estimates && (
                         <>
                             <EntertainmentBlocks>
                                 <EntertainmentBlock>

@@ -148,7 +148,7 @@ export const IdentitySetup: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <IdentityProgress>
-                        {onboarding.identityProgress && (
+                        {!!onboarding.identityProgress && (
                             <>
                                 <FontAwesomeIcon icon={faCircleNotch} spin />
                                 <IdentityProgress>{onboarding.identityProgress}</IdentityProgress>

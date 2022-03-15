@@ -9,8 +9,8 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { faSadCry } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 
-import { useStores } from "../../../store"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -57,9 +57,9 @@ const Content = styled(ViewContent)`
 `
 
 export const TopupFailed: React.FC = observer(() => {
-    const { router } = useStores()
+    const navigate = useNavigate()
     const handleStartOver = () => {
-        router.history?.go(-3)
+        navigate(-3)
     }
     return (
         <ViewContainer>

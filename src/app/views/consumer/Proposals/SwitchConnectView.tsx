@@ -6,7 +6,7 @@
  */
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import styled from "styled-components"
 
 import { useStores } from "../../../store"
@@ -42,9 +42,10 @@ const SwitchLink = styled.div<{ active: boolean }>`
 `
 
 export const SwitchConnectView: React.FC = observer(() => {
-    const { router, config } = useStores()
-    const manual = router.location.pathname == locations.proposalsManualConnect
-    const quick = router.location.pathname == locations.proposalsQuickConnect
+    const { config } = useStores()
+    const location = useLocation()
+    const manual = location.pathname == locations.proposalsManualConnect
+    const quick = location.pathname == locations.proposalsQuickConnect
     return (
         <Container>
             <SwitchGroup>

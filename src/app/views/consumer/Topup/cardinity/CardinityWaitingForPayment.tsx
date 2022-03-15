@@ -7,6 +7,7 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { ViewContainer } from "../../../../navigation/components/ViewContainer/ViewContainer"
@@ -80,20 +81,21 @@ const PaymentExplanation = styled(Paragraph)`
 `
 
 export const CardinityWaitingForPayment: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     useEffect(() => {
         switch (payment.orderStatus) {
             case OrderStatus.SUCCESS:
-                router.pushRelative(topupSteps.success)
+                navigate("../" + topupSteps.success)
                 break
             case OrderStatus.FAILED:
-                router.pushRelative(topupSteps.failed)
+                navigate("../" + topupSteps.failed)
                 break
         }
     }, [payment.orderStatus])
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={2} />
                 </div>

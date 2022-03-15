@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -52,14 +53,15 @@ const Title = styled(Heading2)`
 const TitleDescription = styled(Small)``
 
 export const PaypalOrderSummary: React.FC = observer(() => {
-    const { payment, router, connection } = useStores()
+    const { payment, connection } = useStores()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const handleNextClick = async () => {
         setLoading(() => true)
         try {
             await payment.openOrderSecureForm()
             setLoading(() => false)
-            router.pushRelative(topupSteps.paypalWaitingForPayment)
+            navigate("../" + topupSteps.paypalWaitingForPayment)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -75,7 +77,7 @@ export const PaypalOrderSummary: React.FC = observer(() => {
     }, [])
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>

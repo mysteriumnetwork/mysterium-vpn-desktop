@@ -117,10 +117,10 @@ export class IdentityStore {
         switch (status) {
             case IdentityRegistrationStatus.InProgress:
             case IdentityRegistrationStatus.RegistrationError:
-                this.root.router.push(locations.registering)
+                this.root.navigation.push(locations.registering)
                 return
             case IdentityRegistrationStatus.Registered:
-                this.root.router.push(locations.proposals)
+                this.root.navigation.goHome()
         }
     }
 

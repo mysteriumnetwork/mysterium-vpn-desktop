@@ -10,6 +10,7 @@ import { Currency } from "mysterium-vpn-js"
 import { observer } from "mobx-react-lite"
 import { faHome } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useLocation, useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../store"
 import { IconMystToken } from "../../../ui-kit/icons/IconMystToken"
@@ -106,40 +107,34 @@ const Money = styled.div`
     }
 `
 export const TitleBar: React.FC = observer(() => {
-    const { navigation, router, identity, isWindows, isLinux } = useStores()
-    // const clickReferrals = () => {
-    //     navigation.toggleReferrals()
-    //     if (!referralsActive) {
-    //         referral.generateToken()
-    //     }
-    // }
+    const { navigation, identity, isWindows, isLinux } = useStores()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const isHomeActive = location.pathname.startsWith(locations.consumer)
+    const isSettingsActive = location.pathname.startsWith(locations.settings)
+    const isHelpActive = location.pathname.startsWith(locations.help)
+    const isWalletActive = location.pathname.startsWith(locations.wallet)
     return (
         <Container>
-            {/** Sorry, Mike. Re-adding this soon as the referral-available check is implemented.
-             /*<NavigationButton onClick={clickReferrals}>
-             <NavigationIcon icon={faRetweet} size="1x" />
-             <span style={{ marginLeft: 5 }}>Refer a friend</span>
-             </NavigationButton>*/}
-
-            <NavigationButton active={navigation.isHomeActive} onClick={() => navigation.goHome()}>
+            <NavigationButton active={isHomeActive} onClick={() => !isHomeActive && navigation.goHome()}>
                 <FontAwesomeIcon icon={faHome} />
             </NavigationButton>
             <NavigationButton
-                active={navigation.isSettingsActive}
-                onClick={() => router.push(locations.settingsFilters)}
+                active={isSettingsActive}
+                onClick={() => !isSettingsActive && navigate(locations.settings)}
             >
                 Settings
             </NavigationButton>
-            <NavigationButton active={navigation.isHelpActive} onClick={() => router.push(locations.helpBugReport)}>
+            <NavigationButton active={isHelpActive} onClick={() => !isHelpActive && navigate(locations.help)}>
                 Help
             </NavigationButton>
             <Location>
                 <IP />
                 <ProtectionStatus />
             </Location>
-            <WalletButton active={navigation.isWalletActive} onClick={() => router.push(locations.wallet)}>
+            <WalletButton active={isWalletActive} onClick={() => !isWalletActive && navigate(locations.wallet)}>
                 <Money>
-                    <IconMystToken color={navigation.isWalletActive ? "#fff" : greyBlue1} />
+                    <IconMystToken color={isWalletActive ? "#fff" : greyBlue1} />
                     <span>
                         {displayTokens2(identity.identity?.balanceTokens)} {Currency.MYST}
                     </span>

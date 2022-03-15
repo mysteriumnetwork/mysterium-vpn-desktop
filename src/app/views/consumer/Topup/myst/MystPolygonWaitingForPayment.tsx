@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import CountDown from "react-countdown"
 import useInterval from "@use-it/interval"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { ViewContainer } from "../../../../navigation/components/ViewContainer/ViewContainer"
@@ -98,13 +99,14 @@ const Loading = styled(Spinner)`
 `
 
 export const MystPolygonWaitingForPayment: React.FC = observer(() => {
-    const { payment, identity, router } = useStores()
+    const { payment, identity } = useStores()
+    const navigate = useNavigate()
     useInterval(() => {
         payment.refreshBalance()
     }, 30_000)
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={2} />
                 </div>

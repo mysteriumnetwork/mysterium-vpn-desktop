@@ -7,6 +7,7 @@
 import React from "react"
 import { action, computed, configure, makeObservable, observable, reaction, runInAction } from "mobx"
 import { ipcRenderer } from "electron"
+import { History } from "history"
 
 // import { enableLogging } from "mobx-logger"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
@@ -21,16 +22,23 @@ import { ProposalStore } from "./proposals/store"
 import { ConnectionStore } from "./connection/store"
 import { PaymentStore } from "./payment/store"
 import { FeedbackStore } from "./feedback/store"
-import { RouterStore } from "./navigation/routerStore"
 import { ReferralStore } from "./referral/store"
 import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
 import { analytics } from "./analytics/analytics"
 import { EventName } from "./analytics/event"
 
+export const createRootStore = (history: History): RootStore => {
+    rootStore = new RootStore(history)
+    StoreContext = React.createContext(rootStore)
+    return rootStore
+}
+
+export let rootStore: RootStore
+export let StoreContext: React.Context<RootStore>
+
 export class RootStore {
     navigation: NavigationStore
-    router: RouterStore
     daemon: DaemonStore
     config: ConfigStore
     filters: Filters
@@ -45,7 +53,7 @@ export class RootStore {
     showGrid = false
     os = ""
 
-    constructor() {
+    constructor(history: History) {
         makeObservable(this, {
             showGrid: observable,
             toggleGrid: action,
@@ -54,8 +62,7 @@ export class RootStore {
             isMacOS: computed,
             isLinux: computed,
         })
-        this.navigation = new NavigationStore(this)
-        this.router = new RouterStore()
+        this.navigation = new NavigationStore(this, history)
         this.daemon = new DaemonStore(this)
         this.config = new ConfigStore(this)
         this.filters = new Filters(this)
@@ -131,9 +138,6 @@ export class RootStore {
         }
     }
 }
-
-export const rootStore = new RootStore()
-export const StoreContext = React.createContext(rootStore)
 
 ipcRenderer.on(WebIpcListenChannels.Disconnect, async () => {
     await rootStore.connection.disconnect()

@@ -107,7 +107,7 @@ export const UseReferralCodePrompt: React.FC<UseReferralCodePromptProps> = ({ vi
                 })}
             />
             <PromptValidation>{errors.code?.message}</PromptValidation>
-            {referral.rewardAmount && (
+            {!!referral.rewardAmount && (
                 <RewardPreview>
                     <RewardIcon className="icon" icon={faCheckCircle} color={brand} size="2x" />
                     <RewardAmount>

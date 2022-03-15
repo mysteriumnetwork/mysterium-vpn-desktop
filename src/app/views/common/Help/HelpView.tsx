@@ -6,7 +6,7 @@
  */
 import React from "react"
 import styled from "styled-components"
-import { Redirect, Route, Switch } from "react-router-dom"
+import { useNavigate, useLocation, Outlet } from "react-router-dom"
 import { observer } from "mobx-react-lite"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faDiscord, faFacebookSquare, faReddit, faTwitter } from "@fortawesome/free-brands-svg-icons"
@@ -24,9 +24,6 @@ import { Heading2, Small } from "../../../ui-kit/typography"
 import { locations } from "../../../navigation/locations"
 import { useStores } from "../../../store"
 import { AppVersion } from "../../../daemon/components/AppVersion"
-
-import { HelpContentReportIssue } from "./HelpContentReportIssue"
-import { HelpContentTermsAndConditions } from "./HelpContentTermsAndConditions"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -126,9 +123,11 @@ const SupportChatButton = styled.button`
 `
 
 export const HelpView: React.FC = observer(() => {
-    const { navigation, router } = useStores()
-    const isBugReportActive = router.location.pathname.includes(locations.helpBugReport)
-    const isTermsAndConditionsActive = router.location.pathname.includes(locations.helpTermsAndConditions)
+    const { navigation } = useStores()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const isBugReportActive = location.pathname.includes(locations.helpBugReport)
+    const isTermsAndConditionsActive = location.pathname.includes(locations.helpTermsAndConditions)
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -144,13 +143,13 @@ export const HelpView: React.FC = observer(() => {
                             <FontAwesomeIcon icon={faComments} />
                             Support chat
                         </SupportChatButton>
-                        <NavButton active={isBugReportActive} onClick={() => router.push(locations.helpBugReport)}>
+                        <NavButton active={isBugReportActive} onClick={() => navigate(locations.helpBugReport)}>
                             <FontAwesomeIcon icon={faBug} />
                             Bug report
                         </NavButton>
                         <NavButton
                             active={isTermsAndConditionsActive}
-                            onClick={() => router.push(locations.helpTermsAndConditions)}
+                            onClick={() => navigate(locations.helpTermsAndConditions)}
                         >
                             <FontAwesomeIcon icon={faFileContract} />
                             Terms & Conditions
@@ -199,15 +198,7 @@ export const HelpView: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <Switch>
-                        <Route exact path={locations.helpBugReport}>
-                            <HelpContentReportIssue />
-                        </Route>
-                        <Route exact path={locations.helpTermsAndConditions}>
-                            <HelpContentTermsAndConditions />
-                        </Route>
-                        <Redirect to={locations.helpBugReport} />
-                    </Switch>
+                    <Outlet />
                 </Content>
             </ViewSplit>
         </ViewContainer>

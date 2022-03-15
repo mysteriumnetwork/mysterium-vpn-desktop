@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast"
 import { Currency } from "mysterium-vpn-js"
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -75,7 +76,8 @@ const OptionValue = styled(Heading2)``
 const LightningCheckbox = styled(Checkbox)``
 
 export const CoingatePaymentOptions: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
     const isOptionActive = (cur: string) => {
@@ -94,7 +96,7 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.pushRelative(topupSteps.coingateOrderSummary)
+            navigate("../" + topupSteps.coingateOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -106,7 +108,7 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
     const options = payment.paymentMethod?.gatewayData.currencies.filter((it) => it !== Currency.MYST) || []
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>
