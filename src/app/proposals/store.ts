@@ -278,8 +278,8 @@ export class ProposalStore {
 
     async useQuickSearchSuggestion(proposal?: UIProposal): Promise<void> {
         await this.setCountryFilter(proposal?.country)
-        this.active = proposal
-        this.suggestion = proposal
+        runInAction(() => (this.active = proposal))
+        runInAction(() => (this.suggestion = proposal))
     }
 
     setLoading = (b: boolean): void => {
