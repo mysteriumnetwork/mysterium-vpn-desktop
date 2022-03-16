@@ -136,7 +136,7 @@ export class ConfigStore {
         if (this.onboarded) {
             this.root.navigation.goHome()
         } else {
-            this.root.router.push(locations.onboardingIntro)
+            this.root.navigation.push(locations.onboardingIntroIndex)
         }
     }
 

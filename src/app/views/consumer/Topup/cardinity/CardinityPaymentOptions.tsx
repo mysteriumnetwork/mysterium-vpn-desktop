@@ -10,6 +10,7 @@ import styled from "styled-components"
 import { faDollarSign, faEuroSign, faPoundSign, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { toast } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -78,7 +79,8 @@ const PaymentOption = styled(Paragraph)`
 `
 
 export const CardinityPaymentOptions: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const isOptionActive = (cur: string) => {
         return payment.paymentCurrency == cur
@@ -91,7 +93,7 @@ export const CardinityPaymentOptions: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.pushRelative(topupSteps.cardinityOrderSummary)
+            navigate("../" + topupSteps.cardinityOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -103,7 +105,7 @@ export const CardinityPaymentOptions: React.FC = observer(() => {
     const options = payment.paymentMethod?.gatewayData.currencies || []
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>

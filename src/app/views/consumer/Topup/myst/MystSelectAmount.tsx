@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
 import { toast } from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -119,7 +120,8 @@ const EntertainmentExplanation = styled(Paragraph)`
 `
 
 export const MystSelectAmount: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const isOptionActive = (amt: number) => {
         return payment.topupAmount == amt
@@ -138,7 +140,7 @@ export const MystSelectAmount: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            router.pushRelative(topupSteps.coingateOrderSummary)
+            navigate("../" + topupSteps.coingateOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)
@@ -149,7 +151,7 @@ export const MystSelectAmount: React.FC = observer(() => {
     }
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>
@@ -196,7 +198,7 @@ export const MystSelectAmount: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    {estimates && (
+                    {!!estimates && (
                         <>
                             <EntertainmentBlocks>
                                 <EntertainmentBlock>

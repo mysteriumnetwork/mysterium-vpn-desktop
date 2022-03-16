@@ -8,6 +8,7 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
@@ -22,7 +23,8 @@ import { brandLight, lightBlue } from "../../../ui-kit/colors"
 import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { CryptoAnimation } from "../../../ui-kit/components/CryptoAnimation/CryptoAnimation"
-import { PaymentMethod } from "../../../payment/methods"
+import { PaymentMethod, PaymentMethodName } from "../../../payment/methods"
+import { topupSteps } from "../../../navigation/locations"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -61,17 +63,34 @@ const MethodToggle = styled(Toggle).attrs({
 `
 
 export const TopupChooseMethod: React.FC = observer(() => {
-    const { payment, router } = useStores()
-
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const isOptionActive = (pm: PaymentMethod): boolean => {
         return payment.paymentMethod?.name === pm.name
     }
     const selectOption = (pm: PaymentMethod) => () => {
         payment.setPaymentMethod(pm)
     }
+    const onNextClick = async () => {
+        await payment.onPaymentMethodChosen()
+        switch (payment.paymentMethod?.name) {
+            case PaymentMethodName.COINGATE:
+                navigate(topupSteps.coingate)
+                break
+            case PaymentMethodName.PAYPAL:
+                navigate(topupSteps.paypal)
+                break
+            case PaymentMethodName.CARDINITY:
+                navigate(topupSteps.cardinity)
+                break
+            case PaymentMethodName.MYST:
+                navigate(topupSteps.myst)
+                break
+        }
+    }
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={0} />
                 </div>
@@ -93,14 +112,14 @@ export const TopupChooseMethod: React.FC = observer(() => {
                                     active={isOptionActive(pm)}
                                     onClick={selectOption(pm)}
                                 >
-                                    {pm.icon && <FontAwesomeIcon icon={pm.icon} fixedWidth size="sm" pull="left" />}
+                                    {!!pm.icon && <FontAwesomeIcon icon={pm.icon} fixedWidth size="sm" pull="left" />}
                                     {pm.displayText}
                                 </MethodToggle>
                             )
                         })}
                         <BrandButton
                             style={{ marginTop: "auto" }}
-                            onClick={() => payment.onPaymentMethodChosen()}
+                            onClick={onNextClick}
                             disabled={!payment.paymentMethod}
                         >
                             Next

@@ -25,7 +25,7 @@ import {
     SecondarySidebarActionButton,
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
-import { ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdentityPrompt"
+import { ImportIdentityFormFields, ImportIdentityPrompt } from "../../../views/common/Settings/ImportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
 
 import animationIdentity from "./animation_identity.json"
@@ -89,7 +89,7 @@ export const IdentitySetup: React.FC = observer(() => {
         setImportFilename(filename)
         setImportPrompt(true)
     }
-    const handleImportSubmit = async ({ passphrase }: { passphrase: string }) => {
+    const handleImportSubmit = async ({ passphrase }: ImportIdentityFormFields) => {
         setImportPrompt(false)
         const res = identity.importIdentity({ filename: importFilename, passphrase })
         toast
@@ -148,7 +148,7 @@ export const IdentitySetup: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <IdentityProgress>
-                        {onboarding.identityProgress && (
+                        {!!onboarding.identityProgress && (
                             <>
                                 <FontAwesomeIcon icon={faCircleNotch} spin />
                                 <IdentityProgress>{onboarding.identityProgress}</IdentityProgress>

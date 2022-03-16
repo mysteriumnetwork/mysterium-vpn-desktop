@@ -102,6 +102,7 @@ export class IdentityStore {
         if (!balanceTokens?.wei) {
             return
         }
+        await this.root.payment.fetchTransactorFees()
         const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
         const balance = new BigNumber(balanceTokens?.wei ?? 0)
         if (balance.isLessThan(registrationFee)) {
@@ -116,10 +117,10 @@ export class IdentityStore {
         switch (status) {
             case IdentityRegistrationStatus.InProgress:
             case IdentityRegistrationStatus.RegistrationError:
-                this.root.router.push(locations.registering)
+                this.root.navigation.push(locations.registering)
                 return
             case IdentityRegistrationStatus.Registered:
-                this.root.router.push(locations.proposals)
+                this.root.navigation.goHome()
         }
     }
 

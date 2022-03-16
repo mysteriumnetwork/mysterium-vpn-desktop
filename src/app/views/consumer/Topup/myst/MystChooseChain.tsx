@@ -8,6 +8,7 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { Currency } from "mysterium-vpn-js"
+import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -61,7 +62,8 @@ const MethodToggle = styled(Toggle).attrs({
 `
 
 export const MystChooseChain: React.FC = observer(() => {
-    const { payment, router } = useStores()
+    const { payment } = useStores()
+    const navigate = useNavigate()
     const isOptionActive = (chain: MystChain) => {
         return payment.chain == chain
     }
@@ -71,17 +73,17 @@ export const MystChooseChain: React.FC = observer(() => {
     const handleNextClick = async () => {
         switch (payment.chain) {
             case MystChain.POLYGON:
-                router.pushRelative(topupSteps.mystPolygonWaitingForPayment)
+                navigate("../" + topupSteps.mystPolygonWaitingForPayment)
                 break
             case MystChain.ETHEREUM:
                 payment.setPaymentCurrency(Currency.MYST)
-                router.pushRelative(topupSteps.mystSelectAmount)
+                navigate("../" + topupSteps.mystSelectAmount)
                 break
         }
     }
     return (
         <ViewContainer>
-            <ViewNavBar onBack={() => router.history?.goBack()}>
+            <ViewNavBar onBack={() => navigate(-1)}>
                 <div style={{ width: 375, textAlign: "center" }}>
                     <StepProgressBar step={1} />
                 </div>

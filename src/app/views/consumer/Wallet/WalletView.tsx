@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
-import { Redirect, Route, Switch } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faSync } from "@fortawesome/free-solid-svg-icons"
 import { toast } from "react-hot-toast"
@@ -33,8 +32,6 @@ import { IconCloudDownload } from "../../../ui-kit/icons/IconCloudDownload"
 import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 import { parseError } from "../../../../shared/errors/parseError"
 import { logErrorMessage } from "../../../../shared/log/log"
-
-import { WalletIdentity } from "./WalletIdentity"
 
 const SideTop = styled.div`
     height: 156px;
@@ -173,7 +170,7 @@ export const WalletView: React.FC = observer(() => {
                         </BalanceFiatEquivalent>
                     </SideTop>
                     <SideBot>
-                        {estimates && (
+                        {!!estimates && (
                             <>
                                 <Paragraph style={{ textAlign: "center", marginBottom: 10 }}>
                                     Will be enough for:
@@ -224,14 +221,7 @@ export const WalletView: React.FC = observer(() => {
                         </BrandButton>
                     </SideBot>
                 </ViewSidebar>
-                <Content>
-                    <Switch>
-                        <Route exact path={locations.walletIdentity}>
-                            <WalletIdentity />
-                        </Route>
-                        <Redirect to={locations.walletIdentity} />
-                    </Switch>
-                </Content>
+                <Content />
             </ViewSplit>
         </ViewContainer>
     )

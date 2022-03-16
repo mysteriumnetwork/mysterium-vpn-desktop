@@ -24,10 +24,9 @@ import { log, logErrorMessage } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { parseError } from "../../shared/errors/parseError"
 import { MainIpcListenChannels } from "../../shared/ipc"
-import { topupSteps } from "../navigation/locations"
 
 import { isLightningAvailable } from "./currency"
-import { Gateway, PaymentMethod, PaymentMethodName, SUPPORTED_METHODS } from "./methods"
+import { Gateway, PaymentMethod, SUPPORTED_METHODS } from "./methods"
 
 export enum OrderStatus {
     PENDING,
@@ -86,10 +85,11 @@ export class PaymentStore {
             downloadInvoice: action,
             clearOrder: action,
             clearPaymentOptions: action,
-            onPaymentMethodChosen: action,
             setPaymentMethod: action,
             setPaymentCurrency: action,
             setLightningNetwork: action,
+            setTaxCountry: action,
+            setChain: action,
             setTopupAmount: action,
             refreshBalance: action,
         })
@@ -289,26 +289,12 @@ export class PaymentStore {
         this.setPaymentMethod(undefined)
         this.clearPaymentOptions()
         this.clearOrder()
-        this.root.router.push(location)
+        this.root.navigation.push(location)
     }
 
     async onPaymentMethodChosen(): Promise<void> {
         this.clearPaymentOptions()
         this.clearOrder()
-        switch (this.paymentMethod?.name) {
-            case PaymentMethodName.COINGATE:
-                this.root.router.pushRelative(topupSteps.coingate)
-                break
-            case PaymentMethodName.PAYPAL:
-                this.root.router.pushRelative(topupSteps.paypal)
-                break
-            case PaymentMethodName.CARDINITY:
-                this.root.router.pushRelative(topupSteps.cardinity)
-                break
-            case PaymentMethodName.MYST:
-                this.root.router.pushRelative(topupSteps.mystChooseChain)
-                break
-        }
     }
 
     clearOrder(): void {

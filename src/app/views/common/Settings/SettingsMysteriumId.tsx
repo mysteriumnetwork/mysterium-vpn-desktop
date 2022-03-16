@@ -17,8 +17,8 @@ import { useStores } from "../../../store"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { TextInput } from "../../../ui-kit/form-components/TextInput"
 
-import { ExportIdentityPrompt } from "./ExportIdentityPrompt"
-import { ImportIdentityPrompt } from "./ImportIdentityPrompt"
+import { ExportIdentityFormFields, ExportIdentityPrompt } from "./ExportIdentityPrompt"
+import { ImportIdentityFormFields, ImportIdentityPrompt } from "./ImportIdentityPrompt"
 
 const Title = styled(Heading2)`
     margin-bottom: 15px;
@@ -47,7 +47,7 @@ export const SettingsMysteriumId: React.FC = observer(() => {
         setExportPrompt(true)
     }
 
-    const handleExportSubmit = ({ passphrase }: { passphrase: string }) => {
+    const handleExportSubmit = ({ passphrase }: ExportIdentityFormFields) => {
         setExportPrompt(false)
         const res = identity.exportIdentity({ id: identity.identity?.id ?? "", passphrase })
         toast.promise(res, {
@@ -87,7 +87,7 @@ export const SettingsMysteriumId: React.FC = observer(() => {
         setImportFilename(filename)
         setImportPrompt(true)
     }
-    const handleImportSubmit = async ({ passphrase }: { passphrase: string }) => {
+    const handleImportSubmit = async ({ passphrase }: ImportIdentityFormFields) => {
         setImportPrompt(false)
         const res = identity.importIdentity({ filename: importFilename, passphrase })
         toast.promise(res, {

@@ -4,26 +4,17 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Redirect, Route, Switch } from "react-router-dom"
 import Lottie from "react-lottie-player"
 import React from "react"
 import styled, { keyframes } from "styled-components"
-import { observer } from "mobx-react-lite"
 
-import { locations } from "../../../navigation/locations"
 import { StepProgressBar } from "../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { GhostButton } from "../../../ui-kit/components/Button/GhostButton"
 import { bg1 } from "../../../ui-kit/colors"
 import { Heading2, Small } from "../../../ui-kit/typography"
 import { LightButton } from "../../../ui-kit/components/Button/LightButton"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
-import { useStores } from "../../../store"
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
-
-import animationPayAsYouGo from "./animation_payasyougo.json"
-import animationCrypto from "./animation_crypto.json"
-import animationPrivacy from "./animation_privacy.json"
-import animationNetwork from "./animation_network.json"
 
 const Container = styled(ViewContainer)`
     background: ${bg1};
@@ -110,150 +101,34 @@ const SkipContainer = styled.div`
     align-items: center;
     justify-content: center;
 `
-export const IntroductionSteps: React.FC = observer(() => {
-    const { router, onboarding } = useStores()
-    const handleSetupMyAccountClick = () => {
-        onboarding.setupMyID()
-    }
-    const handleSkip = () => {
-        onboarding.setupMyID()
-    }
-    return (
-        <>
-            <Switch>
-                <Route exact path={locations.onboardingIntro1}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={0} />
-                        </Steps>
-                        <Title>Decentralized global node network</Title>
-                        <Animation>
-                            <Lottie
-                                play
-                                loop
-                                animationData={animationNetwork}
-                                style={{ width: 256, height: 256 }}
-                                renderer="svg"
-                            />
-                        </Animation>
-                        <Subtitle>Run by people, for people</Subtitle>
-                        <Description>
-                            Our network is blind to borders. Select any IP you like from our global list and get
-                            unlimited access to worldwide content.
-                        </Description>
-                        <Actions>
-                            <NextButton
-                                onClick={(): void => {
-                                    router.push(locations.onboardingIntro2)
-                                }}
-                            >
-                                Next
-                            </NextButton>
-                        </Actions>
-                        <SkipContainer>
-                            <GhostButton onClick={handleSkip}>Skip</GhostButton>
-                        </SkipContainer>
-                    </Container>
-                </Route>
-                <Route exact path={locations.onboardingIntro2}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={1} />
-                        </Steps>
-                        <Title>Privacy first</Title>
-                        <Animation>
-                            <Lottie
-                                play
-                                loop
-                                animationData={animationPrivacy}
-                                style={{ width: 256, height: 256 }}
-                                renderer="svg"
-                            />
-                        </Animation>
-                        <Subtitle>Distributed infrastructure, decentralised logs</Subtitle>
-                        <Description>
-                            Now everyone says no logs, but do they mean no logs? Don&apos;t trust. Verify.
-                        </Description>
-                        <Actions>
-                            <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
-                            <NextButton
-                                onClick={(): void => {
-                                    router.push(locations.onboardingIntro3)
-                                }}
-                            >
-                                Next
-                            </NextButton>
-                        </Actions>
-                        <SkipContainer>
-                            <GhostButton onClick={handleSkip}>Skip</GhostButton>
-                        </SkipContainer>
-                    </Container>
-                </Route>
-                <Route exact path={locations.onboardingIntro3}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={2} />
-                        </Steps>
-                        <Title>Surf the web, and pay as you go</Title>
-                        <Animation>
-                            <Lottie
-                                play
-                                loop
-                                animationData={animationPayAsYouGo}
-                                style={{ width: 256, height: 256 }}
-                                renderer="svg"
-                            />
-                        </Animation>
-                        <Subtitle>No lock in subscriptions</Subtitle>
-                        <Description>
-                            Using our micropayments system, Hermes Protocol, you only pay for the gigabytes you actually
-                            use.
-                            <br />
-                            No subscriptions, no monthly fees – just minute-by-minute payments.
-                        </Description>
-                        <Actions>
-                            <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
-                            <NextButton
-                                onClick={(): void => {
-                                    router.push(locations.onboardingIntro4)
-                                }}
-                            >
-                                Next
-                            </NextButton>
-                        </Actions>
-                        <SkipContainer>
-                            <GhostButton onClick={handleSkip}>Skip</GhostButton>
-                        </SkipContainer>
-                    </Container>
-                </Route>
-                <Route exact path={locations.onboardingIntro4}>
-                    <Container>
-                        <Steps>
-                            <StepProgressBar step={3} />
-                        </Steps>
-                        <Title>Top up with popular cryptocurrencies</Title>
-                        <Animation>
-                            <Lottie
-                                play
-                                loop
-                                animationData={animationCrypto}
-                                style={{ width: 256, height: 256 }}
-                                renderer="svg"
-                            />
-                        </Animation>
-                        <Subtitle>BTC, ETH, LTC, BCH and more</Subtitle>
-                        <Description>
-                            Top up your account now or do it later and use limited functionality and free nodes
-                        </Description>
-                        <Actions>
-                            <BackButton onClick={() => router.history?.goBack()}>Back</BackButton>
-                            <NextButton onClick={handleSetupMyAccountClick}>Setup my account</NextButton>
-                        </Actions>
-                        <SkipContainer />
-                    </Container>
-                </Route>
-                <Redirect to={locations.onboardingIntro1} />
-            </Switch>
-        </>
-    )
-})
+
+export interface IntroductionStepProps {
+    index: number
+    title: React.ReactNode
+    subtitle: React.ReactNode
+    description: React.ReactNode
+    animation: object
+    onBack?: () => void
+    nextText?: React.ReactNode
+    onNext?: () => void
+    onSkip?: () => void
+}
+
+export const IntroductionStep: React.FC<IntroductionStepProps> = (props) => (
+    <Container>
+        <Steps>
+            <StepProgressBar step={props.index} />
+        </Steps>
+        <Title>{props.title}</Title>
+        <Animation>
+            <Lottie play loop animationData={props.animation} style={{ width: 256, height: 256 }} renderer="svg" />
+        </Animation>
+        <Subtitle>{props.subtitle}</Subtitle>
+        <Description>{props.description}</Description>
+        <Actions>
+            {!!props.onBack && <BackButton onClick={props.onBack}>Back</BackButton>}
+            {!!props.onNext && <NextButton onClick={props.onNext}>{props.nextText ?? "Next"}</NextButton>}
+        </Actions>
+        <SkipContainer>{!!props.onSkip && <GhostButton onClick={props.onSkip}>Skip</GhostButton>}</SkipContainer>
+    </Container>
+)

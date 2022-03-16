@@ -50,7 +50,7 @@ export const OrderBreakdown: React.FC = observer(() => {
                     {payment.order?.itemsSubTotal} {payment.order?.currency}
                 </LineItemAmount>
             </LineItem>
-            {Number(payment.order?.taxSubTotal) && (
+            {!!Number(payment.order?.taxSubTotal) && (
                 <LineItem>
                     <Tooltip id="vat-tooltip">
                         <span>

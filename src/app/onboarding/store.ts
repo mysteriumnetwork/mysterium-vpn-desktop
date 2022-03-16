@@ -39,14 +39,14 @@ export class OnboardingStore {
     }
 
     getStarted = (): void => {
-        this.root.router.push(locations.terms)
+        this.root.navigation.push(locations.terms)
     }
 
     setupMyID = (): void => {
         if (this.root.identity.identityExists) {
-            this.root.router.push(locations.onboardingIdentityBackup)
+            this.root.navigation.push(locations.onboardingIdentityBackup)
         } else {
-            this.root.router.push(locations.onboardingIdentitySetup)
+            this.root.navigation.push(locations.onboardingIdentitySetup)
         }
     }
 
@@ -58,7 +58,7 @@ export class OnboardingStore {
             log.error("ID not found, exiting")
             return
         }
-        this.root.router.push(locations.onboardingIdentityBackup)
+        this.root.navigation.push(locations.onboardingIdentityBackup)
     }
 
     registerWithReferralCode = async (code: string): Promise<void> => {
@@ -81,9 +81,9 @@ export class OnboardingStore {
         this.complete()
         const id = this.root.identity.identity
         if (id && registered(id)) {
-            this.root.router.push(locations.proposals)
+            this.root.navigation.goHome()
         } else {
-            this.root.router.push(locations.onboardingTopupPrompt)
+            this.root.navigation.push(locations.onboardingTopupPrompt)
         }
     }
 
