@@ -14,7 +14,7 @@ import { useStores } from "../../../store"
 import { IntroductionStep } from "./IntroductionSteps"
 import animationPayAsYouGo from "./animation_payasyougo.json"
 
-export const Step3: React.FC = observer(() => {
+export const Step3: React.FC = observer(function Step3() {
     const { onboarding } = useStores()
     const navigate = useNavigate()
     return (

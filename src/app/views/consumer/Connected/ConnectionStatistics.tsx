@@ -71,7 +71,7 @@ const MetricPlaceholder = () => (
     </div>
 )
 
-export const ConnectionStatistics: React.FC = observer(() => {
+export const ConnectionStatistics: React.FC = observer(function ConnectionStatistics() {
     const {
         connection: { statistics: { duration, bytesReceived, bytesSent, spentTokens } = {}, status },
     } = useStores()

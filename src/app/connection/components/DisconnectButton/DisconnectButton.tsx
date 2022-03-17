@@ -11,7 +11,7 @@ import { observer } from "mobx-react-lite"
 import { useStores } from "../../../store"
 import { SecondaryButton } from "../../../ui-kit/components/Button/SecondaryButton"
 
-export const DisconnectButton = observer(() => {
+export const DisconnectButton = observer(function DisconnectButton() {
     const { connection } = useStores()
     const text = ((): string => {
         switch (connection.status) {

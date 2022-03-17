@@ -122,7 +122,7 @@ const SupportChatButton = styled.button`
     text-align: left;
 `
 
-export const HelpView: React.FC = observer(() => {
+export const HelpView: React.FC = observer(function HelpView() {
     const { navigation } = useStores()
     const navigate = useNavigate()
     const location = useLocation()

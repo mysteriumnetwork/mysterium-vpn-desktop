@@ -149,8 +149,7 @@ const rootStore = createRootStore(history)
 
 analytics.initialize()
 
-const App: React.FC = observer(() => {
-    // const location = useLocation()
+const App: React.FC = observer(function App() {
     const root = useStores()
     return (
         <React.Fragment>

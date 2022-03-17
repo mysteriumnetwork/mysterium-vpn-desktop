@@ -10,7 +10,7 @@ import React from "react"
 import { LoadingView } from "../../../views/common/Loading/loading-view"
 import { useStores } from "../../../store"
 
-export const StartupLoadingView: React.FC = observer(() => {
+export const StartupLoadingView: React.FC = observer(function StartupLoadingView() {
     const { daemon } = useStores()
     return <LoadingView status={daemon.startupStatus} />
 })

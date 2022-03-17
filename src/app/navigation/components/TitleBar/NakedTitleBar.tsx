@@ -18,7 +18,7 @@ const Container = styled(TitlebarContainer)`
     justify-content: flex-end;
 `
 
-export const NakedTitleBar: React.FC = observer(() => {
+export const NakedTitleBar: React.FC = observer(function NakedTitleBar() {
     const root = useStores()
     return (
         <Container>

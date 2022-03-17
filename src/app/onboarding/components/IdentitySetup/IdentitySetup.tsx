@@ -73,7 +73,7 @@ const IdentityProgress = styled(Heading2)`
     opacity: 0.7;
 `
 
-export const IdentitySetup: React.FC = observer(() => {
+export const IdentitySetup: React.FC = observer(function IdentitySetup() {
     const { onboarding, identity } = useStores()
 
     const handleCreateNew = async () => {

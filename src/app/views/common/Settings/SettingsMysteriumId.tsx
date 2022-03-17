@@ -38,7 +38,7 @@ const Explanation = styled(Small)`
     margin-bottom: 15px;
 `
 
-export const SettingsMysteriumId: React.FC = observer(() => {
+export const SettingsMysteriumId: React.FC = observer(function SettingsMysteriumId() {
     const { payment, identity } = useStores()
 
     // Export

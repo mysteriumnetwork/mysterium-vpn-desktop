@@ -39,7 +39,7 @@ const Count = styled.span`
     margin-left: auto;
 `
 
-export const CountryFilter = observer(() => {
+export const CountryFilter = observer(function CountryFilter() {
     const { proposals, filters } = useStores()
     const myRef = useRef<HTMLDivElement>(null)
     useEffect(() => {

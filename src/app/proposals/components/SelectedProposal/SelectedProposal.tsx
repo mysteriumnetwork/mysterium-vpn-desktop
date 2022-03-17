@@ -9,7 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled, { keyframes } from "styled-components"
 
 import { useStores } from "../../../store"
-import { ConnectDisconnectButton } from "../../../connection/components/ConnectDisconnectButton/ConnectDisconnectButton"
+import { ConnectButton } from "../../../connection/components/ConnectButton/ConnectButton"
 import { Flag } from "../../../location/components/Flag/Flag"
 import { displayTokens4 } from "../../../payment/display"
 
@@ -67,7 +67,7 @@ const Pricing = styled.div`
 const ConnectWrapper = styled.div`
     margin-left: auto;
 `
-export const SelectedProposal: React.FC = observer(() => {
+export const SelectedProposal: React.FC = observer(function SelectedProposal() {
     const { proposals } = useStores()
     const proposal = proposals.active
     if (!proposal) {
@@ -84,7 +84,7 @@ export const SelectedProposal: React.FC = observer(() => {
                 <ProviderId>{proposal.shortId}</ProviderId>
                 <Pricing>{pricingText}</Pricing>
                 <ConnectWrapper>
-                    <ConnectDisconnectButton />
+                    <ConnectButton />
                 </ConnectWrapper>
             </Inner>
         </Container>

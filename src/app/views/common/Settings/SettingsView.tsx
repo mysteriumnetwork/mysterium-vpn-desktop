@@ -82,7 +82,7 @@ const NavButton = styled.button<NavButtonProps & React.ButtonHTMLAttributes<HTML
     align-items: center;
 `
 
-export const SettingsView: React.FC = observer(() => {
+export const SettingsView: React.FC = observer(function SettingsView() {
     const navigate = useNavigate()
     const location = useLocation()
     const isFilterTabActive = location.pathname == locations.settingsFilters

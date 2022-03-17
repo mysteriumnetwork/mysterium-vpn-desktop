@@ -14,12 +14,12 @@ import { BrandButton, BrandButtonProps } from "../../../ui-kit/components/Button
 import { CancelButton } from "../../../ui-kit/components/Button/CancelButton"
 import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
 
-export type ConnectDisconnectButtonProps = {
+export type ConnectButtonProps = {
     width?: number
     height?: number
 }
 
-export const ConnectDisconnectButton: React.FC<ConnectDisconnectButtonProps> = observer(() => {
+export const ConnectButton: React.FC<ConnectButtonProps> = observer(function ConnectButton() {
     const { connection } = useStores()
     const text = ((): string => {
         switch (connection.status) {

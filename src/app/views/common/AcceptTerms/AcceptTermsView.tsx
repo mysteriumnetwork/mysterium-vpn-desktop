@@ -83,7 +83,7 @@ const Actions = styled.div`
     margin-bottom: 57px;
 `
 
-export const AcceptTermsView: React.FC = observer(({}) => {
+export const AcceptTermsView: React.FC = observer(function AcceptTermsView() {
     const { config } = useStores()
     const [agree, setAgree] = useState(false)
     return (

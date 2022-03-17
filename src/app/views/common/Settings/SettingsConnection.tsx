@@ -53,7 +53,7 @@ const TooltipIcon = styled(FontAwesomeIcon).attrs({
     margin-left: 10px;
 `
 
-export const SettingsConnection: React.FC = observer(() => {
+export const SettingsConnection: React.FC = observer(function SettingsConnection() {
     const { config } = useStores()
     const onDnsOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const val = event.target.value

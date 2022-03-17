@@ -106,7 +106,7 @@ const Money = styled.div`
         padding-left: 6px;
     }
 `
-export const TitleBar: React.FC = observer(() => {
+export const TitleBar: React.FC = observer(function TitleBar() {
     const { navigation, identity, isWindows, isLinux } = useStores()
     const navigate = useNavigate()
     const location = useLocation()

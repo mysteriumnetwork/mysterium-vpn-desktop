@@ -29,7 +29,7 @@ import { PaypalPaymentOptions } from "./paypal/PaypalPaymentOptions"
 import { PaypalOrderSummary } from "./paypal/PaypalOrderSummary"
 import { PaypalWaitingForPayment } from "./paypal/PaypalWaitingForPayment"
 
-export const TopupRoutes: React.FC = observer(() => {
+export const TopupRoutes: React.FC = observer(function TopupRoutes() {
     return (
         <ReactRoutes>
             <Route path="*" element={<TopupChooseMethod />} />

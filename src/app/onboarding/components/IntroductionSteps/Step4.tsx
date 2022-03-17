@@ -13,7 +13,7 @@ import { useStores } from "../../../store"
 import { IntroductionStep } from "./IntroductionSteps"
 import animationCrypto from "./animation_crypto.json"
 
-export const Step4: React.FC = observer(() => {
+export const Step4: React.FC = observer(function Step4() {
     const { onboarding } = useStores()
     const navigate = useNavigate()
     return (

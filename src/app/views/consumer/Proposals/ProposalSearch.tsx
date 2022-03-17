@@ -126,7 +126,7 @@ const filterProposalsAsync = (
     })
 }
 
-export const ProposalSearch: React.FC = observer(() => {
+export const ProposalSearch: React.FC = observer(function ProposalSearch() {
     const { proposals } = useStores()
 
     // Search box visibility

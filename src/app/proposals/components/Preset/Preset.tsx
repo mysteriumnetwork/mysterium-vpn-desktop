@@ -34,7 +34,7 @@ const PresetIcons: { [key: string]: React.FC<IconProps> | undefined } = {
     "All nodes": IconNoPreset,
 }
 
-export const Preset: React.FC = observer(() => {
+export const Preset: React.FC = observer(function Preset() {
     const { proposals, filters } = useStores()
     if (!proposals.filterPresets) {
         return <></>

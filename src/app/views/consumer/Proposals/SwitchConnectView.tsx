@@ -41,7 +41,7 @@ const SwitchLink = styled.div<{ active: boolean }>`
     line-height: 20px;
 `
 
-export const SwitchConnectView: React.FC = observer(() => {
+export const SwitchConnectView: React.FC = observer(function SwitchConnectView() {
     const { config } = useStores()
     const location = useLocation()
     const manual = location.pathname == locations.proposalsManualConnect

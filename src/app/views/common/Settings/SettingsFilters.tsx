@@ -26,7 +26,7 @@ const SectionIconWrap = styled.div`
     margin-bottom: 15px;
 `
 
-export const SettingsFilters: React.FC = observer(() => {
+export const SettingsFilters: React.FC = observer(function SettingsFilters() {
     return (
         <>
             <Section>

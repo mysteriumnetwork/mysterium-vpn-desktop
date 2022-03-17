@@ -21,7 +21,7 @@ const Metadata = styled.div`
     user-select: text;
 `
 
-export const ConnectionProposal: React.FC = observer(() => {
+export const ConnectionProposal: React.FC = observer(function ConnectionProposal() {
     const {
         connection: { proposal },
     } = useStores()

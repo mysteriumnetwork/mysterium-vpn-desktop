@@ -66,7 +66,7 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
-export const IdentityBackup: React.FC = observer(() => {
+export const IdentityBackup: React.FC = observer(function IdentityBackup() {
     const { onboarding, identity } = useStores()
 
     const nextStep = () => {

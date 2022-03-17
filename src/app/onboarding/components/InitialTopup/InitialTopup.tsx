@@ -65,7 +65,7 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
-export const InitialTopup: React.FC = observer(() => {
+export const InitialTopup: React.FC = observer(function InitialTopup() {
     const { payment, onboarding } = useStores()
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)

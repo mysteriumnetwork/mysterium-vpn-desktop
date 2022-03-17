@@ -18,7 +18,7 @@ const IP = styled.div`
     user-select: text;
 `
 
-export const CurrentIP: React.FC<{ className?: string }> = observer(({ className }) => {
+export const CurrentIP: React.FC<{ className?: string }> = observer(function CurrentIP({ className }) {
     const { connection } = useStores()
     return <IP className={className}>{connection.currentIp}</IP>
 })

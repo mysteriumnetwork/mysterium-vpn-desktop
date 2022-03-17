@@ -36,7 +36,7 @@ const SendButton = styled(LightButton)`
     width: 120px;
 `
 
-export const HelpContentReportIssue: React.FC = observer(() => {
+export const HelpContentReportIssue: React.FC = observer(function HelpContentReportIssue() {
     const { feedback } = useStores()
     const email = useRef<HTMLInputElement>(null)
     const description = useRef<HTMLTextAreaElement>(null)

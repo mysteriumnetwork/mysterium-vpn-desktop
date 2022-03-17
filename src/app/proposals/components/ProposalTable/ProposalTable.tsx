@@ -95,7 +95,7 @@ type TableProps = {
     data: UIProposal[]
 }
 
-const Table: React.FC<TableProps> = observer(({ columns, data }) => {
+const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
     const { proposals, filters } = useStores()
     const defaultColumn = React.useMemo(
         () => ({
@@ -215,7 +215,7 @@ const Table: React.FC<TableProps> = observer(({ columns, data }) => {
     )
 })
 
-export const ProposalTable: React.FC = observer(() => {
+export const ProposalTable: React.FC = observer(function ProposalTable() {
     const { proposals } = useStores()
     const items = proposals.filteredProposals
 

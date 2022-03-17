@@ -114,7 +114,7 @@ const EntertainmentExplanation = styled(Small)`
     opacity: 0.7;
 `
 
-export const WalletView: React.FC = observer(() => {
+export const WalletView: React.FC = observer(function WalletView() {
     const { identity, payment } = useStores()
     const [topupLoading, setTopupLoading] = useState(false)
     const balance = Number(identity.identity?.balanceTokens.human) ?? 0

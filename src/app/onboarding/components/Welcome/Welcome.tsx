@@ -67,7 +67,7 @@ const GetStartedButton = styled(BrandButton)`
     box-shadow: inset 0 0.5px 1px #ff25a1, 2px 2px 3px rgba(0, 0, 0, 0.3);
 `
 
-export const Welcome: React.FC = observer(() => {
+export const Welcome: React.FC = observer(function Welcome() {
     const { onboarding } = useStores()
     return (
         <Container>

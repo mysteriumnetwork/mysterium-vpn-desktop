@@ -55,7 +55,7 @@ const Main = styled.div`
     background: #fff;
 `
 
-export const Routes: React.FC = observer(() => {
+export const Routes: React.FC = observer(function Routes() {
     const { connection, config } = useStores()
     const location = useLocation()
     const nakedTitleBar = [locations.onboarding, locations.terms, locations.registering, locations.loading].find((p) =>

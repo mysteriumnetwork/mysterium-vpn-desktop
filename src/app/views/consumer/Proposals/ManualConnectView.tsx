@@ -66,7 +66,7 @@ const MainBottom = styled.div`
     width: 100%;
 `
 
-export const ManualConnectView: React.FC = observer(() => {
+export const ManualConnectView: React.FC = observer(function ManualConnectView() {
     const { proposals } = useStores()
     useEffect(() => {
         proposals.fetchAllProposalsForQuickSearchDebounced()

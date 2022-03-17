@@ -43,7 +43,7 @@ const Terms = styled.div`
     }
 `
 
-export const HelpContentTermsAndConditions: React.FC = observer(() => {
+export const HelpContentTermsAndConditions: React.FC = observer(function HelpContentTermsAndConditions() {
     return (
         <>
             <Title>Terms & Conditions</Title>

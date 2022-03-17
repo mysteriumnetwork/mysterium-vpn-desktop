@@ -27,7 +27,7 @@ const displayRegistrationStatus = (s?: IdentityRegistrationStatus): string => {
     return ""
 }
 
-export const IdentityRegistrationView: React.FC = observer(() => {
+export const IdentityRegistrationView: React.FC = observer(function IdentityRegistrationView() {
     const { identity } = useStores()
     const statusDisplay = displayRegistrationStatus(identity.identity?.registrationStatus)
     return <LoadingView status={statusDisplay} />

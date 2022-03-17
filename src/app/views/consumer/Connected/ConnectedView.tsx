@@ -107,7 +107,7 @@ const OriginalLocation = styled.div`
     top: 400px;
 `
 
-export const ConnectedView: React.FC = observer(() => {
+export const ConnectedView: React.FC = observer(function ConnectedView() {
     const {
         connection: { location, originalLocation, status, proposal },
     } = useStores()

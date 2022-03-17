@@ -92,7 +92,7 @@ const NavContainer = styled.div`
     padding-left: 80px;
 `
 
-export const QuickConnectView: React.FC = observer(() => {
+export const QuickConnectView: React.FC = observer(function QuickConnectView() {
     const { proposals, connection } = useStores()
     const handleConnectClick = async (): Promise<void> => {
         if (connection.status === ConnectionStatus.NOT_CONNECTED) {

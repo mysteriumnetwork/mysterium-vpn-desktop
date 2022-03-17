@@ -24,7 +24,7 @@ const Status = styled.div<{ isProtected: boolean }>`
     background: ${(props) => (props.isProtected ? "#58c800" : "inherit")};
 `
 
-export const ProtectionStatus = observer(() => {
+export const ProtectionStatus = observer(function ProtectionStatus() {
     const { connection } = useStores()
     const isProtected = connectionActive(connection.status)
     return <Status isProtected={isProtected}>{isProtected ? "Protected" : "Unprotected"}</Status>
