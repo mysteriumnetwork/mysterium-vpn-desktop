@@ -10,6 +10,8 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core"
 import { faBitcoin, faPaypal } from "@fortawesome/free-brands-svg-icons"
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons"
 
+import { IconMystToken } from "../../../src/app/ui-kit/icons/IconMystToken"
+
 export enum PaymentMethodName {
     COINGATE = "coingate",
     PAYPAL = "paypal",
@@ -36,27 +38,28 @@ export type PaymentMethod = {
 } & PaymentMethodMetadata
 
 export const SUPPORTED_METHODS: { [key: string]: PaymentMethodMetadata } = {
-    [PaymentMethodName.COINGATE]: {
+    [PaymentMethodName.MYST]: {
         displayOrder: 0,
+        displayText: "MYST",
+        icon: IconMystToken,
+        gateway: "coingate",
+    },
+    [PaymentMethodName.COINGATE]: {
+        displayOrder: 1,
         displayText: "Crypto",
         icon: faBitcoin,
         gateway: "coingate",
     },
     [PaymentMethodName.PAYPAL]: {
-        displayOrder: 1,
+        displayOrder: 2,
         displayText: "Paypal",
         icon: faPaypal,
         gateway: "paypal",
     },
     [PaymentMethodName.CARDINITY]: {
-        displayOrder: 2,
+        displayOrder: 3,
         displayText: "Credit card",
         icon: faCreditCard,
         gateway: "cardinity",
-    },
-    [PaymentMethodName.MYST]: {
-        displayOrder: 3,
-        displayText: "MYST",
-        gateway: "coingate",
     },
 }
