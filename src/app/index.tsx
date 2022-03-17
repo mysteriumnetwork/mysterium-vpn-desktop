@@ -11,14 +11,13 @@ import ReactDOM from "react-dom"
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
 import { Toaster } from "react-hot-toast"
-import { observer } from "mobx-react-lite"
 import { createHashHistory } from "history"
 import { observe } from "mobx"
 
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 
 import { Routes } from "./navigation/components/Routes/Routes"
-import { createRootStore, StoreContext, useStores } from "./store"
+import { createRootStore, StoreContext } from "./store"
 import { brand, brandLight, greyBlue1 } from "./ui-kit/colors"
 import { analytics } from "./analytics/analytics"
 
@@ -54,11 +53,7 @@ const fadeIn = keyframes`
     }
 `
 
-interface GlobalStyleProps {
-    showGrid: boolean
-}
-
-const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
+const GlobalStyle = createGlobalStyle`
     html, body, #app {
         margin: 0;
         padding: 0;
@@ -115,68 +110,36 @@ const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
         outline: 2px solid ${brandLight};
         outline-offset: 2px;
     }
-    ${(props) => {
-        if (props.showGrid) {
-            return `
-            :root {
-                --baseline: 8px;
-                // --color: hsla(204, 80%, 72%, 0.5);
-                --color: rgba(255, 0, 0, 0.5);
-                --background-baseline: repeating-linear-gradient(
-                    to bottom,
-                    var(--color),
-                    var(--color) 1px,
-                    transparent 1px,
-                    transparent var(--baseline)
-                  );
-            }
-            html {
-                background-image: var(--background-baseline);
-                background-position: 0 0;
-            }
-            `
-        }
-        return ""
-    }}
 `
-
-// Create main element
-// const container = document.createElement("div")
-// document.body.appendChild(container)
 
 const history = createHashHistory()
 const rootStore = createRootStore(history)
 
 analytics.initialize()
 
-const App: React.FC = observer(function App() {
-    const root = useStores()
-    return (
-        <React.Fragment>
-            <GlobalStyle showGrid={root.showGrid} />
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <HistoryRouter history={history}>
-                <StoreContext.Provider value={rootStore}>
-                    <Routes />
-                </StoreContext.Provider>
-            </HistoryRouter>
-            <Toaster
-                position="top-right"
-                gutter={40}
-                containerStyle={{
-                    marginTop: 35,
-                    overflowWrap: "anywhere",
-                    wordBreak: "break-word",
-                    fontSize: 14,
-                }}
-                toastOptions={{
-                    duration: 8_000,
-                }}
-            />
-            <div className="baseline" />
-        </React.Fragment>
-    )
-})
+const App: React.FC = () => (
+    <React.Fragment>
+        <GlobalStyle />
+        <HistoryRouter history={history}>
+            <StoreContext.Provider value={rootStore}>
+                <Routes />
+            </StoreContext.Provider>
+        </HistoryRouter>
+        <Toaster
+            position="top-right"
+            gutter={40}
+            containerStyle={{
+                marginTop: 35,
+                overflowWrap: "anywhere",
+                wordBreak: "break-word",
+                fontSize: 14,
+            }}
+            toastOptions={{
+                duration: 8_000,
+            }}
+        />
+    </React.Fragment>
+)
 
 // Render components
 const app = document.getElementById("app")

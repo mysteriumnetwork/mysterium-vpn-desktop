@@ -5,13 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
-import { action, computed, configure, makeObservable, observable, reaction, runInAction } from "mobx"
+import { computed, configure, makeObservable, observable, reaction, runInAction } from "mobx"
 import { ipcRenderer } from "electron"
 import { History } from "history"
 
 // import { enableLogging } from "mobx-logger"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
-import { isDevelopment } from "../utils/env"
 import { log } from "../shared/log/log"
 
 import { NavigationStore } from "./navigation/store"
@@ -50,13 +49,10 @@ export class RootStore {
     feedback: FeedbackStore
     referral: ReferralStore
 
-    showGrid = false
     os = ""
 
     constructor(history: History) {
         makeObservable(this, {
-            showGrid: observable,
-            toggleGrid: action,
             os: observable,
             isWindows: computed,
             isMacOS: computed,
@@ -82,12 +78,6 @@ export class RootStore {
         this.payment.setupReactions()
         this.connection.setupReactions()
         this.setupReactions()
-
-        document.addEventListener("keydown", (ev: KeyboardEvent) => {
-            if (ev.code == "F5") {
-                this.toggleGrid()
-            }
-        })
 
         ipcRenderer.invoke(MainIpcListenChannels.GetOS).then((os) => {
             runInAction(() => {
@@ -130,12 +120,6 @@ export class RootStore {
 
     get isLinux(): boolean {
         return !this.isWindows && !this.isMacOS
-    }
-
-    toggleGrid = (): void => {
-        if (isDevelopment()) {
-            this.showGrid = !this.showGrid
-        }
     }
 }
 
