@@ -145,7 +145,6 @@ export const MystSelectAmount: React.FC = observer(() => {
             setLoading(() => false)
             const msg = parseError(err)
             logErrorMessage("Could not create a payment order", msg)
-            msg.humanReadable = "Could not initiate the payment. Please try again later or contact us via chat!"
             toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
         }
     }
