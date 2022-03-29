@@ -22,6 +22,7 @@ export enum MainIpcListenChannels {
     OpenCardinityPaymentWindow = "open-cardinity-payment-window",
     MinimizeWindow = "minimize-window",
     CloseWindow = "close-window",
+    SaveUserConfig = "save-user-config",
     ExportIdentity = "export-identity",
     ImportIdentityChooseFile = "import-identity-choose-file",
     ImportIdentity = "import-identity",

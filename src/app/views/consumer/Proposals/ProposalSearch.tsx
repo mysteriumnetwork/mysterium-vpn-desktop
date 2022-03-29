@@ -144,7 +144,7 @@ export const ProposalSearch: React.FC = observer(function ProposalSearch() {
             clearTimeout(lastRequestId)
         }
         const requestId = setTimeout(async () => {
-            const suggestions = await filterProposalsAsync(proposals.allProposals, value.trim())
+            const suggestions = await filterProposalsAsync(proposals.proposalsAllPresetsForQuickSearch, value.trim())
             setSuggestions(suggestions)
         }, 500)
         setLastRequestId(requestId)

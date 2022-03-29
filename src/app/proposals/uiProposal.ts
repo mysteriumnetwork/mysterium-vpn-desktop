@@ -8,10 +8,6 @@ import { Proposal, QualityLevel } from "mysterium-vpn-js"
 
 export type ProposalKey = string
 
-export const proposalKey = ({ providerId, serviceType }: { providerId: string; serviceType: string }): ProposalKey => {
-    return providerId + serviceType
-}
-
 export interface UIProposal extends Proposal {
     key: ProposalKey
     country: string
@@ -38,7 +34,7 @@ const serviceType4 = (serviceType: string): string => {
 export const newUIProposal = (proposal: Proposal): UIProposal => {
     return {
         ...proposal,
-        key: proposalKey(proposal),
+        key: proposal.providerId,
         country: proposal.location.country ?? "unknown",
         ipType: proposal.location.ipType ?? "unknown",
         shortId: shortId(proposal.providerId),
@@ -46,4 +42,4 @@ export const newUIProposal = (proposal: Proposal): UIProposal => {
     }
 }
 
-export const compareProposal = (a: UIProposal, b: UIProposal): number => a.key.localeCompare(b.key)
+export const compareProposal = (a: UIProposal, b: UIProposal): number => (a.key > b.key ? 1 : -1)

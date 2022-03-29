@@ -26,6 +26,7 @@ import { createTray, refreshTrayIcon } from "./tray"
 import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
 import { mysteriumNode } from "./node/mysteriumNode"
+import { tequila } from "./node/tequila"
 
 initializeSentry()
 
@@ -264,6 +265,7 @@ ipcMain.on(MainIpcListenChannels.CloseWindow, () => {
 
 supervisor.registerIPC()
 mysteriumNode.registerIPC(getMainWindow)
+tequila.registerIPC()
 
 autoUpdater.on("download-progress", () => {
     mainWindow?.webContents.send(WebIpcListenChannels.UpdateDownloading)
