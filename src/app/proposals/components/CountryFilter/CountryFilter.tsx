@@ -47,7 +47,7 @@ export const CountryFilter = observer(function CountryFilter() {
         if (parent) {
             ;(parent as HTMLDivElement).scrollTop = myRef.current?.offsetTop
         }
-    }, [proposals.countryFiltered.length != 0, filters.presetID, proposals.suggestion])
+    }, [proposals.proposalsCurrent.length != 0, filters.presetID, proposals.suggestion])
     const countryCounts = proposals.countryCounts
     if (!Object.keys(countryCounts).length) {
         return <></>
@@ -67,7 +67,7 @@ export const CountryFilter = observer(function CountryFilter() {
             >
                 <IconGlobe color={filters.country == null ? "#fff" : brand} />
                 <CountryName>All countries</CountryName>
-                <Count>{proposals.textFiltered.length}</Count>
+                <Count>{proposals.proposalsAll.length}</Count>
             </CountryToggle>
             {sortedCountries.map((countryCode) => {
                 const toggleAction = (): void => {
