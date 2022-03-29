@@ -83,9 +83,6 @@ export class ProposalStore {
                             this.fetchProposalFilterPresets()
                         },
                     )
-                    setTimeout(() => {
-                        this.fetchProposals()
-                    }, 8_000)
                 }
             },
         )
