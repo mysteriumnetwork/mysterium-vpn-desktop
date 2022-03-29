@@ -22,11 +22,6 @@ const supportedServiceType = "wireguard"
 
 const proposalRefreshRate = 30_000
 
-export type TransientFilter = {
-    text?: string
-    country?: string
-}
-
 export class ProposalStore {
     loading = false
     proposals: UIProposal[] = []
@@ -34,7 +29,6 @@ export class ProposalStore {
     filterPresets: FilterPreset[] = []
     active?: UIProposal
     suggestion?: UIProposal
-    filter: TransientFilter = {}
 
     root: RootStore
 
@@ -46,14 +40,11 @@ export class ProposalStore {
             filterPresets: observable,
             active: observable,
             suggestion: observable,
-            filter: observable,
             filters: computed,
             fetchProposals: action,
             fetchAllProposalsForQuickSearch: action,
             prepareForQuickSearch: action,
             fetchProposalFilterPresets: action,
-            setTextFilter: action,
-            textFiltered: computed,
             setQualityFilter: action,
             setIncludeFailed: action,
             countryCounts: computed,
@@ -145,24 +136,6 @@ export class ProposalStore {
     }
 
     // #####################
-    // Text filter
-    // #####################
-
-    setTextFilter(text?: string): void {
-        this.filter.text = text
-        this.setCountryFilter(undefined)
-    }
-
-    get textFiltered(): UIProposal[] {
-        const input = this.proposals
-        const filterText = this.filter.text
-        if (!filterText) {
-            return input
-        }
-        return input.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
-    }
-
-    // #####################
     // Quality filter
     // #####################
 
@@ -205,7 +178,7 @@ export class ProposalStore {
     }
 
     get countryFiltered(): UIProposal[] {
-        const input = this.textFiltered
+        const input = this.proposals
         const country = this.root.filters.country
         if (!country) {
             return input
