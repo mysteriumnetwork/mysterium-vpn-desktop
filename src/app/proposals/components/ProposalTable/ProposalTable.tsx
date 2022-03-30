@@ -91,6 +91,9 @@ type TableProps = {
     data: UIProposal[]
 }
 
+const hiddenColsSingleCountry = ["country"]
+const hiddenColsAllCountries = ["priceHour", "priceGib"]
+
 const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
     const { proposals, filters } = useStores()
     const defaultColumn = React.useMemo(
@@ -99,25 +102,30 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
         }),
         [],
     )
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setHiddenColumns } = useTable<UIProposal>(
-        {
-            columns,
-            data,
-            defaultColumn,
-            autoResetSortBy: false,
-            initialState: {
-                sortBy: [{ id: "country" }, { id: "quality", desc: true }],
-                hiddenColumns: ["priceHour", "priceGib"],
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setHiddenColumns, state } =
+        useTable<UIProposal>(
+            {
+                columns,
+                data,
+                defaultColumn,
+                autoResetSortBy: false,
+                initialState: {
+                    sortBy: [{ id: "country" }, { id: "quality", desc: true }],
+                    hiddenColumns: filters.country == null ? hiddenColsAllCountries : hiddenColsSingleCountry,
+                },
             },
-        },
-        useBlockLayout,
-        useSortBy,
-    )
+            useBlockLayout,
+            useSortBy,
+        )
     useEffect(() => {
         if (filters.country == null) {
-            setHiddenColumns(["priceHour", "priceGib"])
+            if (state.hiddenColumns != hiddenColsAllCountries) {
+                setHiddenColumns(hiddenColsAllCountries)
+            }
         } else {
-            setHiddenColumns(["country"])
+            if (state.hiddenColumns != hiddenColsSingleCountry) {
+                setHiddenColumns(hiddenColsSingleCountry)
+            }
         }
     }, [filters.country])
     const listRef = useRef<FixedSizeList>(null)
@@ -213,8 +221,6 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
 
 export const ProposalTable: React.FC = observer(function ProposalTable() {
     const { proposals } = useStores()
-    const items = proposals.filteredProposals
-
     const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
         () => (rowA, rowB) => {
             const q1 = rowA.original.quality?.quality ?? -1
