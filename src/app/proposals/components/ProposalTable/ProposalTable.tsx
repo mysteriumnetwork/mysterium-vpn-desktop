@@ -17,11 +17,12 @@ import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 import { useStores } from "../../../store"
 import { UIProposal } from "../../uiProposal"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
-import { brand, darkBlue, lightBlue } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier"
 import { countryName } from "../../../location/countries"
-import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayTokens4 } from "../../../payment/display"
+
+import { RowRenderer } from "./RowRenderer"
 
 const Styles = styled.div`
     flex: 1;
@@ -70,13 +71,6 @@ const Styles = styled.div`
         flex: 1;
     }
 `
-
-const TableToggle = styled(Toggle).attrs({
-    activeColor: "#5a597d",
-    hoverColor: lightBlue,
-    textColor: darkBlue,
-    paddingX: "6px",
-})``
 
 const CellCenter = styled.div`
     width: 100%;
@@ -136,66 +130,38 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
                 listRef.current?.scrollToItem(idx, "center")
             }
         }
-    }, [proposals.suggestion])
-    const activeKey = proposals.active?.key
+    }, [proposals.suggestion, data])
     const renderRow = React.useCallback(
         ({ index, style }): JSX.Element => {
-            const row = rows[index]
-            prepareRow(row)
-            const active = activeKey == row.original.key
-            const onClick = (): void => proposals.toggleActiveProposal(row.original)
-            const rowMarginX = 6
-            return (
-                <div
-                    key={row.original.key}
-                    style={{
-                        ...style,
-                        boxSizing: "border-box",
-                        width: `calc(100% - ${rowMarginX * 2}px)`,
-                        borderBottom: "1px dashed #dfdff3",
-                        left: rowMarginX,
-                    }}
-                >
-                    <TableToggle active={active} onClick={onClick}>
-                        <div className="tr" {...row.getRowProps()}>
-                            {row.cells.map((cell) => {
-                                return (
-                                    // eslint-disable-next-line react/jsx-key
-                                    <div className="td" {...cell.getCellProps()}>
-                                        {cell.render("Cell")}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </TableToggle>
-                </div>
-            )
+            return <RowRenderer prepareRow={prepareRow} rows={rows} index={index} style={style} />
         },
-        [prepareRow, rows, activeKey],
+        [prepareRow, rows],
     )
     return (
         <div className="table" {...getTableProps()}>
             <div className="thead">
                 {headerGroups.map((headerGroup) => {
-                    const { style, ...rest } = headerGroup.getHeaderGroupProps()
+                    const { style, key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps()
                     return (
-                        // eslint-disable-next-line react/jsx-key
-                        <div className="tr" style={{ ...style, width: "100%" }} {...rest}>
-                            {headerGroup.headers.map((column) => (
-                                // eslint-disable-next-line react/jsx-key
-                                <div
-                                    className={`th ${
-                                        column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
-                                    }`}
-                                    {...column.getHeaderProps(
-                                        column.getSortByToggleProps({
-                                            title: column.canSort ? `Sort by ${column.Header}` : undefined,
-                                        }),
-                                    )}
-                                >
-                                    {column.render("Header")}
-                                </div>
-                            ))}
+                        <div key={key} className="tr" style={{ ...style, width: "100%" }} {...restHeaderGroupProps}>
+                            {headerGroup.headers.map((column) => {
+                                const { key, ...restHeaderProps } = column.getHeaderProps(
+                                    column.getSortByToggleProps({
+                                        title: column.canSort ? `Sort by ${column.Header}` : undefined,
+                                    }),
+                                )
+                                return (
+                                    <div
+                                        key={key}
+                                        className={`th ${
+                                            column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
+                                        }`}
+                                        {...restHeaderProps}
+                                    >
+                                        {column.render("Header")}
+                                    </div>
+                                )
+                            })}
                         </div>
                     )
                 })}
@@ -302,7 +268,7 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
     ) as Column<UIProposal>[]
     return (
         <Styles>
-            <Table columns={columns} data={items} />
+            <Table columns={columns} data={proposals.filteredProposals} />
         </Styles>
     )
 })
