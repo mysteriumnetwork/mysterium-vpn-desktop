@@ -278,6 +278,6 @@ export class ProposalStore {
 
     setProposalsCurrent = (): void => {
         const country = this.root.filters.country
-        this.proposalsCurrent = country ? this.proposalsByCountry[country] : this.proposalsAll
+        this.proposalsCurrent = country ? this.proposalsByCountry[country] ?? [] : this.proposalsAll
     }
 }
