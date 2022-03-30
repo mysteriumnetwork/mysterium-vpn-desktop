@@ -71,10 +71,6 @@ const Styles = styled.div`
     }
 `
 
-const TableRow = styled.div`
-    border-bottom: 1px dashed #dfdff3;
-`
-
 const TableToggle = styled(Toggle).attrs({
     activeColor: "#5a597d",
     hoverColor: lightBlue,
@@ -143,27 +139,27 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
             const rowMarginX = 6
             return (
                 <div
+                    key={row.original.key}
                     style={{
                         ...style,
                         boxSizing: "border-box",
                         width: `calc(100% - ${rowMarginX * 2}px)`,
+                        borderBottom: "1px dashed #dfdff3",
                         left: rowMarginX,
                     }}
                 >
-                    <TableRow>
-                        <TableToggle key={row.original.key} active={active} onClick={onClick}>
-                            <div className="tr" {...row.getRowProps()}>
-                                {row.cells.map((cell) => {
-                                    return (
-                                        // eslint-disable-next-line react/jsx-key
-                                        <div className="td" {...cell.getCellProps()}>
-                                            {cell.render("Cell")}
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </TableToggle>
-                    </TableRow>
+                    <TableToggle active={active} onClick={onClick}>
+                        <div className="tr" {...row.getRowProps()}>
+                            {row.cells.map((cell) => {
+                                return (
+                                    // eslint-disable-next-line react/jsx-key
+                                    <div className="td" {...cell.getCellProps()}>
+                                        {cell.render("Cell")}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </TableToggle>
                 </div>
             )
         },
