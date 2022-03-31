@@ -12,13 +12,6 @@ export interface QRProps {
     size?: number
 }
 
-export const QR: React.FC<QRProps> = ({ text, size = 128 }) => {
-    if (!text) {
-        return <></>
-    }
-    return (
-        <div style={{ width: size, height: size }}>
-            <QRCode value={text} size={size} renderAs="svg" />
-        </div>
-    )
-}
+export const QR: React.FC<QRProps> = ({ text, size = 128 }) => (
+    <div style={{ width: size, height: size }}>{text && <QRCode value={text} size={size} renderAs="svg" />}</div>
+)
