@@ -7,7 +7,7 @@
 import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
+import { CellProps, Column, Renderer, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { Quality } from "mysterium-vpn-js"
@@ -17,11 +17,11 @@ import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 import { useStores } from "../../../store"
 import { UIProposal } from "../../uiProposal"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
-import { brand, darkBlue, lightBlue } from "../../../ui-kit/colors"
+import { brand } from "../../../ui-kit/colors"
 import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier"
-import { countryName } from "../../../location/countries"
-import { Toggle } from "../../../ui-kit/components/Toggle/Toggle"
 import { displayTokens4 } from "../../../payment/display"
+
+import { RowRenderer } from "./RowRenderer"
 
 const Styles = styled.div`
     flex: 1;
@@ -71,17 +71,6 @@ const Styles = styled.div`
     }
 `
 
-const TableRow = styled.div`
-    border-bottom: 1px dashed #dfdff3;
-`
-
-const TableToggle = styled(Toggle).attrs({
-    activeColor: "#5a597d",
-    hoverColor: lightBlue,
-    textColor: darkBlue,
-    paddingX: "6px",
-})``
-
 const CellCenter = styled.div`
     width: 100%;
     height: 100%;
@@ -95,6 +84,9 @@ type TableProps = {
     data: UIProposal[]
 }
 
+const hiddenColsSingleCountry = ["countryName"]
+const hiddenColsAllCountries = ["priceHour", "priceGib"]
+
 const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
     const { proposals, filters } = useStores()
     const defaultColumn = React.useMemo(
@@ -103,25 +95,30 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
         }),
         [],
     )
-    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setHiddenColumns } = useTable<UIProposal>(
-        {
-            columns,
-            data,
-            defaultColumn,
-            autoResetSortBy: false,
-            initialState: {
-                sortBy: [{ id: "country" }, { id: "quality", desc: true }],
-                hiddenColumns: ["priceHour", "priceGib"],
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, setHiddenColumns, state } =
+        useTable<UIProposal>(
+            {
+                columns,
+                data,
+                defaultColumn,
+                autoResetSortBy: false,
+                initialState: {
+                    sortBy: [{ id: "countryName" }, { id: "qualityLevel", desc: true }],
+                    hiddenColumns: filters.country == null ? hiddenColsAllCountries : hiddenColsSingleCountry,
+                },
             },
-        },
-        useBlockLayout,
-        useSortBy,
-    )
+            useBlockLayout,
+            useSortBy,
+        )
     useEffect(() => {
         if (filters.country == null) {
-            setHiddenColumns(["priceHour", "priceGib"])
+            if (state.hiddenColumns != hiddenColsAllCountries) {
+                setHiddenColumns(hiddenColsAllCountries)
+            }
         } else {
-            setHiddenColumns(["country"])
+            if (state.hiddenColumns != hiddenColsSingleCountry) {
+                setHiddenColumns(hiddenColsSingleCountry)
+            }
         }
     }, [filters.country])
     const listRef = useRef<FixedSizeList>(null)
@@ -132,66 +129,38 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
                 listRef.current?.scrollToItem(idx, "center")
             }
         }
-    }, [proposals.suggestion])
-    const activeKey = proposals.active?.key
+    }, [proposals.suggestion, data])
     const renderRow = React.useCallback(
         ({ index, style }): JSX.Element => {
-            const row = rows[index]
-            prepareRow(row)
-            const active = activeKey == row.original.key
-            const onClick = (): void => proposals.toggleActiveProposal(row.original)
-            const rowMarginX = 6
-            return (
-                <div
-                    style={{
-                        ...style,
-                        boxSizing: "border-box",
-                        width: `calc(100% - ${rowMarginX * 2}px)`,
-                        left: rowMarginX,
-                    }}
-                >
-                    <TableRow>
-                        <TableToggle key={row.original.key} active={active} onClick={onClick}>
-                            <div className="tr" {...row.getRowProps()}>
-                                {row.cells.map((cell) => {
-                                    return (
-                                        // eslint-disable-next-line react/jsx-key
-                                        <div className="td" {...cell.getCellProps()}>
-                                            {cell.render("Cell")}
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </TableToggle>
-                    </TableRow>
-                </div>
-            )
+            return <RowRenderer prepareRow={prepareRow} rows={rows} index={index} style={style} />
         },
-        [prepareRow, rows, activeKey],
+        [prepareRow, rows],
     )
     return (
         <div className="table" {...getTableProps()}>
             <div className="thead">
                 {headerGroups.map((headerGroup) => {
-                    const { style, ...rest } = headerGroup.getHeaderGroupProps()
+                    const { style, key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps()
                     return (
-                        // eslint-disable-next-line react/jsx-key
-                        <div className="tr" style={{ ...style, width: "100%" }} {...rest}>
-                            {headerGroup.headers.map((column) => (
-                                // eslint-disable-next-line react/jsx-key
-                                <div
-                                    className={`th ${
-                                        column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
-                                    }`}
-                                    {...column.getHeaderProps(
-                                        column.getSortByToggleProps({
-                                            title: column.canSort ? `Sort by ${column.Header}` : undefined,
-                                        }),
-                                    )}
-                                >
-                                    {column.render("Header")}
-                                </div>
-                            ))}
+                        <div key={key} className="tr" style={{ ...style, width: "100%" }} {...restHeaderGroupProps}>
+                            {headerGroup.headers.map((column) => {
+                                const { key, ...restHeaderProps } = column.getHeaderProps(
+                                    column.getSortByToggleProps({
+                                        title: column.canSort ? `Sort by ${column.Header}` : undefined,
+                                    }),
+                                )
+                                return (
+                                    <div
+                                        key={key}
+                                        className={`th ${
+                                            column.isSorted ? (column.isSortedDesc ? "sorted-desc" : "sorted-asc") : ""
+                                        }`}
+                                        {...restHeaderProps}
+                                    >
+                                        {column.render("Header")}
+                                    </div>
+                                )
+                            })}
                         </div>
                     )
                 })}
@@ -217,19 +186,6 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
 
 export const ProposalTable: React.FC = observer(function ProposalTable() {
     const { proposals } = useStores()
-    const items = proposals.filteredProposals
-
-    const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
-        () => (rowA, rowB) => {
-            const q1 = rowA.original.quality?.quality ?? -1
-            const q2 = rowB.original.quality?.quality ?? -1
-            if (q1 == q2) {
-                return 0
-            }
-            return q1 > q2 ? 1 : -1
-        },
-        [],
-    )
     const columns = React.useMemo<Column<UIProposal>[]>(
         () => [
             {
@@ -252,10 +208,8 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
 
             {
                 Header: "Country",
-                accessor: "country",
+                accessor: "countryName",
                 width: 124,
-                // eslint-disable-next-line react/display-name
-                Cell: (props): Renderer<CellProps<UIProposal, string>> => <span>{countryName(props.value)}</span>,
             },
             {
                 Header: "Price/h",
@@ -282,15 +236,14 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
             },
             {
                 Header: "Quality",
-                accessor: "quality",
+                accessor: "qualityLevel",
                 width: 42,
                 sortDescFirst: true,
-                sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
                 Cell: (props): Renderer<CellProps<UIProposal, Quality | undefined>> => {
                     return (
                         <CellCenter>
-                            <ProposalQuality level={props.value?.quality} />
+                            <ProposalQuality level={props.value} />
                         </CellCenter>
                     )
                 },
@@ -300,7 +253,7 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
     ) as Column<UIProposal>[]
     return (
         <Styles>
-            <Table columns={columns} data={items} />
+            <Table columns={columns} data={proposals.filteredProposals} />
         </Styles>
     )
 })

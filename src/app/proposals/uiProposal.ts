@@ -4,41 +4,32 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Proposal, QualityLevel } from "mysterium-vpn-js"
+import { Proposal, qualityLevel, QualityLevel } from "mysterium-vpn-js"
+
+import { countryName } from "../location/countries"
 
 export type ProposalKey = string
 
 export interface UIProposal extends Proposal {
     key: ProposalKey
     country: string
+    countryName: string
     shortId: string
-    serviceType4: string
     qualityLevel?: QualityLevel
     ipType: string
 }
 
-const shortId = (id: string): string => id.substr(0, 14)
-
-const serviceType4 = (serviceType: string): string => {
-    switch (serviceType) {
-        case "openvpn": {
-            return "ovpn"
-        }
-        case "wireguard": {
-            return "wgrd"
-        }
-    }
-    return serviceType.substr(0, 4)
-}
+const shortId = (id: string): string => id.substring(0, 14)
 
 export const newUIProposal = (proposal: Proposal): UIProposal => {
     return {
         ...proposal,
+        qualityLevel: qualityLevel(proposal.quality),
         key: proposal.providerId,
         country: proposal.location.country ?? "unknown",
+        countryName: countryName(proposal.location.country ?? "unknown"),
         ipType: proposal.location.ipType ?? "unknown",
         shortId: shortId(proposal.providerId),
-        serviceType4: serviceType4(proposal.serviceType),
     }
 }
 
