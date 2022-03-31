@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Proposal, QualityLevel } from "mysterium-vpn-js"
+import { Proposal, qualityLevel, QualityLevel } from "mysterium-vpn-js"
 
 export type ProposalKey = string
 
@@ -34,6 +34,7 @@ const serviceType4 = (serviceType: string): string => {
 export const newUIProposal = (proposal: Proposal): UIProposal => {
     return {
         ...proposal,
+        qualityLevel: qualityLevel(proposal.quality),
         key: proposal.providerId,
         country: proposal.location.country ?? "unknown",
         ipType: proposal.location.ipType ?? "unknown",

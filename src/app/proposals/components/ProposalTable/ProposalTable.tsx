@@ -7,7 +7,7 @@
 import React, { useEffect, useRef } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { CellProps, Column, Renderer, SortByFn, useBlockLayout, useSortBy, useTable } from "react-table"
+import { CellProps, Column, Renderer, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
 import { Quality } from "mysterium-vpn-js"
@@ -104,7 +104,7 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
                 defaultColumn,
                 autoResetSortBy: false,
                 initialState: {
-                    sortBy: [{ id: "country" }, { id: "quality", desc: true }],
+                    sortBy: [{ id: "country" }, { id: "qualityLevel", desc: true }],
                     hiddenColumns: filters.country == null ? hiddenColsAllCountries : hiddenColsSingleCountry,
                 },
             },
@@ -187,17 +187,6 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
 
 export const ProposalTable: React.FC = observer(function ProposalTable() {
     const { proposals } = useStores()
-    const qualitySortFn = React.useMemo<SortByFn<UIProposal>>(
-        () => (rowA, rowB) => {
-            const q1 = rowA.original.quality?.quality ?? -1
-            const q2 = rowB.original.quality?.quality ?? -1
-            if (q1 == q2) {
-                return 0
-            }
-            return q1 > q2 ? 1 : -1
-        },
-        [],
-    )
     const columns = React.useMemo<Column<UIProposal>[]>(
         () => [
             {
@@ -250,15 +239,14 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
             },
             {
                 Header: "Quality",
-                accessor: "quality",
+                accessor: "qualityLevel",
                 width: 42,
                 sortDescFirst: true,
-                sortType: qualitySortFn,
                 // eslint-disable-next-line react/display-name
                 Cell: (props): Renderer<CellProps<UIProposal, Quality | undefined>> => {
                     return (
                         <CellCenter>
-                            <ProposalQuality level={props.value?.quality} />
+                            <ProposalQuality level={props.value} />
                         </CellCenter>
                     )
                 },
