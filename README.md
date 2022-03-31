@@ -47,6 +47,19 @@ sudo dnf install package-name.rpm
 brew install --cask mysteriumvpn
 ```
 
+### Windows
+
+- Mysterium VPN can also be installed with [chocolatey](https://chocolatey.org/):
+
+```sh
+choco install -y mysteriumvpn
+```
+
+- Update
+```sh
+choco update -y mysteriumvpn
+```
+
 ## Logs
 
 Logs help to debug issues when something goes wrong. Make sure to attach all of them when submitting a bug report.
