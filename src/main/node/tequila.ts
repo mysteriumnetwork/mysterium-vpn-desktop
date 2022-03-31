@@ -28,7 +28,7 @@ export class Tequila {
     persistConfigDebounced = _.debounce((cfg) => {
         log.info("Persisting user configuration:", JSON.stringify(cfg))
         this.tequilapi
-            .updateUserConfig(cfg)
+            .updateUserConfig({ data: cfg })
             .then(() => log.info("Save OK"))
             .catch((err) => log.error("Save failed", err))
     }, 2_000)
