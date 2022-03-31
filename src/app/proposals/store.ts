@@ -27,7 +27,6 @@ type CountryCounts = { [code: string]: number }
 
 export class ProposalStore {
     loading = false
-    proposals: UIProposal[] = []
     proposalsCurrent: UIProposal[] = []
 
     proposalsAll: UIProposal[] = []
@@ -45,13 +44,12 @@ export class ProposalStore {
     constructor(root: RootStore) {
         makeObservable(this, {
             loading: observable,
-            proposals: observable,
-            proposalsCurrent: observable,
-            countryCounts: observable,
-            proposalsAllPresetsForQuickSearch: observable,
-            filterPresets: observable,
-            active: observable,
-            suggestion: observable,
+            proposalsCurrent: observable.ref,
+            countryCounts: observable.ref,
+            proposalsAllPresetsForQuickSearch: observable.ref,
+            filterPresets: observable.ref,
+            active: observable.ref,
+            suggestion: observable.ref,
             filters: computed,
             fetchProposals: action,
             fetchAllProposalsForQuickSearch: action,
@@ -61,7 +59,6 @@ export class ProposalStore {
             setIncludeFailed: action,
             setCountryFilter: action,
             toggleCountryFilter: action,
-            countryFiltered: computed,
             filteredProposals: computed,
             priceCeil: computed,
             toggleActiveProposal: action,
@@ -187,15 +184,6 @@ export class ProposalStore {
     toggleCountryFilter(countryCode?: string): void {
         this.setCountryFilter(this.root.filters.country !== countryCode ? countryCode : undefined)
         this.toggleActiveProposal(undefined)
-    }
-
-    get countryFiltered(): UIProposal[] {
-        const input = this.proposals
-        const country = this.root.filters.country
-        if (!country) {
-            return input
-        }
-        return input.filter((p) => p.country == country)
     }
 
     // #####################
