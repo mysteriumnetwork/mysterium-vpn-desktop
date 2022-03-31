@@ -19,7 +19,6 @@ import { UIProposal } from "../../uiProposal"
 import { ProposalQuality } from "../ProposalQuality/ProposalQuality"
 import { brand } from "../../../ui-kit/colors"
 import { IconPriceTier } from "../../../ui-kit/icons/IconPriceTier"
-import { countryName } from "../../../location/countries"
 import { displayTokens4 } from "../../../payment/display"
 
 import { RowRenderer } from "./RowRenderer"
@@ -85,7 +84,7 @@ type TableProps = {
     data: UIProposal[]
 }
 
-const hiddenColsSingleCountry = ["country"]
+const hiddenColsSingleCountry = ["countryName"]
 const hiddenColsAllCountries = ["priceHour", "priceGib"]
 
 const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
@@ -104,7 +103,7 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
                 defaultColumn,
                 autoResetSortBy: false,
                 initialState: {
-                    sortBy: [{ id: "country" }, { id: "qualityLevel", desc: true }],
+                    sortBy: [{ id: "countryName" }, { id: "qualityLevel", desc: true }],
                     hiddenColumns: filters.country == null ? hiddenColsAllCountries : hiddenColsSingleCountry,
                 },
             },
@@ -209,10 +208,8 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
 
             {
                 Header: "Country",
-                accessor: "country",
+                accessor: "countryName",
                 width: 124,
-                // eslint-disable-next-line react/display-name
-                Cell: (props): Renderer<CellProps<UIProposal, string>> => <span>{countryName(props.value)}</span>,
             },
             {
                 Header: "Price/h",

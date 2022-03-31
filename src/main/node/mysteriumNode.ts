@@ -30,11 +30,11 @@ const mystBin = (): string => {
 const parseCLIError = (message: string): string => {
     let idx = message.indexOf("Possible error: ")
     if (idx != -1) {
-        return message.substr(idx)
+        return message.substring(idx)
     }
     idx = message.indexOf("reason: ")
     if (idx != -1) {
-        return message.substr(idx)
+        return message.substring(idx)
     }
     return message
 }
