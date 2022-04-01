@@ -9,6 +9,7 @@ export enum EventName {
     startup = "startup",
     connect_attempt = "connect_attempt",
     connect_success = "connect_success",
+    connect_cancel = "connect_cancel",
     connect_failure = "connect_failure",
     manual_connect = "manual_connect",
     quick_connect = "quick_connect",

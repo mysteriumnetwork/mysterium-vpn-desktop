@@ -4,15 +4,17 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { action, computed, makeObservable, observable, runInAction } from "mobx"
+import { action, computed, makeObservable, observable, runInAction, toJS } from "mobx"
 import { DNSOption, QualityLevel } from "mysterium-vpn-js"
 import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import * as _ from "lodash"
+import { ipcRenderer } from "electron"
 
 import { RootStore } from "../store"
 import { log } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
 import { locations } from "../navigation/locations"
+import { MainIpcListenChannels } from "../../shared/ipc"
 
 export interface Config {
     desktop: DesktopConfig
@@ -69,7 +71,6 @@ export class ConfigStore {
             updateDesktopConfigPartial: action,
             updateNodeConfigPartial: action,
             persistConfig: action,
-            persistConfigDebounced: action,
 
             currentTermsAgreed: computed,
             agreeToTerms: action,
@@ -102,23 +103,18 @@ export class ConfigStore {
 
     updateDesktopConfigPartial = async (desktopConfig: DesktopConfig): Promise<void> => {
         this.config.desktop = _.merge({}, this.config.desktop, desktopConfig)
-        return this.persistConfigDebounced()
+        return this.persistConfig()
     }
 
     updateNodeConfigPartial = async (config: Partial<Config>): Promise<void> => {
         this.config = _.merge({}, this.config, config)
-        return this.persistConfigDebounced()
+        return this.persistConfig()
     }
 
+    // Offload to main
     persistConfig = async (): Promise<void> => {
-        const cfg = this.config
-        log.info("Persisting user configuration:", JSON.stringify(cfg))
-        await tequilapi.updateUserConfig({
-            data: cfg,
-        })
+        ipcRenderer.send(MainIpcListenChannels.SaveUserConfig, toJS(this.config))
     }
-
-    persistConfigDebounced = _.debounce(this.persistConfig, 2_000)
 
     get currentTermsAgreed(): boolean {
         const version = this.config.desktop?.["terms-agreed"]?.version

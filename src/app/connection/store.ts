@@ -25,6 +25,7 @@ export class ConnectionStore {
     connectInProgress = false
     gracePeriod = false
     status = ConnectionStatus.NOT_CONNECTED
+    userCancelled = false
     statistics?: ConnectionStatistics
     proposal?: UIProposal
     location?: Location
@@ -38,6 +39,7 @@ export class ConnectionStore {
             connectInProgress: observable,
             gracePeriod: observable,
             status: observable,
+            userCancelled: observable,
             statistics: observable,
             proposal: observable,
             location: observable,
@@ -51,6 +53,7 @@ export class ConnectionStore {
             resolveLocation: action,
             currentIp: computed,
             setConnectInProgress: action,
+            markUserCancelled: action,
             setGracePeriod: action,
             setStatus: action,
             setProposal: action,
@@ -169,6 +172,14 @@ export class ConnectionStore {
                 duration: new Date().getTime() - before.getTime(),
             })
         } catch (err) {
+            if (this.userCancelled) {
+                analytics.event(EventName.connect_cancel, {
+                    country: proposal.country,
+                    provider_id: proposal.providerId,
+                    duration: new Date().getTime() - before.getTime(),
+                })
+                return Promise.resolve()
+            }
             analytics.event(EventName.connect_failure, {
                 country: proposal.country,
                 provider_id: proposal.providerId,
@@ -200,6 +211,7 @@ export class ConnectionStore {
     }
 
     async disconnect(): Promise<void> {
+        this.markUserCancelled()
         analytics.event(EventName.balance_update, {
             balance: Number(this.root.identity.identity?.balanceTokens?.human),
         })
@@ -297,6 +309,17 @@ export class ConnectionStore {
         setTimeout(() => {
             runInAction(() => {
                 this.gracePeriod = false
+            })
+        }, 5000)
+    }
+
+    markUserCancelled = (): void => {
+        runInAction(() => {
+            this.userCancelled = true
+        })
+        setTimeout(() => {
+            runInAction(() => {
+                this.userCancelled = false
             })
         }, 5000)
     }

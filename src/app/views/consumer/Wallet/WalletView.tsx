@@ -126,7 +126,6 @@ export const WalletView: React.FC = observer(function WalletView() {
             setTopupLoading(false)
             const msg = parseError(err)
             logErrorMessage("Could not contact payment gateways", msg)
-            msg.humanReadable = "Could not contact payment gateways. Please try again later."
             toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
         }
     }

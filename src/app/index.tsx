@@ -7,12 +7,12 @@
 import { platform } from "os"
 
 import React from "react"
-import ReactDOM from "react-dom"
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom"
 import { createGlobalStyle, keyframes } from "styled-components"
 import { Toaster } from "react-hot-toast"
 import { createHashHistory } from "history"
 import { observe } from "mobx"
+import { createRoot } from "react-dom/client"
 
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 
@@ -142,11 +142,15 @@ const App: React.FC = () => (
 )
 
 // Render components
-const app = document.getElementById("app")
-ReactDOM.render(<App />, app)
+const container = document.getElementById("app")
+if (!container) {
+    throw new Error("Could not find DOM container '#app'")
+}
+const root = createRoot(container)
+root.render(<App />)
 
 observe(rootStore, (change) => {
-    if (change.name === "os" && app) {
-        app.className = change.object[change.name]
+    if (change.name === "os" && container) {
+        container.className = change.object[change.name]
     }
 })

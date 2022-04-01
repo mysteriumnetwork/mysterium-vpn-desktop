@@ -133,15 +133,10 @@ export class PaymentStore {
             this.paymentMethods = Object.keys(SUPPORTED_METHODS)
                 .map((name) => {
                     const meta = SUPPORTED_METHODS[name]
-                    const gatewayData =
-                        this.paymentGateways?.find((gw) => gw.name === meta.gateway) ??
-                        ({
-                            name: "",
-                            currencies: [],
-                            orderOptions: { suggested: [], minimum: 0 },
-                        } as PaymentGateway)
+                    const gatewayData = this.paymentGateways?.find((gw) => gw.name === meta.gateway)
                     return { name, ...meta, gatewayData } as PaymentMethod
                 })
+                .filter((m) => m.gatewayData != null)
                 .sort((a, b) => (a < b ? -1 : 1))
         })
     }

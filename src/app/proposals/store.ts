@@ -22,44 +22,43 @@ const supportedServiceType = "wireguard"
 
 const proposalRefreshRate = 30_000
 
-export type TransientFilter = {
-    text?: string
-    country?: string
-}
+type Dict = _.Dictionary<UIProposal[]>
+type CountryCounts = { [code: string]: number }
 
 export class ProposalStore {
     loading = false
-    proposals: UIProposal[] = []
-    allProposals: UIProposal[] = []
+    proposalsCurrent: UIProposal[] = []
+
+    proposalsAll: UIProposal[] = []
+    proposalsByCountry: Dict = {}
+    countryCounts: CountryCounts = {}
+
+    proposalsAllPresetsForQuickSearch: UIProposal[] = []
+
     filterPresets: FilterPreset[] = []
     active?: UIProposal
     suggestion?: UIProposal
-    filter: TransientFilter = {}
 
     root: RootStore
 
     constructor(root: RootStore) {
         makeObservable(this, {
             loading: observable,
-            proposals: observable,
-            allProposals: observable,
-            filterPresets: observable,
-            active: observable,
-            suggestion: observable,
-            filter: observable,
+            proposalsCurrent: observable.ref,
+            countryCounts: observable.ref,
+            proposalsAllPresetsForQuickSearch: observable.ref,
+            filterPresets: observable.ref,
+            active: observable.ref,
+            suggestion: observable.ref,
             filters: computed,
             fetchProposals: action,
             fetchAllProposalsForQuickSearch: action,
             prepareForQuickSearch: action,
             fetchProposalFilterPresets: action,
-            setTextFilter: action,
-            textFiltered: computed,
             setQualityFilter: action,
             setIncludeFailed: action,
-            countryCounts: computed,
             setCountryFilter: action,
             toggleCountryFilter: action,
-            countryFiltered: computed,
             filteredProposals: computed,
             priceCeil: computed,
             toggleActiveProposal: action,
@@ -67,6 +66,7 @@ export class ProposalStore {
             useQuickSearchSuggestion: action,
             setLoading: action,
             setProposals: action,
+            setProposalsCurrent: action,
         })
         this.root = root
     }
@@ -79,13 +79,12 @@ export class ProposalStore {
                     when(
                         () => this.root.config.loaded,
                         () => {
-                            this.fetchProposals()
+                            this.fetchProposals().then(() => {
+                                this.setProposalsCurrent()
+                            })
                             this.fetchProposalFilterPresets()
                         },
                     )
-                    setTimeout(() => {
-                        this.fetchProposals()
-                    }, 8_000)
                 }
             },
         )
@@ -145,24 +144,7 @@ export class ProposalStore {
         }
         await this.root.filters.setPartial({ preset: { id } })
         await this.fetchProposals()
-    }
-
-    // #####################
-    // Text filter
-    // #####################
-
-    setTextFilter(text?: string): void {
-        this.filter.text = text
-        this.setCountryFilter(undefined)
-    }
-
-    get textFiltered(): UIProposal[] {
-        const input = this.proposals
-        const filterText = this.filter.text
-        if (!filterText) {
-            return input
-        }
-        return input.filter((p) => p.providerId.includes(filterText)).sort(compareProposal)
+        this.setProposalsCurrent()
     }
 
     // #####################
@@ -188,17 +170,14 @@ export class ProposalStore {
     // Country filter
     // #####################
 
-    get countryCounts(): { [code: string]: number } {
-        const input = this.textFiltered
-        const result = _.groupBy(input, (p) => p.country)
-        return _.mapValues(result, (ps) => ps.length)
-    }
-
     async setCountryFilter(countryCode?: string): Promise<void> {
         await this.root.filters.setPartial({
             other: {
                 country: countryCode ?? null,
             },
+        })
+        requestIdleCallback(() => {
+            this.setProposalsCurrent()
         })
     }
 
@@ -207,21 +186,12 @@ export class ProposalStore {
         this.toggleActiveProposal(undefined)
     }
 
-    get countryFiltered(): UIProposal[] {
-        const input = this.textFiltered
-        const country = this.root.filters.country
-        if (!country) {
-            return input
-        }
-        return input.filter((p) => p.country == country)
-    }
-
     // #####################
     // Resulting list of proposals
     // #####################
 
     get filteredProposals(): UIProposal[] {
-        return this.countryFiltered.slice().sort(compareProposal)
+        return this.proposalsCurrent
     }
 
     get priceCeil(): PriceCeiling {
@@ -260,7 +230,7 @@ export class ProposalStore {
         if (this.filters.preset?.id) {
             this.toggleFilterPreset(0)
         }
-        return await this.fetchAllProposalsForQuickSearchDebounced()
+        return this.fetchAllProposalsForQuickSearchDebounced()
     }
 
     fetchAllProposalsForQuickSearchDebounced = _.throttle(this.fetchAllProposalsForQuickSearch, 60_000)
@@ -272,7 +242,7 @@ export class ProposalStore {
             })
             .then((proposals) => proposals.map(newUIProposal))
         runInAction(() => {
-            this.allProposals = allProposals
+            this.proposalsAllPresetsForQuickSearch = allProposals
         })
     }
 
@@ -287,6 +257,15 @@ export class ProposalStore {
     }
 
     setProposals = (proposals: UIProposal[]): void => {
-        this.proposals = proposals
+        proposals = proposals.sort(compareProposal)
+        this.proposalsAll = proposals
+        this.proposalsByCountry = _.groupBy(proposals, "country")
+        // observable
+        this.countryCounts = _.mapValues(this.proposalsByCountry, (ps) => ps.length)
+    }
+
+    setProposalsCurrent = (): void => {
+        const country = this.root.filters.country
+        this.proposalsCurrent = country ? this.proposalsByCountry[country] ?? [] : this.proposalsAll
     }
 }

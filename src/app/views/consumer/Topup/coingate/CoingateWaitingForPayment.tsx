@@ -64,9 +64,11 @@ const Content = styled(ViewContent)`
 `
 
 const PaymentCountDown = styled(Heading2)`
+    height: 21px;
     margin-bottom: 15px;
 `
 const PaymentAmount = styled.div`
+    height: 21px;
     background: ${brand};
     color: #fff;
     padding: 5px 10px;
@@ -86,10 +88,19 @@ const PaymentAddress = styled.div`
     overflow-y: scroll;
     user-select: text;
     opacity: 0.7;
+    height: 60px;
     max-height: 60px;
     border: 1px solid #ffffff99;
     border-radius: 5px;
     padding: 10px;
+`
+
+const PaymentWarning = styled(Small)`
+    margin: 5px 0 10px;
+    max-height: 60px;
+    overflow-y: scroll;
+    white-space: wrap;
+    text-overflow: ellipsis;
 `
 
 const PaymentExplanation = styled(Paragraph)`
@@ -140,15 +151,19 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                 </ViewSidebar>
                 <Content>
                     <PaymentCountDown>
-                        <CountDown
-                            date={payment.orderExpiresAt}
-                            renderer={(props) => (
-                                <div>
-                                    {props.minutes.toString().padStart(2, "0")}:
-                                    {props.seconds.toString().padStart(2, "0")}
-                                </div>
-                            )}
-                        />
+                        {payment.orderExpiresAt ? (
+                            <CountDown
+                                date={payment.orderExpiresAt}
+                                renderer={(props) => (
+                                    <div>
+                                        {props.minutes.toString().padStart(2, "0")}:
+                                        {props.seconds.toString().padStart(2, "0")}
+                                    </div>
+                                )}
+                            />
+                        ) : (
+                            <span>— : —</span>
+                        )}
                     </PaymentCountDown>
                     <PaymentAmount>
                         <Heading2>
@@ -156,9 +171,14 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                         </Heading2>
                     </PaymentAmount>
                     <PaymentQR>
-                        <QR size={192} text={payment.order?.publicGatewayData?.paymentAddress} />
+                        <QR size={168} text={payment.order?.publicGatewayData?.paymentAddress} />
                     </PaymentQR>
                     <PaymentAddress>{payment.order?.publicGatewayData?.paymentAddress}</PaymentAddress>
+                    <PaymentWarning>
+                        This address is for {payment.order?.payCurrency ?? "—"} deposits only. Do not send any other
+                        cryptocurrency or {payment.order?.payCurrency ?? "—"} from any other chains, such as Binance
+                        Chain (BEP-2) or your deposit will be lost.
+                    </PaymentWarning>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
                     <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>
                 </Content>
