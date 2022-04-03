@@ -6,7 +6,6 @@
  */
 
 import * as path from "path"
-import { format as formatUrl } from "url"
 import * as os from "os"
 
 import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
@@ -17,7 +16,7 @@ import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 import { log } from "../shared/log/log"
-import { isDevelopment } from "../utils/env"
+import { isDevelopment, isProduction } from "../utils/env"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { handleProcessExit } from "../utils/handleProcessExit"
 
@@ -96,17 +95,11 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         })
     }
 
-    if (isDevelopment()) {
-        window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-    } else {
-        window.loadURL(
-            formatUrl({
-                pathname: path.join(__dirname, "index.html"),
-                protocol: "file",
-                slashes: true,
-            }),
-        )
-    }
+    const indexUrl = isProduction()
+        ? new URL(`file:///${path.join(__dirname, "index.html")}`)
+        : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    log.info(`Opening in browser window: ${indexUrl.toString()}`)
+    window.loadURL(indexUrl.toString())
 
     window.on("close", (event) => {
         if (app.quitting) {
@@ -157,17 +150,14 @@ const createChatWindow = async (id: string): Promise<BrowserWindow> => {
         chatWindow = null
     })
 
-    const url = formatUrl({
-        pathname: path.join(__static, "support.html"),
-        query: {
-            app_id: packageJson.intercomAppId,
-            node_identity: id,
-            app_version: packageJson.version,
-        },
-        protocol: "file",
-        slashes: true,
-    })
-    await chatWindow.loadURL(url)
+    const url = new URL(`file:///${path.join(__static, "support.html")}`)
+    url.search = new URLSearchParams({
+        app_id: packageJson.intercomAppId,
+        node_identity: id,
+        app_version: packageJson.version,
+    }).toString()
+    log.info(`Opening in browser window: ${url.toString()}`)
+    await chatWindow.loadURL(url.toString())
     return chatWindow
 }
 
