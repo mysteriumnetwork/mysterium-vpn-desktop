@@ -82,7 +82,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
             webSecurity: false, // Make requests to local tequilapi despite CORS policy
             contextIsolation: false,
             nodeIntegration: true,
-            nativeWindowOpen: true,
         },
     })
     window.setMenuBarVisibility(false)
