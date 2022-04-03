@@ -26,6 +26,7 @@ import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
 import { mysteriumNode } from "./node/mysteriumNode"
 import { tequila } from "./node/tequila"
+import { cliFlags } from "./cliFlags"
 
 initializeSentry()
 
@@ -244,7 +245,11 @@ ipcMain.on(MainIpcListenChannels.OpenCardinityPaymentWindow, async (event: IpcMa
 })
 
 ipcMain.on(MainIpcListenChannels.Update, () => {
-    autoUpdater.checkForUpdates()
+    if (app.commandLine.hasSwitch(cliFlags.NO_UPDATE)) {
+        mainWindow?.webContents.send(WebIpcListenChannels.UpdateNotAvailable)
+    } else {
+        autoUpdater.checkForUpdates()
+    }
 })
 ipcMain.on(MainIpcListenChannels.MinimizeWindow, () => {
     mainWindow?.minimize()
