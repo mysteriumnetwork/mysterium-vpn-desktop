@@ -13,14 +13,14 @@ import { faCreditCard } from "@fortawesome/free-solid-svg-icons"
 export enum PaymentMethodName {
     COINGATE = "coingate",
     PAYPAL = "paypal",
-    CARDINITY = "cardinity",
+    STRIPE = "stripe",
     MYST = "myst",
 }
 
 export enum Gateway {
     COINGATE = "coingate",
     PAYPAL = "paypal",
-    CARDINITY = "cardinity",
+    STRIPE = "stripe",
 }
 
 export interface PaymentMethodMetadata {
@@ -48,11 +48,11 @@ export const SUPPORTED_METHODS: { [key: string]: PaymentMethodMetadata } = {
         icon: faPaypal,
         gateway: "paypal",
     },
-    [PaymentMethodName.CARDINITY]: {
+    [PaymentMethodName.STRIPE]: {
         displayOrder: 2,
         displayText: "Credit card",
         icon: faCreditCard,
-        gateway: "cardinity",
+        gateway: "stripe",
     },
     [PaymentMethodName.MYST]: {
         displayOrder: 3,

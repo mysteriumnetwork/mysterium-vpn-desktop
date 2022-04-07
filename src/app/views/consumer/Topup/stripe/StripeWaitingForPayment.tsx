@@ -24,7 +24,7 @@ import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/S
 import { Spinner } from "../../../../ui-kit/components/Spinner/Spinner"
 import { OrderBreakdown } from "../common/OrderBreakdown"
 
-import { LogoCardinity } from "./LogoCardinity"
+import { LogoStripe } from "./LogoStripe"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -76,11 +76,19 @@ const Loading = styled(Spinner)`
     margin-bottom: 10px;
 `
 
+const LogoContainer = styled.div`
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+`
+
 const PaymentExplanation = styled(Paragraph)`
     margin-bottom: auto;
 `
 
-export const CardinityWaitingForPayment: React.FC = observer(() => {
+export const StripeWaitingForPayment: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
     useEffect(() => {
@@ -112,13 +120,13 @@ export const CardinityWaitingForPayment: React.FC = observer(() => {
                     <SideBot>
                         <OrderBreakdown />
                         <Small style={{ margin: "auto 0" }}>
-                            Payment is handled by our payment partner Cardinity.
+                            Payment is handled by Stripe.
                             <br />
                             We do not store any card details.
                         </Small>
-                        <div style={{ height: 100, overflow: "hidden" }}>
-                            <LogoCardinity />
-                        </div>
+                        <LogoContainer>
+                            <LogoStripe />
+                        </LogoContainer>
                     </SideBot>
                 </ViewSidebar>
                 <Content>

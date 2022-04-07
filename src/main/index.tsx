@@ -231,8 +231,8 @@ ipcMain.on(MainIpcListenChannels.OpenSupportChat, async (event: IpcMainEvent, id
     }
     chatWindow.show()
 })
-ipcMain.on(MainIpcListenChannels.OpenCardinityPaymentWindow, async (event: IpcMainEvent, secureForm: string) => {
-    const cardinityPayment = new BrowserWindow({
+ipcMain.on(MainIpcListenChannels.OpenSecureFormPaymentWindow, async (event: IpcMainEvent, secureForm: string) => {
+    const securePaymentWindow = new BrowserWindow({
         frame: true,
         fullscreen: false,
         fullscreenable: false,
@@ -242,7 +242,7 @@ ipcMain.on(MainIpcListenChannels.OpenCardinityPaymentWindow, async (event: IpcMa
         x: (mainWindow?.getBounds().x ?? 0) + 40,
         y: mainWindow?.getBounds().y,
     })
-    return await cardinityPayment.loadURL("data:text/html;charset=UTF-8," + encodeURIComponent(secureForm))
+    return await securePaymentWindow.loadURL("data:text/html;charset=UTF-8," + encodeURIComponent(secureForm))
 })
 
 ipcMain.on(MainIpcListenChannels.Update, () => {
