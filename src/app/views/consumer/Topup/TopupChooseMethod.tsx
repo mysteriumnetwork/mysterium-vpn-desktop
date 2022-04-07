@@ -80,8 +80,8 @@ export const TopupChooseMethod: React.FC = observer(() => {
             case PaymentMethodName.PAYPAL:
                 navigate(topupSteps.paypal)
                 break
-            case PaymentMethodName.CARDINITY:
-                navigate(topupSteps.cardinity)
+            case PaymentMethodName.STRIPE:
+                navigate(topupSteps.stripe)
                 break
             case PaymentMethodName.MYST:
                 navigate(topupSteps.myst)

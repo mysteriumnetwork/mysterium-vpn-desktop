@@ -41,10 +41,10 @@ export const topupSteps = {
     coingatePaymentOptions: "coingate-payment-options",
     coingateOrderSummary: "coingate-order-summary",
     coingateWaitingForPayment: "coingate-waiting-for-payment",
-    cardinity: "cardinity", // entry point
-    cardinityPaymentOptions: "cardinity-payment-options",
-    cardinityOrderSummary: "cardinity-order-summary",
-    cardinityWaitingForPayment: "cardinity-waiting-for-payment",
+    stripe: "stripe", // entry point
+    stripePaymentOptions: "stripe-payment-options",
+    stripeOrderSummary: "stripe-order-summary",
+    stripeWaitingForPayment: "stripe-waiting-for-payment",
     paypal: "paypal", // entry point
     paypalPaymentOptions: "paypal-payment-options",
     paypalOrderSummary: "paypal-order-summary",

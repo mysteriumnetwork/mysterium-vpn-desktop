@@ -15,13 +15,13 @@ import { CoingateWaitingForPayment } from "./coingate/CoingateWaitingForPayment"
 import { TopupSuccess } from "./TopupSuccess"
 import { TopupFailed } from "./TopupFailed"
 import { TopupChooseMethod } from "./TopupChooseMethod"
-import { CardinityPaymentOptions } from "./cardinity/CardinityPaymentOptions"
-import { CardinityWaitingForPayment } from "./cardinity/CardinityWaitingForPayment"
-import { CardinityOrderSummary } from "./cardinity/CardinityOrderSummary"
+import { StripePaymentOptions } from "./stripe/StripePaymentOptions"
+import { StripeWaitingForPayment } from "./stripe/StripeWaitingForPayment"
+import { StripeOrderSummary } from "./stripe/StripeOrderSummary"
 import { CoingateOrderSummary } from "./coingate/CoingateOrderSummary"
 import { MystChooseChain } from "./myst/MystChooseChain"
 import { CoingateSelectAmount } from "./coingate/CoingateSelectAmount"
-import { CardinitySelectAmount } from "./cardinity/CardinitySelectAmount"
+import { StripeSelectAmount } from "./stripe/StripeSelectAmount"
 import { MystSelectAmount } from "./myst/MystSelectAmount"
 import { MystPolygonWaitingForPayment } from "./myst/MystPolygonWaitingForPayment"
 import { PaypalSelectAmount } from "./paypal/PaypalSelectAmount"
@@ -39,10 +39,10 @@ export const TopupRoutes: React.FC = observer(function TopupRoutes() {
             <Route path={topupSteps.coingateOrderSummary} element={<CoingateOrderSummary />} />
             <Route path={topupSteps.coingateWaitingForPayment} element={<CoingateWaitingForPayment />} />
 
-            <Route path={topupSteps.cardinity} element={<CardinitySelectAmount />} />
-            <Route path={topupSteps.cardinityPaymentOptions} element={<CardinityPaymentOptions />} />
-            <Route path={topupSteps.cardinityOrderSummary} element={<CardinityOrderSummary />} />
-            <Route path={topupSteps.cardinityWaitingForPayment} element={<CardinityWaitingForPayment />} />
+            <Route path={topupSteps.stripe} element={<StripeSelectAmount />} />
+            <Route path={topupSteps.stripePaymentOptions} element={<StripePaymentOptions />} />
+            <Route path={topupSteps.stripeOrderSummary} element={<StripeOrderSummary />} />
+            <Route path={topupSteps.stripeWaitingForPayment} element={<StripeWaitingForPayment />} />
 
             <Route path={topupSteps.paypal} element={<PaypalSelectAmount />} />
             <Route path={topupSteps.paypalPaymentOptions} element={<PaypalPaymentOptions />} />
