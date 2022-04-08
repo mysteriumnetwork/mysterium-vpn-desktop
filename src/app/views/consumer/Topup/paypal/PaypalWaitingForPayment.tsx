@@ -76,6 +76,14 @@ const Loading = styled(Spinner)`
     margin-bottom: 10px;
 `
 
+const LogoContainer = styled.div`
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+`
+
 const PaymentExplanation = styled(Paragraph)`
     margin-bottom: auto;
 `
@@ -116,9 +124,9 @@ export const PaypalWaitingForPayment: React.FC = observer(() => {
                             <br />
                             We do not store any card details.
                         </Small>
-                        <div style={{ height: 100, overflow: "hidden" }}>
+                        <LogoContainer>
                             <LogoPaypal />
-                        </div>
+                        </LogoContainer>
                     </SideBot>
                 </ViewSidebar>
                 <Content>

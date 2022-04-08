@@ -52,7 +52,7 @@ const Title = styled(Heading2)`
 
 const TitleDescription = styled(Small)``
 
-export const CardinityOrderSummary: React.FC = observer(() => {
+export const StripeOrderSummary: React.FC = observer(() => {
     const { payment, connection } = useStores()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
@@ -61,7 +61,7 @@ export const CardinityOrderSummary: React.FC = observer(() => {
         try {
             await payment.openOrderSecureForm()
             setLoading(() => false)
-            navigate("../" + topupSteps.cardinityWaitingForPayment)
+            navigate("../" + topupSteps.stripeWaitingForPayment)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)

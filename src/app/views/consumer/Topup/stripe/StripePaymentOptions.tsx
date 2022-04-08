@@ -78,7 +78,7 @@ const PaymentOption = styled(Paragraph)`
     text-align: left;
 `
 
-export const CardinityPaymentOptions: React.FC = observer(() => {
+export const StripePaymentOptions: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
@@ -93,7 +93,7 @@ export const CardinityPaymentOptions: React.FC = observer(() => {
         try {
             await payment.createOrder()
             setLoading(() => false)
-            navigate("../" + topupSteps.cardinityOrderSummary)
+            navigate("../" + topupSteps.stripeOrderSummary)
         } catch (err) {
             setLoading(() => false)
             const msg = parseError(err)

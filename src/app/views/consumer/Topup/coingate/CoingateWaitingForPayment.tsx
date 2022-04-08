@@ -88,7 +88,6 @@ const PaymentAddress = styled.div`
     overflow-y: scroll;
     user-select: text;
     opacity: 0.7;
-    height: 60px;
     max-height: 60px;
     border: 1px solid #ffffff99;
     border-radius: 5px;
@@ -96,15 +95,22 @@ const PaymentAddress = styled.div`
 `
 
 const PaymentWarning = styled(Small)`
-    margin: 5px 0 10px;
+    margin: 5px 0;
     max-height: 60px;
     overflow-y: scroll;
-    white-space: wrap;
     text-overflow: ellipsis;
 `
 
 const PaymentExplanation = styled(Paragraph)`
     margin-top: auto;
+`
+
+const LogoContainer = styled.div`
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 `
 
 export const CoingateWaitingForPayment: React.FC = observer(() => {
@@ -144,9 +150,9 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                     <SideBot>
                         <OrderBreakdown />
                         <Small style={{ margin: "auto 0" }}>Payment is handled by our payment partner Coingate.</Small>
-                        <div style={{ height: 40, overflow: "hidden" }}>
+                        <LogoContainer>
                             <LogoCoingate />
-                        </div>
+                        </LogoContainer>
                     </SideBot>
                 </ViewSidebar>
                 <Content>

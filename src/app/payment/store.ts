@@ -153,11 +153,8 @@ export class PaymentStore {
                     lightningNetwork: this.lightningNetwork,
                 }
             case Gateway.PAYPAL:
+            case Gateway.STRIPE:
                 return {}
-            case Gateway.CARDINITY:
-                return {
-                    country: this.taxCountry,
-                }
         }
         throw new Error("Unsupported payment gateway: " + gateway)
     }
@@ -172,7 +169,7 @@ export class PaymentStore {
                     throw new Error("Could not retrieve payment URL")
                 }
                 return
-            case Gateway.CARDINITY:
+            case Gateway.STRIPE:
                 if (!order.publicGatewayData?.secureForm) {
                     throw new Error("Could not retrieve secure form for payment")
                 }
@@ -228,7 +225,10 @@ export class PaymentStore {
 
     async openOrderSecureForm(): Promise<void> {
         if (this.order?.publicGatewayData?.secureForm) {
-            ipcRenderer.send(MainIpcListenChannels.OpenCardinityPaymentWindow, this.order.publicGatewayData?.secureForm)
+            ipcRenderer.send(
+                MainIpcListenChannels.OpenSecureFormPaymentWindow,
+                this.order.publicGatewayData?.secureForm,
+            )
         }
     }
 

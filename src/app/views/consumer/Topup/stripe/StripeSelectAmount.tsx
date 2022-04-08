@@ -115,7 +115,7 @@ const EntertainmentExplanation = styled(Paragraph)`
     opacity: 0.7;
 `
 
-export const CardinitySelectAmount: React.FC = observer(() => {
+export const StripeSelectAmount: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
     const isOptionActive = (amt: number) => {
@@ -131,7 +131,7 @@ export const CardinitySelectAmount: React.FC = observer(() => {
         }
     }, [payment.topupAmount])
     const handleNextClick = async () => {
-        navigate("../" + topupSteps.cardinityPaymentOptions)
+        navigate("../" + topupSteps.stripePaymentOptions)
     }
     return (
         <ViewContainer>

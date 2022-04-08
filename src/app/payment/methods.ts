@@ -15,14 +15,14 @@ import { IconMystToken } from "../../../src/app/ui-kit/icons/IconMystToken"
 export enum PaymentMethodName {
     COINGATE = "coingate",
     PAYPAL = "paypal",
-    CARDINITY = "cardinity",
+    STRIPE = "stripe",
     MYST = "myst",
 }
 
 export enum Gateway {
     COINGATE = "coingate",
     PAYPAL = "paypal",
-    CARDINITY = "cardinity",
+    STRIPE = "stripe",
 }
 
 export interface PaymentMethodMetadata {
@@ -44,22 +44,22 @@ export const SUPPORTED_METHODS: { [key: string]: PaymentMethodMetadata } = {
         icon: IconMystToken,
         gateway: "coingate",
     },
-    [PaymentMethodName.COINGATE]: {
+    [PaymentMethodName.STRIPE]: {
         displayOrder: 1,
+        displayText: "Credit Card",
+        icon: faCreditCard,
+        gateway: "stripe",
+    },
+    [PaymentMethodName.COINGATE]: {
+        displayOrder: 2,
         displayText: "Crypto",
         icon: faBitcoin,
         gateway: "coingate",
     },
     [PaymentMethodName.PAYPAL]: {
-        displayOrder: 2,
+        displayOrder: 3,
         displayText: "Paypal",
         icon: faPaypal,
         gateway: "paypal",
-    },
-    [PaymentMethodName.CARDINITY]: {
-        displayOrder: 3,
-        displayText: "Credit card",
-        icon: faCreditCard,
-        gateway: "cardinity",
     },
 }

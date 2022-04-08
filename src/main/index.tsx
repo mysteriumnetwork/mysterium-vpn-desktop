@@ -6,7 +6,6 @@
  */
 
 import * as path from "path"
-import { format as formatUrl } from "url"
 import * as os from "os"
 
 import { app, BrowserWindow, ipcMain, IpcMainEvent, Menu, Tray } from "electron"
@@ -17,7 +16,7 @@ import * as packageJson from "../../package.json"
 import { winSize } from "../config"
 import { initialize as initializeSentry } from "../shared/errors/sentry"
 import { log } from "../shared/log/log"
-import { isDevelopment } from "../utils/env"
+import { isDevelopment, isProduction } from "../utils/env"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { handleProcessExit } from "../utils/handleProcessExit"
 
@@ -27,6 +26,7 @@ import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
 import { mysteriumNode } from "./node/mysteriumNode"
 import { tequila } from "./node/tequila"
+import { cliFlags } from "./cliFlags"
 
 initializeSentry()
 
@@ -70,6 +70,8 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         width: winSize.width,
         height: winSize.height,
         frame: false,
+        maxWidth: winSize.width,
+        maxHeight: winSize.height,
         titleBarStyle: "hidden",
         trafficLightPosition: { x: 12, y: 11 },
         useContentSize: true,
@@ -82,7 +84,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
             webSecurity: false, // Make requests to local tequilapi despite CORS policy
             contextIsolation: false,
             nodeIntegration: true,
-            nativeWindowOpen: true,
         },
     })
     window.setMenuBarVisibility(false)
@@ -96,17 +97,11 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         })
     }
 
-    if (isDevelopment()) {
-        window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
-    } else {
-        window.loadURL(
-            formatUrl({
-                pathname: path.join(__dirname, "index.html"),
-                protocol: "file",
-                slashes: true,
-            }),
-        )
-    }
+    const indexUrl = isProduction()
+        ? new URL(`file:///${path.join(__dirname, "index.html")}`)
+        : `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    log.info(`Opening in browser window: ${indexUrl.toString()}`)
+    window.loadURL(indexUrl.toString())
 
     window.on("close", (event) => {
         if (app.quitting) {
@@ -157,17 +152,14 @@ const createChatWindow = async (id: string): Promise<BrowserWindow> => {
         chatWindow = null
     })
 
-    const url = formatUrl({
-        pathname: path.join(__static, "support.html"),
-        query: {
-            app_id: packageJson.intercomAppId,
-            node_identity: id,
-            app_version: packageJson.version,
-        },
-        protocol: "file",
-        slashes: true,
-    })
-    await chatWindow.loadURL(url)
+    const url = new URL(`file:///${path.join(__static, "support.html")}`)
+    url.search = new URLSearchParams({
+        app_id: packageJson.intercomAppId,
+        node_identity: id,
+        app_version: packageJson.version,
+    }).toString()
+    log.info(`Opening in browser window: ${url.toString()}`)
+    await chatWindow.loadURL(url.toString())
     return chatWindow
 }
 
@@ -239,8 +231,8 @@ ipcMain.on(MainIpcListenChannels.OpenSupportChat, async (event: IpcMainEvent, id
     }
     chatWindow.show()
 })
-ipcMain.on(MainIpcListenChannels.OpenCardinityPaymentWindow, async (event: IpcMainEvent, secureForm: string) => {
-    const cardinityPayment = new BrowserWindow({
+ipcMain.on(MainIpcListenChannels.OpenSecureFormPaymentWindow, async (event: IpcMainEvent, secureForm: string) => {
+    const securePaymentWindow = new BrowserWindow({
         frame: true,
         fullscreen: false,
         fullscreenable: false,
@@ -250,11 +242,15 @@ ipcMain.on(MainIpcListenChannels.OpenCardinityPaymentWindow, async (event: IpcMa
         x: (mainWindow?.getBounds().x ?? 0) + 40,
         y: mainWindow?.getBounds().y,
     })
-    return await cardinityPayment.loadURL("data:text/html;charset=UTF-8," + encodeURIComponent(secureForm))
+    return await securePaymentWindow.loadURL("data:text/html;charset=UTF-8," + encodeURIComponent(secureForm))
 })
 
 ipcMain.on(MainIpcListenChannels.Update, () => {
-    autoUpdater.checkForUpdates()
+    if (app.commandLine.hasSwitch(cliFlags.NO_UPDATE)) {
+        mainWindow?.webContents.send(WebIpcListenChannels.UpdateNotAvailable)
+    } else {
+        autoUpdater.checkForUpdates()
+    }
 })
 ipcMain.on(MainIpcListenChannels.MinimizeWindow, () => {
     mainWindow?.minimize()
