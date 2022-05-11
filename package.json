@@ -28,7 +28,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@mysteriumnetwork/node": "1.6.0",
     "@mysteriumnetwork/terms": "0.0.40",
-    "@sentry/electron": "^3.0.4",
+    "@sentry/electron": "^3.0.7",
     "@use-it/interval": "^1.0.0",
     "async-retry": "^1.3.3",
     "bignumber.js": "^9.0.2",
@@ -67,7 +67,7 @@
     "sudo-prompt": "^9.2.1"
   },
   "devDependencies": {
-    "@sentry/cli": "^1.73.2",
+    "@sentry/cli": "^2.0.4",
     "@types/async-retry": "^1.4.3",
     "@types/electron-devtools-installer": "^2.2.1",
     "@types/lodash": "^4.14.179",
