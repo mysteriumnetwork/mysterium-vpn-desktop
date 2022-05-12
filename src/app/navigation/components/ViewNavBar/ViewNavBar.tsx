@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from "react"
+import React, { PropsWithChildren } from "react"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons"
@@ -44,7 +44,7 @@ export interface ViewNavBarProps {
     onBack?: () => void
 }
 
-export const ViewNavBar: React.FC<ViewNavBarProps> = ({ onBack, children }) => (
+export const ViewNavBar: React.FC<PropsWithChildren<ViewNavBarProps>> = ({ onBack, children }) => (
     <Container>
         {onBack && (
             <BackContainer onClick={onBack}>

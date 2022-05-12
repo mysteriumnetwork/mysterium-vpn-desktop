@@ -102,9 +102,11 @@ export const QuickConnectView: React.FC = observer(function QuickConnectView() {
                 toast.error(
                     dismissibleToast(
                         <span>
-                            <b>Oops! Could not connect 😶</b>
-                            <br />
-                            {reason}
+                            <>
+                                <b>Oops! Could not connect 😶</b>
+                                <br />
+                                {reason}
+                            </>
                         </span>,
                     ),
                 )

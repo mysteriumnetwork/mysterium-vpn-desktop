@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { FormEventHandler } from "react"
+import React, { FormEventHandler, PropsWithChildren } from "react"
 import styled from "styled-components"
 
 import { OutlineButton } from "../Button/OutlineButton"
@@ -64,7 +64,14 @@ export interface PromptProps {
     submitText?: string
 }
 
-export const Prompt: React.FC<PromptProps> = ({ visible, title, onSubmit, onCancel, submitText = "OK", children }) => {
+export const Prompt: React.FC<PropsWithChildren<PromptProps>> = ({
+    visible,
+    title,
+    onSubmit,
+    onCancel,
+    submitText = "OK",
+    children,
+}) => {
     if (!visible) {
         return <></>
     }

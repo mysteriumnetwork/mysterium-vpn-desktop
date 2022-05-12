@@ -42,9 +42,11 @@ export const ConnectButton: React.FC<ConnectButtonProps> = observer(function Con
                 toast.error(
                     dismissibleToast(
                         <span>
-                            <b>Oops! Could not connect 😶</b>
-                            <br />
-                            {reason}
+                            <>
+                                <b>Oops! Could not connect 😶</b>
+                                <br />
+                                {reason}
+                            </>
                         </span>,
                     ),
                 )

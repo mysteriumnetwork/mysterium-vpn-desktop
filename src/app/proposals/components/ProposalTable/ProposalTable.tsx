@@ -4,13 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { useEffect, useRef } from "react"
+import React, { CSSProperties, useEffect, useRef } from "react"
 import styled from "styled-components"
 import { observer } from "mobx-react-lite"
-import { CellProps, Column, Renderer, useBlockLayout, useSortBy, useTable } from "react-table"
+import { Column, useBlockLayout, useSortBy, useTable } from "react-table"
 import { FixedSizeList } from "react-window"
 import AutoSizer from "react-virtualized-auto-sizer"
-import { Quality } from "mysterium-vpn-js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRegistered } from "@fortawesome/free-solid-svg-icons"
 
@@ -131,7 +130,7 @@ const Table: React.FC<TableProps> = observer(function Table({ columns, data }) {
         }
     }, [proposals.suggestion, data])
     const renderRow = React.useCallback(
-        ({ index, style }): JSX.Element => {
+        ({ index, style }: { index: number; style: CSSProperties }): JSX.Element => {
             return <RowRenderer prepareRow={prepareRow} rows={rows} index={index} style={style} />
         },
         [prepareRow, rows],
@@ -200,7 +199,7 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
                             </span>
                         )
                     }
-                    return ""
+                    return <span />
                 },
                 disableSortBy: true,
             },
@@ -229,18 +228,14 @@ export const ProposalTable: React.FC = observer(function ProposalTable() {
                 Header: "Price",
                 accessor: (p): number => proposals.priceTier(p),
                 width: 44,
-                // eslint-disable-next-line react/display-name
-                Cell: (props: { value: number }): Renderer<CellProps<UIProposal, string>> => (
-                    <IconPriceTier tier={props.value} />
-                ),
+                Cell: (props: { value: number }) => <IconPriceTier tier={props.value} />,
             },
             {
                 Header: "Quality",
                 accessor: "qualityLevel",
                 width: 42,
                 sortDescFirst: true,
-                // eslint-disable-next-line react/display-name
-                Cell: (props): Renderer<CellProps<UIProposal, Quality | undefined>> => {
+                Cell: (props) => {
                     return (
                         <CellCenter>
                             <ProposalQuality level={props.value} />
