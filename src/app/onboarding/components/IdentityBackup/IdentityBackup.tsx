@@ -89,9 +89,11 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
             toast.error(
                 dismissibleToast(
                     <span>
-                        <b>Identity backup failed 😶</b>
-                        <br />
-                        Error: {reason}
+                        <>
+                            <b>Identity backup failed 😶</b>
+                            <br />
+                            Error: {reason}
+                        </>
                     </span>,
                 ),
             )
