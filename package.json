@@ -48,7 +48,7 @@
     "qrcode.react": "^2.0.0",
     "react": "^18.1.0",
     "react-autosuggest": "^10.1.0",
-    "react-circle-flags": "^0.0.15",
+    "react-circle-flags": "^0.0.17",
     "react-countdown": "^2.3.2",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.1",

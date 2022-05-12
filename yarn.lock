@@ -8280,10 +8280,10 @@ react-autosuggest@^10.1.0:
     section-iterator "^2.0.0"
     shallow-equal "^1.2.1"
 
-react-circle-flags@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/react-circle-flags/-/react-circle-flags-0.0.15.tgz#4b69f7b33d8b39475a12d7b18099b511b6e214c2"
-  integrity sha512-RpQj7O3GT5820XttIRovT0OgSytDvxHlskf1cd3uxhAOfDhGT6iaRScdz1IcINLmlsgSWaqJXFSq7tto4VAkcg==
+react-circle-flags@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/react-circle-flags/-/react-circle-flags-0.0.17.tgz#e0e4d3ff74f35715c15cc159d43407c28188cf35"
+  integrity sha512-RsgnkmTuSQNlB5jn7XcFzbp3W+WI75/sxT5CtjPa+67AiM8qjgMvxC45UWvDkjxH+qpoIAwEvA6VXpBbfnyH3g==
 
 react-countdown@^2.3.2:
   version "2.3.2"
