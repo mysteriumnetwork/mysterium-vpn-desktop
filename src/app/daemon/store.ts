@@ -23,6 +23,7 @@ export enum DaemonStatusType {
 
 export enum StartupStatus {
     CheckingForUpdates = "Checking for updates",
+    UpgradingIdentity = "Upgrading identity compatibility (<1 minute)...",
     UpdateAvailable = "Update available",
     UpdateNotAvailable = "No update available",
     Downloading = "Downloading update",

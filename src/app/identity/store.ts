@@ -28,11 +28,14 @@ const registrationPossible = (status: IdentityRegistrationStatus): boolean => {
     ].includes(status)
 }
 
+type IdUpgradeStatus = "unknown" | "required" | "finished"
+
 export class IdentityStore {
     loading = false
     identity?: Identity
     unlocked = false
     identities: Identity[] = []
+    upgradeStatus: IdUpgradeStatus = "unknown"
 
     root: RootStore
 
@@ -51,6 +54,9 @@ export class IdentityStore {
             unlock: action,
             register: action,
             registerWithReferralToken: action,
+            upgradeRequired: action,
+            upgrade: action,
+            upgradeStatus: observable,
             setLoading: action,
             setIdentity: action,
             setIdentities: action,
@@ -90,6 +96,7 @@ export class IdentityStore {
         )
         reaction(() => this.identity?.balanceTokens, this.registerOnBalanceChange)
         reaction(() => this.identity?.registrationStatus, this.navigateOnStatusChange)
+        reaction(() => this.upgradeStatus, this.navigationOnIdUpgradeStatusChange)
     }
 
     registerOnBalanceChange = async (balanceTokens?: Tokens): Promise<void> => {
@@ -120,7 +127,16 @@ export class IdentityStore {
                 this.root.navigation.push(locations.registering)
                 return
             case IdentityRegistrationStatus.Registered:
-                this.root.navigation.goHome()
+                if (this.upgradeStatus === "finished") {
+                    this.root.navigation.goHome()
+                }
+        }
+    }
+
+    navigationOnIdUpgradeStatusChange = (status: IdUpgradeStatus): void => {
+        switch (status) {
+            case "finished":
+                this.root.navigation.navigateToInitialRoute()
         }
     }
 
@@ -238,6 +254,45 @@ export class IdentityStore {
         }
     }
 
+    requireId(): string {
+        const id = this.identity?.id
+        if (!id) {
+            throw Error("No Identity")
+        }
+        return id
+    }
+
+    async upgradeRequired(): Promise<boolean> {
+        const id = this.requireId()
+        const res = await tequilapi.http.get(`identities/${id}/migrate-hermes/status`)
+        const status = res?.status
+        if (!status) {
+            log.error("Cannot check for migration status")
+            return false
+        }
+        if (status !== "required") {
+            log.info("Migration is not required")
+            this.upgradeStatus = "finished"
+            return false
+        }
+        return true
+    }
+
+    async upgrade(): Promise<void> {
+        const id = this.requireId()
+        await retry(
+            async () => {
+                const res = await tequilapi.http.post(`identities/${id}/migrate-hermes`, {}, 60_000)
+                log.info("Migrate ID response:", JSON.stringify(res))
+            },
+            {
+                retries: 10,
+                factor: 1,
+                onRetry: (e, attempt) => log.warn(`Retrying ID upgrade (${attempt}): ${e.message}`),
+            },
+        )
+    }
+
     async registerWithReferralToken(token: string): Promise<void> {
         if (!this.identity) {
             return
@@ -291,6 +346,9 @@ export class IdentityStore {
         await this.loadIdentity()
         if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
             await this.register(this.identity)
+        }
+        if (await this.upgradeRequired()) {
+            await this.upgrade()
         }
         return String(res.result)
     }

@@ -26,6 +26,7 @@ import { Filters } from "./config/filters"
 import { OnboardingStore } from "./onboarding/store"
 import { analytics } from "./analytics/analytics"
 import { EventName } from "./analytics/event"
+import { locations } from "./navigation/locations"
 
 export const createRootStore = (history: History): RootStore => {
     rootStore = new RootStore(history)
@@ -101,8 +102,15 @@ export class RootStore {
                         }),
                     ])
 
+                    log.info("Checking if ID needs to be registered")
                     await this.identity.registerIfNeeded()
-                    this.navigation.navigateToInitialRoute()
+                    log.info("Checking if ID upgrade is needed")
+                    if (await this.identity.upgradeRequired()) {
+                        this.navigation.push(locations.idUpgrade)
+                    } else {
+                        this.navigation.navigateToInitialRoute()
+                    }
+                    log.info("Startup sequence done")
                 }
             },
         )
