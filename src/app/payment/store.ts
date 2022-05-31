@@ -9,7 +9,7 @@ import {
     CreatePaymentOrderRequest,
     Currency,
     EntertainmentEstimateResponse,
-    Fees,
+    FeesV2,
     Money,
     PaymentGateway,
     PaymentOrder,
@@ -45,7 +45,7 @@ export class PaymentStore {
     appCurrency: Currency = Currency.MYST
     appFiatCurrency = "USD"
 
-    fees?: Fees
+    fees?: FeesV2
     mystToUsdRate?: Money
     registrationTopupAmount?: number
     topupAmount?: number
@@ -106,9 +106,9 @@ export class PaymentStore {
     }
 
     async fetchTransactorFees(): Promise<void> {
-        const fees = await tequilapi.transactorFees()
+        const fees = await tequilapi.transactorFeesV2()
         runInAction(() => {
-            this.fees = fees
+            this.fees = fees?.current
         })
     }
 
