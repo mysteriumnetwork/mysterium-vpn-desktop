@@ -7,3 +7,8 @@
 export const isLightningAvailable = (currency?: string): boolean => {
     return currency == "BTC" || currency == "LTC"
 }
+
+export interface AmountMultiCurrency {
+    MYST?: number
+    USD?: number
+}

@@ -25,7 +25,7 @@ import { tequilapi } from "../tequilapi"
 import { parseError } from "../../shared/errors/parseError"
 import { MainIpcListenChannels } from "../../shared/ipc"
 
-import { isLightningAvailable } from "./currency"
+import { AmountMultiCurrency, isLightningAvailable } from "./currency"
 import { Gateway, PaymentMethod, SUPPORTED_METHODS } from "./methods"
 
 export enum OrderStatus {
@@ -48,7 +48,7 @@ export class PaymentStore {
     fees?: FeesV2
     mystToUsdRate?: Money
     registrationTopupAmount?: number
-    topupAmount?: number
+    topUpAmountUSD?: number
     paymentMethod?: PaymentMethod
     paymentGateways?: PaymentGateway[]
     paymentMethods: PaymentMethod[] = []
@@ -65,7 +65,7 @@ export class PaymentStore {
             fees: observable,
             mystToUsdRate: observable,
             registrationTopupAmount: observable,
-            topupAmount: observable,
+            topUpAmountUSD: observable,
             paymentMethod: observable,
 
             paymentGateways: observable,
@@ -90,7 +90,7 @@ export class PaymentStore {
             setLightningNetwork: action,
             setTaxCountry: action,
             setChain: action,
-            setTopupAmount: action,
+            setTopupAmountUSD: action,
             refreshBalance: action,
         })
         this.root = root
@@ -125,7 +125,7 @@ export class PaymentStore {
     }
 
     async fetchPaymentGateways(): Promise<void> {
-        const gateways = await tequilapi.payment.gateways()
+        const gateways = await tequilapi.payment.gateways("USD")
         runInAction(() => {
             this.paymentGateways = gateways
         })
@@ -179,13 +179,13 @@ export class PaymentStore {
 
     async createOrder(): Promise<void> {
         const id = this.root.identity.identity?.id
-        if (!id || !this.topupAmount || !this.paymentCurrency || !this.paymentMethod) {
+        if (!id || !this.topUpAmountUSD || !this.paymentCurrency || !this.paymentMethod) {
             return
         }
 
         const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
             country: this.taxCountry || "",
-            mystAmount: new BigNumber(this.topupAmount).toFixed(2),
+            amountUsd: new BigNumber(this.topUpAmountUSD).toFixed(2),
             payCurrency: this.paymentCurrency,
             gatewayCallerData: this.buildCallerData(),
         })
@@ -301,7 +301,7 @@ export class PaymentStore {
         this.setPaymentCurrency(undefined)
         this.setLightningNetwork(false)
         this.setChain(undefined)
-        this.setTopupAmount(undefined)
+        this.setTopupAmountUSD(undefined)
     }
 
     setPaymentMethod = (pm?: PaymentMethod): void => {
@@ -325,18 +325,28 @@ export class PaymentStore {
         this.lightningNetwork = use
     }
 
-    setTopupAmount = (amount?: number): void => {
-        this.topupAmount = amount
+    setTopupAmountUSD = (amountUSD?: number): void => {
+        this.topUpAmountUSD = amountUSD
     }
 
-    estimateEntertainment = async (amount: number): Promise<EntertainmentEstimateResponse | undefined> => {
+    estimateEntertainment = async (amount: AmountMultiCurrency): Promise<EntertainmentEstimateResponse | undefined> => {
+        let amt
+        if (amount.USD != null && this.mystToUsdRate?.amount) {
+            amt = amount.USD / this.mystToUsdRate.amount
+        } else if (amount.MYST != null) {
+            amt = amount.MYST
+        } else {
+            return undefined
+        }
         try {
-            return await tequilapi.estimateEntertainment({ amount }).then((res: EntertainmentEstimateResponse) => ({
-                videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
-                musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
-                browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
-                trafficMb: Number((res.trafficMb / 1024).toFixed()),
-            }))
+            return await tequilapi
+                .estimateEntertainment({ amount: amt })
+                .then((res: EntertainmentEstimateResponse) => ({
+                    videoMinutes: Number((res.videoMinutes / 60).toFixed(0)),
+                    musicMinutes: Number((res.musicMinutes / 60).toFixed(0)),
+                    browsingMinutes: Number((res.browsingMinutes / 60).toFixed(0)),
+                    trafficMb: Number((res.trafficMb / 1024).toFixed()),
+                }))
         } catch (err) {
             const msg = parseError(err)
             logErrorMessage("Failed to estimate entertainment for amount: " + amount, msg)

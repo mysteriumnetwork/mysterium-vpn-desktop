@@ -131,7 +131,7 @@ export const WalletView: React.FC = observer(function WalletView() {
     }
     const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)
     useEffect(() => {
-        payment.estimateEntertainment(balance).then((res) => setEstimates(res))
+        payment.estimateEntertainment({ MYST: balance }).then((res) => setEstimates(res))
     }, [balance])
     const handleRefreshBalanceClick = () => {
         if (!identity.identity?.id) {
