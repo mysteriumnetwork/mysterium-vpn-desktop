@@ -21,7 +21,6 @@ import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading1, Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../../ui-kit/colors"
 import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
-import { displayUSD } from "../../../../payment/display"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { IconPlay } from "../../../../ui-kit/icons/IconPlay"
 import { IconMusic } from "../../../../ui-kit/icons/IconMusic"
@@ -73,12 +72,6 @@ const Currency = styled(Small)`
     opacity: 0.7;
 `
 
-const FiatEquivalent = styled.div`
-    margin-top: auto;
-    text-align: center;
-    font-size: 11px;
-`
-
 const Content = styled(ViewContent)`
     background: none;
 `
@@ -119,17 +112,17 @@ export const CoingateSelectAmount: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
     const isOptionActive = (amt: number) => {
-        return payment.topupAmount == amt
+        return payment.topUpAmountUSD == amt
     }
     const selectOption = (amt: number) => () => {
-        payment.setTopupAmount(amt)
+        payment.setTopupAmountUSD(amt)
     }
     const [estimates, setEstimates] = useState<EntertainmentEstimateResponse | undefined>(undefined)
     useEffect(() => {
-        if (payment.topupAmount) {
-            payment.estimateEntertainment(payment.topupAmount).then((res) => setEstimates(res))
+        if (payment.topUpAmountUSD) {
+            payment.estimateEntertainment({ USD: payment.topUpAmountUSD }).then((res) => setEstimates(res))
         }
-    }, [payment.topupAmount])
+    }, [payment.topUpAmountUSD])
     const handleNextClick = async () => {
         navigate("../" + topupSteps.coingatePaymentOptions)
     }
@@ -145,13 +138,11 @@ export const CoingateSelectAmount: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
-                        <TitleDescription>
-                            Select how many {payment.appCurrency}s you would like to add to your account
-                        </TitleDescription>
+                        <TitleDescription>Select the desired amount in {payment.appFiatCurrency}</TitleDescription>
                     </SideTop>
                     <SideBot>
                         <AmountSelect>
-                            {payment.paymentMethod?.gatewayData.orderOptions.suggested.map((opt) => (
+                            {payment.orderOptions.map((opt) => (
                                 <AmountToggle
                                     key={opt}
                                     active={isOptionActive(opt)}
@@ -162,19 +153,15 @@ export const CoingateSelectAmount: React.FC = observer(() => {
                                 >
                                     <div style={{ textAlign: "center" }}>
                                         <Amount>{opt}</Amount>
-                                        <Currency>{payment.appCurrency}</Currency>
+                                        <Currency>{payment.appFiatCurrency}</Currency>
                                     </div>
                                 </AmountToggle>
                             ))}
                         </AmountSelect>
-                        <FiatEquivalent>
-                            {payment.appFiatCurrency} equivalent ≈{" "}
-                            {displayUSD(payment.fiatEquivalent(payment.topupAmount ?? 0))}
-                        </FiatEquivalent>
                         <BrandButton
                             style={{ marginTop: "15px" }}
                             onClick={handleNextClick}
-                            disabled={!payment.topupAmount}
+                            disabled={!payment.topUpAmountUSD}
                         >
                             Next
                         </BrandButton>

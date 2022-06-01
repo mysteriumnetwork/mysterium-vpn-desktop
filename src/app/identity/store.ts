@@ -103,7 +103,7 @@ export class IdentityStore {
             return
         }
         await this.root.payment.fetchTransactorFees()
-        const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
+        const registrationFee = new BigNumber(this.root.payment.fees?.registration.wei ?? 0)
         const balance = new BigNumber(balanceTokens?.wei ?? 0)
         if (balance.isLessThan(registrationFee)) {
             log.info("Balance is insufficient to register")
@@ -216,9 +216,9 @@ export class IdentityStore {
             return
         }
         await this.root.payment.fetchTransactorFees()
-        log.info("Registration fee:", this.root.payment.fees?.registrationTokens.ether)
+        log.info("Registration fee:", this.root.payment.fees?.registration.ether)
 
-        const registrationFee = new BigNumber(this.root.payment.fees?.registrationTokens.wei ?? 0)
+        const registrationFee = new BigNumber(this.root.payment.fees?.registration.wei ?? 0)
         const balance = new BigNumber(balanceTokens.wei)
         if (balance.isLessThan(registrationFee)) {
             log.info("Balance is insufficient to register")
