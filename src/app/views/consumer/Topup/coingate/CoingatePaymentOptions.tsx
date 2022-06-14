@@ -59,14 +59,14 @@ const Title = styled(Heading2)`
 
 const TitleDescription = styled(Small)``
 
-const AmountSelect = styled.div`
+const OptionToggleGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 20px;
 `
 
-const AmountToggle = styled(Toggle)`
+const OptionToggle = styled(Toggle)`
     width: 85px;
     height: 36px;
 `
@@ -105,6 +105,7 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
         }
     }
     const options = payment.paymentMethod?.gatewayData.currencies.filter((it) => it !== Currency.MYST) || []
+    const paymentOptionsOK = !loading && payment.paymentCurrency
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => navigate(-1)}>
@@ -120,9 +121,9 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
                         <TitleDescription>Select the cryptocurrency in which the top-up will be done</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <AmountSelect>
+                        <OptionToggleGrid>
                             {options.map((opt) => (
-                                <AmountToggle
+                                <OptionToggle
                                     key={opt}
                                     active={isOptionActive(opt)}
                                     onClick={selectOption(opt)}
@@ -133,9 +134,9 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
                                     <div style={{ textAlign: "center" }}>
                                         <OptionValue>{opt}</OptionValue>
                                     </div>
-                                </AmountToggle>
+                                </OptionToggle>
                             ))}
-                        </AmountSelect>
+                        </OptionToggleGrid>
                         {isLightningAvailable(payment.paymentCurrency) && (
                             <LightningCheckbox checked={payment.lightningNetwork} onChange={setUseLightning}>
                                 Use lightning network
@@ -151,7 +152,7 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
                             style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
                             loading={loading}
-                            disabled={loading || !payment.paymentCurrency}
+                            disabled={!paymentOptionsOK}
                         >
                             Next
                         </BrandButton>
