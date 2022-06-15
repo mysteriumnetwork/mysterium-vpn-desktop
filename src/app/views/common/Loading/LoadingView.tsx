@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite"
 import Lottie from "react-lottie-player"
 
 import { bg1 } from "../../../ui-kit/colors"
+import { Spinner } from "../../../ui-kit/components/Spinner/Spinner"
 
 import animationLoadingStart from "./animation_loading_start.json"
 import animationLoadingLoop from "./animation_loading_loop.json"
@@ -23,9 +24,11 @@ const Container = styled.div`
     align-items: center;
     flex-direction: column;
     -webkit-app-region: drag;
+    padding-top: 50px;
 `
 
 const Status = styled.div`
+    margin-top: 50px;
     color: #fff;
 `
 
@@ -55,7 +58,9 @@ export const LoadingView: React.FC<LoadingViewProps> = observer(({ status }) => 
                 style={{ width: 250 }}
                 renderer="svg"
             />
+
             <Status>{status}</Status>
+            <Spinner />
         </Container>
     )
 })

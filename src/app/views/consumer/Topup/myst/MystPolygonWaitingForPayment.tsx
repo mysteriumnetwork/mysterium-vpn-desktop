@@ -92,10 +92,7 @@ const PaymentExplanation = styled(Paragraph)`
 `
 
 const Loading = styled(Spinner)`
-    font-size: 32px;
-    color: ${brandLight};
-    margin-top: auto;
-    margin-bottom: 10px;
+    margin: auto;
 `
 
 export const MystPolygonWaitingForPayment: React.FC = observer(() => {
