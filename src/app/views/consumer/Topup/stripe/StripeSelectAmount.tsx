@@ -159,7 +159,7 @@ export const StripeSelectAmount: React.FC = observer(() => {
                             ))}
                         </AmountSelect>
                         <BrandButton
-                            style={{ marginTop: "15px" }}
+                            style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
                             disabled={!payment.topUpAmountUSD}
                         >

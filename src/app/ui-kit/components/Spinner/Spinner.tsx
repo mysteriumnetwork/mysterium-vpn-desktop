@@ -1,26 +1,25 @@
 /**
- * Copyright (c) 2020 BlockDev AG
+ * Copyright (c) 2022 BlockDev AG
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 import React from "react"
+import Lottie from "react-lottie-player"
 import styled from "styled-components"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons"
 
-const Icon = styled(FontAwesomeIcon)`
-    animation: fa-spin 0.7s infinite linear;
-`
+import animationSpinner from "./animation_spinner.json"
 
 export interface SpinnerProps {
     className?: string
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({ className }) => {
-    return (
-        <div className={className}>
-            <Icon icon={faCircleNotch} spin />
-        </div>
-    )
-}
+const Container = styled.div`
+    width: 80px;
+`
+
+export const Spinner: React.FC<SpinnerProps> = ({ className }) => (
+    <Container className={className}>
+        <Lottie play loop animationData={animationSpinner} renderer="svg" speed={1.25} />
+    </Container>
+)

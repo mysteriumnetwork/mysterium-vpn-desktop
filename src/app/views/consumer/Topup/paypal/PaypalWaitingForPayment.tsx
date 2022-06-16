@@ -70,10 +70,7 @@ const PaymentAmount = styled.div`
 `
 
 const Loading = styled(Spinner)`
-    font-size: 32px;
-    color: #ffffff88;
-    margin-top: auto;
-    margin-bottom: 10px;
+    margin: auto;
 `
 
 const LogoContainer = styled.div`

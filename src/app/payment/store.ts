@@ -47,7 +47,6 @@ export class PaymentStore {
 
     fees?: FeesV2
     mystToUsdRate?: Money
-    registrationTopupAmount?: number
     topUpAmountUSD?: number
     paymentMethod?: PaymentMethod
     paymentGateways?: PaymentGateway[]
@@ -64,13 +63,13 @@ export class PaymentStore {
             appCurrency: observable,
             fees: observable,
             mystToUsdRate: observable,
-            registrationTopupAmount: observable,
             topUpAmountUSD: observable,
             paymentMethod: observable,
 
             paymentGateways: observable,
-            orderOptions: computed,
             paymentMethods: observable,
+            currencies: computed,
+            orderOptions: computed,
 
             paymentCurrency: observable,
             chain: observable,
@@ -143,6 +142,10 @@ export class PaymentStore {
 
     get orderOptions(): number[] {
         return this.paymentMethod?.gatewayData.orderOptions.suggested ?? []
+    }
+
+    get currencies(): string[] {
+        return this.paymentMethod?.gatewayData.currencies ?? []
     }
 
     buildCallerData(): CreatePaymentOrderRequest["gatewayCallerData"] {

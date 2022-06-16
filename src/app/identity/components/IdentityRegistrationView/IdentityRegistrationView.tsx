@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite"
 import { IdentityRegistrationStatus } from "mysterium-vpn-js"
 import React from "react"
 
-import { LoadingView } from "../../../views/common/Loading/loading-view"
+import { LoadingView } from "../../../views/common/Loading/LoadingView"
 import { useStores } from "../../../store"
 
 const displayRegistrationStatus = (s?: IdentityRegistrationStatus): string => {

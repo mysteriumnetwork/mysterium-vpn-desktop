@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { faDollarSign, faEuroSign, faPoundSign, faQuestionCircle } from "@fortawesome/free-solid-svg-icons"
@@ -56,21 +56,21 @@ const Title = styled(Heading2)`
 
 const TitleDescription = styled(Small)``
 
-const AmountSelect = styled.div`
+const OptionToggleGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     margin-bottom: 20px;
 `
 
-const AmountToggle = styled(Toggle)`
+const OptionToggle = styled(Toggle)`
     width: 85px;
     height: 36px;
 `
 
 const OptionValue = styled(Heading2)``
 
-const PaymentOption = styled(Paragraph)`
+const OptionLabel = styled(Paragraph)`
     &:not(:first-child) {
         border-top: 1px dashed #ddd;
     }
@@ -101,7 +101,13 @@ export const PaypalPaymentOptions: React.FC = observer(() => {
             toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
         }
     }
-    const options = payment.paymentMethod?.gatewayData.currencies || []
+    useEffect(() => {
+        if (payment.currencies.length === 1) {
+            payment.setPaymentCurrency(payment.currencies[0])
+        }
+    }, [payment.currencies])
+    const currencyGridVisible = payment.currencies.length > 1
+    const paymentOptionsOK = !loading && payment.paymentCurrency && payment.taxCountry
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => navigate(-1)}>
@@ -117,47 +123,51 @@ export const PaypalPaymentOptions: React.FC = observer(() => {
                         <TitleDescription>Select the payment options</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <PaymentOption>Payment currency:</PaymentOption>
-                        <AmountSelect>
-                            {options.map((opt) => {
-                                let currencyIcon = faQuestionCircle
-                                switch (opt) {
-                                    case "EUR":
-                                        currencyIcon = faEuroSign
-                                        break
-                                    case "USD":
-                                        currencyIcon = faDollarSign
-                                        break
-                                    case "GBP":
-                                        currencyIcon = faPoundSign
-                                        break
-                                }
-                                return (
-                                    <AmountToggle
-                                        key={opt}
-                                        active={isOptionActive(opt)}
-                                        onClick={selectOption(opt)}
-                                        inactiveColor={lightBlue}
-                                        height="36px"
-                                        justify="center"
-                                    >
-                                        <div style={{ textAlign: "center" }}>
-                                            <OptionValue>
-                                                <FontAwesomeIcon icon={currencyIcon} fixedWidth size="sm" />
-                                                {opt}
-                                            </OptionValue>
-                                        </div>
-                                    </AmountToggle>
-                                )
-                            })}
-                        </AmountSelect>
-                        <PaymentOption>Tax residence country (VAT):</PaymentOption>
+                        {currencyGridVisible && (
+                            <>
+                                <OptionLabel>Payment currency:</OptionLabel>
+                                <OptionToggleGrid>
+                                    {payment.currencies.map((opt) => {
+                                        let currencyIcon = faQuestionCircle
+                                        switch (opt) {
+                                            case "EUR":
+                                                currencyIcon = faEuroSign
+                                                break
+                                            case "USD":
+                                                currencyIcon = faDollarSign
+                                                break
+                                            case "GBP":
+                                                currencyIcon = faPoundSign
+                                                break
+                                        }
+                                        return (
+                                            <OptionToggle
+                                                key={opt}
+                                                active={isOptionActive(opt)}
+                                                onClick={selectOption(opt)}
+                                                inactiveColor={lightBlue}
+                                                height="36px"
+                                                justify="center"
+                                            >
+                                                <div style={{ textAlign: "center" }}>
+                                                    <OptionValue>
+                                                        <FontAwesomeIcon icon={currencyIcon} fixedWidth size="sm" />
+                                                        {opt}
+                                                    </OptionValue>
+                                                </div>
+                                            </OptionToggle>
+                                        )
+                                    })}
+                                </OptionToggleGrid>
+                            </>
+                        )}
+                        <OptionLabel>Tax residence country (VAT):</OptionLabel>
                         <SelectTaxCountry />
                         <BrandButton
                             style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
                             loading={loading}
-                            disabled={loading || !payment.paymentCurrency || !payment.taxCountry}
+                            disabled={!paymentOptionsOK}
                         >
                             Next
                         </BrandButton>

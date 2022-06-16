@@ -7,7 +7,7 @@
 import { observer } from "mobx-react-lite"
 import React from "react"
 
-import { LoadingView } from "../../../views/common/Loading/loading-view"
+import { LoadingView } from "../../../views/common/Loading/LoadingView"
 import { useStores } from "../../../store"
 
 export const StartupLoadingView: React.FC = observer(function StartupLoadingView() {
