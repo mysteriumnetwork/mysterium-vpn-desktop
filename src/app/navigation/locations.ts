@@ -19,6 +19,7 @@ export const locations = {
     onboardingWalletTopup: "/onboarding/wallet/topup",
     terms: "/terms",
     registering: "/registration",
+    idUpgrade: "/id-upgrade",
     wallet: "/wallet",
     walletTopup: "/wallet/topup",
     consumer: "/consumer",

@@ -38,6 +38,7 @@ import { Step1 } from "../../../onboarding/components/IntroductionSteps/Step1"
 import { Step2 } from "../../../onboarding/components/IntroductionSteps/Step2"
 import { Step3 } from "../../../onboarding/components/IntroductionSteps/Step3"
 import { Step4 } from "../../../onboarding/components/IntroductionSteps/Step4"
+import { IdentityUpgradeView } from "../../../identity/components/IdentityUpgradeView/IdentityUpgradeView"
 
 const WinContents = styled.div`
     min-height: 0;
@@ -83,6 +84,7 @@ export const Routes: React.FC = observer(function Routes() {
                     </Route>
                     <Route path="/terms" element={<AcceptTermsView />} />
                     <Route path="/registration" element={<IdentityRegistrationView />} />
+                    <Route path="/id-upgrade" element={<IdentityUpgradeView />} />
                     <Route
                         path="/consumer"
                         element={
