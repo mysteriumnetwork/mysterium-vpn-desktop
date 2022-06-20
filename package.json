@@ -38,7 +38,7 @@
     "history": "^5.3.0",
     "lodash": "^4.17.21",
     "mkdirp": "^1.0.4",
-    "mobx": "^6.4.2",
+    "mobx": "^6.6.0",
     "mobx-logger": "^0.7.1",
     "mobx-react-lite": "^3.3.0",
     "mysterium-vpn-js": "^24.0.0",
