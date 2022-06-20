@@ -59,8 +59,8 @@ const Main = styled.div`
 export const Routes: React.FC = observer(function Routes() {
     const { connection, config } = useStores()
     const location = useLocation()
-    const nakedTitleBar = [locations.onboarding, locations.terms, locations.registering, locations.loading].find((p) =>
-        location.pathname.startsWith(p),
+    const nakedTitleBar = [locations.onboarding, locations.terms, locations.idRegistering, locations.loading].find(
+        (p) => location.pathname.startsWith(p),
     )
     return (
         <WinContents>

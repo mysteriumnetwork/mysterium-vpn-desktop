@@ -61,10 +61,10 @@ const Content = styled(ViewContent)`
 
 export const TopupSuccess: React.FC = observer(() => {
     const { payment, identity, navigation } = useStores()
-    const isOnboarding = identity.identity?.registrationStatus != IdentityRegistrationStatus.Registered
+    const isRegistrationTopup = identity.identity?.registrationStatus != IdentityRegistrationStatus.Registered
     const handleAction = () => {
-        if (isOnboarding) {
-            navigation.push(locations.registering)
+        if (isRegistrationTopup) {
+            navigation.push(locations.idRegistering)
         } else {
             navigation.goHome()
         }
