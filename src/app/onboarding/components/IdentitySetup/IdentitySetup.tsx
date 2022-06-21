@@ -6,7 +6,7 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faCircleNotch, faFileImport, faIdCardAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons"
+import { faFileImport, faIdCardAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
@@ -62,15 +62,6 @@ const SideBot = styled.div`
 
 const Content = styled(ViewContent)`
     background: none;
-`
-
-const IdentityProgress = styled(Heading2)`
-    height: 115px;
-    width: 130px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    opacity: 0.7;
 `
 
 export const IdentitySetup: React.FC = observer(function IdentitySetup() {
@@ -147,14 +138,6 @@ export const IdentitySetup: React.FC = observer(function IdentitySetup() {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <IdentityProgress>
-                        {!!onboarding.identityProgress && (
-                            <>
-                                <FontAwesomeIcon icon={faCircleNotch} spin />
-                                <IdentityProgress>{onboarding.identityProgress}</IdentityProgress>
-                            </>
-                        )}
-                    </IdentityProgress>
                     <Lottie
                         play
                         loop={false}

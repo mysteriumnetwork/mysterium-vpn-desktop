@@ -25,7 +25,7 @@ export const Step4: React.FC = observer(function Step4() {
             animation={animationCrypto}
             onBack={() => navigate(-1)}
             nextText="Setup my account"
-            onNext={() => onboarding.setupMyID()}
+            onNext={() => onboarding.onboardingStepsComplete()}
         />
     )
 })

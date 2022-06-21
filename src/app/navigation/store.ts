@@ -64,7 +64,10 @@ export class NavigationStore {
     }
 
     determineInitialLocation = (): string | undefined => {
-        const { config, identity } = this.root
+        const { config, identity, connection } = this.root
+        if (connectionInProgress(connection.status)) {
+            return locations.connection
+        }
         if (this.location.pathname == locations.wallet) {
             return undefined
         }
@@ -81,7 +84,7 @@ export class NavigationStore {
             case IdentityRegistrationStatus.Unknown:
                 return undefined // Do nothing (leave loading)
             case IdentityRegistrationStatus.InProgress:
-                return locations.registering
+                return locations.idRegistering
             case IdentityRegistrationStatus.Unregistered:
             case IdentityRegistrationStatus.RegistrationError:
                 return locations.onboardingTopupPrompt

@@ -26,7 +26,7 @@ export const Step2: React.FC = observer(function Step2() {
             animation={animationPrivacy}
             onBack={() => navigate(-1)}
             onNext={() => navigate(locations.onboardingIntro3)}
-            onSkip={() => onboarding.setupMyID()}
+            onSkip={() => onboarding.onboardingStepsComplete()}
         />
     )
 })

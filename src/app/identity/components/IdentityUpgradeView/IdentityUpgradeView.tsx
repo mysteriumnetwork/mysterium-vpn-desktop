@@ -9,16 +9,17 @@ import React, { useEffect } from "react"
 import { toast } from "react-hot-toast"
 
 import { LoadingView } from "../../../views/common/Loading/LoadingView"
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
 
 export const IdentityUpgradeView: React.FC = observer(function IdentityUpgradeView() {
-    const { identity, navigation } = useStores()
+    const root = useStores()
+    const { identity } = root
     useEffect(() => {
         identity
             .upgrade()
             .then(() => {
                 toast.success("ID upgraded! Balance will refresh within 1-3 minutes.")
-                navigation.navigateToInitialRoute()
+                return root.startupSequence(Step.IDENTITY_UPGRADE_DONE)
             })
             .catch(() => {
                 toast.error("Failed to upgrade ID (restart and try again)")

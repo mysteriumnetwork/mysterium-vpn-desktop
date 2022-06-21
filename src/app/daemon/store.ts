@@ -23,7 +23,6 @@ export enum DaemonStatusType {
 
 export enum StartupStatus {
     CheckingForUpdates = "Checking for updates",
-    UpgradingIdentity = "Upgrading identity compatibility (<1 minute)...",
     UpdateAvailable = "Update available",
     UpdateNotAvailable = "No update available",
     Downloading = "Downloading update",
@@ -60,7 +59,7 @@ export class DaemonStore {
         this.root = root
         setInterval(async () => {
             await this.healthcheck()
-        }, 2000)
+        }, 5_000)
     }
 
     setupReactions(): void {
@@ -68,21 +67,6 @@ export class DaemonStore {
             () => this.startupStatus == StartupStatus.UpdateNotAvailable,
             async () => {
                 await this.start()
-            },
-        )
-        reaction(
-            () => this.status,
-            async (status) => {
-                if (status == DaemonStatusType.Down) {
-                    log.info("Connection to Mysterium Node lost (auto-start in 5s)")
-                    setTimeout(async () => {
-                        if (this.status == DaemonStatusType.Down) {
-                            await this.start()
-                        } else {
-                            log.info("Connection to Mysterium Node restored")
-                        }
-                    }, 5_000)
-                }
             },
         )
         reaction(
@@ -112,7 +96,7 @@ export class DaemonStore {
         }
         this.setStatusLoading(true)
         try {
-            await tequilapi.healthCheck(10000)
+            await tequilapi.healthCheck(10_000)
             this.setStatus(DaemonStatusType.Up)
         } catch (err) {
             const msg = parseError(err)

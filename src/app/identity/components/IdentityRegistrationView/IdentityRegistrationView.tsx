@@ -7,9 +7,11 @@
 import { observer } from "mobx-react-lite"
 import { IdentityRegistrationStatus } from "mysterium-vpn-js"
 import React from "react"
+import { reaction, when } from "mobx"
 
 import { LoadingView } from "../../../views/common/Loading/LoadingView"
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
+import { log } from "../../../../shared/log/log"
 
 const displayRegistrationStatus = (s?: IdentityRegistrationStatus): string => {
     switch (s) {
@@ -28,7 +30,27 @@ const displayRegistrationStatus = (s?: IdentityRegistrationStatus): string => {
 }
 
 export const IdentityRegistrationView: React.FC = observer(function IdentityRegistrationView() {
-    const { identity } = useStores()
+    const root = useStores()
+    const { identity } = root
     const statusDisplay = displayRegistrationStatus(identity.identity?.registrationStatus)
+    reaction(
+        () => identity.identity?.balanceTokens.wei,
+        async (balance, prev) => {
+            log.debug(`[event] Balance changed: ${prev} -> ${balance}`)
+            switch (identity.identity?.registrationStatus) {
+                case IdentityRegistrationStatus.Unregistered:
+                case IdentityRegistrationStatus.RegistrationError:
+                    if (await identity.balanceSufficientToRegister()) {
+                        root.startupSequence(Step.IDENTITY_REGISTER)
+                    }
+            }
+        },
+    )
+    when(
+        () => identity.identity?.registrationStatus === IdentityRegistrationStatus.Registered,
+        () => {
+            root.startupSequence(Step.IDENTITY_REGISTER_DONE)
+        },
+    )
     return <LoadingView status={statusDisplay} />
 })

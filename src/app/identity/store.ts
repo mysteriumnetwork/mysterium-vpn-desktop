@@ -4,13 +4,13 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { AppState, Identity, IdentityRegistrationStatus, SSEEventType, Tokens } from "mysterium-vpn-js"
+import { AppState, Identity, SSEEventType } from "mysterium-vpn-js"
 import { action, computed, makeObservable, observable, reaction, runInAction, toJS } from "mobx"
 import retry from "async-retry"
 import _ from "lodash"
 import BigNumber from "bignumber.js"
 
-import { RootStore } from "../store"
+import { RootStore, Step } from "../store"
 import { eventBus, tequilapi } from "../tequilapi"
 import { log } from "../../shared/log/log"
 import { PushTopic } from "../../shared/push/topics"
@@ -18,24 +18,12 @@ import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
-import { locations } from "../navigation/locations"
-
-const registrationPossible = (status: IdentityRegistrationStatus): boolean => {
-    return ![
-        IdentityRegistrationStatus.Registered,
-        IdentityRegistrationStatus.InProgress,
-        IdentityRegistrationStatus.Unknown,
-    ].includes(status)
-}
-
-type IdUpgradeStatus = "unknown" | "required" | "finished"
 
 export class IdentityStore {
     loading = false
     identity?: Identity
     unlocked = false
     identities: Identity[] = []
-    upgradeStatus: IdUpgradeStatus = "unknown"
 
     root: RootStore
 
@@ -52,11 +40,11 @@ export class IdentityStore {
             fetchIdentity: action,
             hasIdentities: action,
             unlock: action,
+            balanceSufficientToRegister: action,
             register: action,
             registerWithReferralToken: action,
             upgradeRequired: action,
             upgrade: action,
-            upgradeStatus: observable,
             setLoading: action,
             setIdentity: action,
             setIdentities: action,
@@ -94,50 +82,6 @@ export class IdentityStore {
                 reportBalanceUpdate(balance)
             },
         )
-        reaction(() => this.identity?.balanceTokens, this.registerOnBalanceChange)
-        reaction(() => this.identity?.registrationStatus, this.navigateOnStatusChange)
-        reaction(() => this.upgradeStatus, this.navigationOnIdUpgradeStatusChange)
-    }
-
-    registerOnBalanceChange = async (balanceTokens?: Tokens): Promise<void> => {
-        if (!this.identity) {
-            return
-        }
-        if (!registrationPossible(this.identity.registrationStatus)) {
-            return
-        }
-        if (!balanceTokens?.wei) {
-            return
-        }
-        await this.root.payment.fetchTransactorFees()
-        const registrationFee = new BigNumber(this.root.payment.fees?.registration.wei ?? 0)
-        const balance = new BigNumber(balanceTokens?.wei ?? 0)
-        if (balance.isLessThan(registrationFee)) {
-            log.info("Balance is insufficient to register")
-            return
-        }
-        log.info("Balance is sufficient for registration")
-        return await this.register(this.identity)
-    }
-
-    navigateOnStatusChange = (status?: IdentityRegistrationStatus): void => {
-        switch (status) {
-            case IdentityRegistrationStatus.InProgress:
-            case IdentityRegistrationStatus.RegistrationError:
-                this.root.navigation.push(locations.registering)
-                return
-            case IdentityRegistrationStatus.Registered:
-                if (this.upgradeStatus === "finished") {
-                    this.root.navigation.goHome()
-                }
-        }
-    }
-
-    navigationOnIdUpgradeStatusChange = (status: IdUpgradeStatus): void => {
-        switch (status) {
-            case "finished":
-                this.root.navigation.navigateToInitialRoute()
-        }
     }
 
     async hasIdentities(): Promise<boolean> {
@@ -214,34 +158,26 @@ export class IdentityStore {
         }
     }
 
-    async registerIfNeeded(): Promise<void> {
-        if (!this.identity) {
-            log.info("No ID")
-            return
-        }
-        const { id, registrationStatus: status, balanceTokens } = this.identity
-        if (!registrationPossible(status)) {
-            log.info(`Status ${status} cannot be registered`) // Identity is already registered or status is unknown
-            return
-        }
-        const eligibleForFreeRegistration = await tequilapi.freeRegistrationEligibility(id).then((res) => res.eligible)
-        log.info("Free registration eligibility:", eligibleForFreeRegistration)
-        if (eligibleForFreeRegistration) {
-            log.info("Attempting to register for free")
-            await this.register(this.identity)
-            return
-        }
-        await this.root.payment.fetchTransactorFees()
-        log.info("Registration fee:", this.root.payment.fees?.registration.ether)
+    async balanceSufficientToRegister(): Promise<boolean> {
+        const { id, balanceTokens: balance } = this.requireId()
 
-        const registrationFee = new BigNumber(this.root.payment.fees?.registration.wei ?? 0)
-        const balance = new BigNumber(balanceTokens.wei)
-        if (balance.isLessThan(registrationFee)) {
-            log.info("Balance is insufficient to register")
-            return
+        // Check whether the user is eligible for free registration
+        const eligibleForFreeRegistration = await tequilapi.freeRegistrationEligibility(id).then((res) => res.eligible)
+        if (eligibleForFreeRegistration) {
+            log.info("User is eligible for free registration")
+            return true
         }
-        log.info("Balance is sufficient for registration")
-        await this.register(this.identity)
+
+        // Fetch registration fees and compare with user's balance
+        await this.root.payment.fetchTransactorFees()
+        const registrationFee = this.root.payment.fees?.registration
+        if (new BigNumber(balance.wei).isGreaterThan(new BigNumber(registrationFee?.wei ?? 0))) {
+            log.info(`Balance is sufficient to register: ${balance.ether} >= ${registrationFee?.ether} (reg. fee)`)
+            return true
+        }
+
+        log.info(`Balance is NOT sufficient to register: ${balance.ether} < ${registrationFee?.ether} (reg. fee)`)
+        return false
     }
 
     async register(id: Identity, referralToken?: string): Promise<void> {
@@ -254,8 +190,8 @@ export class IdentityStore {
         }
     }
 
-    requireId(): string {
-        const id = this.identity?.id
+    requireId(): Identity {
+        const id = this.identity
         if (!id) {
             throw Error("No Identity")
         }
@@ -263,7 +199,7 @@ export class IdentityStore {
     }
 
     async upgradeRequired(): Promise<boolean> {
-        const id = this.requireId()
+        const id = this.requireId().id
         const res = await tequilapi.http.get(`identities/${id}/migrate-hermes/status`)
         const status = res?.status
         if (!status) {
@@ -272,14 +208,13 @@ export class IdentityStore {
         }
         if (status !== "required") {
             log.info("Migration is not required")
-            this.upgradeStatus = "finished"
             return false
         }
         return true
     }
 
     async upgrade(): Promise<void> {
-        const id = this.requireId()
+        const id = this.requireId().id
         await retry(
             async () => {
                 const res = await tequilapi.http.post(`identities/${id}/migrate-hermes`, {}, 60_000)
@@ -344,12 +279,7 @@ export class IdentityStore {
             return Promise.reject(res.error)
         }
         await this.loadIdentity()
-        if (this.identity && this.identity?.registrationStatus !== IdentityRegistrationStatus.Registered) {
-            await this.register(this.identity)
-        }
-        if (await this.upgradeRequired()) {
-            await this.upgrade()
-        }
+        this.root.startupSequence(Step.IDENTITY_CREATE_DONE)
         return String(res.result)
     }
 }

@@ -32,7 +32,7 @@ export const Step3: React.FC = observer(function Step3() {
             animation={animationPayAsYouGo}
             onBack={() => navigate(-1)}
             onNext={() => navigate(locations.onboardingIntro4)}
-            onSkip={() => onboarding.setupMyID()}
+            onSkip={() => onboarding.onboardingStepsComplete()}
         />
     )
 })
