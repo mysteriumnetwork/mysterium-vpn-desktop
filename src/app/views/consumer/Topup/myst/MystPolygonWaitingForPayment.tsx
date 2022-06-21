@@ -10,6 +10,8 @@ import styled from "styled-components"
 import CountDown from "react-countdown"
 import useInterval from "@use-it/interval"
 import { useNavigate } from "react-router-dom"
+import { reaction } from "mobx"
+import BigNumber from "bignumber.js"
 
 import { useStores } from "../../../../store"
 import { ViewContainer } from "../../../../navigation/components/ViewContainer/ViewContainer"
@@ -23,6 +25,7 @@ import { brand, brandLight } from "../../../../ui-kit/colors"
 import { QR } from "../../../../ui-kit/components/QR/QR"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
 import { Spinner } from "../../../../ui-kit/components/Spinner/Spinner"
+import { topupSteps } from "../../../../navigation/locations"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -98,6 +101,14 @@ const Loading = styled(Spinner)`
 export const MystPolygonWaitingForPayment: React.FC = observer(() => {
     const { payment, identity } = useStores()
     const navigate = useNavigate()
+    reaction(
+        () => identity.identity?.balanceTokens,
+        (cur, prev) => {
+            if (new BigNumber(cur?.wei ?? 0).isGreaterThan(new BigNumber(prev?.wei ?? 0))) {
+                navigate("../" + topupSteps.success)
+            }
+        },
+    )
     useInterval(() => {
         payment.refreshBalance()
     }, 30_000)

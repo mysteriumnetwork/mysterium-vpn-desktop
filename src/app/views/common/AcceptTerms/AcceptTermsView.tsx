@@ -12,7 +12,7 @@ import * as termsPackageJson from "@mysteriumnetwork/terms/package.json"
 import styled from "styled-components"
 import { shell } from "electron"
 
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 import { Checkbox } from "../../../ui-kit/form-components/Checkbox/Checkbox"
 import { Heading1 } from "../../../ui-kit/typography"
@@ -84,8 +84,13 @@ const Actions = styled.div`
 `
 
 export const AcceptTermsView: React.FC = observer(function AcceptTermsView() {
-    const { config } = useStores()
+    const root = useStores()
+    const { config } = root
     const [agree, setAgree] = useState(false)
+    const onAgreeToTerms = async () => {
+        await config.agreeToTerms()
+        return root.startupSequence(Step.TERMS_DONE)
+    }
     return (
         <Container>
             <Title>Terms and Conditions</Title>
@@ -117,12 +122,7 @@ export const AcceptTermsView: React.FC = observer(function AcceptTermsView() {
                 </Checkbox>
             </TermsAgree>
             <Actions>
-                <BrandButton
-                    disabled={!agree}
-                    onClick={(): void => {
-                        config.agreeToTerms()
-                    }}
-                >
+                <BrandButton disabled={!agree} onClick={onAgreeToTerms}>
                     Continue
                 </BrandButton>
             </Actions>

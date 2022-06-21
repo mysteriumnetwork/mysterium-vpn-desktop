@@ -8,7 +8,7 @@ import React from "react"
 import { observer } from "mobx-react-lite"
 import styled, { keyframes } from "styled-components"
 
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
 import { BrandButton } from "../../../ui-kit/components/Button/BrandButton"
 
 import welcomeBg from "./welcome-bg.png"
@@ -68,13 +68,16 @@ const GetStartedButton = styled(BrandButton)`
 `
 
 export const Welcome: React.FC = observer(function Welcome() {
-    const { onboarding } = useStores()
+    const rootStore = useStores()
+    const onGetStarted = () => {
+        return rootStore.startupSequence(Step.WELCOME_DONE)
+    }
     return (
         <Container>
             <Title>Welcome to Mysterium Network</Title>
             <Description>Connect to everything, everywhere via the Worldߴs first decentralized VPN.</Description>
             <Actions>
-                <GetStartedButton onClick={onboarding.getStarted}>Get Started</GetStartedButton>
+                <GetStartedButton onClick={onGetStarted}>Get Started</GetStartedButton>
             </Actions>
         </Container>
     )

@@ -25,7 +25,7 @@ export const Step1: React.FC = observer(function Step1() {
             description="Our network is blind to borders. Select any IP you like from our global list and get unlimited access to worldwide content."
             animation={animationNetwork}
             onNext={() => navigate(locations.onboardingIntro2)}
-            onSkip={() => onboarding.setupMyID()}
+            onSkip={() => onboarding.onboardingStepsComplete()}
         />
     )
 })

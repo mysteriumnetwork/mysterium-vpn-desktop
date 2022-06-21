@@ -13,7 +13,6 @@ import { ipcRenderer } from "electron"
 import { RootStore } from "../store"
 import { log } from "../../shared/log/log"
 import { tequilapi } from "../tequilapi"
-import { locations } from "../navigation/locations"
 import { MainIpcListenChannels } from "../../shared/ipc"
 
 export interface Config {
@@ -129,11 +128,6 @@ export class ConfigStore {
                 at: new Date().toISOString(),
             },
         })
-        if (this.onboarded) {
-            this.root.navigation.goHome()
-        } else {
-            this.root.navigation.push(locations.onboardingIntroIndex)
-        }
     }
 
     get onboarded(): boolean {

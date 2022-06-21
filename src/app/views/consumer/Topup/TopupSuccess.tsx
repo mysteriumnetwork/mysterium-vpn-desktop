@@ -64,6 +64,7 @@ export const TopupSuccess: React.FC = observer(() => {
     const isRegistrationTopup = identity.identity?.registrationStatus != IdentityRegistrationStatus.Registered
     const handleAction = () => {
         if (isRegistrationTopup) {
+            identity.register(identity.requireId())
             navigation.push(locations.idRegistering)
         } else {
             navigation.goHome()

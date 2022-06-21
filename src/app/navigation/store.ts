@@ -64,7 +64,10 @@ export class NavigationStore {
     }
 
     determineInitialLocation = (): string | undefined => {
-        const { config, identity } = this.root
+        const { config, identity, connection } = this.root
+        if (connectionInProgress(connection.status)) {
+            return locations.connection
+        }
         if (this.location.pathname == locations.wallet) {
             return undefined
         }
