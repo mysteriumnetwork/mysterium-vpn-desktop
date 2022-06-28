@@ -12,6 +12,41 @@ It is the first Mysterium Network use case in action. Our dVPN is our flagship p
 
 Download and install the [latest version](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest) for your platform. After installation, run MysteriumVPN to get started.
 
+### Windows
+
+#### WinGet - Windows Package Manager
+
+- Mysterium VPN can be installed using [Windows Package Manager](https://docs.microsoft.com/windows/package-manager)
+
+```pwsh
+winget install MysteriumNetwork.Mysterium
+```
+
+- Update
+
+```pwsh
+winget upgrade MysteriumNetwork.Mysterium
+```
+
+#### Manual Install
+
+- Download the `.exe` file from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
+- Run the executable to install
+
+#### Chocolatey
+
+- Mysterium VPN can also be installed with [chocolatey](https://chocolatey.org/):
+
+```pwsh
+choco install -y mysteriumvpn
+```
+
+- Update
+
+```pwsh
+choco update -y mysteriumvpn
+```
+
 ### Linux
 
 #### Ubuntu/Debian
@@ -51,27 +86,6 @@ brew install --cask mysteriumvpn
 
 ```sh
 brew upgrade --cask mysteriumvpn
-```
-
-### Windows
-
-#### Manual Install
-
-- Download the `.exe` file from [releases](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases/latest)
-- Run the executable to install
-
-#### Chocolatey
-
-- Mysterium VPN can also be installed with [chocolatey](https://chocolatey.org/):
-
-```pwsh
-choco install -y mysteriumvpn
-```
-
-- Update
-
-```pwsh
-choco update -y mysteriumvpn
 ```
 
 ## Logs
