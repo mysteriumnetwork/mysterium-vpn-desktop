@@ -135,6 +135,10 @@
       "entitlementsInherit": "build/entitlements.mac.plist",
       "category": "public.app-category.productivity"
     },
+    "dmg": {
+      "background": "build/background.tiff",
+      "iconTextSize": 14
+    },
     "win": {
       "target": [
         "nsis"
