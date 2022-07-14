@@ -16,7 +16,8 @@
     "lint": "eslint src",
     "clean": "shx rm -rf dist",
     "build": "electron-webpack",
-    "bundle": "yarn build && electron-builder"
+    "bundle": "yarn build && electron-builder",
+    "bundle-dev": "yarn build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder"
   },
   "engines": {
     "node": ">=16"
