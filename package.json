@@ -129,10 +129,11 @@
       "**/node_modules/@mysteriumnetwork/node/bin/${platform}/${arch}/**"
     ],
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "target": {
+        "target": "default",
+        "arch": "universal"
+      },
+      "singleArchFiles": "**/node_modules/@mysteriumnetwork/node/bin/**",
       "icon": "static/logo.icns",
       "hardenedRuntime": true,
       "entitlements": "build/entitlements.mac.plist",
