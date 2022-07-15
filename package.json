@@ -11,7 +11,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "postinstall": "shx rm -rf static/bin && shx cp -r node_modules/@mysteriumnetwork/node/bin static/bin",
     "dev": "electron-webpack dev",
     "lint": "eslint src",
     "clean": "shx rm -rf dist",
@@ -27,7 +26,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mysteriumnetwork/node": "1.9.5-p1",
+    "@mysteriumnetwork/node": "1.9.5-p3",
     "@mysteriumnetwork/terms": "0.0.41",
     "@sentry/electron": "^3.0.7",
     "@use-it/interval": "^1.0.0",
@@ -125,6 +124,10 @@
       "buildResources": "build",
       "output": "dist"
     },
+    "files": [
+      "!**/node_modules/@mysteriumnetwork/node/bin/**",
+      "**/node_modules/@mysteriumnetwork/node/bin/${platform}/${arch}/**"
+    ],
     "mac": {
       "target": [
         "dmg",

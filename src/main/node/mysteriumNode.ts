@@ -4,27 +4,22 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { platform } from "os"
 import { ChildProcess } from "child_process"
 
 import { NodeHealthcheck, TequilapiClientFactory } from "mysterium-vpn-js"
 import { BrowserWindow, dialog, ipcMain, IpcMainInvokeEvent } from "electron"
+import { mysteriumNodeBin } from "@mysteriumnetwork/node"
 
 import { spawnProcess } from "../../utils/spawn"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { TEQUILAPI_PORT } from "../../app/tequilapi"
-import { staticAssetPath } from "../../utils/paths"
 import { IpcResponse, MainIpcListenChannels } from "../../shared/ipc"
 import { isProduction } from "../../utils/env"
 import { ExportIdentityOpts, ImportIdentityOpts } from "../../shared/node/mysteriumNodeIPC"
 import { parseError } from "../../shared/errors/parseError"
 
 const mystBin = (): string => {
-    let mystBinaryName = "bin/myst"
-    if (platform() === "win32") {
-        mystBinaryName += ".exe"
-    }
-    return staticAssetPath(mystBinaryName)
+    return mysteriumNodeBin(process.platform, process.arch).replace("app.asar", "app.asar.unpacked")
 }
 
 const parseCLIError = (message: string): string => {
