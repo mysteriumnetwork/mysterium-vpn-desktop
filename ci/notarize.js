@@ -15,6 +15,10 @@ exports.default = async function notarizing(context) {
     if (electronPlatformName !== "darwin") {
         return
     }
+    if (process.env.CSC_IDENTITY_AUTO_DISCOVERY === "false") {
+        console.log("CSC_IDENTITY_AUTO_DISCOVERY is set to false, skipping notarization")
+        return
+    }
 
     const appName = context.packager.appInfo.productFilename
 

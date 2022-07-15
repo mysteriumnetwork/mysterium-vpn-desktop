@@ -11,12 +11,12 @@
   },
   "license": "MIT",
   "scripts": {
-    "postinstall": "shx rm -rf static/bin && shx cp -r node_modules/@mysteriumnetwork/node/bin static/bin",
     "dev": "electron-webpack dev",
     "lint": "eslint src",
     "clean": "shx rm -rf dist",
     "build": "electron-webpack",
-    "bundle": "yarn build && electron-builder"
+    "bundle": "yarn build && electron-builder",
+    "bundle-dev": "yarn build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder"
   },
   "engines": {
     "node": ">=16"
@@ -26,7 +26,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mysteriumnetwork/node": "1.9.3",
+    "@mysteriumnetwork/node": "1.9.5-p3",
     "@mysteriumnetwork/terms": "0.0.41",
     "@sentry/electron": "^3.0.7",
     "@use-it/interval": "^1.0.0",
@@ -84,8 +84,8 @@
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "electron": "^19.0.5",
-    "electron-builder": "^23.0.3",
+    "electron": "^19.0.8",
+    "electron-builder": "^23.1.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-download": "^4.1.1",
     "electron-notarize": "^1.2.1",
@@ -124,15 +124,25 @@
       "buildResources": "build",
       "output": "dist"
     },
+    "files": [
+      "!**/node_modules/@mysteriumnetwork/node/bin/**",
+      "**/node_modules/@mysteriumnetwork/node/bin/${platform}/${arch}/**"
+    ],
     "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ],
+      "target": {
+        "target": "default",
+        "arch": "universal"
+      },
+      "singleArchFiles": "**/node_modules/@mysteriumnetwork/node/bin/**",
       "icon": "static/logo.icns",
       "hardenedRuntime": true,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "background": "build/background.tiff",
+      "iconTextSize": 14
     },
     "win": {
       "target": [

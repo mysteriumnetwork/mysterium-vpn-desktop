@@ -10,9 +10,8 @@ import { platform } from "os"
 
 import semver from "semver"
 import { ipcMain } from "electron"
+import { mysteriumSupervisorBin, nodeVersion } from "@mysteriumnetwork/node"
 
-import * as packageJson from "../../../package.json"
-import { staticAssetPath } from "../../utils/paths"
 import { log } from "../../shared/log/log"
 import { sudoExec } from "../../utils/sudo"
 import { uid } from "../../utils/user"
@@ -28,11 +27,7 @@ function mystSockPath(): string {
 }
 
 const supervisorBin = (): string => {
-    let supervisorBinaryName = "bin/myst_supervisor"
-    if (isWin) {
-        supervisorBinaryName += ".exe"
-    }
-    return staticAssetPath(supervisorBinaryName)
+    return mysteriumSupervisorBin(process.platform, process.arch).replace("app.asar", "app.asar.unpacked")
 }
 
 export class Supervisor {
@@ -99,7 +94,7 @@ export class Supervisor {
     }
 
     async upgrade(): Promise<void> {
-        const bundledVersion = packageJson.dependencies["@mysteriumnetwork/node"]
+        const bundledVersion = nodeVersion()
 
         let runningVersion = ""
         try {
