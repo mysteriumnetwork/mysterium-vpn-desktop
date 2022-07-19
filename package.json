@@ -26,7 +26,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "@mysteriumnetwork/node": "1.9.5-p3",
+    "@mysteriumnetwork/node": "1.9.6",
     "@mysteriumnetwork/terms": "0.0.41",
     "@sentry/electron": "^3.0.7",
     "@use-it/interval": "^1.0.0",
@@ -84,6 +84,7 @@
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
+    "chmodr": "^1.2.0",
     "electron": "^19.0.8",
     "electron-builder": "^23.1.0",
     "electron-devtools-installer": "^3.2.0",
@@ -126,7 +127,7 @@
     },
     "files": [
       "!**/node_modules/@mysteriumnetwork/node/bin/**",
-      "**/node_modules/@mysteriumnetwork/node/bin/${platform}/${arch}/**"
+      "**/node_modules/@mysteriumnetwork/node/bin/${os}/${arch}/**"
     ],
     "mac": {
       "target": {
@@ -193,6 +194,7 @@
       "runAfterFinish": true,
       "include": "build/nsis/customize.nsi"
     },
+    "afterPack": "ci/afterPack.js",
     "afterSign": "ci/notarize.js",
     "publish": {
       "provider": "github",
