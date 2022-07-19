@@ -84,6 +84,7 @@
     "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
+    "chmodr": "^1.2.0",
     "electron": "^19.0.8",
     "electron-builder": "^23.1.0",
     "electron-devtools-installer": "^3.2.0",
@@ -193,6 +194,7 @@
       "runAfterFinish": true,
       "include": "build/nsis/customize.nsi"
     },
+    "afterPack": "ci/afterPack.js",
     "afterSign": "ci/notarize.js",
     "publish": {
       "provider": "github",
