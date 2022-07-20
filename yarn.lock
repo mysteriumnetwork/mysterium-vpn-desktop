@@ -1033,10 +1033,10 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@1.9.6":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.9.6.tgz#b3f1132908d9fa2c4bfba684759a8851f03a8f03"
-  integrity sha512-7xGv9wEA8IXkC5kOMjGz3Yxz4ItXEElTONzbJDEvQ1Yy37J4rKzlFXu7HZGIeLqq92/Ri6HKAarGZwrwPkM0kQ==
+"@mysteriumnetwork/node@1.9.6-p1":
+  version "1.9.6-p1"
+  resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.9.6-p1.tgz#bd9223bb9b9b78de426aff59e1525d87751ce0f1"
+  integrity sha512-1sEV067NnqlP7mXUpnMNQ6YPzNe3UxPVtECGU7gOZb2yw/g8QxQ5Ixb/EQgiFzS9iL1Vt83o99KmwpkJ8CN+6A==
   dependencies:
     extract-zip "^2.0.0"
     node-fetch "^2.6.7"
