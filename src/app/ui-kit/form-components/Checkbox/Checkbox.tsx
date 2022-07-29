@@ -10,7 +10,7 @@ import { uniqueId } from "lodash"
 
 const Container = styled.div`
     height: 24px;
-    font-size: 14px;
+    font-size: 13px;
     display: flex;
     -webkit-app-region: no-drag;
 `

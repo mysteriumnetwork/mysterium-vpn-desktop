@@ -30,6 +30,8 @@ import { logErrorMessage } from "../../../../../shared/log/log"
 import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
 import { SelectTaxCountry } from "../../../../payment/components/SelectTaxCountry/SelectTaxCountry"
 import { SelectTaxState } from "../../../../payment/components/SelectTaxState/SelectTaxState"
+import { OptionLabel } from "../common/OptionLabel"
+import { OptionValue } from "../common/OptionValue"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -67,15 +69,6 @@ const OptionToggleGrid = styled.div`
 const OptionToggle = styled(Toggle)`
     width: 85px;
     height: 36px;
-`
-
-const OptionValue = styled.div`
-    margin-bottom: 10px;
-`
-
-const OptionLabel = styled(Small)`
-    margin-bottom: 5px;
-    text-align: left;
 `
 
 export const StripePaymentOptions: React.FC = observer(() => {
