@@ -5,11 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { observer } from "mobx-react-lite"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { faUserFriends, faWallet } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
+import { IdentityRegistrationStatus } from "mysterium-vpn-js"
+import BigNumber from "bignumber.js"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -65,8 +67,11 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
+const HALF_MYST = 500_000_000_000_000_000
+
 export const InitialTopup: React.FC = observer(function InitialTopup() {
-    const { payment, onboarding } = useStores()
+    const { payment, onboarding, identity, navigation } = useStores()
+
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
     }
@@ -81,6 +86,24 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
     const handleReferralCancel = () => {
         setReferralPrompt(false)
     }
+
+    useEffect(() => {
+        const skipToRegistrationIfAlreadyPaid = () => {
+            const id = identity.identity?.id
+            const status = identity.identity?.registrationStatus
+            const balanceWei = identity.identity?.balanceTokens.wei
+            if (
+                id &&
+                status === IdentityRegistrationStatus.Unregistered &&
+                new BigNumber(balanceWei ?? 0).gte(HALF_MYST)
+            ) {
+                identity.register(identity.requireId())
+                navigation.push(locations.idRegistering)
+            }
+        }
+        skipToRegistrationIfAlreadyPaid()
+    }, [identity.identity?.id])
+
     return (
         <ViewContainer>
             <ViewNavBar />
