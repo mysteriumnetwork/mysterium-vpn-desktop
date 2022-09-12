@@ -86,7 +86,7 @@
     "@typescript-eslint/parser": "^5.23.0",
     "chmodr": "^1.2.0",
     "electron": "^20.1.2",
-    "electron-builder": "^23.1.0",
+    "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-download": "^4.1.1",
     "electron-notarize": "^1.2.1",
