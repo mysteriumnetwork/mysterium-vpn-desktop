@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { observer } from "mobx-react-lite"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { faUserFriends, faWallet } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
+import { comparer, reaction } from "mobx"
 import { IdentityRegistrationStatus } from "mysterium-vpn-js"
-import BigNumber from "bignumber.js"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -25,9 +25,10 @@ import {
     PrimarySidebarActionButton,
     SecondarySidebarActionButton,
 } from "../../../ui-kit/components/Button/SidebarButtons"
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
 import { locations } from "../../../navigation/locations"
+import { log } from "../../../../shared/log/log"
 
 import { ReferralCodeFormFields, UseReferralCodePrompt } from "./UseReferralCodePrompt"
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
@@ -67,10 +68,9 @@ const Content = styled(ViewContent)`
     justify-content: center;
 `
 
-const HALF_MYST = 500_000_000_000_000_000
-
 export const InitialTopup: React.FC = observer(function InitialTopup() {
-    const { payment, onboarding, identity, navigation } = useStores()
+    const root = useStores()
+    const { payment, onboarding, identity } = root
 
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
@@ -87,22 +87,22 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
         setReferralPrompt(false)
     }
 
-    useEffect(() => {
-        const skipToRegistrationIfAlreadyPaid = () => {
-            const id = identity.identity?.id
-            const status = identity.identity?.registrationStatus
-            const balanceWei = identity.identity?.balanceTokens.wei
-            if (
-                id &&
-                status === IdentityRegistrationStatus.Unregistered &&
-                new BigNumber(balanceWei ?? 0).gte(HALF_MYST)
-            ) {
-                identity.register(identity.requireId())
-                navigation.push(locations.idRegistering)
+    reaction(
+        () => identity.identity?.balanceTokens,
+        async (balance, prev) => {
+            log.debug(`[event] Balance changed: ${prev?.ether} -> ${balance?.ether}`)
+            switch (identity.identity?.registrationStatus) {
+                case IdentityRegistrationStatus.Unregistered:
+                case IdentityRegistrationStatus.RegistrationError:
+                    if (await identity.balanceSufficientToRegister()) {
+                        root.startupSequence(Step.IDENTITY_REGISTER)
+                    }
             }
-        }
-        skipToRegistrationIfAlreadyPaid()
-    }, [identity.identity?.id])
+        },
+        {
+            equals: comparer.structural,
+        },
+    )
 
     return (
         <ViewContainer>

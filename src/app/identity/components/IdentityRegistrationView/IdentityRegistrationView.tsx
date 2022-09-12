@@ -7,7 +7,7 @@
 import { observer } from "mobx-react-lite"
 import { IdentityRegistrationStatus } from "mysterium-vpn-js"
 import React from "react"
-import { reaction, when } from "mobx"
+import { comparer, reaction, when } from "mobx"
 
 import { LoadingView } from "../../../views/common/Loading/LoadingView"
 import { Step, useStores } from "../../../store"
@@ -34,9 +34,9 @@ export const IdentityRegistrationView: React.FC = observer(function IdentityRegi
     const { identity } = root
     const statusDisplay = displayRegistrationStatus(identity.identity?.registrationStatus)
     reaction(
-        () => identity.identity?.balanceTokens.wei,
+        () => identity.identity?.balanceTokens,
         async (balance, prev) => {
-            log.debug(`[event] Balance changed: ${prev} -> ${balance}`)
+            log.debug(`[event] Balance changed: ${prev?.ether} -> ${balance?.ether}`)
             switch (identity.identity?.registrationStatus) {
                 case IdentityRegistrationStatus.Unregistered:
                 case IdentityRegistrationStatus.RegistrationError:
@@ -45,6 +45,7 @@ export const IdentityRegistrationView: React.FC = observer(function IdentityRegi
                     }
             }
         },
+        { equals: comparer.structural },
     )
     when(
         () => identity.identity?.registrationStatus === IdentityRegistrationStatus.Registered,
