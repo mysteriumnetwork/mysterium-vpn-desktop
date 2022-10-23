@@ -72,9 +72,9 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
     const nextStep = () => {
         onboarding.finishIDSetup()
     }
-    const handleBackupLater = () => {
-        nextStep()
-    }
+    // const handleBackupLater = () => {
+    //     nextStep()
+    // }
 
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleBackupNow = () => {
@@ -121,7 +121,7 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
                                 Backup Private Key
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleBackupLater}>
+                        <SecondarySidebarActionButton>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faClock} />
