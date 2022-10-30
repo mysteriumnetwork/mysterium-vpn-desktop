@@ -6,11 +6,12 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { faFileExport, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -18,7 +19,7 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { Heading2, Small } from "../../../ui-kit/typography"
-import { ButtonContent, ButtonIcon, PrimarySidebarActionButton } from "../../../ui-kit/components/Button/SidebarButtons"
+import { ButtonContent, ButtonIcon, PrimarySidebarActionButton, SecondarySidebarActionButton } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { ExportIdentityFormFields, ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
@@ -64,12 +65,10 @@ const Content = styled(ViewContent)`
 export const IdentityBackup: React.FC = observer(function IdentityBackup() {
     const { onboarding, identity } = useStores()
 
+    const navigate = useNavigate()
     const nextStep = () => {
         onboarding.finishIDSetup()
     }
-    // const handleBackupLater = () => {
-    // nextStep()
-    // }
 
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleBackupNow = () => {
@@ -116,14 +115,14 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
                                 Backup Private Key
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        {/* <SecondarySidebarActionButton>
+                        <SecondarySidebarActionButton onClick={() => navigate(-1)}>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faArrowAltCircleLeft} />
                                 </ButtonIcon>
                                 Go Back
                             </ButtonContent>
-                        </SecondarySidebarActionButton> */}
+                        </SecondarySidebarActionButton>
                     </SideBot>
                 </ViewSidebar>
                 <Content>
