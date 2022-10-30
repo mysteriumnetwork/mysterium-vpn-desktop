@@ -6,7 +6,7 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { faArrowAltCircleLeft, faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
@@ -73,8 +73,10 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
         onboarding.finishIDSetup()
     }
     // const handleBackupLater = () => {
-    //     nextStep()
+        // nextStep()
     // }
+
+    
 
     const [exportPrompt, setExportPrompt] = useState(false)
     const handleBackupNow = () => {
@@ -121,14 +123,14 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
                                 Backup Private Key
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton>
+                        {/* <SecondarySidebarActionButton>
                             <ButtonContent>
                                 <ButtonIcon>
-                                    <FontAwesomeIcon icon={faClock} />
+                                    <FontAwesomeIcon icon={faArrowAltCircleLeft} />
                                 </ButtonIcon>
-                                Backup later
+                                Go Back
                             </ButtonContent>
-                        </SecondarySidebarActionButton>
+                        </SecondarySidebarActionButton> */}
                     </SideBot>
                 </ViewSidebar>
                 <Content>
