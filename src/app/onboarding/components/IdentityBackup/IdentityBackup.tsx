@@ -6,7 +6,7 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faArrowAltCircleLeft, faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { faFileExport } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
@@ -21,8 +21,7 @@ import { Heading2, Small } from "../../../ui-kit/typography"
 import {
     ButtonContent,
     ButtonIcon,
-    PrimarySidebarActionButton,
-    SecondarySidebarActionButton,
+    PrimarySidebarActionButton
 } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { ExportIdentityFormFields, ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
