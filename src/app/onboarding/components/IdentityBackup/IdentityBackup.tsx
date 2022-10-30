@@ -18,7 +18,7 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { ViewNavBar } from "../../../navigation/components/ViewNavBar/ViewNavBar"
 import { Heading2, Small } from "../../../ui-kit/typography"
-import { ButtonContent, ButtonIcon, PrimarySidebarActionButton} from "../../../ui-kit/components/Button/SidebarButtons"
+import { ButtonContent, ButtonIcon, PrimarySidebarActionButton } from "../../../ui-kit/components/Button/SidebarButtons"
 import { useStores } from "../../../store"
 import { ExportIdentityFormFields, ExportIdentityPrompt } from "../../../views/common/Settings/ExportIdentityPrompt"
 import { brandLight } from "../../../ui-kit/colors"
@@ -68,7 +68,7 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
         onboarding.finishIDSetup()
     }
     // const handleBackupLater = () => {
-        // nextStep()
+    // nextStep()
     // }
 
     const [exportPrompt, setExportPrompt] = useState(false)
