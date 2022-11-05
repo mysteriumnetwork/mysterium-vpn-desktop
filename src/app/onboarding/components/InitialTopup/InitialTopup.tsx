@@ -6,12 +6,13 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faUserFriends, faWallet } from "@fortawesome/free-solid-svg-icons"
+import { faWallet, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
 import { comparer, reaction } from "mobx"
 import { IdentityRegistrationStatus } from "mysterium-vpn-js"
+import { useNavigate } from "react-router-dom"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -70,15 +71,16 @@ const Content = styled(ViewContent)`
 
 export const InitialTopup: React.FC = observer(function InitialTopup() {
     const root = useStores()
+    const navigate = useNavigate()
     const { payment, onboarding, identity } = root
 
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
     }
     const [referralPrompt, setReferralPrompt] = useState(false)
-    const handleUseReferralCode = () => {
-        setReferralPrompt(true)
-    }
+    // const handleUseReferralCode = () => {
+    //     setReferralPrompt(true)
+    // }
     const handleReferralSubmit = async ({ code }: ReferralCodeFormFields) => {
         setReferralPrompt(false)
         await onboarding.registerWithReferralCode(code)
@@ -123,12 +125,20 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
                                 Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleUseReferralCode}>
+                        {/* <SecondarySidebarActionButton onClick={handleUseReferralCode}>
                             <ButtonContent>
                                 <ButtonIcon>
                                     <FontAwesomeIcon icon={faUserFriends} />
                                 </ButtonIcon>
                                 Use a Referral code
+                            </ButtonContent>
+                        </SecondarySidebarActionButton> */}
+                        <SecondarySidebarActionButton onClick={() => navigate(-1)}>
+                            <ButtonContent>
+                                <ButtonIcon>
+                                    <FontAwesomeIcon icon={faArrowAltCircleLeft} />
+                                </ButtonIcon>
+                                Go Back
                             </ButtonContent>
                         </SecondarySidebarActionButton>
                     </SideBot>
