@@ -125,14 +125,6 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
                                 Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        {/* <SecondarySidebarActionButton onClick={handleUseReferralCode}>
-                            <ButtonContent>
-                                <ButtonIcon>
-                                    <FontAwesomeIcon icon={faUserFriends} />
-                                </ButtonIcon>
-                                Use a Referral code
-                            </ButtonContent>
-                        </SecondarySidebarActionButton> */}
                         <SecondarySidebarActionButton onClick={() => navigate(-1)}>
                             <ButtonContent>
                                 <ButtonIcon>
