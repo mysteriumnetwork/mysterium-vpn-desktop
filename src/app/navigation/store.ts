@@ -12,6 +12,7 @@ import { History, Location } from "history"
 import { RootStore } from "../store"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { connectionInProgress } from "../connection/status"
+import { log } from "../../shared/log/log"
 
 import { locations } from "./locations"
 
@@ -33,6 +34,7 @@ export class NavigationStore {
     }
 
     push = (path: string): void => {
+        log.debug("Navigating ->", path)
         this.history?.push(path)
     }
 

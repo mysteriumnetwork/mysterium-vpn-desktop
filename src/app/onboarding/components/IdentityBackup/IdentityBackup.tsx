@@ -6,11 +6,12 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faClock, faFileExport } from "@fortawesome/free-solid-svg-icons"
+import { faFileExport, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -69,11 +70,9 @@ const Content = styled(ViewContent)`
 export const IdentityBackup: React.FC = observer(function IdentityBackup() {
     const { onboarding, identity } = useStores()
 
+    const navigate = useNavigate()
     const nextStep = () => {
         onboarding.finishIDSetup()
-    }
-    const handleBackupLater = () => {
-        nextStep()
     }
 
     const [exportPrompt, setExportPrompt] = useState(false)
@@ -121,12 +120,12 @@ export const IdentityBackup: React.FC = observer(function IdentityBackup() {
                                 Backup Private Key
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleBackupLater}>
+                        <SecondarySidebarActionButton onClick={() => navigate(-1)}>
                             <ButtonContent>
                                 <ButtonIcon>
-                                    <FontAwesomeIcon icon={faClock} />
+                                    <FontAwesomeIcon icon={faArrowAltCircleLeft} />
                                 </ButtonIcon>
-                                Backup later
+                                Go Back
                             </ButtonContent>
                         </SecondarySidebarActionButton>
                     </SideBot>

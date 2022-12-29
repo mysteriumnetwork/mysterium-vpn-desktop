@@ -54,6 +54,7 @@ export class PaymentStore {
     paymentCurrency?: string
     chain?: MystChain
     taxCountry?: string
+    taxState?: string
     lightningNetwork = false
     order?: PaymentOrder
     orderExpiresAt?: Date
@@ -74,6 +75,7 @@ export class PaymentStore {
             paymentCurrency: observable,
             chain: observable,
             taxCountry: observable,
+            taxState: observable,
             lightningNetwork: observable,
             order: observable,
             fetchTransactorFees: action,
@@ -88,6 +90,7 @@ export class PaymentStore {
             setPaymentCurrency: action,
             setLightningNetwork: action,
             setTaxCountry: action,
+            setTaxState: action,
             setChain: action,
             setTopupAmountUSD: action,
             refreshBalance: action,
@@ -188,6 +191,7 @@ export class PaymentStore {
 
         const order = await tequilapi.payment.createOrder(id, this.paymentMethod.gateway, {
             country: this.taxCountry || "",
+            state: this.taxState || "",
             amountUsd: new BigNumber(this.topUpAmountUSD).toFixed(2),
             payCurrency: this.paymentCurrency,
             gatewayCallerData: this.buildCallerData(),
@@ -322,6 +326,10 @@ export class PaymentStore {
 
     setTaxCountry = (country?: string): void => {
         this.taxCountry = country
+    }
+
+    setTaxState = (state?: string): void => {
+        this.taxState = state
     }
 
     setLightningNetwork = (use: boolean): void => {

@@ -7,6 +7,7 @@
 
 import React from "react"
 import styled from "styled-components"
+import { nodeVersion } from "@mysteriumnetwork/node"
 
 import * as packageJson from "../../../../package.json"
 import { Small } from "../../ui-kit/typography"
@@ -19,9 +20,9 @@ const Container = styled(Small)`
 export const AppVersion: React.FC<{ className?: string }> = ({ className }) => {
     return (
         <Container className={className}>
-            App version:
+            Version: <b>{packageJson.version}</b>
             <br />
-            {packageJson.version}
+            Mysterium Node: <b>{nodeVersion()}</b>
         </Container>
     )
 }

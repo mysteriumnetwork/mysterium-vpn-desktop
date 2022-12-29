@@ -6,10 +6,13 @@
  */
 import { observer } from "mobx-react-lite"
 import React, { useState } from "react"
-import { faUserFriends, faWallet } from "@fortawesome/free-solid-svg-icons"
+import { faWallet, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Lottie from "react-lottie-player"
+import { comparer, reaction } from "mobx"
+import { IdentityRegistrationStatus } from "mysterium-vpn-js"
+import { useNavigate } from "react-router-dom"
 
 import { ViewContainer } from "../../../navigation/components/ViewContainer/ViewContainer"
 import { ViewSplit } from "../../../navigation/components/ViewSplit/ViewSplit"
@@ -23,9 +26,10 @@ import {
     PrimarySidebarActionButton,
     SecondarySidebarActionButton,
 } from "../../../ui-kit/components/Button/SidebarButtons"
-import { useStores } from "../../../store"
+import { Step, useStores } from "../../../store"
 import { brandLight } from "../../../ui-kit/colors"
 import { locations } from "../../../navigation/locations"
+import { log } from "../../../../shared/log/log"
 
 import { ReferralCodeFormFields, UseReferralCodePrompt } from "./UseReferralCodePrompt"
 import animationOnboardingTopup from "./animation_onboarding_topup.json"
@@ -66,14 +70,17 @@ const Content = styled(ViewContent)`
 `
 
 export const InitialTopup: React.FC = observer(function InitialTopup() {
-    const { payment, onboarding } = useStores()
+    const root = useStores()
+    const navigate = useNavigate()
+    const { payment, onboarding, identity } = root
+
     const handleTopupNow = async () => {
         return payment.startTopupFlow(locations.onboardingWalletTopup)
     }
     const [referralPrompt, setReferralPrompt] = useState(false)
-    const handleUseReferralCode = () => {
-        setReferralPrompt(true)
-    }
+    // const handleUseReferralCode = () => {
+    //     setReferralPrompt(true)
+    // }
     const handleReferralSubmit = async ({ code }: ReferralCodeFormFields) => {
         setReferralPrompt(false)
         await onboarding.registerWithReferralCode(code)
@@ -81,6 +88,24 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
     const handleReferralCancel = () => {
         setReferralPrompt(false)
     }
+
+    reaction(
+        () => identity.identity?.balanceTokens,
+        async (balance, prev) => {
+            log.debug(`[event] Balance changed: ${prev?.ether} -> ${balance?.ether}`)
+            switch (identity.identity?.registrationStatus) {
+                case IdentityRegistrationStatus.Unregistered:
+                case IdentityRegistrationStatus.RegistrationError:
+                    if (await identity.balanceSufficientToRegister()) {
+                        root.startupSequence(Step.IDENTITY_REGISTER)
+                    }
+            }
+        },
+        {
+            equals: comparer.structural,
+        },
+    )
+
     return (
         <ViewContainer>
             <ViewNavBar />
@@ -100,12 +125,12 @@ export const InitialTopup: React.FC = observer(function InitialTopup() {
                                 Top up now
                             </ButtonContent>
                         </PrimarySidebarActionButton>
-                        <SecondarySidebarActionButton onClick={handleUseReferralCode}>
+                        <SecondarySidebarActionButton onClick={() => navigate(-1)}>
                             <ButtonContent>
                                 <ButtonIcon>
-                                    <FontAwesomeIcon icon={faUserFriends} />
+                                    <FontAwesomeIcon icon={faArrowAltCircleLeft} />
                                 </ButtonIcon>
-                                Use a Referral code
+                                Go Back
                             </ButtonContent>
                         </SecondarySidebarActionButton>
                     </SideBot>

@@ -20,7 +20,7 @@ import { ViewSplit } from "../../../../navigation/components/ViewSplit/ViewSplit
 import { ViewSidebar } from "../../../../navigation/components/ViewSidebar/ViewSidebar"
 import { ViewContent } from "../../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
-import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
+import { Heading2, Small } from "../../../../ui-kit/typography"
 import { brandLight, lightBlue } from "../../../../ui-kit/colors"
 import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
@@ -29,6 +29,9 @@ import { parseError } from "../../../../../shared/errors/parseError"
 import { logErrorMessage } from "../../../../../shared/log/log"
 import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
 import { SelectTaxCountry } from "../../../../payment/components/SelectTaxCountry/SelectTaxCountry"
+import { SelectTaxState } from "../../../../payment/components/SelectTaxState/SelectTaxState"
+import { OptionLabel } from "../common/OptionLabel"
+import { OptionValue } from "../common/OptionValue"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -68,16 +71,6 @@ const OptionToggle = styled(Toggle)`
     height: 36px;
 `
 
-const OptionValue = styled(Heading2)``
-
-const OptionLabel = styled(Paragraph)`
-    &:not(:first-child) {
-        border-top: 1px dashed #ddd;
-    }
-    padding: 10px 0;
-    text-align: left;
-`
-
 export const StripePaymentOptions: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
@@ -107,7 +100,8 @@ export const StripePaymentOptions: React.FC = observer(() => {
         }
     }, [payment.currencies])
     const currencyGridVisible = payment.currencies.length > 1
-    const paymentOptionsOK = !loading && payment.paymentCurrency && payment.taxCountry
+    const usPaymentOptionsOK = payment.taxCountry === "US" ? payment.taxState : true
+    const paymentOptionsOK = !loading && payment.paymentCurrency && payment.taxCountry && usPaymentOptionsOK
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => navigate(-1)}>
@@ -161,8 +155,18 @@ export const StripePaymentOptions: React.FC = observer(() => {
                                 </OptionToggleGrid>
                             </>
                         )}
-                        <OptionLabel>Tax residence country (VAT):</OptionLabel>
-                        <SelectTaxCountry />
+                        <OptionLabel>Tax residence: Country</OptionLabel>
+                        <OptionValue>
+                            <SelectTaxCountry />
+                        </OptionValue>
+                        {payment.taxCountry === "US" && (
+                            <>
+                                <OptionLabel>Tax residence: State</OptionLabel>
+                                <OptionValue>
+                                    <SelectTaxState />
+                                </OptionValue>
+                            </>
+                        )}
                         <BrandButton
                             style={{ marginTop: "auto" }}
                             onClick={handleNextClick}

@@ -22,8 +22,7 @@ import { ViewSidebar } from "../../../../navigation/components/ViewSidebar/ViewS
 import { ViewContent } from "../../../../navigation/components/ViewContent/ViewContent"
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
-import { brandLight, lightBlue } from "../../../../ui-kit/colors"
-import { Toggle } from "../../../../ui-kit/components/Toggle/Toggle"
+import { brandLight } from "../../../../ui-kit/colors"
 import { isLightningAvailable } from "../../../../payment/currency"
 import { Checkbox } from "../../../../ui-kit/form-components/Checkbox/Checkbox"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
@@ -32,6 +31,11 @@ import { CryptoAnimation } from "../../../../ui-kit/components/CryptoAnimation/C
 import { parseError } from "../../../../../shared/errors/parseError"
 import { logErrorMessage } from "../../../../../shared/log/log"
 import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
+import { Select } from "../../../../ui-kit/form-components/Select"
+import { SelectTaxCountry } from "../../../../payment/components/SelectTaxCountry/SelectTaxCountry"
+import { SelectTaxState } from "../../../../payment/components/SelectTaxState/SelectTaxState"
+import { OptionValue } from "../common/OptionValue"
+import { OptionLabel } from "../common/OptionLabel"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -59,20 +63,6 @@ const Title = styled(Heading2)`
 
 const TitleDescription = styled(Small)``
 
-const OptionToggleGrid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-`
-
-const OptionToggle = styled(Toggle)`
-    width: 85px;
-    height: 36px;
-`
-
-const OptionValue = styled(Heading2)``
-
 const LightningCheckbox = styled(Checkbox)``
 
 export const CoingatePaymentOptions: React.FC = observer(() => {
@@ -80,12 +70,6 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
 
-    const isOptionActive = (cur: string) => {
-        return payment.paymentCurrency == cur
-    }
-    const selectOption = (cur: string) => () => {
-        payment.setPaymentCurrency(cur)
-    }
     const setUseLightning = (): void => {
         const val = !payment.lightningNetwork
         payment.setLightningNetwork(val)
@@ -105,7 +89,8 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
         }
     }
     const options = payment.paymentMethod?.gatewayData.currencies.filter((it) => it !== Currency.MYST) || []
-    const paymentOptionsOK = !loading && payment.paymentCurrency
+    const usPaymentOptionsOK = payment.taxCountry === "US" ? payment.taxState : true
+    const paymentOptionsOK = !loading && payment.paymentCurrency && payment.taxCountry && usPaymentOptionsOK
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => navigate(-1)}>
@@ -118,29 +103,45 @@ export const CoingatePaymentOptions: React.FC = observer(() => {
                     <SideTop>
                         <IconWallet color={brandLight} />
                         <Title>Top up your account</Title>
-                        <TitleDescription>Select the cryptocurrency in which the top-up will be done</TitleDescription>
+                        <TitleDescription>Select the payment options</TitleDescription>
                     </SideTop>
                     <SideBot>
-                        <OptionToggleGrid>
-                            {options.map((opt) => (
-                                <OptionToggle
-                                    key={opt}
-                                    active={isOptionActive(opt)}
-                                    onClick={selectOption(opt)}
-                                    inactiveColor={lightBlue}
-                                    height="36px"
-                                    justify="center"
-                                >
-                                    <div style={{ textAlign: "center" }}>
-                                        <OptionValue>{opt}</OptionValue>
-                                    </div>
-                                </OptionToggle>
-                            ))}
-                        </OptionToggleGrid>
+                        {payment.paymentCurrency !== Currency.MYST && (
+                            <>
+                                <OptionLabel>Payment currency</OptionLabel>
+                                <OptionValue>
+                                    <Select
+                                        value={payment.paymentCurrency}
+                                        onChange={(event) => payment.setPaymentCurrency(event.target.value)}
+                                    >
+                                        <option key="" value=""></option>
+                                        {options.map((opt) => (
+                                            <option key={opt} value={opt}>
+                                                {opt}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </OptionValue>
+                            </>
+                        )}
                         {isLightningAvailable(payment.paymentCurrency) && (
-                            <LightningCheckbox checked={payment.lightningNetwork} onChange={setUseLightning}>
-                                Use lightning network
-                            </LightningCheckbox>
+                            <OptionValue>
+                                <LightningCheckbox checked={payment.lightningNetwork} onChange={setUseLightning}>
+                                    Use lightning network
+                                </LightningCheckbox>
+                            </OptionValue>
+                        )}
+                        <OptionLabel>Tax residence: Country</OptionLabel>
+                        <OptionValue>
+                            <SelectTaxCountry />
+                        </OptionValue>
+                        {payment.taxCountry === "US" && (
+                            <>
+                                <OptionLabel>Tax residence: State</OptionLabel>
+                                <OptionValue>
+                                    <SelectTaxState />
+                                </OptionValue>
+                            </>
                         )}
                         {payment.paymentCurrency == Currency.MYST && (
                             <Paragraph style={{ color: "red" }}>

@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import { EntertainmentEstimateResponse } from "mysterium-vpn-js"
-import { toast } from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 
 import { useStores } from "../../../../store"
@@ -28,9 +27,6 @@ import { IconMusic } from "../../../../ui-kit/icons/IconMusic"
 import { IconCloudDownload } from "../../../../ui-kit/icons/IconCloudDownload"
 import { IconDocument } from "../../../../ui-kit/icons/IconDocument"
 import { topupSteps } from "../../../../navigation/locations"
-import { parseError } from "../../../../../shared/errors/parseError"
-import { logErrorMessage } from "../../../../../shared/log/log"
-import { dismissibleToast } from "../../../../ui-kit/components/dismissibleToast"
 
 const SideTop = styled.div`
     box-sizing: border-box;
@@ -115,7 +111,6 @@ const EntertainmentExplanation = styled(Paragraph)`
 export const MystSelectAmount: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
-    const [loading, setLoading] = useState(false)
     const isOptionActive = (amt: number) => {
         return payment.topUpAmountUSD == amt
     }
@@ -129,17 +124,7 @@ export const MystSelectAmount: React.FC = observer(() => {
         }
     }, [payment.topUpAmountUSD])
     const handleNextClick = async () => {
-        setLoading(() => true)
-        try {
-            await payment.createOrder()
-            setLoading(() => false)
-            navigate("../" + topupSteps.coingateOrderSummary)
-        } catch (err) {
-            setLoading(() => false)
-            const msg = parseError(err)
-            logErrorMessage("Could not create a payment order", msg)
-            toast.error(dismissibleToast(<span>{msg.humanReadable}</span>))
-        }
+        navigate("../" + topupSteps.coingatePaymentOptions)
     }
     return (
         <ViewContainer>
@@ -176,8 +161,7 @@ export const MystSelectAmount: React.FC = observer(() => {
                         <BrandButton
                             style={{ marginTop: "auto" }}
                             onClick={handleNextClick}
-                            disabled={!payment.topUpAmountUSD || loading}
-                            loading={loading}
+                            disabled={!payment.topUpAmountUSD}
                         >
                             Next
                         </BrandButton>
