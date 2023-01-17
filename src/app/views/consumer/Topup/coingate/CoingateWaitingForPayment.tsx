@@ -183,7 +183,7 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                     <PaymentWarning>
                         This address is for {payment.order?.payCurrency ?? "—"} deposits only. Do not send any other
                         cryptocurrency or {payment.order?.payCurrency ?? "—"} from any other chains, such as Binance
-                        Chain (BEP-2) or your deposit will be lost.
+                        Chain (BEP-2/BSC) or your deposit will be lost.
                     </PaymentWarning>
                     <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
                     <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>
