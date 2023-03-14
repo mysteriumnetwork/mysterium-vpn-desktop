@@ -181,7 +181,7 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                     </PaymentQR>
                     <PaymentAddress>{payment.order?.publicGatewayData?.paymentAddress}</PaymentAddress>
                     <PaymentWarning>
-                        This address is for {payment.order?.payCurrency ?? "—"} deposits only. Do not send any other
+                        This address is for {payment.order?.payCurrency ?? "—"} (ERC20) deposits only. Do not send any other
                         cryptocurrency or {payment.order?.payCurrency ?? "—"} from any other chains, such as Binance
                         Chain (BEP-2/BSC) or your deposit will be lost.
                     </PaymentWarning>
