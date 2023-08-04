@@ -17,7 +17,7 @@ const Container = styled.div`
 const Dismiss = styled.div`
     width: 22px;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: flex-end;
     font-size: 18px;
     color: #ccc;

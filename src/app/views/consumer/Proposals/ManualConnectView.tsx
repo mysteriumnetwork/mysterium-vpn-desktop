@@ -19,6 +19,7 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { darkBlue } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
+import { MysteriumVPN2Toast } from "../../../ui-kit/components/MysteriumVPN2Toast/MysteriumVPN2Toast"
 
 import { SwitchConnectView } from "./SwitchConnectView"
 import { ProposalSearch } from "./ProposalSearch"
@@ -73,6 +74,7 @@ export const ManualConnectView: React.FC = observer(function ManualConnectView()
     }, [])
     return (
         <ViewContainer>
+            <MysteriumVPN2Toast />
             <ViewNavBar>
                 <NavContainer>
                     <SwitchConnectView />

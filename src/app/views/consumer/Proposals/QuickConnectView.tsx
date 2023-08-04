@@ -22,6 +22,7 @@ import { brand } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
 import { RippleButton } from "../../../ui-kit/components/Button/RippleButton"
 import { dismissibleToast } from "../../../ui-kit/components/dismissibleToast"
+import { MysteriumVPN2Toast } from "../../../ui-kit/components/MysteriumVPN2Toast/MysteriumVPN2Toast"
 
 import animationQuickConnect from "./animation_quick_connect.json"
 import { SwitchConnectView } from "./SwitchConnectView"
@@ -117,6 +118,7 @@ export const QuickConnectView: React.FC = observer(function QuickConnectView() {
     }
     return (
         <ViewContainer>
+            <MysteriumVPN2Toast />
             <ViewNavBar>
                 <NavContainer>
                     <SwitchConnectView />

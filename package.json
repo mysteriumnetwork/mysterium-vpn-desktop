@@ -1,7 +1,7 @@
 {
   "name": "mysterium-vpn-desktop",
-  "productName": "MysteriumVPN",
-  "description": "Desktop VPN client for Mysterium Network",
+  "productName": "MysteriumDark",
+  "description": "Desktop VPN client (legacy) for Mysterium Network",
   "version": "0.0.0-snapshot",
   "main": "index.js",
   "author": {
@@ -44,7 +44,6 @@
     "mysterium-vpn-js": "26.0.0",
     "node-machine-id": "^1.1.12",
     "open": "^7.0.0",
-    "pushy-electron": "^1.0.8",
     "qrcode.react": "^2.0.0",
     "react": "^18.2.0",
     "react-autosuggest": "^10.1.0",
@@ -85,6 +84,7 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "chmodr": "^1.2.0",
+    "cross-env": "^7.0.3",
     "electron": "^20.1.2",
     "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
@@ -110,13 +110,15 @@
   },
   "analyticsUrl": "https://analytics.mysterium.network",
   "intercomAppId": "sjkeehf4",
-  "pushyAppId": "5f23dc54d4786d7760003a71",
   "sentryDsn": "https://5c3208e8d6124f2db303a2d12c7f48b8@o136129.ingest.sentry.io/5222592",
   "electronWebpack": {
     "renderer": {
       "sourceDirectory": "src/app",
       "template": "src/app/index.html",
       "webpackConfig": "webpack.renderer.additions.js"
+    },
+    "main": {
+      "webpackConfig": "webpack.main.additions.js"
     }
   },
   "build": {
