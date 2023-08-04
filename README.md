@@ -4,6 +4,8 @@
 [![Downloads](https://img.shields.io/github/downloads/mysteriumnetwork/mysterium-vpn-desktop/total.svg)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/releases)
 [![Lint](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/workflows/Lint/badge.svg?event=push)](https://github.com/mysteriumnetwork/mysterium-vpn-desktop/actions?query=workflow%3ALint)
 
+## ⚠️ MysteriumVPN 2.0 for Desktop is available. https://www.mysteriumvpn.com
+
 Mysterium VPN is a Desktop VPN client for Windows, macOS and Linux.
 
 It is the first Mysterium Network use case in action. Our dVPN is our flagship product and showcases the potential of our residential IP network. [Learn more](https://docs.mysterium.network/)
