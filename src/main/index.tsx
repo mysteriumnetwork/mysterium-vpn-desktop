@@ -78,7 +78,7 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         fullscreen: false,
         fullscreenable: false,
         maximizable: false,
-        backgroundColor: "#882f61",
+        backgroundColor: "#020202",
         webPreferences: {
             webSecurity: false, // Make requests to local tequilapi despite CORS policy
             contextIsolation: false,
