@@ -22,6 +22,7 @@ import { Preset } from "../../../proposals/components/Preset/Preset"
 
 import { SwitchConnectView } from "./SwitchConnectView"
 import { ProposalSearch } from "./ProposalSearch"
+import { MysteriumVPN2Toast } from "../../../ui-kit/components/MysteriumVPN2Toast/MysteriumVPN2Toast";
 
 const Content = styled(ViewContent)`
     background: #fff;
@@ -73,6 +74,7 @@ export const ManualConnectView: React.FC = observer(function ManualConnectView()
     }, [])
     return (
         <ViewContainer>
+            <MysteriumVPN2Toast />
             <ViewNavBar>
                 <NavContainer>
                     <SwitchConnectView />
