@@ -19,10 +19,10 @@ import { ViewSidebar } from "../../../navigation/components/ViewSidebar/ViewSide
 import { ViewContent } from "../../../navigation/components/ViewContent/ViewContent"
 import { darkBlue } from "../../../ui-kit/colors"
 import { Preset } from "../../../proposals/components/Preset/Preset"
+import { MysteriumVPN2Toast } from "../../../ui-kit/components/MysteriumVPN2Toast/MysteriumVPN2Toast"
 
 import { SwitchConnectView } from "./SwitchConnectView"
 import { ProposalSearch } from "./ProposalSearch"
-import { MysteriumVPN2Toast } from "../../../ui-kit/components/MysteriumVPN2Toast/MysteriumVPN2Toast";
 
 const Content = styled(ViewContent)`
     background: #fff;

@@ -36,6 +36,7 @@ export interface DesktopConfig {
     "nat-compatibility"?: "auto" | "off"
     "quick-connect"?: boolean
     filters?: ProposalFilters
+    "vpn2-offered"?: boolean
 }
 
 export interface ProposalFilters {
@@ -170,5 +171,13 @@ export class ConfigStore {
         return this.updateNodeConfigPartial({
             "keep-connected-on-fail": enabled,
         })
+    }
+
+    get vpn2Offered(): boolean {
+        return this.config.desktop?.["vpn2-offered"] === true
+    }
+
+    setVpn2Offered = async (): Promise<void> => {
+        return this.updateDesktopConfigPartial({ "vpn2-offered": true })
     }
 }
