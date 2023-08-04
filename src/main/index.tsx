@@ -20,7 +20,6 @@ import { isDevelopment, isProduction } from "../utils/env"
 import { MainIpcListenChannels, WebIpcListenChannels } from "../shared/ipc"
 import { handleProcessExit } from "../utils/handleProcessExit"
 
-import { initialize as initializePushNotifications } from "./push/push"
 import { createTray, refreshTrayIcon } from "./tray"
 import { supervisor } from "./node/supervisor"
 import { createMenu } from "./menu"
@@ -120,9 +119,6 @@ const createMainWindow = async (): Promise<BrowserWindow> => {
         setImmediate(() => {
             window.focus()
         })
-    })
-    window.webContents.on("did-finish-load", () => {
-        initializePushNotifications()
     })
 
     return window

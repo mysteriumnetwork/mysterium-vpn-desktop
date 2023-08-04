@@ -16,7 +16,6 @@ import { newUIProposal, UIProposal } from "../proposals/uiProposal"
 import { MainIpcListenChannels } from "../../shared/ipc"
 import { log, logErrorMessage } from "../../shared/log/log"
 import { eventBus, tequilapi } from "../tequilapi"
-import { subscribePush } from "../push/push"
 import { parseError } from "../../shared/errors/parseError"
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
@@ -235,7 +234,6 @@ export class ConnectionStore {
         try {
             const location = await tequilapi.location()
             this.setOriginalLocation(location)
-            subscribePush(location.country)
         } catch (err) {
             const msg = parseError(err)
             logErrorMessage("Failed to lookup original location", msg)

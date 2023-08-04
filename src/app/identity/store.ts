@@ -13,8 +13,6 @@ import BigNumber from "bignumber.js"
 import { RootStore, Step } from "../store"
 import { eventBus, tequilapi } from "../tequilapi"
 import { log } from "../../shared/log/log"
-import { PushTopic } from "../../shared/push/topics"
-import { subscribePush, unsubscribePush } from "../push/push"
 import { ExportIdentityOpts, ImportIdentityOpts, mysteriumNodeIPC } from "../../shared/node/mysteriumNodeIPC"
 import { analytics } from "../analytics/analytics"
 import { EventName } from "../analytics/event"
@@ -74,11 +72,6 @@ export class IdentityStore {
         reaction(
             () => Number(this.identity?.balanceTokens.human ?? 0),
             (balance) => {
-                if (balance != null && balance < 0.5) {
-                    subscribePush(PushTopic.LessThanHalfMyst)
-                } else {
-                    unsubscribePush(PushTopic.LessThanHalfMyst)
-                }
                 reportBalanceUpdate(balance)
             },
         )
