@@ -18,7 +18,7 @@ import { locations } from "../../locations"
 import { titleBarSize } from "../../../../config"
 import { ProtectionStatus } from "../../../location/components/ProtectionStatus/ProtectionStatus"
 import { CurrentIP } from "../../../location/components/CurrentIP/CurrentIP"
-import { darkBlue, greyBlue1 } from "../../../ui-kit/colors"
+import { greyBlue1, greyBlue2, lightBlue } from "../../../ui-kit/colors"
 import { displayTokens2 } from "../../../payment/display"
 
 import { WindowButtonsWindows } from "./WindowButtonsWindows"
@@ -37,8 +37,8 @@ export const Container = styled.div`
         padding-left: 80px;
     }
 
-    color: ${darkBlue};
-    background: #fcfcfc;
+    color: ${lightBlue};
+    background: #0c0c0c;
     display: flex;
     align-items: center;
 
@@ -69,7 +69,7 @@ const NavigationButton = styled.div<{ active: boolean }>`
         background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
         color: ${(props) => (props.active ? "#fff" : "inherit")};
     }
-    background: ${(props) => (props.active ? greyBlue1 : "inherit")};
+    background: ${(props) => (props.active ? greyBlue2 : "inherit")};
     color: ${(props) => (props.active ? "#fff" : "inherit")};
 
     display: flex;
