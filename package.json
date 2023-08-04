@@ -1,7 +1,7 @@
 {
   "name": "mysterium-vpn-desktop",
-  "productName": "MysteriumVPN",
-  "description": "Desktop VPN client for Mysterium Network",
+  "productName": "MysteriumDark",
+  "description": "Desktop VPN client (legacy) for Mysterium Network",
   "version": "0.0.0-snapshot",
   "main": "index.js",
   "author": {
