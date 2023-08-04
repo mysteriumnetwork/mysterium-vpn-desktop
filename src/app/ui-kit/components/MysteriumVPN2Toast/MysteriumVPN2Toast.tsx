@@ -17,15 +17,26 @@ const Container = styled.div`
   cursor: pointer;
 `;
 export const MysteriumVPN2Toast: React.FC = () => {
-  const { config } = useStores()
+  const root = useStores()
+  const { config } = root
   useEffect(() => {
     if (config.vpn2Offered) {
       return
     }
+
+    let link: string
+    if (root.isWindows) {
+      link = "https://www.mysteriumvpn.com/mysterium-vpn-v2?utm_source=MysteriumDark&utm_medium=Windows&utm_campaign=Banner"
+    } else if (root.isMacOS) {
+      link = "https://www.mysteriumvpn.com/mysterium-vpn-v2?utm_source=MysteriumDark&utm_medium=Mac&utm_campaign=Banner"
+    } else {
+      link = "https://www.mysteriumvpn.com/mysterium-vpn-v2?utm_source=MysteriumDark&utm_medium=Other&utm_campaign=Banner"
+    }
+
     toast(dismissibleToast(
       <Container>
         <a onClick={() => {
-          shell.openExternal("https://www.mysteriumvpn.com");
+          shell.openExternal(link);
           config.setVpn2Offered()
         }}>
           <b>MysteriumVPN 2.0 for Desktop is available</b><br />
