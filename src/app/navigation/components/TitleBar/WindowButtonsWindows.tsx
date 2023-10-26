@@ -29,8 +29,7 @@ const Button = styled.div`
     -webkit-app-region: no-drag;
 
     &:hover {
-        background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
-        color: ${(props) => (props.active ? "#fff" : "inherit")};
+        background: #aeaedb33;
     }
     &:active {
         background: rgba(0, 0, 0, 0.3);

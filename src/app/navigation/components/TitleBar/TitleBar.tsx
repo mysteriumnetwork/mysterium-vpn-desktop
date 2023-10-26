@@ -65,6 +65,8 @@ const NavigationButton = styled.div<{ active: boolean }>`
     line-height: 12px;
     padding: 0 16px;
 
+    cursor: pointer;
+
     &:hover {
         background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
         color: ${(props) => (props.active ? "#fff" : "inherit")};
