@@ -23,12 +23,15 @@ const Button = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    fill: #fff;
+	cursor: pointer;
 
     user-select: none;
     -webkit-app-region: no-drag;
 
     &:hover {
-        background: rgba(0, 0, 0, 0.1);
+        background: ${(props) => (props.active ? greyBlue1 : "#aeaedb33")};
+        color: ${(props) => (props.active ? "#fff" : "inherit")};
     }
     &:active {
         background: rgba(0, 0, 0, 0.3);
