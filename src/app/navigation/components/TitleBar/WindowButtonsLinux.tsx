@@ -27,8 +27,9 @@ const Button = styled.div`
     user-select: none;
     -webkit-app-region: no-drag;
 
+    fill: #fff;
     &:hover {
-        background: rgba(0, 0, 0, 0.1);
+        background: #aeaedb33;
     }
     &:active {
         background: rgba(0, 0, 0, 0.3);
