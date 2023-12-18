@@ -33,11 +33,12 @@ export const MysteriumVPN2Toast: React.FC = () => {
       link = "https://www.mysteriumvpn.com/mysterium-vpn-v2?utm_source=MysteriumDark&utm_medium=Other&utm_campaign=Banner"
     }
 
-    toast(dismissibleToast(
+    const toastID = toast(dismissibleToast(
       <Container>
         <a onClick={() => {
           shell.openExternal(link);
           config.setVpn2Offered()
+          toast.dismiss(toastID)
         }}>
           <b>MysteriumVPN 2.0 for Desktop is available</b><br />
           <span>Download the new app to use Mysterium VPN on Android, iOS, Mac and Windows</span>
