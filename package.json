@@ -19,7 +19,7 @@
     "bundle-dev": "yarn build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
