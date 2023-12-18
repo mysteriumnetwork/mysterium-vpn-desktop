@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { notarize } = require("electron-notarize")
+const { notarize } = require("@electron/notarize")
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require("../package.json")

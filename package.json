@@ -66,6 +66,7 @@
     "sudo-prompt": "^9.2.1"
   },
   "devDependencies": {
+    "@electron/notarize": "^2.2.0",
     "@sentry/cli": "^2.5.2",
     "@types/async-retry": "^1.4.3",
     "@types/electron-devtools-installer": "^2.2.2",
@@ -89,7 +90,6 @@
     "electron-builder": "^23.3.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-download": "^4.1.1",
-    "electron-notarize": "^1.2.1",
     "electron-webpack": "^2.8.2",
     "electron-webpack-ts": "^4.0.1",
     "eslint": "^8.23.1",
