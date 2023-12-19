@@ -106,7 +106,8 @@
     "webpack": "^4.46.0"
   },
   "resolutions": {
-    "@types/react": "^18.0.14"
+    "@types/react": "^18.0.14",
+    "nan": "2.18.0"
   },
   "analyticsUrl": "https://analytics.mysterium.network",
   "intercomAppId": "sjkeehf4",
