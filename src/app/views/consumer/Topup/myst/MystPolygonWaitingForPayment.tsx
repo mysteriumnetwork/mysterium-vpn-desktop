@@ -149,11 +149,13 @@ export const MystPolygonWaitingForPayment: React.FC = observer(() => {
                             )}
                         />
                     </PaymentCountDown>
-                    <PaymentAmount>
-                        <Heading2>
-                            {payment.order?.payAmount} {payment.order?.payCurrency}
-                        </Heading2>
-                    </PaymentAmount>
+                    {payment.order?.payAmount && (
+                        <PaymentAmount>
+                            <Heading2>
+                                {payment.order?.payAmount} {payment.order?.payCurrency}
+                            </Heading2>
+                        </PaymentAmount>
+                    )}
                     <PaymentQR>
                         <QR size={192} text={identity.identity?.channelAddress} />
                     </PaymentQR>
