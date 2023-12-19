@@ -11,6 +11,7 @@ export const uid = (): string => {
     // getuid only available on POSIX
     // and it's not needed on windows anyway
     if (platform() !== "win32") {
+        // @ts-ignore
         uid = process.getuid()
     }
     return uid.toString()
