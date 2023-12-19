@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 16
-      - run: yarn
+      - run: yarn install --frozen-lockfile
       - uses: battila7/get-version-action@v1.2.1
         id: get_version
       - name: Replace version

@@ -1052,7 +1052,7 @@
     lodash "^4.17.15"
     tmp-promise "^3.0.2"
 
-"@mysteriumnetwork/node@^1.29.2":
+"@mysteriumnetwork/node@1.29.2":
   version "1.29.2"
   resolved "https://registry.yarnpkg.com/@mysteriumnetwork/node/-/node-1.29.2.tgz#372714edd9454b5cf2f713cde9de1b2e6d2d0cba"
   integrity sha512-RCj+nzul5e6gYGCChFSehuHE2xNlEfq+nfsAjszBY8SsQ9jd1gcW4RRE3BRnoym5K4MJ3oo9IJpb6DoUj+uIHQ==
