@@ -121,6 +121,7 @@ Pre-requisites:
 Required env variables (macOS):
 - APPLEID
 - APPLEIDPASS (generate an app-specific password for this)
+- APPLETEAMID
 
 ```
 yarn bundle
