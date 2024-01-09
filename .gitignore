@@ -3,3 +3,4 @@ dist/
 static/bin/
 *.log
 .idea
+.electron-symbols
