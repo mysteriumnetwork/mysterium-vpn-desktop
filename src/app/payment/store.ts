@@ -168,9 +168,6 @@ export class PaymentStore {
     validateOrderResponse(order: PaymentOrder): void {
         switch (this.paymentMethod?.gateway) {
             case Gateway.COINGATE:
-                if (!order.publicGatewayData?.paymentAddress) {
-                    throw new Error("Could not retrieve payment address")
-                }
                 if (!order.publicGatewayData?.paymentUrl) {
                     throw new Error("Could not retrieve payment URL")
                 }
