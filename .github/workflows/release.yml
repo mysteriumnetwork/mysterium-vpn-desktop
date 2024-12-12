@@ -11,15 +11,15 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-11, windows-2022, ubuntu-20.04]
+        os: [macos-latest, windows-latest, ubuntu-latest]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
       - run: yarn install --frozen-lockfile
-      - uses: battila7/get-version-action@v1.2.1
+      - uses: battila7/get-version-action@v2
         id: get_version
       - name: Replace version
         run: yarn version --no-git-tag-version --new-version ${{ steps.get_version.outputs.version }}
