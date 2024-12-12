@@ -9,6 +9,7 @@ import { observer } from "mobx-react-lite"
 import styled from "styled-components"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import { shell } from "electron"
 
 import { useStores } from "../../../../store"
 import { BrandButton } from "../../../../ui-kit/components/Button/BrandButton"
@@ -59,8 +60,11 @@ export const CoingateOrderSummary: React.FC = observer(() => {
     const handleNextClick = async () => {
         setLoading(() => true)
         try {
-            await payment.openOrderSecureForm()
+            if (!payment.order?.publicGatewayData?.paymentUrl) {
+                return
+            }
             setLoading(() => false)
+            shell.openExternal(payment.order.publicGatewayData.paymentUrl)
             navigate("../" + topupSteps.coingateWaitingForPayment)
         } catch (err) {
             setLoading(() => false)

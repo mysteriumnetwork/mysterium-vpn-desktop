@@ -7,7 +7,6 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import styled from "styled-components"
-import { shell } from "electron"
 import CountDown from "react-countdown"
 import { useNavigate } from "react-router-dom"
 
@@ -20,11 +19,10 @@ import { ViewContent } from "../../../../navigation/components/ViewContent/ViewC
 import { IconWallet } from "../../../../ui-kit/icons/IconWallet"
 import { Heading2, Paragraph, Small } from "../../../../ui-kit/typography"
 import { brand, brandLight } from "../../../../ui-kit/colors"
-import { Anchor } from "../../../../ui-kit/components/Anchor"
-import { QR } from "../../../../ui-kit/components/QR/QR"
 import { OrderStatus } from "../../../../payment/store"
 import { topupSteps } from "../../../../navigation/locations"
 import { StepProgressBar } from "../../../../ui-kit/components/StepProgressBar/StepProgressBar"
+import { Spinner } from "../../../../ui-kit/components/Spinner/Spinner"
 import { OrderBreakdown } from "../common/OrderBreakdown"
 
 import { LogoCoingate } from "./LogoCoingate"
@@ -77,32 +75,8 @@ const PaymentAmount = styled.div`
     user-select: text;
 `
 
-const PaymentQR = styled.div`
-    background: #fff;
-    padding: 5px;
-    margin-bottom: 15px;
-`
-
-const PaymentAddress = styled.div`
-    overflow-wrap: anywhere;
-    overflow-y: scroll;
-    user-select: text;
-    opacity: 0.7;
-    max-height: 60px;
-    border: 1px solid #ffffff99;
-    border-radius: 5px;
-    padding: 10px;
-`
-
-const PaymentWarning = styled(Small)`
-    margin: 5px 0;
-    max-height: 60px;
-    overflow-y: scroll;
-    text-overflow: ellipsis;
-`
-
 const PaymentExplanation = styled(Paragraph)`
-    margin-top: auto;
+    margin-bottom: auto;
 `
 
 const LogoContainer = styled.div`
@@ -113,14 +87,14 @@ const LogoContainer = styled.div`
     overflow: hidden;
 `
 
+const Loading = styled(Spinner)`
+    margin: auto;
+`
+
 export const CoingateWaitingForPayment: React.FC = observer(() => {
     const { payment } = useStores()
     const navigate = useNavigate()
-    const onPayInBrowserClick = () => {
-        if (payment.order?.publicGatewayData?.paymentUrl) {
-            shell.openExternal(payment.order?.publicGatewayData.paymentUrl)
-        }
-    }
+
     useEffect(() => {
         switch (payment.orderStatus) {
             case OrderStatus.SUCCESS:
@@ -131,6 +105,7 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                 break
         }
     }, [payment.orderStatus])
+
     return (
         <ViewContainer>
             <ViewNavBar onBack={() => navigate(-1)}>
@@ -145,7 +120,7 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                             <IconWallet color={brandLight} />
                         </TitleIcon>
                         <Title>Waiting for payment</Title>
-                        <TitleDescription>Scan QR code or use a payment link below</TitleDescription>
+                        <TitleDescription>Complete payment transaction in the browser</TitleDescription>
                     </SideTop>
                     <SideBot>
                         <OrderBreakdown />
@@ -156,8 +131,8 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                     </SideBot>
                 </ViewSidebar>
                 <Content>
-                    <PaymentCountDown>
-                        {payment.orderExpiresAt ? (
+                    {payment.orderExpiresAt && (
+                        <PaymentCountDown>
                             <CountDown
                                 date={payment.orderExpiresAt}
                                 renderer={(props) => (
@@ -167,26 +142,15 @@ export const CoingateWaitingForPayment: React.FC = observer(() => {
                                     </div>
                                 )}
                             />
-                        ) : (
-                            <span>— : —</span>
-                        )}
-                    </PaymentCountDown>
+                        </PaymentCountDown>
+                    )}
                     <PaymentAmount>
                         <Heading2>
                             {payment.order?.payAmount} {payment.order?.payCurrency}
                         </Heading2>
                     </PaymentAmount>
-                    <PaymentQR>
-                        <QR size={168} text={payment.order?.publicGatewayData?.paymentAddress} />
-                    </PaymentQR>
-                    <PaymentAddress>{payment.order?.publicGatewayData?.paymentAddress}</PaymentAddress>
-                    <PaymentWarning>
-                        This address is for {payment.order?.payCurrency ?? "—"} (ERC20) deposits only. Do not send any
-                        other cryptocurrency or {payment.order?.payCurrency ?? "—"} from any other chains, such as
-                        Binance Chain (BEP-2/BSC) or your deposit will be lost.
-                    </PaymentWarning>
-                    <PaymentExplanation>Send the indicated amount to the address above.</PaymentExplanation>
-                    <Anchor onClick={onPayInBrowserClick}>Pay in browser instead?</Anchor>
+                    <Loading />
+                    <PaymentExplanation>Waiting for payment...</PaymentExplanation>
                 </Content>
             </ViewSplit>
         </ViewContainer>
