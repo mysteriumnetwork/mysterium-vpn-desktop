@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
-      - uses: battila7/get-version-action@v1.2.1
+      - uses: battila7/get-version-action@v2
         id: get_version
       - name: Replace version
         run: yarn version --no-git-tag-version --new-version ${{ steps.get_version.outputs.version }}
