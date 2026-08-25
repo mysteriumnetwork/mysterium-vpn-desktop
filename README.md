@@ -6,7 +6,7 @@
 
 ## ⚠️ MysteriumVPN 2.0 for Desktop is available. https://www.mysteriumvpn.com
 
-Mysterium VPN Desktop Client
+## Mysterium VPN Desktop Client
 Desktop VPN for Windows, macOS, and Linux on Mysterium's residential network.
 
 It is the first Mysterium Network use case in action. Our dVPN is our flagship product and showcases the potential of our residential IP network. [Learn more](https://docs.mysterium.network/)
